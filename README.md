@@ -19,14 +19,6 @@ A generated Hyrax-based MorphoSource application
 
    *You can quickly check to see if you have VirtualBox installed by running `vboxmanage --version`*
 
-## Version Info
-
-* Ruby 2.4.2
-
-* Rails 5.1.4
-
-* Hyrax v2.1.0.beta2
-
 
 ## Setup the Environment
 
@@ -117,6 +109,7 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 * [Fedora 4.7.1](http://fedorarepository.org/): [http://localhost:8984/](http://localhost:8984/)
 * [Ruby 2.4.2](https://www.ruby-lang.org) (managed by RVM)
 * [Rails 5.1.4](http://rubyonrails.org/)
+* [Hyrax v2.1.0.beta2](http://hyr.ax/)
 
 
 ## References
