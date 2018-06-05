@@ -34,7 +34,6 @@ gem 'figaro'
 
 group :production do
   gem 'passenger'
-  gem 'pg'
   gem 'therubyracer', platforms: :ruby
 end
 
@@ -75,3 +74,4 @@ group :development, :test do
 end
 
 gem 'riiif', '~> 1.1'
+gem 'pg'
