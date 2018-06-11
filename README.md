@@ -68,8 +68,11 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 6. Create default admin set
     
     Open a new ssh session and shell into vagrant:
+    
    `cd morphosource-vagrant`
+   
    `vagrant ssh`
+   
    `cd /vagrant/MorphoSource_SF`
 
     then run 
