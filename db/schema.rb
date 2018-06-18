@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20180409175425) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_type"
@@ -214,7 +217,7 @@ ActiveRecord::Schema.define(version: 20180409175425) do
     t.string "namespace", default: "default", null: false
     t.string "template", null: false
     t.text "counters"
-    t.integer "seq", limit: 8, default: 0
+    t.bigint "seq", default: 0
     t.binary "rand"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
