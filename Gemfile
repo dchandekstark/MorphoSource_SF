@@ -75,3 +75,5 @@ end
 
 gem 'riiif', '~> 1.1'
 gem 'pg'
+
+gem 'hydra-role-management'
