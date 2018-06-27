@@ -52,20 +52,26 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 
 4. Move to the MorphoSource_SF folder 
     
-    `cd /vagrant/MorphoSource_SF`
+   `cd /vagrant/MorphoSource_SF`
+    
+   then update the MorphoSource_SF repository with the following two commands
    
-   then run MorphoSource_SF setup script
+   `git fetch`
+   
+   `git pull origin master`
+   
+5. Run MorphoSource_SF setup script
    
    `../install_scripts/morphosource_sf.sh`
 
-5. start the server(s)
+6. start the server(s)
     
     `bin/rails hydra:server`
 
     *This starts Solr, Fedora, and Rails*
 
 
-6. Create default admin set
+7. Create default admin set
     
     Open a new ssh session and shell into vagrant:
     
@@ -82,7 +88,7 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
     (you can close the session when it's done)
 
 
-7. The application should now be running at [localhost:3000](http://localhost:3000). You can try to do some things like [creating a new user account](http://localhost:3000/users/sign_up?locale=en) and [depositing an object](http://localhost:3000/concern/works/new?locale=en)
+8. The application should now be running at [localhost:3000](http://localhost:3000). You can try to do some things like [creating a new user account](http://localhost:3000/users/sign_up?locale=en) and [depositing an object](http://localhost:3000/concern/works/new?locale=en)
 
     *Note that if you would like to give your user account admin rights, you'll need to edit the config/role_map.yml file. Create a new role type under the development section at the top named 'admin:' and add the user account you created under it as '- email@address.com'.  After updating the role_map.xml, shutdown and restart the rails server to see the change. *
 
