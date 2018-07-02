@@ -1,0 +1,8 @@
+de:
+  hyrax:
+    icons:
+      media:     'fa fa-file-text-o'
+    select_type:
+      media:
+        description:        "Media Werke"
+        name:               "Media"
