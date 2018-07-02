@@ -27,11 +27,13 @@ A generated Hyrax-based MorphoSource application
 
 1. clone the [morphosource-vagrant](https://github.com/morphosource/morphosource-vagrant) repository 
    
-   `git clone --recursive https://github.com/morphosource/morphosource-vagrant.git`
+   `git clone https://github.com/morphosource/morphosource-vagrant.git`
 
-2. move to the *morphosource-vagrant* folder 
+2. move to the *morphosource-vagrant* folder, then clone the MorphoSource_SF repository
 
    `cd morphosource-vagrant`
+   
+   `git clone https://github.com/MorphoSource/MorphoSource_SF.git`
 
 3. startup vagrant 
 
