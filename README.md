@@ -126,5 +126,3 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 ## References
 
 Instructions are based on the [Samvera Hyrax](https://github.com/samvera/hyrax#creating-a-hyrax-based-app) installation instructions
-
-Troubleshooting git error - Jocelyn
