@@ -25,17 +25,17 @@ A generated Hyrax-based MorphoSource application
 
 ### Vagrant
 
-1. clone the [morphosource-vagrant](https://github.com/morphosource/morphosource-vagrant) repository 
-   
+1. clone the [morphosource-vagrant](https://github.com/morphosource/morphosource-vagrant) repository
+
    `git clone https://github.com/morphosource/morphosource-vagrant.git`
 
 2. move to the *morphosource-vagrant* folder, then clone the MorphoSource_SF repository
 
    `cd morphosource-vagrant`
-   
+
    `git clone https://github.com/MorphoSource/MorphoSource_SF.git`
 
-3. startup vagrant 
+3. startup vagrant
 
    `vagrant up`
 
@@ -44,7 +44,7 @@ A generated Hyrax-based MorphoSource application
    *Vagrant creates a shared folder that you can access both inside the VM and on your workstation. We've found it's best to do your git operations exclusively via the workstation folder.*
 
    Shell into vagrant box
-   
+
    `vagrant ssh`
 
 
@@ -52,39 +52,39 @@ A generated Hyrax-based MorphoSource application
 
 This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) is included as a submodule in morphosource-vagrant, so the folder and files are there already.
 
-4. Move to the MorphoSource_SF folder 
-    
+4. Move to the MorphoSource_SF folder
+
    `cd /vagrant/MorphoSource_SF`
-    
+
    then update the MorphoSource_SF repository with the following two commands
-   
+
    `git fetch`
-   
+
    `git pull origin master`
-   
+
 5. Run MorphoSource_SF setup script
-   
+
    `../install_scripts/morphosource_sf.sh`
 
 6. start the server(s)
-    
+
     `bin/rails hydra:server`
 
     *This starts Solr, Fedora, and Rails*
 
 
 7. Create default admin set
-    
+
     Open a new ssh session and shell into vagrant:
-    
+
    `cd morphosource-vagrant`
-   
+
    `vagrant ssh`
-   
+
    `cd /vagrant/MorphoSource_SF`
 
-    then run 
-    
+    then run
+
     `bin/rails hyrax:default_admin_set:create`
 
     (you can close the session when it's done)
@@ -126,3 +126,5 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 ## References
 
 Instructions are based on the [Samvera Hyrax](https://github.com/samvera/hyrax#creating-a-hyrax-based-app) installation instructions
+
+Troubleshooting git error - Jocelyn
