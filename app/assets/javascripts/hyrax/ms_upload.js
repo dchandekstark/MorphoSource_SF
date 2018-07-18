@@ -7,7 +7,8 @@ $( document ).ready(function() {
     // hyraxUploader with other options (like afterSubmit), then override this file.
     Blacklight.onLoad(function() {
       var options = {
-          acceptFileTypes: /(\.|\/)(zip|ply|stl|obj|x3d|gltf|png|gif|bmp|dicom|jpg|jpeg|jpeg2000|tiff|tif|mtl|pdf)$/i
+          maxNumberOfFiles:10,
+          acceptFileTypes: /(\.|\/)(zip|ply|stl|obj|x3d|gltf|png|gif|bmp|dicom|jpg|jpeg|jpeg2000|tiff|tif|mtl|pdf|wmv|mov|avi|mpe?g|m4v)$/i
       };
       $('#fileupload').hyraxUploader(options);
       $('#fileuploadlogo').hyraxUploader({downloadTemplateId: 'logo-template-download'});
