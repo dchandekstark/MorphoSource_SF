@@ -1,0 +1,9 @@
+# config/authorities/media_types.yml
+# Todo: Create a URI resource for this subtype list
+terms:
+  - id: ImageStack
+    term: Image Stack
+    active: true
+  - id: Mesh
+    term: Mesh
+    active: true
