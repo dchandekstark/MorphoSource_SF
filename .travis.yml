@@ -1,0 +1,30 @@
+# Based on https://github.com/duke-libraries/rdr/blob/develop/.travis.yml
+
+language: ruby
+rvm:
+  - 2.4.2
+services:
+  - postgresql
+  # Use redis for background jobs
+  - redis-server
+addons:
+  firefox: '61.0'
+before_install:
+  # from http://www.columbia.edu/~njn2118/journal/2016/10/28.html
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
+  - mkdir geckodriver
+  - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
+
+before_script:
+  - "cp .rspec.travis .rspec"
+  # Don't need to use role_map if using hydra-role-manager
+  - "cp config/role_map.yml.sample config/role_map.yml"
+
+  # Sets up test db name to be travis_ci_test
+  - "cp config/database.yml.travis config/database.yml"
+  - "psql -c 'create database travis_ci_test;' -U postgres"
+
+script: "bundle exec rake ci"
+jdk:
+  - oraclejdk8
