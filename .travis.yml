@@ -19,8 +19,8 @@ before_install:
 before_script:
   - "cp .rspec.travis .rspec"
   # Don't need to use role_map if using hydra-role-manager
-  - "cp config/role_map.yml.sample config/role_map.yml"
-
+  # - "cp config/role_map.yml.sample config/role_map.yml"
+  - "cp spec/travis_spec_helper.rb spec/spec_helper.rb"
   # Sets up test db name to be travis_ci_test
   - "cp config/database.yml.travis config/database.yml"
   - "psql -c 'create database travis_ci_test;' -U postgres"
