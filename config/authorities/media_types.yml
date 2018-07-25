@@ -1,9 +1,21 @@
 # config/authorities/media_types.yml
 # Todo: Create a URI resource for this subtype list
 terms:
+  - id: Image
+    term: Image (*.tiff, *.png, *.dcm, etc.)
+    active: true
+  - id: Video
+    term: Video (*.avi, *.mp4, *.mov, .etc.)
+    active: true
   - id: ImageStack
-    term: Image Stack
+    term: Image stack (multiple files of type *.tiff, *.png, *.dcm, etc.)
     active: true
   - id: Mesh
-    term: Mesh
+    term: Mesh or point cloud (*.stl, *.ply, .etc)
+    active: true
+  - id: MeshWithTexture
+    term: Mesh with texture file (single file of type *.stl, *.ply, etc. and associated texture or color file)
+    active: true
+  - id: Other
+    term: Other
     active: true
