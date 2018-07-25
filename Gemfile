@@ -14,8 +14,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'figaro'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+gem 'redis'
 gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
 gem 'devise'
@@ -45,7 +44,7 @@ end
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 2.13'
+  gem 'capybara'
   gem 'selenium-webdriver'
   gem 'solr_wrapper', '~> 2.0.0'
   gem 'fcrepo_wrapper'
@@ -54,6 +53,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'factory_bot_rails', '~> 4.8'
   gem 'webmock'
+  gem 'geckodriver-helper'
 end
 
 group :production do
