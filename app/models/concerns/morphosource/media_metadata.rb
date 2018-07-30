@@ -8,7 +8,7 @@ module Morphosource
 	  # -- Fields present on edit/show form --
 
 	  # Required select values 
-	  property :modality, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subtypeLiteral") do |index|
+	  property :modality, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/captureDevice") do |index|
 	  	index.as :stored_searchable, :facetable
 	  end
 
@@ -17,7 +17,7 @@ module Morphosource
 	  end
 
 	  # Optional select values
-	  property :side, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subjectPart") do |index|
+	  property :side, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/comments") do |index|
 		index.as :stored_searchable, :facetable
 	  end
 
@@ -42,12 +42,12 @@ module Morphosource
 		index.as :stored_searchable
 	  end
 
-	  property :agreement_uri, predicate: ::RDF::URI.new("http://ns.adobe.com/xap/1.0/rights/Owner") do |index|
+	  property :agreement_uri, predicate: ::RDF::URI.new("http://ns.adobe.com/xap/1.0/rights/UsageTerms") do |index|
 		index.as :stored_searchable
 	  end
 
 	  # -- Fields not present on edit/show form --
-	  property :legacy_media_file_id, predicate: ::RDF::Vocab::DC.identifier, multiple: false do |index|
+	  property :legacy_media_file_id, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/providerManagedID"), multiple: false do |index|
 		index.as :stored_searchable
 	  end
 
@@ -55,15 +55,15 @@ module Morphosource
 		index.as :stored_searchable
 	  end
 
-	  property :uuid, predicate: ::RDF::Vocab::DC.identifier, multiple: false do |index|
+	  property :uuid, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/mediaUUID"), multiple: false do |index|
 		index.as :stored_searchable
 	  end
 
-	  property :ark, predicate: ::RDF::Vocab::DC.identifier, multiple: false do |index|
+	  property :ark, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/mediaARK"), multiple: false do |index|
 		index.as :stored_searchable
 	  end
 
-	  property :doi, predicate: ::RDF::Vocab::DC.identifier, multiple: false do |index|
+	  property :doi, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/mediaDOI"), multiple: false do |index|
 		index.as :stored_searchable
 	  end
 
