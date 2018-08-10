@@ -5,7 +5,7 @@ module Morphosource
 	extend ActiveSupport::Concern
 
 	included do 
-	  # -- Fields present on edit/show form --
+	  # -- Core metadata --
 
 	  # Required select values 
 	  property :modality, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/captureDevice") do |index|
@@ -46,7 +46,7 @@ module Morphosource
 		index.as :stored_searchable
 	  end
 
-	  # -- Fields not present on edit/show form --
+	  # Fields not present on edit/show form
 	  property :legacy_media_file_id, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/providerManagedID"), multiple: false do |index|
 		index.as :stored_searchable
 	  end
@@ -70,6 +70,47 @@ module Morphosource
 	  property :available, predicate: ::RDF::Vocab::DC.available, multiple: false do |index|
 		index.as :stored_searchable
 	  end
+
+	  # -- Media type-specific metadata --
+
+	  # ImageStack fields
+	  property :number_of_images_in_set, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomNumberOfSeriesRelatedInstances"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  # CTImageStack fields
+	  property :x_spacing, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomPixelSpacingWidth"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  property :y_spacing, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomPixelSpacingHeight"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  property :z_spacing, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomSpacingBetweenSlices"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  # PhotogrammetryImageStack fields
+	  property :scale_bar_target_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBarTargetType"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  property :scale_bar_distance, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBarDistance"), multiple: false do |index|
+		index.as :stored_searchable
+	  end
+
+	  # Mesh and CTImageStack field
+	  property :unit, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/ACExt/units"), multiple: false do |index|
+		index.as :stored_searchable, :facetable
+	  end
+
+	  # Mesh field
+	   property :map_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/mapType") do |index|
+		index.as :stored_searchable, :facetable
+	  end
+
+
 	end
   end
 end
