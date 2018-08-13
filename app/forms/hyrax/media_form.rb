@@ -7,8 +7,10 @@ module Hyrax
 
     # Customizing field terms
 
-    self.terms = [:title, :modality, :media_type, :part, :side, :orientation, :description, 
-                    :keyword, :identifier, :related_url, :creator, :date_created, 
+    self.terms = [:title, :modality, :media_type, :x_spacing, :y_spacing, :z_spacing, 
+                    :scale_bar_target_type, :scale_bar_distance, :unit, :map_type, 
+                    :part, :side, :orientation, 
+                    :description, :keyword, :identifier, :related_url, :creator, :date_created, 
                     :funding, :license, :rights_statement, :agreement_uri, 
                     :rights_holder, :cite_as, :publisher,     
                     :representative_id, :thumbnail_id, :rendering_ids, :files,
