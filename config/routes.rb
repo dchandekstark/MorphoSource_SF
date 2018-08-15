@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  require "resque_web"
+  mount ResqueWeb::Engine => "/queues"
+  
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
   
