@@ -3,6 +3,8 @@ Hyrax.config do |config|
   config.register_curation_concern :work
   # Injected via `rails g hyrax:work Media`
   config.register_curation_concern :media
+  # Injected via `rails g hyrax:work PhysicalObject`
+  config.register_curation_concern :physical_object
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
@@ -118,7 +120,7 @@ Hyrax.config do |config|
   # Should work creation require file upload, or can a work be created first
   # and a file added at a later time?
   # The default is true.
-  # config.work_requires_files = true
+  config.work_requires_files = false
 
   # Enable IIIF image service. This is required to use the
   # UniversalViewer-ified show page
