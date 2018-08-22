@@ -1,0 +1,8 @@
+develop:
+  stage: deploy
+  script:
+    - /srv/perkins/bin/deploy-morphosource.sh
+  only:
+    - dev
+  tags:
+    - development
