@@ -6,13 +6,14 @@ function show_fields(field_array) {
 
 function hide_fields(field_array, clear = true) {
 	$(field_array.join(',')).addClass('hide');
-	if (clear) { 
+	if (clear) {
 		console.log(field_array.join(','));
-		$(field_array.join(',')).children('input, select').val(''); 
+		$(field_array.join(',')).children('input, select').val('');
 	}
 }
 
 function adjust_form_media_type() {
+	show_fields(['.media_title']);
 	if ($('#media_media_type').val() == 'CTImageStack') {
 		show_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit']);
 		hide_fields(['.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_map_type']);
