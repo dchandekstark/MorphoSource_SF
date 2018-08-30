@@ -13,7 +13,6 @@ function hide_fields(field_array, clear = true) {
 }
 
 function adjust_form_physical_object_type() {
-	show_fields(['.physical_object_title']);
 	if ($('#physical_object_physical_object_type').val() == 'BioSpec') {
 		show_fields(['.physical_object_idigbio_recordset_id', '.physical_object_idigbio_uuid', '.physical_object_is_type_specimen', '.physical_object_occurrence_id', '.physical_object_sex']);
 		hide_fields(['.physical_object_cho_type', '.physical_object_contributor', '.physical_object_creator', '.physical_object_material']);
@@ -26,6 +25,7 @@ function adjust_form_physical_object_type() {
 }
 
 $(document).ready(function () {
+	show_fields(['.physical_object_title']);
 	adjust_form_physical_object_type();
 });
 
