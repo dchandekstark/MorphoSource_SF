@@ -13,22 +13,23 @@ function hide_fields(field_array, clear = true) {
 }
 
 function adjust_form_media_type() {
-	show_fields(['.media_title']);
 	if ($('#media_media_type').val() == 'CTImageStack') {
 		show_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit']);
-		hide_fields(['.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_map_type']);
+		hide_fields(['.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_scale_bar_units', '.media_map_type']);
 	} else if ($('#media_media_type').val() == 'PhotogrammetryImageStack') {
-		show_fields(['.media_scale_bar_target_type', '.media_scale_bar_distance']);
+		show_fields(['.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_scale_bar_units']);
 		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit', '.media_map_type']);
 	} else if ($('#media_media_type').val() == 'Mesh') {
 		show_fields(['.media_unit', '.media_map_type']);
 		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_scale_bar_target_type', '.media_scale_bar_distance']);
 	} else {
-		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_unit', '.media_map_type']);
+		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_scale_bar_target_type', '.media_scale_bar_distance', '.media_scale_bar_units', '.media_unit', '.media_map_type']);
 	}
 }
 
 $(document).ready(function () {
+	show_fields(['.media_title']);
+	hide_fields(['.media_scale_bar','.media_number_of_images_in_set']);
 	adjust_form_media_type();
 });
 
