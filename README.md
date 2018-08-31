@@ -56,11 +56,14 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 
    `cd /vagrant/MorphoSource_SF`
 
-   then update the MorphoSource_SF repository with the following two commands
+   then checkout the latest code from the MorphoSource_SF repository.
+   For dev branch, run the following commands:
 
-   `git fetch`
+    `git checkout dev`
 
-   `git pull origin master`
+    `git fetch`
+
+    `git pull`
 
 5. Run MorphoSource_SF setup script
 
@@ -120,11 +123,11 @@ This repo ([MorphoSource_SF](https://github.com/morphosource/MorphoSource_SF)) i
 * [Fedora 4.7.1](http://fedorarepository.org/): [http://localhost:8984/](http://localhost:8984/)
 * [Ruby 2.4.2](https://www.ruby-lang.org) (managed by RVM)
 * [Rails 5.1.4](http://rubyonrails.org/)
-* [Hyrax v2.1.0.beta2](http://hyr.ax/)
+* [Hyrax v2.2.0](http://hyr.ax/)
 
 ## Tests
 
-* You will need to install Firefox to run tests. See further instructions in the [Wiki](https://github.com/MorphoSource/MorphoSource_SF/wiki/Tests)
+* See further instructions in the [Wiki](https://github.com/MorphoSource/MorphoSource_SF/wiki/Tests)
 
 ## References
 

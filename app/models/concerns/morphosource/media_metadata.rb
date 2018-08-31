@@ -100,6 +100,14 @@ module Morphosource
 		index.as :stored_searchable
 	  end
 
+    property :scale_bar_units, predicate: ::RDF::URI.new("http://id.loc.gov/authorities/subjects/sh85075978.html") do |index|
+		index.as :stored_searchable
+	  end
+
+    property :scale_bar, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBar") do |index|
+		index.as :stored_searchable
+	  end
+
 	  # Mesh and CTImageStack field
 	  property :unit, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/ACExt/units") do |index|
 		index.as :stored_searchable, :facetable

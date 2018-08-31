@@ -3,6 +3,30 @@
 module Hyrax
   module Actors
     class MediaActor < Hyrax::Actors::BaseActor
+
+      def create(env)
+        concat_scale_bar(env) && super
+      end
+
+      def update(env)
+        concat_scale_bar(env) && super
+      end
+
+      def concat_scale_bar(env)
+        scale_bar_target_type = "Type: " + env.attributes[:scale_bar_target_type].first
+        scale_bar_distance = "Distance: " + env.attributes[:scale_bar_distance].first
+        scale_bar_units = "Units: " + env.attributes[:scale_bar_units].first
+
+        concatenated = [scale_bar_target_type, scale_bar_distance, scale_bar_units].join(', ')
+
+        scale_bar = [concatenated]
+
+        env.attributes[:scale_bar] = scale_bar
+
+        true
+
+      end
+
     end
   end
 end
