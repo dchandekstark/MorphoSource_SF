@@ -25,7 +25,6 @@ function adjust_form_physical_object_type() {
 }
 
 $(document).ready(function () {
-	show_fields(['.physical_object_title']);
 	adjust_form_physical_object_type();
 });
 
