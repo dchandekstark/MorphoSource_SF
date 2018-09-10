@@ -17,11 +17,7 @@ module Hyrax
         scale_bar_distance = "Distance: " + env.attributes[:scale_bar_distance].first.to_s
         scale_bar_units = "Units: " + env.attributes[:scale_bar_units].first.to_s
 
-        concatenated = [scale_bar_target_type, scale_bar_distance, scale_bar_units].join(', ')
-
-        scale_bar = [concatenated]
-
-        env.attributes[:scale_bar] = scale_bar
+        env.attributes[:scale_bar] = [[scale_bar_target_type, scale_bar_distance, scale_bar_units].join(', ')]
 
         true
 
