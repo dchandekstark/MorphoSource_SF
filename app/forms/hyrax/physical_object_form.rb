@@ -59,9 +59,7 @@ module Hyrax
       :institution,
       :numeric_time,
       :original_location,
-      :periodic_time,
       :publisher,
-      :related_url,
       :vouchered,
       # Biological Specimens only
       :idigbio_recordset_id,
