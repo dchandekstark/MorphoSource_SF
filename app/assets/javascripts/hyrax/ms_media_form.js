@@ -28,7 +28,6 @@ function adjust_form_media_type() {
 }
 
 $(document).ready(function () {
-	show_fields(['.media_title']);
 	hide_fields(['.media_scale_bar','.media_number_of_images_in_set']);
 	adjust_form_media_type();
 });
