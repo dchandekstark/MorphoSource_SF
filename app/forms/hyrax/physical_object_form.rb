@@ -16,9 +16,10 @@ module Hyrax
        # bibliographic_citation should be included in Hyrax Basic Metadata, but causes errors if commented out
        :physical_object_type,
        :bibliographic_citation,
+       # :based_near,
        :catalog_number,
        :collection_code,
-       :current_location,
+       # :current_location,
        # :date_created,
        # :description,
        # :identifier,
@@ -45,7 +46,7 @@ module Hyrax
        :material
     ]
 
-    self.terms -= [:based_near, :keyword, :license, :rights_statement, :subject, :language, :source, :resource_type]
+    self.terms -= [:keyword, :license, :rights_statement, :subject, :language, :source, :resource_type]
 
     self.required_fields = [:title, :vouchered, :physical_object_type]
 
@@ -53,7 +54,7 @@ module Hyrax
       :bibliographic_citation,
       :catalog_number,
       :collection_code,
-      :current_location,
+      # :current_location,
       :date_created,
       :description,
       :institution,
@@ -77,9 +78,10 @@ module Hyrax
     def primary_terms
       required_fields + [
         :bibliographic_citation,
+        :based_near,
         :catalog_number,
         :collection_code,
-        :current_location,
+        # :current_location,
         :date_created,
         :identifier,
         :institution,

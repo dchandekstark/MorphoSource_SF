@@ -16,9 +16,9 @@ module Morphosource
       index.as :stored_searchable
     end
 
-    property :current_location, predicate: ::RDF::Vocab::EDM.currentLocation do |index|
-      index.as :stored_searchable, :facetable
-    end
+    # property :current_location, predicate: ::RDF::Vocab::EDM.currentLocation do |index|
+    #   index.as :stored_searchable, :facetable
+    # end
 
     property :institution, predicate: ::RDF::Vocab::DWC.institutionID do |index|
       index.as :stored_searchable, :facetable
