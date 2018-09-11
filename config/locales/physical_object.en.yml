@@ -11,7 +11,8 @@ en:
       physical_object:
         physical_object_type: Resource Type
         description: Description
-        current_location: Current Location
+        # current_location: Current Location
+        based_near: Current Location
         original_location: Original Location
         date_created: Date Created
         identifier: Identifier
