@@ -2,7 +2,7 @@
   <% if defined?(viewer) && viewer %>
     <div class="viewer-wrapper">
       <div class="viewer">
-  		<iframe height="100%" width="100%" src="<%= PulUvRails::UniversalViewer.viewer_src %>#?manifest=<%= main_app.polymorphic_path [main_app, :manifest, presenter], { locale: nil } %>" allowfullscreen frameborder="0"></iframe>
+  		  <iframe height="100%" width="100%" src="<%= PulUvRails::UniversalViewer.viewer_src %>#?manifest=<%= main_app.polymorphic_path [main_app, :manifest, presenter], { locale: nil } %>" allowfullscreen frameborder="0"></iframe>
   	  </div>
   	</div>
   <% else %>
