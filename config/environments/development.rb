@@ -26,8 +26,8 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # ActiveJob adapter as inline
-  config.active_job.queue_adapter = :inline
+  # ActiveJob adapter as inline - disabled (using async as default) for now due to file characterization issue
+  # config.active_job.queue_adapter = :inline
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
