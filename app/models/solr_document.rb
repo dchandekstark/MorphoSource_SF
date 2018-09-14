@@ -28,6 +28,7 @@ class SolrDocument
 
   # Add custom metadata fields to show view
 
+  # Media Fields
   def agreement_uri
     self[Solrizer.solr_name('agreement_uri')]
   end
@@ -87,5 +88,76 @@ class SolrDocument
   def z_spacing
     self[Solrizer.solr_name('z_spacing')]
   end
-  
+
+  # Physical Object Fields
+  def physical_object_type
+    self[Solrizer.solr_name('physical_object_type')]
+  end
+
+  def bibliographic_citation
+    self[Solrizer.solr_name('bibliographic_citation')]
+  end
+
+  def catalog_number
+    self[Solrizer.solr_name('catalog_number')]
+  end
+
+  def collection_code
+    self[Solrizer.solr_name('collection_code')]
+  end
+
+  def current_location
+    self[Solrizer.solr_name('current_location')]
+  end
+
+  def institution
+    self[Solrizer.solr_name('institution')]
+  end
+
+  def numeric_time
+    self[Solrizer.solr_name('numeric_time')]
+  end
+
+  def original_location
+    self[Solrizer.solr_name('original_location')]
+  end
+
+  def periodic_time
+    self[Solrizer.solr_name('periodic_time')]
+  end
+
+  def vouchered
+    self[Solrizer.solr_name('vouchered')]
+  end
+
+  # Biological Specimens only
+  def idigbio_recordset_id
+    self[Solrizer.solr_name('idigbio_recordset_id')]
+  end
+
+  def idigbio_uuid
+    self[Solrizer.solr_name('idigbio_uuid')]
+  end
+
+  def is_type_specimen
+    self[Solrizer.solr_name('is_type_specimen')]
+  end
+
+  def occurrence_id
+    self[Solrizer.solr_name('occurrence_id')]
+  end
+
+  def sex
+    self[Solrizer.solr_name('sex')]
+  end
+
+  # CHOs only
+  def cho_type
+    self[Solrizer.solr_name('cho_type')]
+  end
+
+  def material
+    self[Solrizer.solr_name('material')]
+  end
+
 end
