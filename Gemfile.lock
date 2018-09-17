@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/JuliaWinchester/pul_uv_rails.git
+  revision: 9d014a4cfc09670446add377da632fd33c73b096
+  specs:
+    pul_uv_rails (2.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -522,7 +528,6 @@ GEM
     posix-spawn (0.3.13)
     power_converter (0.1.2)
     public_suffix (3.0.3)
-    pul_uv_rails (2.0.1)
     puma (3.12.0)
     qa (2.0.1)
       activerecord-import
@@ -839,6 +844,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   passenger
   pg
+  pul_uv_rails!
   puma (~> 3.7)
   rails (~> 5.1.4)
   rails-controller-testing
