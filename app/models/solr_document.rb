@@ -30,134 +30,134 @@ class SolrDocument
 
   # Media Fields
   def agreement_uri
-    self[Solrizer.solr_name('agreement_uri')]
+    self[Solrizer.solr_name('agreement_uri', :stored_searchable)]
   end
 
   def cite_as
-    self[Solrizer.solr_name('cite_as')]
+    self[Solrizer.solr_name('cite_as', :stored_searchable)]
   end
 
   def funding
-    self[Solrizer.solr_name('funding')]
+    self[Solrizer.solr_name('funding', :stored_searchable)]
   end
 
   def map_type
-    self[Solrizer.solr_name('map_type')]
+    self[Solrizer.solr_name('map_type', :stored_searchable)]
   end
 
   def media_type
-    self[Solrizer.solr_name('media_type')]
+    self[Solrizer.solr_name('media_type', :stored_searchable)]
   end
 
   def modality
-    self[Solrizer.solr_name('modality')]
+    self[Solrizer.solr_name('modality', :stored_searchable)]
   end
 
   def orientation
-    self[Solrizer.solr_name('orientation')]
+    self[Solrizer.solr_name('orientation', :stored_searchable)]
   end
 
   def part
-    self[Solrizer.solr_name('part')]
+    self[Solrizer.solr_name('part', :stored_searchable)]
   end
 
   def rights_holder
-    self[Solrizer.solr_name('rights_holder')]
+    self[Solrizer.solr_name('rights_holder', :stored_searchable)]
   end
 
   def scale_bar
-    self[Solrizer.solr_name('scale_bar')]
+    self[Solrizer.solr_name('scale_bar', :stored_searchable)]
   end
 
   def side
-    self[Solrizer.solr_name('side')]
+    self[Solrizer.solr_name('side', :stored_searchable)]
   end
 
   def unit
-    self[Solrizer.solr_name('unit')]
+    self[Solrizer.solr_name('unit', :stored_searchable)]
   end
 
   def x_spacing
-    self[Solrizer.solr_name('x_spacing')]
+    self[Solrizer.solr_name('x_spacing', :stored_searchable)]
   end
 
   def y_spacing
-    self[Solrizer.solr_name('y_spacing')]
+    self[Solrizer.solr_name('y_spacing', :stored_searchable)]
   end
 
   def z_spacing
-    self[Solrizer.solr_name('z_spacing')]
+    self[Solrizer.solr_name('z_spacing', :stored_searchable)]
   end
 
   # Physical Object Fields
   def physical_object_type
-    self[Solrizer.solr_name('physical_object_type')]
+    self[Solrizer.solr_name('physical_object_type', :stored_searchable)]
   end
 
   def bibliographic_citation
-    self[Solrizer.solr_name('bibliographic_citation')]
+    self[Solrizer.solr_name('bibliographic_citation', :stored_searchable)]
   end
 
   def catalog_number
-    self[Solrizer.solr_name('catalog_number')]
+    self[Solrizer.solr_name('catalog_number', :stored_searchable)]
   end
 
   def collection_code
-    self[Solrizer.solr_name('collection_code')]
+    self[Solrizer.solr_name('collection_code', :stored_searchable)]
   end
 
   def current_location
-    self[Solrizer.solr_name('current_location')]
+    self[Solrizer.solr_name('current_location', :stored_searchable)]
   end
 
   def institution
-    self[Solrizer.solr_name('institution')]
+    self[Solrizer.solr_name('institution', :stored_searchable)]
   end
 
   def numeric_time
-    self[Solrizer.solr_name('numeric_time')]
+    self[Solrizer.solr_name('numeric_time', :stored_searchable)]
   end
 
   def original_location
-    self[Solrizer.solr_name('original_location')]
+    self[Solrizer.solr_name('original_location', :stored_searchable)]
   end
 
   def periodic_time
-    self[Solrizer.solr_name('periodic_time')]
+    self[Solrizer.solr_name('periodic_time', :stored_searchable)]
   end
 
   def vouchered
-    self[Solrizer.solr_name('vouchered')]
+    self[Solrizer.solr_name('vouchered', :stored_searchable)]
   end
 
   # Biological Specimens only
   def idigbio_recordset_id
-    self[Solrizer.solr_name('idigbio_recordset_id')]
+    self[Solrizer.solr_name('idigbio_recordset_id', :stored_searchable)]
   end
 
   def idigbio_uuid
-    self[Solrizer.solr_name('idigbio_uuid')]
+    self[Solrizer.solr_name('idigbio_uuid', :stored_searchable)]
   end
 
   def is_type_specimen
-    self[Solrizer.solr_name('is_type_specimen')]
+    self[Solrizer.solr_name('is_type_specimen', :stored_searchable)]
   end
 
   def occurrence_id
-    self[Solrizer.solr_name('occurrence_id')]
+    self[Solrizer.solr_name('occurrence_id', :stored_searchable)]
   end
 
   def sex
-    self[Solrizer.solr_name('sex')]
+    self[Solrizer.solr_name('sex', :stored_searchable)]
   end
 
   # CHOs only
   def cho_type
-    self[Solrizer.solr_name('cho_type')]
+    self[Solrizer.solr_name('cho_type', :stored_searchable)]
   end
 
   def material
-    self[Solrizer.solr_name('material')]
+    self[Solrizer.solr_name('material', :stored_searchable)]
   end
 
 end
