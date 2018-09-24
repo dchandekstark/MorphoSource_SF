@@ -15,20 +15,20 @@ function hide_fields(field_array, clear = true) {
 function adjust_form_media_type() {
 	if ($('#media_media_type').val() == 'CTImageStack') {
 		show_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit']);
-		hide_fields(['.media_map_type', '.media_scale_bar']);
+		hide_fields(['.media_map_type', '#media_scale_bar_wrapper']);
 	} else if ($('#media_media_type').val() == 'PhotogrammetryImageStack') {
-		show_fields(['.media_scale_bar']);
+		show_fields(['#media_scale_bar_wrapper']);
 		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit', '.media_map_type']);
 	} else if ($('#media_media_type').val() == 'Mesh') {
 		show_fields(['.media_unit', '.media_map_type']);
-		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_scale_bar']);
+		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '#media_scale_bar_wrapper']);
 	} else {
-		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit', '.media_map_type', '.media_scale_bar']);
+		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_unit', '.media_map_type', '#media_scale_bar_wrapper']);
 	}
 }
 
 $(document).ready(function () {
-	hide_fields(['.media_number_of_images_in_set']);
+	hide_fields(['.media_number_of_images_in_set','.media_scale_bar']);
 	adjust_form_media_type();
 });
 
