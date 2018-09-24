@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/JuliaWinchester/iiif_manifest.git
+  revision: 5f0586d9c4dc6b1c327fd94278e4ad59cbd83393
+  specs:
+    iiif_manifest (0.4.0)
+      activesupport (>= 4)
+
+GIT
   remote: https://github.com/JuliaWinchester/pul_uv_rails.git
   revision: 9d014a4cfc09670446add377da632fd33c73b096
   specs:
@@ -371,8 +378,6 @@ GEM
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
-    iiif_manifest (0.4.0)
-      activesupport (>= 4)
     io-like (0.3.0)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -839,6 +844,7 @@ DEPENDENCIES
   geckodriver-helper
   hydra-role-management
   hyrax (= 2.2.0)
+  iiif_manifest!
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)

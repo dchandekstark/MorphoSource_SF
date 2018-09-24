@@ -25,4 +25,22 @@ class SolrDocument
   # Do content negotiation for AF models. 
 
   use_extension( Hydra::ContentNegotiation )
+
+  # MorphoSource customizations
+  def file_ext
+    File.extname(title.kind_of?(Array) ? title.first : title)
+  end
+
+  def mesh? # TODO: Needs to be adjusted to use mime types when FITS issue is dealt with
+    accepted_formats = [".ply", ".stl", ".obj", ".gltf"]
+    accepted_formats.include? file_ext
+  end
+
+  def mesh_mime_type # TODO: Temporary, should not exist forever
+    mesh_mime_types = { ".ply" => "application/ply", 
+                        ".stl" => "application/sla", 
+                        ".obj" => "text/plain", 
+                        ".gltf" => "model/gltf+json" }
+    mesh_mime_types[file_ext]
+  end
 end

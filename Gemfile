@@ -25,6 +25,9 @@ gem 'riiif', '~> 1.1'
 # pul_uv_rails fork upgraded for universal viewer v3 beta
 gem 'pul_uv_rails', :git => 'https://github.com/JuliaWinchester/pul_uv_rails.git'
 
+# pull iiif_manifest fork that can handle 3D manifests
+gem 'iiif_manifest', :git => 'https://github.com/JuliaWinchester/iiif_manifest.git'
+
 gem 'hyrax', '2.2.0'
 gem 'hydra-role-management'
 

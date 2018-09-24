@@ -10,5 +10,10 @@ module Hyrax
 
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::MediaPresenter
+
+    private 
+      def manifest_builder
+        ::IIIFManifest::V3::ManifestFactory.new(presenter)
+      end
   end
 end
