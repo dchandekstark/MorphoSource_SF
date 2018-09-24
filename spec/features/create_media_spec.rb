@@ -63,7 +63,14 @@ RSpec.feature 'Create a Media', js: true do
       click_on('Save')
 
       expect(page).to have_content('My Test Media Work')
-      expect(page).to have_content "Type: Example Target Type, Distance: Example Distance, Units: Example Units"
+      expect(page).to have_content("Type: Example Target Type, Distance: Example Distance, Units: Example Units")
+
+      click_link 'Edit'
+
+      expect(page).to have_field("media_scale_bar_target_type", with: 'Example Target Type', visible: false)
+      expect(page).to have_field("media_scale_bar_distance", with: 'Example Distance', visible: false)
+      expect(page).to have_field("media_scale_bar_units", with: 'Example Units', visible: false)
+
     end
   end
 end

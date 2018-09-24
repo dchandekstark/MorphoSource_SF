@@ -43,7 +43,7 @@ $(document).ready(function(){
     var concatScaleBarValue = concatScaleBars[i].value
     var type = concatScaleBarValue.match(/Type: (.*?), Distance: /)[1];
     var distance = concatScaleBarValue.match(/, Distance: (.*?), Units: /)[1];
-    var units = concatScaleBarValue.match(/Units: (...)/)[1];
+    var units = concatScaleBarValue.match(/Units: (.*)/)[1];
 
     // Fill in values for first line
     if (i == 0) {
