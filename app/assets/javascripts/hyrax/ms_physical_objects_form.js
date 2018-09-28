@@ -7,7 +7,6 @@ function show_fields(field_array) {
 function hide_fields(field_array, clear = true) {
 	$(field_array.join(',')).addClass('hide');
 	if (clear) {
-		console.log(field_array.join(','));
 		$(field_array.join(',')).children('input, select').val('');
 	}
 }
