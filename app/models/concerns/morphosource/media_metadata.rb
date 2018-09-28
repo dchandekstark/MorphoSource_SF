@@ -92,18 +92,6 @@ module Morphosource
 	  end
 
 	  # PhotogrammetryImageStack fields
-	  property :scale_bar_target_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBarTargetType") do |index|
-		index.as :stored_searchable
-	  end
-
-	  property :scale_bar_distance, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBarDistance") do |index|
-		index.as :stored_searchable
-	  end
-
-    property :scale_bar_units, predicate: ::RDF::URI.new("http://id.loc.gov/authorities/subjects/sh85075978.html") do |index|
-		index.as :stored_searchable
-	  end
-
     property :scale_bar, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBar") do |index|
 		index.as :stored_searchable
 	  end

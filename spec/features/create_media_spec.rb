@@ -1,5 +1,3 @@
-# TODO: Troubleshoot - test fails with message "Failure/Error: click_link "Add new work" "Capybara::ElementNotFound: Unable to find visible link "Add new work""
-
 # Generated via
 #  `rails generate hyrax:work Media`
 require 'rails_helper'
@@ -35,37 +33,44 @@ RSpec.feature 'Create a Media', js: true do
     scenario do
       visit '/dashboard'
       click_link "Works"
-#       click_link "Add new work"
-#
-#       # If you generate more than one work uncomment these lines
-#       choose "payload_concern", option: "Media"
-#       click_button "Create work"
-#
-#       expect(page).to have_content "Add New Media"
-#       click_link "Files" # switch tab
-#       expect(page).to have_content "Add files"
-#       expect(page).to have_content "Add folder"
-#       within('span#addfiles') do
-#         attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
-#         attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/jp2_fits.xml", visible: false)
-#       end
-#       click_link "Descriptions" # switch tab
-#       fill_in('Title', with: 'My Test Work')
-#       fill_in('Creator', with: 'Doe, Jane')
-#       fill_in('Keyword', with: 'testing')
-#       select('In Copyright', from: 'Rights statement')
-#
-#       # With selenium and the chrome driver, focus remains on the
-#       # select box. Click outside the box so the next line can't find
-#       # its element
-#       find('body').click
-#       choose('media_visibility_open')
-#       expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
-#       check('agreement')
-#
-#       click_on('Save')
-#       expect(page).to have_content('My Test Work')
-#       expect(page).to have_content "Your files are being processed by Hyrax in the background."
+      click_link "Add new work"
+
+      # If you generate more than one work uncomment these lines
+      choose "payload_concern", option: "Media"
+      click_button "Create work"
+
+      expect(page).to have_content "Add New Media"
+
+      fill_in('Title', with: 'My Test Media Work')
+      select('Positron Emission Tomography (PET)', from: 'Modality')
+      select('Photogrammetry image stack (multiple files of type *.tiff, *.png, etc.)', from: 'Media Type')
+
+      # Use JS to fill in hidden fields
+      page.execute_script("
+        document.getElementById('media_scale_bar_target_type').value = 'Example Target Type';
+        document.getElementById('media_scale_bar_distance').value = 'Example Distance';
+        document.getElementById('media_scale_bar_units').value = 'Example Units';
+      ");
+
+      # With selenium and the chrome driver, focus remains on the
+      # select box. Click outside the box so the next line can't find
+      # its element
+      find('body').click
+
+      choose('media_visibility_open')
+      expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
+      check('agreement')
+      click_on('Save')
+
+      expect(page).to have_content('My Test Media Work')
+      expect(page).to have_content("Type: Example Target Type, Distance: Example Distance, Units: Example Units")
+
+      click_link 'Edit'
+
+      expect(page).to have_field("media_scale_bar_target_type", with: 'Example Target Type', visible: false)
+      expect(page).to have_field("media_scale_bar_distance", with: 'Example Distance', visible: false)
+      expect(page).to have_field("media_scale_bar_units", with: 'Example Units', visible: false)
+
     end
   end
 end
