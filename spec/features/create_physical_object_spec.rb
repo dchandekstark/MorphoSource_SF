@@ -46,6 +46,14 @@ RSpec.feature 'Create a PhysicalObject', js: true do
       select('Yes', from: 'Vouchered?')
       select('Cultural Heritage Object', from: 'Resource Type')
 
+      # Use JS to fill in hidden fields
+      page.execute_script("
+        document.getElementById('physical_object_creator').value = 'Jefferson, Thomas';
+        document.getElementById('physical_object_contributor').value = 'Washington, George';
+        document.getElementById('physical_object_cho_type').value = 'Lite Brite';
+        document.getElementById('physical_object_material').value = 'pudding';
+      ");
+
       expect(first('#physical_object_contributor', visible: false)['class']).to include('multi_value')
       expect(first('#physical_object_cho_type', visible: false)['class']).to include('multi_value')
       expect(first('#physical_object_material', visible: false)['class']).to include('multi_value')
@@ -60,6 +68,16 @@ RSpec.feature 'Create a PhysicalObject', js: true do
       check('agreement')
       click_on('Save')
       expect(page).to have_content('My Test Physical Object')
+
+      click_link 'Edit'
+
+      click_link 'Additional fields'
+
+      expect(page).to have_field('physical_object_creator', with: 'Jefferson, Thomas')
+      expect(page).to have_field('physical_object_contributor', with: 'Washington, George')
+      expect(page).to have_field('physical_object_cho_type', with: 'Lite Brite')
+      expect(page).to have_field('physical_object_material', with: 'pudding')
+
     end
   end
 end
