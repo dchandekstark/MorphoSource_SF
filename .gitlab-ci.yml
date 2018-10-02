@@ -1,7 +1,23 @@
-develop:
+.test:
+  stage: test
+  script:
+    - whoami
+    - pwd
+    - export
+    - $RAILS_DEPLOY_PATH/bin/test.sh
+
+deploy_dev:
+  environment:
+    name: development
+    url: https://morphosource-dev.lib.duke.edu/
   stage: deploy
   script:
-    - /srv/perkins/bin/deploy-morphosource.sh
+    - whoami
+    - pwd
+    - export
+    - $RAILS_DEPLOY_PATH/bin/deploy.sh $CI_PROJECT_DIR
+  after_script:
+    - $RAILS_DEPLOY_PATH/bin/after_deploy.sh
   only:
     - dev
   tags:
