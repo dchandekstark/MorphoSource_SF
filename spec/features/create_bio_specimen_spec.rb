@@ -44,11 +44,16 @@ RSpec.feature 'Create a PhysicalObject', js: true do
 
       fill_in('Title', with: 'My Test Physical Object')
       select('Yes', from: 'Vouchered?')
-      select('Cultural Heritage Object', from: 'Resource Type')
+      select('Biological Specimen', from: 'Resource Type')
 
-      expect(first('#physical_object_contributor', visible: false)['class']).to include('multi_value')
-      expect(first('#physical_object_cho_type', visible: false)['class']).to include('multi_value')
-      expect(first('#physical_object_material', visible: false)['class']).to include('multi_value')
+      # Use JS to fill in hidden fields
+      page.execute_script("
+        document.getElementById('physical_object_idigbio_recordset_id').value = 'AAAAbbbb';
+        document.getElementById('physical_object_idigbio_uuid').value = '1234abcd';
+        document.getElementById('physical_object_is_type_specimen').value = 'Yes';
+        document.getElementById('physical_object_occurrence_id').value = 'ABCD1234';
+        document.getElementById('physical_object_sex').value = 'Female';
+      ");
 
       # With selenium and the chrome driver, focus remains on the
       # select box. Click outside the box so the next line can find
@@ -60,6 +65,17 @@ RSpec.feature 'Create a PhysicalObject', js: true do
       check('agreement')
       click_on('Save')
       expect(page).to have_content('My Test Physical Object')
+
+      click_link 'Edit'
+
+      click_link 'Additional fields'
+
+      expect(page).to have_field('physical_object_idigbio_recordset_id', with: 'AAAAbbbb')
+      expect(page).to have_field('physical_object_idigbio_uuid', with: '1234abcd')
+      expect(page).to have_field('physical_object_is_type_specimen', with: 'Yes')
+      expect(page).to have_field('physical_object_occurrence_id', with: 'ABCD1234')
+      expect(page).to have_field('physical_object_sex', with: 'Female')
+
     end
   end
 end
