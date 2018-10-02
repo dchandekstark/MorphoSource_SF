@@ -54,6 +54,14 @@ module Morphosource
       index.as :stored_searchable, :facetable
     end
 
+    property :latitude, predicate: RDF::Vocab::EXIF.gpsLatitude do |index|
+      index.as :stored_searchable
+    end
+
+    property :longitude, predicate: RDF::Vocab::EXIF.gpsLongitude do |index|
+      index.as :stored_searchable
+    end
+
     # Biological Specimens
     property :idigbio_recordset_id, predicate: ::RDF::Vocab::DWC.datasetID do |index|
       index.as :stored_searchable
