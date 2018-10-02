@@ -54,10 +54,6 @@ RSpec.feature 'Create a PhysicalObject', js: true do
         document.getElementById('physical_object_material').value = 'pudding';
       ");
 
-      expect(first('#physical_object_contributor', visible: false)['class']).to include('multi_value')
-      expect(first('#physical_object_cho_type', visible: false)['class']).to include('multi_value')
-      expect(first('#physical_object_material', visible: false)['class']).to include('multi_value')
-
       # With selenium and the chrome driver, focus remains on the
       # select box. Click outside the box so the next line can find
       # its element
