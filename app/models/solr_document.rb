@@ -90,10 +90,6 @@ class SolrDocument
   end
 
   # Physical Object Fields
-  def physical_object_type
-    self[Solrizer.solr_name('physical_object_type', :stored_searchable)]
-  end
-
   def bibliographic_citation
     self[Solrizer.solr_name('bibliographic_citation', :stored_searchable)]
   end
@@ -110,8 +106,26 @@ class SolrDocument
     self[Solrizer.solr_name('current_location', :stored_searchable)]
   end
 
+  def geographic_coordinates
+    if (latitude && longitude)
+      "Latitude: " + latitude[0] + ", Longitude: " + longitude[0]
+    elsif latitude
+      "Latitude: " + latitude[0]
+    elsif longitude
+      "Longitude: " + longitude[0]
+    end
+  end
+
   def institution
     self[Solrizer.solr_name('institution', :stored_searchable)]
+  end
+
+  def latitude
+    self[Solrizer.solr_name('latitude', :stored_searchable)]
+  end
+
+  def longitude
+    self[Solrizer.solr_name('longitude', :stored_searchable)]
   end
 
   def numeric_time
@@ -124,6 +138,10 @@ class SolrDocument
 
   def periodic_time
     self[Solrizer.solr_name('periodic_time', :stored_searchable)]
+  end
+
+  def physical_object_type
+    self[Solrizer.solr_name('physical_object_type', :stored_searchable)]
   end
 
   def vouchered

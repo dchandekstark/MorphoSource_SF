@@ -3,7 +3,7 @@ module Morphosource
   # physical object works
   module PhysicalObjectMetadata
 	extend ActiveSupport::Concern
-#
+
 	included do
 
 # 	  -- custom fields only --
@@ -52,6 +52,14 @@ module Morphosource
 
     property :physical_object_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/physicalObjectType") do |index|
       index.as :stored_searchable, :facetable
+    end
+
+    property :latitude, predicate: RDF::Vocab::EXIF.gpsLatitude do |index|
+      index.as :stored_searchable
+    end
+
+    property :longitude, predicate: RDF::Vocab::EXIF.gpsLongitude do |index|
+      index.as :stored_searchable
     end
 
     # Biological Specimens

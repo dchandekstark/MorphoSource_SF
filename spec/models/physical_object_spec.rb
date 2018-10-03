@@ -16,6 +16,8 @@ RSpec.describe PhysicalObject do
       expect(subject).to respond_to(:description)
       expect(subject).to respond_to(:identifier)
       expect(subject).to respond_to(:institution)
+      expect(subject).to respond_to(:latitude)
+      expect(subject).to respond_to(:longitude)
       expect(subject).to respond_to(:numeric_time)
       expect(subject).to respond_to(:original_location)
       expect(subject).to respond_to(:periodic_time)
