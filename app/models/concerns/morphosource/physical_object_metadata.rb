@@ -3,7 +3,7 @@ module Morphosource
   # physical object works
   module PhysicalObjectMetadata
 	extend ActiveSupport::Concern
-#
+
 	included do
 
 # 	  -- custom fields only --

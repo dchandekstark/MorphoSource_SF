@@ -106,6 +106,16 @@ class SolrDocument
     self[Solrizer.solr_name('current_location', :stored_searchable)]
   end
 
+  def geographic_coordinates
+    if (latitude && longitude)
+      "Latitude: " + latitude[0] + ", Longitude: " + longitude[0]
+    elsif latitude
+      "Latitude: " + latitude[0]
+    elsif longitude
+      "Longitude: " + longitude[0]
+    end
+  end
+
   def institution
     self[Solrizer.solr_name('institution', :stored_searchable)]
   end
