@@ -9,6 +9,8 @@ RSpec.feature 'Display a Physical Object Work' do
   let(:description)             {['example description']}
   let(:identifier)              {['1234ABCD']}
   let(:institution)             {['Duke University']}
+  let(:latitude)                {['-37.556']}
+  let(:longitude)               {['133.444']}
   let(:numeric_time)            {['30 years']}
   let(:original_location)       {['Rome, Italy']}
   let(:periodic_time)           {['18th century']}
@@ -44,6 +46,8 @@ RSpec.feature 'Display a Physical Object Work' do
                           description:            description,
                           identifier:             identifier,
                           institution:            institution,
+                          latitude:               latitude,
+                          longitude:              longitude,
                           numeric_time:           numeric_time,
                           original_location:      original_location,
                           periodic_time:          periodic_time,
@@ -80,6 +84,7 @@ RSpec.feature 'Display a Physical Object Work' do
     expect(page).to have_content work.description.first
     expect(page).to have_content work.identifier.first
     expect(page).to have_content work.institution.first
+    expect(page).to have_content("Latitude: " + work.latitude.first + ", Longitude: " + work.longitude.first)
     expect(page).to have_content work.numeric_time.first
     expect(page).to have_content work.original_location.first
     expect(page).to have_content work.periodic_time.first
