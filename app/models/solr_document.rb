@@ -47,6 +47,9 @@ class SolrDocument
   end
 
   # Add custom metadata fields to show view
+  def in_works_ids
+    self[Solrizer.solr_name('in_works_ids', :stored_searchable)]
+  end
 
   # Media Fields
   def agreement_uri
