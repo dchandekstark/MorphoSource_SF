@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/JuliaWinchester/iiif_manifest.git
-  revision: 5f0586d9c4dc6b1c327fd94278e4ad59cbd83393
+  revision: edb9f53d5c11ab2e7c2f714f1e7db3e1dafd76de
   specs:
-    iiif_manifest (0.4.0)
+    iiif_manifest (0.5.0)
       activesupport (>= 4)
 
 GIT
@@ -37,10 +37,10 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active-fedora (11.5.2)
+    active-fedora (11.5.4)
       active-triples (>= 0.11.0, < 2.0.0)
-      activemodel (>= 4.2, < 6)
-      activesupport (>= 4.2.4, < 6)
+      activemodel (>= 4.2, < 5.2)
+      activesupport (>= 4.2.4, < 5.2)
       deprecation
       faraday (~> 0.12.1)
       faraday-encoding (= 0.0.4)
@@ -53,8 +53,8 @@ GEM
       activesupport (>= 3.0.0)
       rdf (>= 2.0.2, < 4.0)
       rdf-vocab (>= 2.0, < 4.0)
-    active_encode (0.1.1)
-      activesupport
+    active_encode (0.4)
+      rails
     activejob (5.1.6)
       activesupport (= 5.1.6)
       globalid (>= 0.3.6)
@@ -83,17 +83,17 @@ GEM
     awesome_nested_set (3.1.4)
       activerecord (>= 4.0.0, < 5.3)
     aws-eventstream (1.0.1)
-    aws-partitions (1.102.0)
-    aws-sdk-core (3.25.0)
+    aws-partitions (1.105.0)
+    aws-sdk-core (3.29.0)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.7.0)
-      aws-sdk-core (~> 3)
+    aws-sdk-kms (1.9.0)
+      aws-sdk-core (~> 3, >= 3.26.0)
       aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.17.1)
-      aws-sdk-core (~> 3, >= 3.21.2)
+    aws-sdk-s3 (1.20.0)
+      aws-sdk-core (~> 3, >= 3.26.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.0.3)
@@ -221,8 +221,8 @@ GEM
       dry-equalizer (~> 0.2)
       dry-logic (~> 0.4, >= 0.4.0)
       dry-types (~> 0.13.1)
-    ebnf (1.1.2)
-      rdf (>= 2.2, < 4.0)
+    ebnf (1.1.3)
+      rdf (~> 3.0)
       sxp (~> 1.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
@@ -254,14 +254,14 @@ GEM
       archive-zip (~> 0.7)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    google-api-client (0.23.7)
+    google-api-client (0.24.2)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (>= 0.5, < 0.7.0)
       httpclient (>= 2.8.1, < 3.0)
       mime-types (~> 3.0)
       representable (~> 3.0)
       retriable (>= 2.0, < 4.0)
-      signet (~> 0.9)
+      signet (~> 0.10)
     google_drive (2.1.3)
       google-api-client (>= 0.11.0, < 1.0.0)
       googleauth (>= 0.5.0, < 1.0.0)
@@ -316,19 +316,21 @@ GEM
       hydra-access-controls (= 10.5.1)
       hydra-core (= 10.5.1)
       rails (>= 3.2.6)
-    hydra-pcdm (0.11.0)
+    hydra-pcdm (1.0.0)
       active-fedora (>= 10, < 13)
+      activesupport (< 5.2)
       mime-types (>= 1)
     hydra-role-management (1.0.0)
       blacklight
       bootstrap_form
       cancancan
-    hydra-works (0.17.0)
+    hydra-works (1.0.0)
+      activesupport (>= 4.2.10, < 5.2)
       hydra-derivatives (~> 3.0)
       hydra-file_characterization (~> 0.3, >= 0.3.3)
       hydra-pcdm (>= 0.9)
       om (~> 3.1)
-    hyrax (2.2.0)
+    hyrax (2.3.3)
       active-fedora (~> 11.5, >= 11.5.2)
       almond-rails (~> 0.1)
       awesome_nested_set (~> 3.1)
@@ -347,8 +349,8 @@ GEM
       hydra-derivatives (~> 3.3)
       hydra-editor (>= 3.3, < 5.0)
       hydra-head (>= 10.5.0)
-      hydra-works (~> 0.16)
-      iiif_manifest (>= 0.3, < 0.5)
+      hydra-works (>= 0.16, < 2.0)
+      iiif_manifest (>= 0.3, < 0.6)
       jquery-datatables-rails (~> 3.4)
       jquery-ui-rails (~> 6.0)
       json-schema
@@ -395,11 +397,11 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.1.0)
-    json-ld (3.0.0)
+    json-ld (3.0.2)
       multi_json (~> 1.12)
       rdf (>= 2.2.8, < 4.0)
-    json-ld-preloaded (3.0.0)
-      json-ld (>= 2.2, < 4.0)
+    json-ld-preloaded (3.0.1)
+      json-ld (~> 3.0)
       multi_json (~> 1.12)
       rdf (~> 3.0)
     json-schema (2.8.0)
@@ -488,7 +490,7 @@ GEM
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
-    mini_magick (4.8.0)
+    mini_magick (4.9.2)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -534,7 +536,7 @@ GEM
     power_converter (0.1.2)
     public_suffix (3.0.3)
     puma (3.12.0)
-    qa (2.0.1)
+    qa (2.1.1)
       activerecord-import
       deprecation
       faraday
@@ -579,7 +581,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    rdf (3.0.2)
+    rdf (3.0.4)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (2.2.1)
@@ -593,7 +595,7 @@ GEM
       nokogiri (~> 1.8)
       rdf (>= 2.2.8, < 4.0)
       rdf-xsd (>= 2.2, < 4.0)
-    rdf-n3 (3.0.0)
+    rdf-n3 (3.0.1)
       rdf (~> 3.0)
     rdf-normalize (0.3.3)
       rdf (>= 2.2, < 4.0)
@@ -619,18 +621,18 @@ GEM
       rdf (>= 2.2, < 4.0)
       rdf-vocab (>= 2.2, < 4.0)
       rdf-xsd (>= 2.2, < 4.0)
-    rdf-trig (2.2.0)
-      ebnf (~> 1.0, >= 1.0.1)
-      rdf (>= 2.2, < 4.0)
-      rdf-turtle (>= 2.2, < 4.0)
+    rdf-trig (3.0.1)
+      ebnf (~> 1.1)
+      rdf (~> 3.0)
+      rdf-turtle (~> 3.0, >= 3.0.3)
     rdf-trix (2.2.1)
       rdf (>= 2.2, < 4.0)
-    rdf-turtle (3.0.1)
+    rdf-turtle (3.0.3)
       ebnf (~> 1.1)
       rdf (~> 3.0)
     rdf-vocab (3.0.3)
       rdf (~> 3.0)
-    rdf-xsd (3.0.0)
+    rdf-xsd (3.0.1)
       rdf (~> 3.0)
     redic (1.5.0)
       hiredis
@@ -697,7 +699,7 @@ GEM
       oauth2
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     safe_yaml (1.0.4)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
@@ -728,7 +730,7 @@ GEM
       rdf-xsd (>= 2.2, < 4.0)
       sparql (>= 2.2, < 4.0)
       sxp (~> 1.0)
-    signet (0.9.1)
+    signet (0.10.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
       jwt (>= 1.5, < 3.0)
@@ -790,7 +792,7 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tinymce-rails (4.8.2)
+    tinymce-rails (4.8.3)
       railties (>= 3.1.1)
     turbolinks (5.2.0)
       turbolinks-source (~> 5.2)
@@ -828,6 +830,8 @@ GEM
     xml-simple (1.1.5)
     xpath (3.1.0)
       nokogiri (~> 1.8)
+    xray-rails (0.3.1)
+      rails (>= 3.1.0)
 
 PLATFORMS
   ruby
@@ -843,7 +847,7 @@ DEPENDENCIES
   figaro
   geckodriver-helper
   hydra-role-management
-  hyrax (= 2.2.0)
+  hyrax (= 2.3.3)
   iiif_manifest!
   jbuilder (~> 2.5)
   jquery-rails
@@ -873,6 +877,7 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
   webmock
+  xray-rails
 
 BUNDLED WITH
-   1.16.4
+   1.16.5

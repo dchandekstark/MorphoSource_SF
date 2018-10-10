@@ -22,15 +22,15 @@
 
 .byebug_history
 
+# Ignore application configuration
+/config/application.yml
+
 # ---------------------------------------------------
-# Below are copied from RDR. Might need them later 
+# Below are copied from RDR. Might need them later
 # ---------------------------------------------------
 
 # Ignore role_map.yml
 /config/role_map.yml
-
-# Ignore application configuration
-/config/application.yml
 
 # Pre-compiled assets
 /public/assets

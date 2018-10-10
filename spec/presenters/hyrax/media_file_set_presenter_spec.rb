@@ -58,6 +58,7 @@ RSpec.describe Hyrax::MediaFileSetPresenter do
           let(:attributes) { {
   									  id: '999',
                       title_tesim: ['test.ply'],
+                      label_tesim: ['test.ply'],
                       creator_tesim: ['Doe, John', 'Doe, Jane'],
                       date_modified_dtsi: '2011-04-01',
                       has_model_ssim: ['Media'],

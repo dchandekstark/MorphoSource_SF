@@ -1,10 +1,10 @@
 # Generated via
-#  `rails generate hyrax:work Media`
+#  `rails generate hyrax:work PhysicalObject`
 require 'rails_helper'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a Media', js: true do
+RSpec.feature 'Create a PhysicalObject', js: true do
   context 'a logged in user' do
     let(:user_attributes) do
       { email: 'test@example.com' }
@@ -33,45 +33,48 @@ RSpec.feature 'Create a Media', js: true do
     scenario do
       visit '/dashboard'
       click_link "Works"
+
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
-      choose "payload_concern", option: "Media"
+      choose "payload_concern", option: "PhysicalObject"
       click_button "Create work"
 
-      expect(page).to have_content "Add New Media"
+      expect(page).to have_content "Add New Physical Object"
 
-      fill_in('Title', with: 'My Test Media Work')
-      select('Positron Emission Tomography (PET)', from: 'Modality')
-      select('Photogrammetry image stack (multiple files of type *.tiff, *.png, etc.)', from: 'Media Type')
+      fill_in('Title', with: 'My Test Physical Object')
+      select('Yes', from: 'Vouchered?')
+      select('Biological Specimen', from: 'Resource Type')
 
       # Use JS to fill in hidden fields
       page.execute_script("
-        document.getElementById('media_scale_bar_target_type').value = 'Example Target Type';
-        document.getElementById('media_scale_bar_distance').value = 'Example Distance';
-        document.getElementById('media_scale_bar_units').value = 'Example Units';
+        document.getElementById('physical_object_idigbio_recordset_id').value = 'AAAAbbbb';
+        document.getElementById('physical_object_idigbio_uuid').value = '1234abcd';
+        document.getElementById('physical_object_is_type_specimen').value = 'Yes';
+        document.getElementById('physical_object_occurrence_id').value = 'ABCD1234';
+        document.getElementById('physical_object_sex').value = 'Female';
       ");
 
       # With selenium and the chrome driver, focus remains on the
-      # select box. Click outside the box so the next line can't find
+      # select box. Click outside the box so the next line can find
       # its element
       find('body').click
 
-      choose('media_visibility_open')
+      choose('physical_object_visibility_open')
       expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
       check('agreement')
       click_on('Save')
-
-      expect(page).to have_content('My Test Media Work')
-      expect(page).to have_content("Type: Example Target Type, Distance: Example Distance, Units: Example Units")
+      expect(page).to have_content('My Test Physical Object')
 
       click_link 'Edit'
 
       click_link 'Additional fields'
 
-      expect(page).to have_field("media_scale_bar_target_type", with: 'Example Target Type')
-      expect(page).to have_field("media_scale_bar_distance", with: 'Example Distance')
-      expect(page).to have_field("media_scale_bar_units", with: 'Example Units')
+      expect(page).to have_field('physical_object_idigbio_recordset_id', with: 'AAAAbbbb')
+      expect(page).to have_field('physical_object_idigbio_uuid', with: '1234abcd')
+      expect(page).to have_field('physical_object_is_type_specimen', with: 'Yes')
+      expect(page).to have_field('physical_object_occurrence_id', with: 'ABCD1234')
+      expect(page).to have_field('physical_object_sex', with: 'Female')
 
     end
   end
