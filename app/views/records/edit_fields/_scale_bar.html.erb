@@ -1,6 +1,5 @@
 <% # app/views/records/edit_fields/_scale_bar.html.erb %>
-<%= f.input :scale_bar, as: :multi_value,
-    wrapper_html: { class: 'hide' } %>
+<%= f.input :scale_bar, as: :multi_value %>
 
 <div id="media_scale_bar_wrapper" class="form-group multi_value optional managed" style="margin-right:7em;">
 
@@ -11,7 +10,7 @@
       <div style="width:30%;"><label for="media_scale_bar_target_type">Target Type</label></div>
       <div style="width:30%;"><label>Distance</label></div>
       <div style="width:30%;"><label>Units</label></div>
-  </div>
+    </div>
     <li class="field-wrapper input-group input-append" style="display:flex; flex-direction:row; justify-content:space-evenly;">
       <input class="string multi_value optional form-control media_scale_bar_target_type form-control multi-text-field" name="media[scale_bar_target_type][]" value="" id="media_scale_bar_target_type" type="text" style="margin:5px; width:30%; border-radius:5px;">
       <input class="string multi_value optional form-control media_scale_bar_distance form-control multi-text-field" name="media[scale_bar_distance][]" value="" id="media_scale_bar_distance" type="text" style="margin:5px; width:30%; border-radius:5px;">
@@ -35,8 +34,21 @@ var scaleBarWrapper = document.getElementById("media_scale_bar_wrapper");
 var scaleBarWrapperUl = scaleBarWrapper.querySelector('ul');
 var scaleBarWrapperLi = scaleBarWrapper.querySelector('li');
 
-// Using JQuery because window.addEventListener('onload') was not loading except for page refresh:
-$(document).ready(function(){
+// Puts concatenated values into scale bar on submit.
+function buildScaleBar(scaleBar) {
+  var li = document.createElement('li');
+
+  var input = document.createElement('input');
+  input.className = 'string multi_value optional media_scale_bar form-control multi-text-field';
+  input.setAttribute("id", "media_scale_bar");
+  input.setAttribute("name", "media[scale_bar][]");
+  input.value = scaleBar
+
+  li.appendChild(input);
+  scaleBarGroupUl.appendChild(li);
+}
+
+$(document).on('turbolinks:load', function(){
 
   // When editing a record, this populates the three-part scale bar fields with previously saved metadata.
   for (i = 0; i < concatScaleBarCount; i++) {
@@ -84,6 +96,18 @@ $(document).ready(function(){
     unitsInput.value = units;
     li.appendChild(unitsInput);
 
+    var span = document.createElement('span');
+    span.className = "input-group-btn field-controls";
+    span.innerHTML = `<button type="button" class="btn btn-link remove">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="controls-remove-text">Remove</span>
+                        <span class="sr-only"> previous
+                          <span class="controls-field-name-text"> Scale Bar</span>
+                        </span>
+                      </button>`
+
+    li.appendChild(span);
+
     scaleBarWrapperUl.appendChild(li);
 
     }
@@ -95,32 +119,29 @@ $(document).ready(function(){
   // On submit, type/distance/units fields are concatenated and inserted into hidden default scale bar field.
   form.addEventListener("submit", function() {
 
-  var scaleBarCount = document.getElementsByClassName("media_scale_bar_target_type").length;
+    // If media type = photogrammetry, submit scale bar fields. Otherwise, submit an empty scale bar.
+    if($('#media_media_type').val() == 'PhotogrammetryImageStack') {
 
-    for (i = 0; i < scaleBarCount; i++) {
+      var scaleBarCount = document.getElementsByClassName("media_scale_bar_target_type").length;
 
-      var targetType = document.getElementsByClassName("media_scale_bar_target_type")[i].value || '';
-      var scaleBarDistance = document.getElementsByClassName("media_scale_bar_distance")[i].value || '';
-      var scaleBarUnits = document.getElementsByClassName("media_scale_bar_units")[i].value || '';
+      for (i = 0; i < scaleBarCount; i++) {
 
-      // As long as at least one input is filled out, proceed with creating a scale bar string. Otherwise, create an empty string, which will not result in a new scale bar triple.
-      if ((targetType != '') || (scaleBarDistance != '') || (scaleBarUnits != '')) {
-        var scaleBar = "Type: " + targetType + ", Distance: " + scaleBarDistance + ", Units: " +  scaleBarUnits;
+        var targetType = document.getElementsByClassName("media_scale_bar_target_type")[i].value || '';
+        var scaleBarDistance = document.getElementsByClassName("media_scale_bar_distance")[i].value || '';
+        var scaleBarUnits = document.getElementsByClassName("media_scale_bar_units")[i].value || '';
+
+        // As long as at least one input is filled out, proceed with creating a scale bar string. Otherwise, create an empty string, which will not result in a new scale bar triple.
+        if ((targetType != '') || (scaleBarDistance != '') || (scaleBarUnits != '')) {
+          var scaleBar = "Type: " + targetType + ", Distance: " + scaleBarDistance + ", Units: " +  scaleBarUnits;
+        }
+        else {
+          var scaleBar = ''
+        }
+        buildScaleBar(scaleBar);
       }
-      else {
-        var scaleBar = ''
-      }
-
-      var li = document.createElement('li');
-
-      var input = document.createElement('input');
-      input.className = 'string multi_value optional media_scale_bar form-control multi-text-field';
-      input.setAttribute("id", "media_scale_bar");
-      input.setAttribute("name", "media[scale_bar][]");
-      input.value = scaleBar
-
-      li.appendChild(input);
-      scaleBarGroupUl.appendChild(li);
+    }
+    else {
+      buildScaleBar('');
     }
   });
 });
