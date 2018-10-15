@@ -46,7 +46,7 @@ RSpec.describe Hyrax::ImagingEventPresenter do
     let(:user)                    { 'test@example.com' }
 
     let :work do
-        ImageCaptureEvent.create(
+        ImagingEvent.create(
             description: description,
             creator: creator,
             title: title,
