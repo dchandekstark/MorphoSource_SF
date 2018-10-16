@@ -197,4 +197,13 @@ class SolrDocument
   def material
     self[Solrizer.solr_name('material', :stored_searchable)]
   end
+    
+  def bits_per_sample
+    self[Solrizer.solr_name('bits_per_sample', :stored_searchable)]
+  end
+
+  def spacing_between_slices
+    self[Solrizer.solr_name('spacing_between_slices', :stored_searchable)]
+  end
+
 end
