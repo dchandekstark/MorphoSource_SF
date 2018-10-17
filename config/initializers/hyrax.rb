@@ -3,6 +3,8 @@ Hyrax.config do |config|
   config.register_curation_concern :media
   # Injected via `rails g hyrax:work PhysicalObject`
   config.register_curation_concern :physical_object
+  # Injected via `rails g hyrax:work Institution`
+  config.register_curation_concern :institution
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
