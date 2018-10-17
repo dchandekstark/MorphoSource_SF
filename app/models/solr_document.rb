@@ -198,12 +198,27 @@ class SolrDocument
     self[Solrizer.solr_name('material', :stored_searchable)]
   end
     
+
+  # images
   def bits_per_sample
     self[Solrizer.solr_name('bits_per_sample', :stored_searchable)]
   end
 
+  # dicom
   def spacing_between_slices
     self[Solrizer.solr_name('spacing_between_slices', :stored_searchable)]
   end
-
+    
+  def modality
+    self[Solrizer.solr_name('modality', :stored_searchable)]
+  end
+    
+  def secondary_capture_device_manufacturer
+    self[Solrizer.solr_name('secondary_capture_device_manufacturer', :stored_searchable)]
+  end
+    
+  def secondary_capture_device_software_vers
+    self[Solrizer.solr_name('secondary_capture_device_software_vers', :stored_searchable)]
+  end
+    
 end

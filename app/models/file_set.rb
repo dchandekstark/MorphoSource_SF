@@ -5,8 +5,14 @@ class FileSet < ActiveFedora::Base
 
   self.indexer = ::MsFileSetIndexer
 
+  # for images
   delegate(:bits_per_sample, to: :characterization_proxy)
 
-  delegate(:spacing_between_slices, to: :characterization_proxy)
+  # for dicom
+  delegate(:spacing_between_slices, 
+            :modality,
+            :secondary_capture_device_manufacturer,
+            :secondary_capture_device_software_vers,
+            to: :characterization_proxy)
 
 end

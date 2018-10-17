@@ -47,7 +47,10 @@ module Hydra::Works::Characterization
           t.graphics_count(path: 'graphicsCount')
         end
         t.dicom do
+            t.modality(path: 'modality')
             t.spacing_between_slices(path: 'spacingBetweenSlices')
+            t.secondary_capture_device_manufacturer(path: 'secondaryCaptureDeviceManufacturer')
+            t.secondary_capture_device_software_vers(path: 'secondaryCaptureDeviceSoftwareVers')
         end
         t.image do
           t.byte_order(path: 'byteOrder')
@@ -163,7 +166,10 @@ module Hydra::Works::Characterization
       t.video_bit_rate(proxy: [:metadata, :video, :bit_rate])
       t.track_frame_rate(proxy: [:metadata, :video, :track, :frame_rate])
       t.aspect_ratio(proxy: [:metadata, :video, :track, :aspect_ratio])
+      t.modality(proxy: [:metadata, :dicom, :modality])
       t.spacing_between_slices(proxy: [:metadata, :dicom, :spacing_between_slices])
+      t.secondary_capture_device_manufacturer(proxy: [:metadata, :dicom, :secondary_capture_device_manufacturer])
+      t.secondary_capture_device_software_vers(proxy: [:metadata, :dicom, :secondary_capture_device_software_vers])
     end
 
     # Cleanup phase; ugly name to avoid collisions.

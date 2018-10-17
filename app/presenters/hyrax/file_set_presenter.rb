@@ -9,7 +9,12 @@ module Hyrax
     attr_accessor :solr_document, :current_ability, :request
 
     def self.characterization_terms
-      super + [:bits_per_sample, :spacing_between_slices]
+      super + [:bits_per_sample, 
+            :spacing_between_slices,
+            :modality,
+            :secondary_capture_device_manufacturer,
+            :secondary_capture_device_software_vers
+          ]
     end
 
     # @param [SolrDocument] solr_document
@@ -36,9 +41,15 @@ module Hyrax
              :date_created, :date_modified, :itemtype,
              to: :solr_document
 
+    # for images
     delegate :bits_per_sample, to: :solr_document
       
-    delegate :spacing_between_slices, to: :solr_document
+    # for dicom  
+    delegate :spacing_between_slices, 
+             :modality,
+             :secondary_capture_device_manufacturer,
+             :secondary_capture_device_software_vers,
+             to: :solr_document
 
     def single_use_links
       @single_use_links ||= SingleUseLink.where(itemId: id).map { |link| link_presenter_class.new(link) }
