@@ -8,7 +8,6 @@ class ProcessingEvent < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  # FIX THIS!!!!
   include Morphosource::ProcessingEventMetadata
 
   # This must be included at the end, because it finalizes the metadata

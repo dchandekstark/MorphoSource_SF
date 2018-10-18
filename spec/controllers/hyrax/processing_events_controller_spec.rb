@@ -7,6 +7,6 @@ RSpec.describe Hyrax::ProcessingEventsController do
     expect(Hyrax::ProcessingEventsController.curation_concern_type).to be(::ProcessingEvent)
   end
    it "should have show_presenter Hyrax::ProcessingEventPresenter" do
-    expect(Hyrax::ProcessingEventsController.show_presenter).to be(Hyrax::ProcessingEvent)
+    expect(Hyrax::ProcessingEventsController.show_presenter).to be(Hyrax::ProcessingEventPresenter)
   end
 end
