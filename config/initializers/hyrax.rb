@@ -3,10 +3,13 @@ Hyrax.config do |config|
   config.register_curation_concern :media
   # Injected via `rails g hyrax:work Institution`
   config.register_curation_concern :institution
+  # Injected via `rails g hyrax:work ProcessingEvent`
+  config.register_curation_concern :processing_event
   # Injected via `rails g hyrax:work BiologicalSpecimen`
   config.register_curation_concern :biological_specimen
   # Injected via `rails g hyrax:work CulturalHeritageObject`
   config.register_curation_concern :cultural_heritage_object
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
