@@ -1,10 +1,10 @@
 Hyrax.config do |config|
-  # Injected via `rails g hyrax:work Work`
-  config.register_curation_concern :work
   # Injected via `rails g hyrax:work Media`
   config.register_curation_concern :media
   # Injected via `rails g hyrax:work PhysicalObject`
   config.register_curation_concern :physical_object
+  # Injected via `rails g hyrax:work Institution`
+  config.register_curation_concern :institution
   # Injected via `rails g hyrax:work ProcessingEvent`
   config.register_curation_concern :processing_event
   # Register roles that are expected by your implementation.

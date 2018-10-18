@@ -88,4 +88,40 @@ RSpec.describe ::SolrDocument, type: :model do
 			end
 		end
 	end
+
+	describe "institution metadata field solrizer methods" do
+		let(:work) do
+			Institution.new({
+				title: ['American Museum of Natural History'],
+				institution_code: ['AMNH'],
+				description: ['A sample description'],
+				address: ['Central Park West'],
+				city: ['New York City'],
+				state_province: ['New York'],
+				country: ['United States']
+			})
+		end
+		
+		subject { SolrDocument.new(work.to_solr) }
+
+		it "return institution_code" do
+			expect(subject.institution_code.first).to eq('AMNH')
+		end
+
+		it "return address" do
+			expect(subject.address.first).to eq('Central Park West')
+		end
+
+		it "return city" do
+			expect(subject.city.first).to eq('New York City')
+		end
+
+		it "return state/province" do
+			expect(subject.state_province.first).to eq('New York')
+		end
+
+		it "return country" do
+			expect(subject.country.first).to eq('United States')
+		end
+	end
 end

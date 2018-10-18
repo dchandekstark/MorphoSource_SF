@@ -198,6 +198,27 @@ class SolrDocument
     self[Solrizer.solr_name('material', :stored_searchable)]
   end
 
+  # Institution fields
+  def institution_code
+    self[Solrizer.solr_name('institution_code', :stored_searchable)]
+  end
+
+  def address
+    self[Solrizer.solr_name('address', :stored_searchable)]
+  end
+
+  def city
+    self[Solrizer.solr_name('city', :stored_searchable)]
+  end
+
+  def state_province
+    self[Solrizer.solr_name('state_province', :stored_searchable)]
+  end
+
+  def country
+    self[Solrizer.solr_name('country', :stored_searchable)]
+  end
+  
   # Processing Event
   def software
     self[Solrizer.solr_name('software', :stored_searchable)]
