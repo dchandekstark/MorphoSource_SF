@@ -39,9 +39,9 @@ class SolrDocument
   end
 
   def mesh_mime_type # TODO: Temporary, should not exist forever
-    mesh_mime_types = { ".ply" => "application/ply", 
-                        ".stl" => "application/sla", 
-                        ".obj" => "text/plain", 
+    mesh_mime_types = { ".ply" => "application/ply",
+                        ".stl" => "application/sla",
+                        ".obj" => "text/plain",
                         ".gltf" => "model/gltf+json" }
     mesh_mime_types[file_ext]
   end
@@ -222,5 +222,10 @@ class SolrDocument
   # Device fields, also uses modality currently in media above
   def facility
     self[Solrizer.solr_name('facility', :stored_searchable)]
+  end
+  
+  # Processing Event
+  def software
+    self[Solrizer.solr_name('software', :stored_searchable)]
   end
 end
