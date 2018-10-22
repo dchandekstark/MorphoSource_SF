@@ -221,4 +221,188 @@ class SolrDocument
     self[Solrizer.solr_name('secondary_capture_device_software_vers', :stored_searchable)]
   end
     
+  def file_type_extension
+    self[Solrizer.solr_name('file_type_extension', :stored_searchable)]
+  end
+
+  def file_meta_info_group_length
+    self[Solrizer.solr_name('file_meta_info_group_length', :stored_searchable)]
+  end
+
+  def file_meta_info_version
+    self[Solrizer.solr_name('file_meta_info_version', :stored_searchable)]
+  end
+
+  def media_storage_sop_class_uid
+    self[Solrizer.solr_name('media_storage_sop_class_uid', :stored_searchable)]
+  end
+
+  def media_storage_sop_instance_uid
+    self[Solrizer.solr_name('media_storage_sop_instance_uid', :stored_searchable)]
+  end
+
+  def transfer_syntax_uid
+    self[Solrizer.solr_name('transfer_syntax_uid', :stored_searchable)]
+  end
+
+  def implementation_class_uid
+    self[Solrizer.solr_name('implementation_class_uid', :stored_searchable)]
+  end
+
+  def implementation_version_name
+    self[Solrizer.solr_name('implementation_version_name', :stored_searchable)]
+  end
+
+  def specific_character_set
+    self[Solrizer.solr_name('specific_character_set', :stored_searchable)]
+  end
+
+  def image_type
+    self[Solrizer.solr_name('image_type', :stored_searchable)]
+  end
+
+  def sop_class_uid
+    self[Solrizer.solr_name('sop_class_uid', :stored_searchable)]
+  end
+
+  def sop_instance_uid
+    self[Solrizer.solr_name('sop_instance_uid', :stored_searchable)]
+  end
+
+  def study_date
+    self[Solrizer.solr_name('study_date', :stored_searchable)]
+  end
+
+  def series_date
+    self[Solrizer.solr_name('series_date', :stored_searchable)]
+  end
+
+  def content_date
+    self[Solrizer.solr_name('content_date', :stored_searchable)]
+  end
+
+  def study_time
+    self[Solrizer.solr_name('study_time', :stored_searchable)]
+  end
+
+  def series_time
+    self[Solrizer.solr_name('series_time', :stored_searchable)]
+  end
+
+  def content_time
+    self[Solrizer.solr_name('content_time', :stored_searchable)]
+  end
+
+  def accession_number
+    self[Solrizer.solr_name('accession_number', :stored_searchable)]
+  end
+
+  def conversion_type
+    self[Solrizer.solr_name('conversion_type', :stored_searchable)]
+  end
+
+  def referring_physician_name
+    self[Solrizer.solr_name('referring_physician_name', :stored_searchable)]
+  end
+
+  def study_description
+    self[Solrizer.solr_name('study_description', :stored_searchable)]
+  end
+
+  def series_description
+    self[Solrizer.solr_name('series_description', :stored_searchable)]
+  end
+
+  def patient_name
+    self[Solrizer.solr_name('patient_name', :stored_searchable)]
+  end
+
+  def patient_id
+    self[Solrizer.solr_name('patient_id', :stored_searchable)]
+  end
+
+  def patient_birth_date
+    self[Solrizer.solr_name('patient_birth_date', :stored_searchable)]
+  end
+
+  def study_instance_uid
+    self[Solrizer.solr_name('study_instance_uid', :stored_searchable)]
+  end
+
+  def series_instance_uid
+    self[Solrizer.solr_name('series_instance_uid', :stored_searchable)]
+  end
+
+  def instance_number
+    self[Solrizer.solr_name('instance_number', :stored_searchable)]
+  end
+
+  def image_position_patient
+    self[Solrizer.solr_name('image_position_patient', :stored_searchable)]
+  end
+
+  def image_orientation_patient
+    self[Solrizer.solr_name('image_orientation_patient', :stored_searchable)]
+  end
+
+  def samples_per_pixel
+    self[Solrizer.solr_name('samples_per_pixel', :stored_searchable)]
+  end
+
+  def photometric_interpretation
+    self[Solrizer.solr_name('photometric_interpretation', :stored_searchable)]
+  end
+
+  def dcm_rows
+    self[Solrizer.solr_name('dcm_rows', :stored_searchable)]
+  end
+
+  def dcm_columns
+    self[Solrizer.solr_name('dcm_columns', :stored_searchable)]
+  end
+
+  def pixel_spacing
+    self[Solrizer.solr_name('pixel_spacing', :stored_searchable)]
+  end
+
+  def bits_allocated
+    self[Solrizer.solr_name('bits_allocated', :stored_searchable)]
+  end
+
+  def bits_stored
+    self[Solrizer.solr_name('bits_stored', :stored_searchable)]
+  end
+
+  def high_bit
+    self[Solrizer.solr_name('high_bit', :stored_searchable)]
+  end
+
+  def pixel_representation
+    self[Solrizer.solr_name('pixel_representation', :stored_searchable)]
+  end
+
+  def window_center
+    self[Solrizer.solr_name('window_center', :stored_searchable)]
+  end
+
+  def window_width
+    self[Solrizer.solr_name('window_width', :stored_searchable)]
+  end
+
+  def rescale_intercept
+    self[Solrizer.solr_name('rescale_intercept', :stored_searchable)]
+  end
+
+  def rescale_slope
+    self[Solrizer.solr_name('rescale_slope', :stored_searchable)]
+  end
+
+  def window_center_and_width_explanation
+    self[Solrizer.solr_name('window_center_and_width_explanation', :stored_searchable)]
+  end
+
+  def pixel_data
+    self[Solrizer.solr_name('pixel_data', :stored_searchable)]
+  end
+
 end
