@@ -301,28 +301,12 @@ class SolrDocument
     self[Solrizer.solr_name('conversion_type', :stored_searchable)]
   end
 
-  def referring_physician_name
-    self[Solrizer.solr_name('referring_physician_name', :stored_searchable)]
-  end
-
   def study_description
     self[Solrizer.solr_name('study_description', :stored_searchable)]
   end
 
   def series_description
     self[Solrizer.solr_name('series_description', :stored_searchable)]
-  end
-
-  def patient_name
-    self[Solrizer.solr_name('patient_name', :stored_searchable)]
-  end
-
-  def patient_id
-    self[Solrizer.solr_name('patient_id', :stored_searchable)]
-  end
-
-  def patient_birth_date
-    self[Solrizer.solr_name('patient_birth_date', :stored_searchable)]
   end
 
   def study_instance_uid

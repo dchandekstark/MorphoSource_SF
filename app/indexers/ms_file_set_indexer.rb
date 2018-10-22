@@ -29,12 +29,8 @@ class MsFileSetIndexer < Hyrax::FileSetIndexer
       solr_doc['content_time_tesim'] = object.content_time
       solr_doc['accession_number_tesim'] = object.accession_number
       solr_doc['conversion_type_tesim'] = object.conversion_type
-      solr_doc['referring_physician_name_tesim'] = object.referring_physician_name
       solr_doc['study_description_tesim'] = object.study_description
       solr_doc['series_description_tesim'] = object.series_description
-      solr_doc['patient_name_tesim'] = object.patient_name
-      solr_doc['patient_id_tesim'] = object.patient_id
-      solr_doc['patient_birth_date_tesim'] = object.patient_birth_date
       solr_doc['study_instance_uid_tesim'] = object.study_instance_uid
       solr_doc['series_instance_uid_tesim'] = object.series_instance_uid
       solr_doc['instance_number_tesim'] = object.instance_number
