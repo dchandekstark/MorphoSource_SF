@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::DevicePresenter do
-  it "has tests" do
-    skip "Add your tests here"
-  end
+  subject { described_class.new(double, double) }
+  it { is_expected.to delegate_method(:facility).to(:solr_document) }
+  it { is_expected.to delegate_method(:modality).to(:solr_document) }
 end

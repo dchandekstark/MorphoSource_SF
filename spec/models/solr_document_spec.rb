@@ -145,4 +145,25 @@ RSpec.describe ::SolrDocument, type: :model do
     end
   end
 
+  describe "device metadata field solrizer methods" do
+		let(:work) do
+			Device.new({
+				title: ['XTekCT 100'],
+				creator: ['Nikon'],
+				modality: ['MedicalXRayComputedTomography'],
+				facility: ['Duke SMIF'],
+				description: ['A sample description']
+			})
+		end
+
+		subject { SolrDocument.new(work.to_solr) }
+
+		it "return modality" do
+			expect(subject.modality.first).to eq('MedicalXRayComputedTomography')
+		end
+
+		it "return facility" do
+			expect(subject.facility.first).to eq('Duke SMIF')
+		end
+  end
 end
