@@ -9,6 +9,8 @@ Hyrax.config do |config|
   config.register_curation_concern :biological_specimen
   # Injected via `rails g hyrax:work CulturalHeritageObject`
   config.register_curation_concern :cultural_heritage_object
+  # Injected via `rails g hyrax:work Attachment`
+  config.register_curation_concern :attachment
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
