@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Device do
+
+  it_behaves_like 'a Morphosource work'
+
   describe "metadata attributes" do
     it "include the appropriate terms" do
       expect(subject.attributes).to include('title', 'creator', 'modality', 'facility', 'description')
