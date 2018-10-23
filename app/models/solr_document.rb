@@ -218,10 +218,14 @@ class SolrDocument
   def country
     self[Solrizer.solr_name('country', :stored_searchable)]
   end
+
+  # Device fields, also uses modality currently in media above
+  def facility
+    self[Solrizer.solr_name('facility', :stored_searchable)]
+  end
   
   # Processing Event
   def software
     self[Solrizer.solr_name('software', :stored_searchable)]
   end
-
 end

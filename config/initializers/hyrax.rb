@@ -3,6 +3,8 @@ Hyrax.config do |config|
   config.register_curation_concern :media
   # Injected via `rails g hyrax:work Institution`
   config.register_curation_concern :institution
+  # Injected via `rails g hyrax:work Device`
+  config.register_curation_concern :device
   # Injected via `rails g hyrax:work ProcessingEvent`
   config.register_curation_concern :processing_event
   # Injected via `rails g hyrax:work BiologicalSpecimen`
