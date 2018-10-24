@@ -10,7 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= 
+//=
 //= require turbolinks
 //
 // Required by Blacklight
@@ -22,4 +22,5 @@
 
 //= require_tree .
 //= require hyrax
-
+//= require morphosource/add_parent
+//= require morphosource/editor

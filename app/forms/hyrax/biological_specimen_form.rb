@@ -3,7 +3,7 @@
 module Hyrax
   # Generated form for BiologicalSpecimen
   class BiologicalSpecimenForm < Hyrax::Forms::WorkForm
-
+    include Morphosource::FormMethods
     include SingleValuedForm
     class_attribute :single_value_fields
 
