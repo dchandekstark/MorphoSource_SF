@@ -227,13 +227,9 @@ class SolrDocument
       self[Solrizer.solr_name('shading_correction', :stored_searchable)]   
   end
   
-  def filter_material
-      self[Solrizer.solr_name('filter_material', :stored_searchable)]   
+  def filter
+      self[Solrizer.solr_name('filter', :stored_searchable)]   
   end 
-    
-  def filter_thickness
-      self[Solrizer.solr_name('filter_thickness', :stored_searchable)]   
-  end
     
   def frame_averaging
       self[Solrizer.solr_name('frame_averaging', :stored_searchable)]   

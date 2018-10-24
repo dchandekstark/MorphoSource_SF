@@ -31,14 +31,18 @@ module Morphosource
             index.as :stored_searchable, :facetable
         end
         
-        property :filter_material, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#FilterMaterial") do |index|
-            index.as :stored_searchable, :facetable
-        end
+        #property :filter_material, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#FilterMaterial") do |index|
+        #    index.as :stored_searchable, :facetable
+        #end
         
-        property :filter_thickness, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#FilterThicknessMinimum") do |index|
-            index.as :stored_searchable, :facetable
-        end
+        #property :filter_thickness, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#FilterThicknessMinimum") do |index|
+        #    index.as :stored_searchable, :facetable
+        #end
 
+        property :filter, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filter") do |index|
+          index.as :stored_searchable
+        end
+      
         property :frame_averaging, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#ContrastFrameAveraging") do |index|
             index.as :stored_searchable, :facetable
         end

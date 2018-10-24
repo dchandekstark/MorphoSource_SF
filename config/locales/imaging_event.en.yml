@@ -18,8 +18,7 @@ en:
         flux_normalization: Flux Normalization Calibration
         geometric_calibration: 
         shading_correction: Shading Correction Calibration
-        filter_material: Filter (material that xrays must pass through before encounter object and detector and its thickness in millimeters)
-        filter_thickness: Filter (material that xrays must pass through before encounter object and detector and its thickness in millimeters)
+        filter: Filter (material that xrays must pass through before encounter object and detector and its thickness in millimeters)
         frame_averaging: Frame Averaging. The number of images acquired at each projection angle and their average.
         projections: The number of images at distinct angles used to create a 3D image.
         voltage: Voltage, units in kilovolts
