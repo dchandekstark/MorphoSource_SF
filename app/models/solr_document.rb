@@ -39,9 +39,9 @@ class SolrDocument
   end
 
   def mesh_mime_type # TODO: Temporary, should not exist forever
-    mesh_mime_types = { ".ply" => "application/ply", 
-                        ".stl" => "application/sla", 
-                        ".obj" => "text/plain", 
+    mesh_mime_types = { ".ply" => "application/ply",
+                        ".stl" => "application/sla",
+                        ".obj" => "text/plain",
                         ".gltf" => "model/gltf+json" }
     mesh_mime_types[file_ext]
   end
@@ -196,6 +196,32 @@ class SolrDocument
 
   def material
     self[Solrizer.solr_name('material', :stored_searchable)]
+  end
+
+  # Institution fields
+  def institution_code
+    self[Solrizer.solr_name('institution_code', :stored_searchable)]
+  end
+
+  def address
+    self[Solrizer.solr_name('address', :stored_searchable)]
+  end
+
+  def city
+    self[Solrizer.solr_name('city', :stored_searchable)]
+  end
+
+  def state_province
+    self[Solrizer.solr_name('state_province', :stored_searchable)]
+  end
+
+  def country
+    self[Solrizer.solr_name('country', :stored_searchable)]
+  end
+  
+  # Processing Event
+  def software
+    self[Solrizer.solr_name('software', :stored_searchable)]
   end
 
   # Image Capture Event
