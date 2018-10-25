@@ -3,12 +3,16 @@ Hyrax.config do |config|
   config.register_curation_concern :media
   # Injected via `rails g hyrax:work Institution`
   config.register_curation_concern :institution
+  # Injected via `rails g hyrax:work Device`
+  config.register_curation_concern :device
   # Injected via `rails g hyrax:work ProcessingEvent`
   config.register_curation_concern :processing_event
   # Injected via `rails g hyrax:work BiologicalSpecimen`
   config.register_curation_concern :biological_specimen
   # Injected via `rails g hyrax:work CulturalHeritageObject`
   config.register_curation_concern :cultural_heritage_object
+  # Injected via `rails g hyrax:work Attachment`
+  config.register_curation_concern :attachment
   # Injected via `rails g hyrax:work ImagingEvent`
   config.register_curation_concern :imaging_event
 
