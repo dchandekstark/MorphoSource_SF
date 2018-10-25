@@ -53,13 +53,13 @@ $(document).on('turbolinks:load', function(){
 
     var form = $('form[id*="imaging_event"]')[0];
 
-    // Hidden Default Filter Field
+    // Check the Filter Field (will be hidden)
     var filterGroup = document.querySelector('div.imaging_event_filter');
     var filterGroupUl = filterGroup.querySelector("ul");
     var concatFilters = filterGroup.querySelectorAll("input");
     var concatFilterCount = (filterGroup.querySelectorAll("input").length) - 1;
 
-    // Three part filter entry
+    // Two part filter entry
     var filterWrapper = document.getElementById("imaging_event_filter_wrapper");
     var filterWrapperUl = filterWrapper.querySelector('ul');
     var filterWrapperLi = filterWrapper.querySelector('li');
@@ -74,21 +74,36 @@ $(document).on('turbolinks:load', function(){
 
       // Fill in values for first line
       if (i == 0) {
-        filterWrapperLi.querySelectorAll('input')[0].value = material;
-        filterWrapperLi.querySelectorAll('input')[1].value = thickness;
+        var materialSelectOject = $('select[name="imaging_event[filter_material][]"]')[0];
+        for (var x = 0; x < materialSelectOject.length; x++){
+          if (materialSelectOject.options[x].value == material)
+            materialSelectOject.selectedIndex = x;
+        }
+        $('input[name="imaging_event[filter_thickness][]"]')[0].value = thickness;
       } else {
-        // Assemble new material, thickness inputs
+        // Assemble new material, thickness 
         var li = document.createElement('li');
         li.className = 'field-wrapper input-group input-append';
         li.setAttribute('style', "display:flex; flex-direction:row; justify-content:space-evenly;");
 
-        var materialInput = document.createElement('input');
-        materialInput.className = "string multi_value optional form-control imaging_event_filter_material form-control multi-text-field";
-        materialInput.setAttribute("id", "imaging_event_filter_material");
-        materialInput.setAttribute("name", "imaging_event[filter_material][]");
-        materialInput.setAttribute("style", "margin:5px; width:50%; border-radius:5px;");
-        materialInput.value = material;
-        li.appendChild(materialInput);
+        $('<select />', {
+          id : "imaging_event_filter_material_"+i,
+          name : 'imaging_event[filter_material][]',
+          class : "form-control select optional form-control",
+          style : "margin:5px; width:50%; border-radius:5px;",
+          append : [
+            $('<option />', {value : "", text : ""}),
+            $('<option />', {value : "Molybdenum", text : "Molybdenum"}),
+            $('<option />', {value : "Aluminum", text : "Aluminum"}),
+            $('<option />', {value : "Copper", text : "Copper"}),
+            $('<option />', {value : "Rhodium", text : "Rhodium"}),
+            $('<option />', {value : "Niobium", text : "Niobium"}),
+            $('<option />', {value : "Europium", text : "Europium"}),
+            $('<option />', {value : "Lead", text : "Lead"})
+          ]
+        }).appendTo(li);
+        // select the existing option
+        $(li).find('select').val(material);
 
         var thicknessInput = document.createElement('input');
         thicknessInput.className = "string multi_value optional form-control imaging_event_filter_thickness form-control multi-text-field";
@@ -128,17 +143,17 @@ $(document).on('turbolinks:load', function(){
       if (selectedModality === 'MicroNanoXRayComputedTomography' ||
             selectedModality === 'MedicalXRayComputedTomography' ) {
 
-        var filterCount = document.getElementsByClassName("imaging_event_filter_material").length;
+        var filterCount = $('select[name="imaging_event[filter_material][]"]').length;
         for (i = 0; i < filterCount; i++) {
 
-          var filterMaterial = document.getElementsByClassName("imaging_event_filter_material")[i].value || '';
-          var filterThickness = document.getElementsByClassName("imaging_event_filter_thickness")[i].value || '';
+          var filterMaterial = $('select[name="imaging_event[filter_material][]"]')[i].value || '';
+          var filterThickness = $('input[name="imaging_event[filter_thickness][]"]')[i].value || '';
 
-          // As long as at least one input is filled out, proceed with creating a filter string. Otherwise, create an empty string, which will not result in a new filter triple.
+          // As long as at least one input is filled out, proceed with creating a filter string. Otherwise, create an empty string.
           if ((filterMaterial != '') || (filterThickness != '')) {
             var filter = "Filter material: " + filterMaterial + ", Filter thickness: " + filterThickness;
           } else {
-            var filter = ''
+            var filter = '';
           }
           //console.log('filter: '+filter);
           buildFilter(filter, filterGroupUl);

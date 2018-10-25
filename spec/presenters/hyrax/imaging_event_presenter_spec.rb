@@ -16,8 +16,7 @@ RSpec.describe Hyrax::ImagingEventPresenter do
     let(:flux_normalization)  {['test']}
     let(:geometric_calibration)  {['test']}
     let(:shading_correction)  {['test']}
-    let(:filter_material)  {['test']}
-    let(:filter_thickness)  {['test']}
+    let(:filter)  {['test']}
     let(:frame_averaging)  {['test']}
     let(:projections)  {['test']}
     let(:voltage)  {['test']}
@@ -57,8 +56,7 @@ RSpec.describe Hyrax::ImagingEventPresenter do
             flux_normalization: flux_normalization,
             geometric_calibration: geometric_calibration,
             shading_correction: shading_correction,
-            filter_material: filter_material,
-            filter_thickness: filter_thickness,
+            filter: filter,
             frame_averaging: frame_averaging,
             projections: projections,
             voltage: voltage,
@@ -97,8 +95,7 @@ RSpec.describe Hyrax::ImagingEventPresenter do
             flux_normalization: flux_normalization,
             geometric_calibration: geometric_calibration,
             shading_correction: shading_correction,
-            filter_material: filter_material,
-            filter_thickness: filter_thickness,
+            filter: filter,
             frame_averaging: frame_averaging,
             projections: projections,
             voltage: voltage,
