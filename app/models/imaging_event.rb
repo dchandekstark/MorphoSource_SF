@@ -1,8 +1,6 @@
-# Generated via
-#  `rails generate hyrax:work ImagingEvent`
-class ImagingEvent < ActiveFedora::Base
+class ImagingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
-
+  self.work_requires_files = false
   self.indexer = ImagingEventIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
