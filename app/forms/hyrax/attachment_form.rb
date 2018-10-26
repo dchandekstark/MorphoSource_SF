@@ -4,7 +4,7 @@ module Hyrax
   # Generated form for Attachment
   class AttachmentForm < Hyrax::Forms::WorkForm
     self.model_class = ::Attachment
-
+    include Morphosource::FormMethods
     include SingleValuedForm
 
     self.terms = [:title]

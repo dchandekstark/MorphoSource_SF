@@ -55,3 +55,35 @@ en:
     institution_name_full:  "The Institution Name"
     product_name:           "Hyrax"
     product_twitter_handle: "@SamveraRepo"
+    base:
+      parents:
+        actions: Actions
+        date_uploaded: Date Uploaded
+        empty: This %{type} has no files associated with it. Click "edit" to add more files.
+        header: Parents
+        thumbnail: Thumbnail
+        title: Title
+        unauthorized: There are no publicly available items in this %{type}.
+        visibility: Visibility
+      form_parent_work_relationships:
+        actions:
+          remove: Remove from work
+        attach_new_work: Deposit new work as parent of this work
+        caption: This work is currently in these works
+        confirm:
+          cancel: Cancel
+          remove: Remove
+          text: Removing this work will not remove it from the repository, only its relationship to the work you are editing. Are you sure you want to remove this work?
+        header:
+          actions: Action
+          title: Work title
+    works:
+      form:
+        find_parent_work: Parent Works
+  simple_form:
+    labels:
+      defaults:
+        find_parent_work: Add to work
+    placeholders:
+      defaults:
+        find_parent_work: Search for a work...

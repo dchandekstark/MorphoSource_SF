@@ -4,7 +4,7 @@ module Hyrax
   # Generated form for Media
   class MediaForm < Hyrax::Forms::WorkForm
     self.model_class = ::Media
-
+    include Morphosource::FormMethods
     include SingleValuedForm
 
     class_attribute :single_value_fields

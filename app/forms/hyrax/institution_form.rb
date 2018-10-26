@@ -4,7 +4,7 @@ module Hyrax
   # Generated form for Institution
   class InstitutionForm < Hyrax::Forms::WorkForm
     self.model_class = ::Institution
-
+    include Morphosource::FormMethods
     include SingleValuedForm
 
     class_attribute :single_value_fields
