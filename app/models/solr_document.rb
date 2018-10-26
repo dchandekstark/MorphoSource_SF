@@ -225,48 +225,8 @@ class SolrDocument
     self[Solrizer.solr_name('file_type_extension', :stored_searchable)]
   end
 
-  def file_meta_info_group_length
-    self[Solrizer.solr_name('file_meta_info_group_length', :stored_searchable)]
-  end
-
-  def file_meta_info_version
-    self[Solrizer.solr_name('file_meta_info_version', :stored_searchable)]
-  end
-
-  def media_storage_sop_class_uid
-    self[Solrizer.solr_name('media_storage_sop_class_uid', :stored_searchable)]
-  end
-
-  def media_storage_sop_instance_uid
-    self[Solrizer.solr_name('media_storage_sop_instance_uid', :stored_searchable)]
-  end
-
-  def transfer_syntax_uid
-    self[Solrizer.solr_name('transfer_syntax_uid', :stored_searchable)]
-  end
-
-  def implementation_class_uid
-    self[Solrizer.solr_name('implementation_class_uid', :stored_searchable)]
-  end
-
-  def implementation_version_name
-    self[Solrizer.solr_name('implementation_version_name', :stored_searchable)]
-  end
-
-  def specific_character_set
-    self[Solrizer.solr_name('specific_character_set', :stored_searchable)]
-  end
-
   def image_type
     self[Solrizer.solr_name('image_type', :stored_searchable)]
-  end
-
-  def sop_class_uid
-    self[Solrizer.solr_name('sop_class_uid', :stored_searchable)]
-  end
-
-  def sop_instance_uid
-    self[Solrizer.solr_name('sop_instance_uid', :stored_searchable)]
   end
 
   def study_date
@@ -295,26 +255,6 @@ class SolrDocument
 
   def accession_number
     self[Solrizer.solr_name('accession_number', :stored_searchable)]
-  end
-
-  def conversion_type
-    self[Solrizer.solr_name('conversion_type', :stored_searchable)]
-  end
-
-  def study_description
-    self[Solrizer.solr_name('study_description', :stored_searchable)]
-  end
-
-  def series_description
-    self[Solrizer.solr_name('series_description', :stored_searchable)]
-  end
-
-  def study_instance_uid
-    self[Solrizer.solr_name('study_instance_uid', :stored_searchable)]
-  end
-
-  def series_instance_uid
-    self[Solrizer.solr_name('series_instance_uid', :stored_searchable)]
   end
 
   def instance_number
@@ -383,10 +323,6 @@ class SolrDocument
 
   def window_center_and_width_explanation
     self[Solrizer.solr_name('window_center_and_width_explanation', :stored_searchable)]
-  end
-
-  def pixel_data
-    self[Solrizer.solr_name('pixel_data', :stored_searchable)]
   end
 
 end
