@@ -3,6 +3,8 @@ class FileSet < ActiveFedora::Base
 
   include ::Hyrax::FileSetBehavior
 
+  # MS_CUSTOMIZATION : override FileSetIndexer
+  #self.indexer = ::FileSetIndexer
   self.indexer = ::MsFileSetIndexer
 
   # for images
