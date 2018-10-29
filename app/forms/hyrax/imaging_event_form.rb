@@ -5,6 +5,8 @@ module Hyrax
   class ImagingEventForm < Hyrax::Forms::WorkForm
 
     include SingleValuedForm
+    
+    include Morphosource::FormMethods
 
     class_attribute :single_value_fields
 
