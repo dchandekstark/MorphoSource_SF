@@ -13,6 +13,8 @@ Hyrax.config do |config|
   config.register_curation_concern :cultural_heritage_object
   # Injected via `rails g hyrax:work Attachment`
   config.register_curation_concern :attachment
+  # Injected via `rails g hyrax:work ImagingEvent`
+  config.register_curation_concern :imaging_event
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
