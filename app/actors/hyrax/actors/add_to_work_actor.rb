@@ -26,6 +26,7 @@ module Hyrax
       # @param [Hyrax::Actors::Environment] env
       # @return [Boolean] true if update was successful
       def update(env)
+        env.attributes.delete(:in_works_ids)
         parent_works_hash = env.attributes["work_parents_attributes"]
         add_to_works(env, parent_works_hash) && next_actor.update(env)
       end
