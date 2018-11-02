@@ -3,7 +3,8 @@ class ProcessingEvent < Morphosource::Works::Base
 
   self.indexer = ProcessingEventIndexer
   # Change this to restrict which works can be added as a child.
-  # self.valid_child_concerns = []
+  self.valid_child_concerns = [Media, Attachment]
+
   validates :title, presence: { message: 'Your work must have a title.' }
 
   include Morphosource::ProcessingEventMetadata
