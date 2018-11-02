@@ -37,7 +37,7 @@ RSpec.describe Hyrax::MediaPresenter do
       end
 
       it 'has a work presenter' do
-        expect(subject.in_work_presenters).to include(an_instance_of(described_class))
+        expect(subject.in_work_presenters).to include(an_instance_of(Hyrax::WorkShowPresenter))
       end
     end
   end
