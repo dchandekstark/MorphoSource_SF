@@ -2,7 +2,9 @@
 #  `rails generate hyrax:work ImagingEvent`
 module Hyrax
   class ImagingEventPresenter < Hyrax::WorkShowPresenter
-    delegate  :description, 
+    include Morphosource::PresenterMethods
+
+    delegate  :description,
             :creator,
             :title,
             :software,
@@ -39,4 +41,3 @@ module Hyrax
         to: :solr_document
   end
 end
-      
