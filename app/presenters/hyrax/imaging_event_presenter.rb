@@ -4,9 +4,6 @@ module Hyrax
   class ImagingEventPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
 
-    class_attribute :work_presenter_class
-    self.work_presenter_class = ImagingEventPresenter
-
     delegate  :description,
             :creator,
             :title,

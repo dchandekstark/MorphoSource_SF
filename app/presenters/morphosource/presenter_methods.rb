@@ -28,9 +28,9 @@ module Morphosource
     # modeled on '#member_of_collection_presenters' in Hyrax::WorkShowPresenter
     def in_work_presenters
       Hyrax::PresenterFactory.build_for(ids: work.in_works_ids,
-                                 presenter_class: work_presenter_class,
+                                 presenter_class: Hyrax::WorkShowPresenter,
                                  presenter_args: presenter_factory_arguments)
     end
-
+    
   end
 end

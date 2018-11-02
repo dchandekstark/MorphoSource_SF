@@ -3,13 +3,6 @@
 module Hyrax
   class MediaPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
-    class_attribute :work_presenter_class
-
-
-    class_attribute :work_presenter_class
-
-
-    self.work_presenter_class = MediaPresenter
 
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :side, :unit, :x_spacing, :y_spacing, :z_spacing, to: :solr_document
 

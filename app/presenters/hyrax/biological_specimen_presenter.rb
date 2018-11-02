@@ -3,10 +3,6 @@
 module Hyrax
   class BiologicalSpecimenPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
-    class_attribute :work_presenter_class
-
-    self.work_presenter_class = BiologicalSpecimenPresenter
-
 
     delegate :bibliographic_citation, :catalog_number, :collection_code, :institution, :numeric_time,
              :original_location, :periodic_time, :vouchered, :idigbio_recordset_id, :idigbio_uuid, :is_type_specimen,
