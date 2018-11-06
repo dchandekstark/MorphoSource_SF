@@ -14,11 +14,11 @@ RSpec.describe Institution do
 
   describe "valid work relationships" do
     it "has no valid parents" do
-      expect(subject.valid_parent_concerns).to eq([])
+      expect(subject.valid_parent_concerns).to match_array([])
     end
 
     it "has Device, BiologicalSpecimen, CulturalHeritageObject, and Attachment as valid children" do
-      expect(subject.valid_child_concerns).to eq([Device, BiologicalSpecimen, CulturalHeritageObject, Attachment])
+      expect(subject.valid_child_concerns).to match_array([Device, BiologicalSpecimen, CulturalHeritageObject, Attachment])
     end
   end
 
@@ -65,13 +65,13 @@ RSpec.describe Institution do
     describe "valid work relationships" do
 
       it "has no valid parents" do
-        expect(subject.valid_parent_concerns).to eq([])
+        expect(subject.valid_parent_concerns).to match_array([])
       end
 
       it "has Device, BiologicalSpecimen, CulturalHeritageObject, and Attachment as valid children" do
-        expect(subject.valid_child_concerns).to eq([Device, BiologicalSpecimen, CulturalHeritageObject, Attachment])
+        expect(subject.valid_child_concerns).to match_array([Device, BiologicalSpecimen, CulturalHeritageObject, Attachment])
       end
-      
+
     end
 
   end

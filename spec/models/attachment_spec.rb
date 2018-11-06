@@ -12,11 +12,12 @@ RSpec.describe Attachment do
   end
 
   describe "valid work relationships" do
+
     it "has all other work types as valid parents" do
-      expect(subject.valid_parent_concerns).to eq([Media, Institution, Device, ProcessingEvent, BiologicalSpecimen, CulturalHeritageObject, ImagingEvent])
+      expect(subject.valid_parent_concerns).to match_array([Media, Institution, Device, ProcessingEvent, BiologicalSpecimen, CulturalHeritageObject, ImagingEvent])
     end
     it "has no valid children" do
-      expect(subject.valid_child_concerns).to eq([])
+      expect(subject.valid_child_concerns).to match_array([])
     end
   end
 
@@ -33,15 +34,15 @@ RSpec.describe Attachment do
     describe "valid work relationships" do
 
       it "has all other work types as valid parents" do
-        expect(subject.valid_parent_concerns).to eq([Media, Institution, Device, ProcessingEvent, BiologicalSpecimen, CulturalHeritageObject, ImagingEvent])
+        expect(subject.valid_parent_concerns).to match_array([Media, Institution, Device, ProcessingEvent, BiologicalSpecimen, CulturalHeritageObject, ImagingEvent])
       end
 
       it "has no valid children" do
-        expect(subject.valid_child_concerns).to eq([])
+        expect(subject.valid_child_concerns).to match_array([])
       end
 
     end
 
   end
-  
+
 end

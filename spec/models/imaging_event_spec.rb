@@ -7,11 +7,11 @@ RSpec.describe ImagingEvent do
   describe "valid work relationships" do
 
     it "has Device, BiologicalSpecimen, and CulturalHeritageObject as valid parents" do
-      expect(subject.valid_parent_concerns).to eq([Device, BiologicalSpecimen, CulturalHeritageObject])
+      expect(subject.valid_parent_concerns).to match_array([Device, BiologicalSpecimen, CulturalHeritageObject])
     end
 
     it "has Media, ProcessingEvent and Attachment as valid child concerns" do
-      expect(subject.valid_child_concerns).to eq([Media, ProcessingEvent, Attachment])
+      expect(subject.valid_child_concerns).to match_array([Media, ProcessingEvent, Attachment])
     end
 
   end
@@ -98,15 +98,15 @@ RSpec.describe ImagingEvent do
     describe "valid work relationships" do
 
       it "has Device, BiologicalSpecimen, and CulturalHeritageObject as valid parents" do
-        expect(subject.valid_parent_concerns).to eq([Device, BiologicalSpecimen, CulturalHeritageObject])
+        expect(subject.valid_parent_concerns).to match_array([Device, BiologicalSpecimen, CulturalHeritageObject])
       end
 
       it "has Media, ProcessingEvent and Attachment as valid child concerns" do
-        expect(subject.valid_child_concerns).to eq([Media, ProcessingEvent, Attachment])
+        expect(subject.valid_child_concerns).to match_array([Media, ProcessingEvent, Attachment])
       end
 
     end
 
   end
-  
+
 end
