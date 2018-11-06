@@ -3,7 +3,8 @@ class ImagingEvent < Morphosource::Works::Base
   self.work_requires_files = false
   self.indexer = ImagingEventIndexer
   # Change this to restrict which works can be added as a child.
-  # self.valid_child_concerns = []
+  self.valid_child_concerns = [Media, ProcessingEvent, Attachment]
+
   validates :title, presence: { message: 'Your work must have a title.' }
 
   include Morphosource::ImagingEventMetadata

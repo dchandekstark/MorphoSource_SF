@@ -3,7 +3,8 @@ class Institution < Morphosource::Works::Base
 
   self.indexer = InstitutionIndexer
   # Change this to restrict which works can be added as a child.
-  # self.valid_child_concerns = []
+  self.valid_child_concerns = [Device, BiologicalSpecimen, CulturalHeritageObject, Attachment]
+
   validates :title, presence: { message: 'Your work must have a title.' }
 
   include Morphosource::InstitutionMetadata

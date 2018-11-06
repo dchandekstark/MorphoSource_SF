@@ -12,6 +12,18 @@ RSpec.describe Device do
     end
   end
 
+  describe "valid work relationships" do
+
+    it "has only Institution as a valid parent" do
+      expect(subject.valid_parent_concerns).to match_array([Institution])
+    end
+
+    it "has ImagingEvent and Attachment as valid child concerns" do
+      expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
+    end
+
+  end
+
   describe "instance" do
     subject { Device.new({
         title: ['XTekCT 100'],
@@ -36,5 +48,19 @@ RSpec.describe Device do
     it "creates with correct description" do
       expect(subject.description.first).to eq('A sample description')
     end
+
+    describe "valid work relationships" do
+
+      it "has only Institution as a valid parent" do
+        expect(subject.valid_parent_concerns).to match_array([Institution])
+      end
+
+      it "has ImagingEvent and Attachment as valid child concerns" do
+        expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
+      end
+
+    end
+
   end
+
 end
