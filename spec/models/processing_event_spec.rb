@@ -20,4 +20,37 @@ RSpec.describe ProcessingEvent do
 
   end
 
+  describe "valid work relationships" do
+
+    it "has Media and ImagingEvent as valid parents" do
+      expect(subject.valid_parent_concerns).to eq([Media, ImagingEvent])
+    end
+
+    it "has Media and Attachment as valid children" do
+      expect(subject.valid_child_concerns).to eq([Media, Attachment])
+    end
+
+  end
+
+  describe "instance" do
+
+    subject { ProcessingEvent.new({
+        title: ['Test Attachment']
+      })
+    }
+
+    describe "valid work relationships" do
+      
+      it "has Media and ImagingEvent as valid parents" do
+        expect(subject.valid_parent_concerns).to eq([Media, ImagingEvent])
+      end
+
+      it "has Media and Attachment as valid children" do
+        expect(subject.valid_child_concerns).to eq([Media, Attachment])
+      end
+
+    end
+
+  end
+
 end
