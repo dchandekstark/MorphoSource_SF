@@ -1,5 +1,6 @@
 class ProcessingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
+  validates_with Morphosource::ParentChildValidator
 
   self.indexer = ProcessingEventIndexer
   # Change this to restrict which works can be added as a child.

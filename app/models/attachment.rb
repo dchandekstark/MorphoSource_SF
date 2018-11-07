@@ -2,6 +2,7 @@
 #  `rails generate hyrax:work Attachment`
 class Attachment < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
+  validates_with Morphosource::ParentChildValidator
 
   self.work_requires_files = true
 
