@@ -1,7 +1,7 @@
 require 'rails_helper'
 
   RSpec.describe Morphosource::ParentChildValidator do
-    subject(:parent_child_validator) { described_class.new }
+
     let(:record) { Media.new( { title: ["Sample Media"] } ) }
     let(:valid_child) { ProcessingEvent.new( { title: ["Sample Processing Event"] } ) }
     let(:invalid_child) { Institution.new( { title: ["Sample Institution"]} )}
