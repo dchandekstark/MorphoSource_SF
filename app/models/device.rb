@@ -2,6 +2,7 @@
 #  `rails generate hyrax:work Device`
 class Device < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
+  validates_with Morphosource::ParentChildValidator
 
   self.indexer = DeviceIndexer
   # Change this to restrict which works can be added as a child.

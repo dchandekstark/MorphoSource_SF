@@ -1,5 +1,7 @@
 class ImagingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
+  validates_with Morphosource::ParentChildValidator
+
   self.work_requires_files = false
   self.indexer = ImagingEventIndexer
   # Change this to restrict which works can be added as a child.
