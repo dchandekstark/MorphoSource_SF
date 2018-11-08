@@ -280,12 +280,12 @@ class SolrDocument
     self[Solrizer.solr_name('photometric_interpretation', :stored_searchable)]
   end
 
-  def dcm_rows
-    self[Solrizer.solr_name('dcm_rows', :stored_searchable)]
+  def rows
+    self[Solrizer.solr_name('rows', :stored_searchable)]
   end
 
-  def dcm_columns
-    self[Solrizer.solr_name('dcm_columns', :stored_searchable)]
+  def columns
+    self[Solrizer.solr_name('columns', :stored_searchable)]
   end
 
   def pixel_spacing
