@@ -23,8 +23,8 @@ class MsFileSetIndexer < Hyrax::FileSetIndexer
       solr_doc['image_orientation_patient_tesim'] = object.image_orientation_patient
       solr_doc['samples_per_pixel_tesim'] = object.samples_per_pixel
       solr_doc['photometric_interpretation_tesim'] = object.photometric_interpretation
-      solr_doc['dcm_rows_tesim'] = object.dcm_rows
-      solr_doc['dcm_columns_tesim'] = object.dcm_columns
+      solr_doc['rows_tesim'] = object.rows
+      solr_doc['columns_tesim'] = object.columns
       solr_doc['pixel_spacing_tesim'] = object.pixel_spacing
       solr_doc['bits_allocated_tesim'] = object.bits_allocated
       solr_doc['bits_stored_tesim'] = object.bits_stored
