@@ -15,7 +15,10 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-
+  - mkdir tempdownload
+  - cd tempdownload
+  - wget https://github.com/MorphoSource/morphosource-vagrant/blob/master/install_scripts/fits_config/fits.xml
+  - which fits.sh
 before_script:
   - "cp .rspec.travis .rspec"
   # Don't need to use role_map if using hydra-role-manager
