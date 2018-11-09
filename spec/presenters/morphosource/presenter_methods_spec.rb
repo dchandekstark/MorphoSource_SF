@@ -26,7 +26,7 @@ RSpec.describe Hyrax::MediaPresenter do
 
   describe '#in_work_presenters' do
     describe 'nested work' do
-      let(:parent) { Media.new(title: ["Example Parent Media Work"]) }
+      let(:parent) { ImagingEvent.new(title: ["Example Parent Imaging Event Work"]) }
       let(:child) { Media.create(title: ["Example Child Media Work"]) }
       subject { described_class.new(SolrDocument.find(child.id), ability, request) }
 
