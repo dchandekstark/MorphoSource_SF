@@ -6,12 +6,12 @@ RSpec.describe Media do
 
   describe "valid work relationships" do
 
-    it "has Media, ProcessingEvent, and ImagingEvent as valid parents" do
-      expect(subject.valid_parent_concerns).to match_array([Media, ProcessingEvent, ImagingEvent])
+    it "has ProcessingEvent, and ImagingEvent as valid parents" do
+      expect(subject.valid_parent_concerns).to match_array([ProcessingEvent, ImagingEvent])
     end
 
-    it "has Media, ProcessingEvent, and Attachment as valid children" do
-      expect(subject.valid_child_concerns).to match_array([Media, ProcessingEvent, Attachment])
+    it "has ProcessingEvent, and Attachment as valid children" do
+      expect(subject.valid_child_concerns).to match_array([ProcessingEvent, Attachment])
     end
 
   end
@@ -75,12 +75,12 @@ RSpec.describe Media do
 
     describe "valid work relationships" do
 
-      it "has Media, ProcessingEvent, and ImagingEvent as valid parents" do
-        expect(subject.valid_parent_concerns).to match_array([Media, ProcessingEvent, ImagingEvent])
+      it "has ProcessingEvent, and ImagingEvent as valid parents" do
+        expect(subject.valid_parent_concerns).to match_array([ProcessingEvent, ImagingEvent])
       end
 
-      it "has Media, ProcessingEvent, and Attachment as valid children" do
-        expect(subject.valid_child_concerns).to match_array([Media, ProcessingEvent, Attachment])
+      it "has ProcessingEvent, and Attachment as valid children" do
+        expect(subject.valid_child_concerns).to match_array([ProcessingEvent, Attachment])
       end
 
     end

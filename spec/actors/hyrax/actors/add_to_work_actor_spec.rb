@@ -9,7 +9,7 @@ RSpec.describe Hyrax::Actors::AddToWorkActor do
   let(:work) { Media.new(title: ["Work Being Updated"], id: "OriginalWork") }
   let(:ability) { Ability.new(User.new) }
 
-  let(:parent_work) { Media.new(title: ["Example Parent Work"], id: "ParentWork") }
+  let(:parent_work) { ImagingEvent.new(title: ["Example Parent Work"], id: "ParentWork") }
   let(:parent_id) { parent_work.id }
 
   let(:attributes) { { work_parents_attributes: { '0' => { id: parent_id, _destroy: 'false' } } } }
