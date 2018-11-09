@@ -6,14 +6,6 @@ RSpec.describe Hyrax::MsFileSetPresenter do
   let(:ability) { double "Ability" }
   let(:presenter) { described_class.new(solr_document, ability, request) }
   let(:attributes) { file.to_solr }
-  let(:file) do
-    FactoryBot.build(:file_set,
-          id: '123abc',
-          user: user,
-          title: ["File title"],
-          depositor: user.user_key,
-          label: "filename.tif")
-  end
   let(:user) { double(user_key: 'sarah') }
 
   let(:request) { double(base_url: 'http://test.host') }
@@ -28,7 +20,7 @@ RSpec.describe Hyrax::MsFileSetPresenter do
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, dcm_file, :original_file)
       # perform the characterization job ( app/jobs/characterize_job.rb )
-      CharacterizeJob.perform_now(file_set, file.id, file_path_string)
+      CharacterizeJob.perform_now(file_set, file_set.original_file.id, file_path_string)
     end
 
     # find the solr doc, then verify the metadata
