@@ -26,17 +26,14 @@ RSpec.describe Hyrax::MsFileSetPresenter do
     # find the solr doc, then verify the metadata
     subject { SolrDocument.find(file_set.id) }
 
-    #it "has dicom attributes in the metadata" do
-      #expect(subject[:mime_type_ssi]).to eq("application/dicom")
-      #expect(subject[:spacing_between_slices_tesim].first).to eq("0.0100088")
-      #expect(subject[:modality_tesim].first).to eq("OT")
-      #expect(subject[:secondary_capture_device_manufacturer_tesim].first).to eq("FEI")
-      #expect(subject[:secondary_capture_device_software_vers_tesim].first).to eq("Avizo")
-    #end
+    it "has dicom attributes in the metadata" do
+      expect(subject[:mime_type_ssi]).to eq("application/dicom")
+      expect(subject[:spacing_between_slices_tesim].first).to eq("0.0100088")
+      expect(subject[:modality_tesim].first).to eq("OT")
+      expect(subject[:secondary_capture_device_manufacturer_tesim].first).to eq("FEI")
+      expect(subject[:secondary_capture_device_software_vers_tesim].first).to eq("Avizo")
+    end
       
-
   end
     
-  pending("Waiting to setup and configure FITS in Travis before running the test")
-  
 end
