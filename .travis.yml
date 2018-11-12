@@ -33,7 +33,7 @@ before_install:
   - fits.sh -v
   - fits.sh -i "/home/travis/build/MorphoSource/MorphoSource_SF/spec/fixtures/CMB06020_R-m1_011.dcm"
   # end FITS setup
-  - cd $TRAVIS_BUILD_DIR/MorphoSource_SF
+  - cd $TRAVIS_BUILD_DIR
 before_script:
   - "cp .rspec.travis .rspec"
   # Don't need to use role_map if using hydra-role-manager
