@@ -18,7 +18,6 @@ before_install:
   # Download anc configure FITS
   # $TRAVIS_BUILD_DIR
   - mkdir tempdownload
-  - export 
   - cd tempdownload
   - curl http://projects.iq.harvard.edu/files/fits/files/fits-1.3.0.zip -o fits.zip
   - mkdir fits-1.3.0
@@ -30,6 +29,8 @@ before_install:
   - cp fits.xml fits-1.3.0/xml/.
   - cp exiftool_dicom_to_fits.xslt fits-1.3.0/xml/exiftool/.
   - cp exiftool_xslt_map.xml fits-1.3.0/xml/exiftool/.
+  - cd ..
+  - export PATH=$PATH:$PWD/tempdownload/fits-1.3.0
   # echo "PATH=\${PATH}:$FITS_PATH" >> .bashrc
 before_script:
   - "cp .rspec.travis .rspec"
