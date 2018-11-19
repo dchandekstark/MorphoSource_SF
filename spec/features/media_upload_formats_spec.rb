@@ -51,7 +51,7 @@ RSpec.feature 'update Media file formats', js: true do
       click_link "Descriptions"
       select('Video (*.avi, *.mp4, *.mov, .etc.)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".avi, .m4v, .mov, .mp4, .mpe, .mpeg, .wmv")
+      expect(page).to have_content (".avi, .m4v, .mov, .mp4, .mpg, .mpeg, .wmv")
 
       click_link "Descriptions"
       select('CT/MRI image stack (multiple files of type *.tiff, *.png, *.dcm, etc.)', from: 'Media Type')
