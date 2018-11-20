@@ -22,6 +22,8 @@
 
 //= require_tree .
 //= require hyrax
-//= require morphosource/add_parent
-//= require morphosource/editor
 //= require select2
+//= require morphosource/ms_app
+//= require morphosource/ms_editor
+//= require morphosource/media/upload_formats
+//= require morphosource/ms_save_work_control
