@@ -25,6 +25,9 @@
 # Ignore application configuration
 /config/application.yml
 
+# Google Analytics config
+/config/analytics.yml
+
 # ---------------------------------------------------
 # Below are copied from RDR. Might need them later
 # ---------------------------------------------------
