@@ -1,0 +1,9 @@
+<!-- Adds hidden list of previously uploaded file names used by upload_formats.js to evaluate the file formats requirement on Media works -->
+<div id="uploaded_files_list" class="hide">
+  <% file_list = curation_concern.file_sets.map{|f| f.label} %>
+  <ul>
+  <% file_list.each do |f| %>
+    <li><%= f %></li>
+  <% end %>
+  </ul>
+</div>
