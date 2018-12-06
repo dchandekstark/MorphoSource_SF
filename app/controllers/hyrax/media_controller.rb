@@ -15,7 +15,7 @@ module Hyrax
     # Overriding WorksControllerBehavior to add file format validation
     # Could not do this as an ActiveModel validation because new file uploads are not added until after create
     def create
-     if valid_file_formats && actor.create(actor_environment)
+     if file_formats_valid? && actor.create(actor_environment)
        after_create_response
      else
        respond_to do |wants|
@@ -29,7 +29,7 @@ module Hyrax
    end
 
    def update
-      if valid_file_formats && actor.update(actor_environment)
+      if file_formats_valid? && actor.update(actor_environment)
         after_update_response
       else
         respond_to do |wants|
@@ -49,7 +49,7 @@ module Hyrax
       end
 
       # Checks that uploaded files are the correct format for selected media type.
-      def valid_file_formats
+      def validate_file_formats
         invalid_files = []
         media_type = attributes_for_actor["media_type"].first
 
@@ -59,10 +59,14 @@ module Hyrax
           invalid_files << file_name unless Morphosource.send(Morphosource::MEDIA_FORMATS[media_type]).include? File.extname(file_name)
         end
 
-        return true if invalid_files.length == 0
+        if invalid_files.length != 0
+          curation_concern.errors.add(:base, "Invalid files: #{invalid_files.uniq.join(', ')} for Media Type: #{media_type}.")
+        end
+      end
 
-        curation_concern.errors.add(:base, "Invalid files: #{invalid_files.uniq.join(', ')} for Media Type: #{media_type}.")
-        false
+      def file_formats_valid?
+        validate_file_formats
+        curation_concern.errors.empty? ? true : false
       end
   end
 end

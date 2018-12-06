@@ -48,6 +48,6 @@ class FileSet < ActiveFedora::Base
 
     # Used to validate uploaded file is appropriate for selected media type
     def file_extension
-      return File.extname(self.label).downcase
+      File.extname(self.original_file.original_name).downcase
     end
 end

@@ -13,7 +13,7 @@ module Morphosource
 
       return if invalid_files.empty?
 
-      invalid_file_names = invalid_files.map{|f| f.label}.uniq.join(', ')
+      invalid_file_names = invalid_files.map{|f| f.original_file.original_name}.uniq.join(', ')
       invalid_file_extensions = invalid_files.map{|f| f.file_extension}.uniq.join(', ')
 
       record.errors.add(:base, "Invalid files: #{invalid_file_names} for Media Type: #{media_type}.")

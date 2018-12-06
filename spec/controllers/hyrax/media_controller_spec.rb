@@ -40,7 +40,7 @@ RSpec.describe Hyrax::MediaController do
   describe "#valid_file_formats" do
     let(:work)        { Media.new(title: ["Test Media Work"]) }
     let(:user)        { FactoryBot.create(:user) }
-    let(:file_path1)  { fixture_path + '/images/hamster.png' }
+    let(:file_path1)  { fixture_path + '/images/duke.png' }
     let(:file_path2)  { fixture_path + '/images/ms.jpg' }
     let(:file_path3)  { fixture_path + '/images/ms_2.jpg' }
     let(:local_file1) { File.open(file_path1) }
@@ -61,7 +61,7 @@ RSpec.describe Hyrax::MediaController do
       end
 
       it "returns true" do
-        expect(subject.send(:valid_file_formats)).to be(true)
+        expect(subject.send(:file_formats_valid?)).to be(true)
       end
     end
 
@@ -71,12 +71,12 @@ RSpec.describe Hyrax::MediaController do
       end
 
       it "returns false if the uploaded file formats are correct for the selected media type" do
-        expect(subject.send(:valid_file_formats)).to be(false)
+        expect(subject.send(:file_formats_valid?)).to be(false)
       end
 
       it "adds a base error if the uploaded file formats are incorrect" do
-        subject.send(:valid_file_formats)
-        expect(subject.curation_concern.errors[:base][0]).to include("hamster.png","ms.jpg","ms_2.jpg")
+        subject.send(:file_formats_valid?)
+        expect(subject.curation_concern.errors[:base][0]).to include("duke.png","ms.jpg","ms_2.jpg")
       end
     end
   end
