@@ -21,33 +21,33 @@ function regularExpressionize(list) {
   return new RegExp('(\\' + list.replace(/, /g,'|\\') + ')$','i');
 }
 
-// Set allowed formats for each Media Type here.
+// Set allowed formats for each Media Type in lib/morphosource/configurable.
 // Returns a formats object.
 function mediaTypeFormats() {
   let mediaType = $('#media_media_type').val();
   let mediaTitle = $("#media_media_type option:selected").html().split(' (')[0];
   let acceptedFormatsMessage = "Accepted formats for " + mediaTitle + " files are: ";
-  let allFormats = ".avi, .bmp, .dcm, .dicom, .gif, .gltf, .jp2, .jpeg, .jpg, .m4v, .mov, .mp4, .mpg, .mpeg, .mtl, .obj, .pdf, .ply, .png, .stl, .tif, .tiff, .wmv, .wrl, .x3d, .zip";
+  let allFormats = (<%= Morphosource.all_formats %>).join(', ');
   let formats = {};
 
   switch (mediaType) {
     case 'Image':
-      var list = ".bmp, .dcm, .dicom, .gif, .jp2, .jpeg, .jpg, .png, .tif, .tiff";
+      var list = (<%= Morphosource.image_formats %>).join(', ');
       break;
     case 'Video':
-      var list = ".avi, .m4v, .mov, .mp4, .mpg, .mpeg, .wmv";
+      var list = (<%= Morphosource.video_formats %>).join(', ');
       break;
     case 'CTImageStack':
-      var list = ".zip";
+      var list = (<%= Morphosource.ct_formats %>).join(', ');
       break;
     case 'PhotogrammetryImageStack':
-      var list = ".zip";
+      var list = (<%= Morphosource.photogrammetry_formats %>).join(', ');
       break;
     case 'Mesh':
-      var list = ".bmp, .dcm, .dicom, .gif, .gltf, .jp2, .jpeg, .jpg, .mtl, .obj, .ply, .png, .stl, .tif, .tiff, .wrl, .x3d, .zip"
+      var list = (<%= Morphosource.mesh_formats %>).join(', ')
       break;
     case 'Other':
-      var list = allFormats;
+      var list = (<%= Morphosource.other_formats %>).join(', ');
       break;
     case '':
       var list = allFormats;

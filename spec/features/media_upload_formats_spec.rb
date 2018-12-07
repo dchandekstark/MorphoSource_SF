@@ -46,27 +46,27 @@ RSpec.feature 'update Media file formats', js: true do
       # Test that accepted formats message changes as different media types are selected
       select('Image (*.tiff, *.png, *.dcm, etc.)', from: 'Media Type')
       click_link "Files" # switch tab
-      expect(page).to have_content (".bmp, .dcm, .dicom, .gif, .jp2, .jpeg, .jpg, .png, .tif, .tiff")
+      expect(page).to have_content (Morphosource.image_formats.join(', '))
 
       click_link "Descriptions"
       select('Video (*.avi, *.mp4, *.mov, .etc.)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".avi, .m4v, .mov, .mp4, .mpg, .mpeg, .wmv")
+      expect(page).to have_content (Morphosource.video_formats.join(', '))
 
       click_link "Descriptions"
       select('CT/MRI image stack (multiple files of type *.tiff, *.png, *.dcm, etc.)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".zip")
+      expect(page).to have_content (Morphosource.ct_formats.join(', '))
 
       click_link "Descriptions"
       select('Photogrammetry image stack (multiple files of type *.tiff, *.png, etc.)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".zip")
+      expect(page).to have_content (Morphosource.photogrammetry_formats.join(', '))
 
       click_link "Descriptions"
       select('Mesh or point cloud (*.stl, *.ply, .etc, with optional associated texture or color file)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".bmp, .dcm, .dicom, .gif, .gltf, .jp2, .jpeg, .jpg, .mtl, .obj, .ply, .png, .stl, .tif, .tiff, .wrl, .x3d, .zip")
+      expect(page).to have_content (Morphosource.mesh_formats.join(', '))
 
     end
   end
