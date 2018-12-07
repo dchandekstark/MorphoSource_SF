@@ -18,6 +18,7 @@ module Hydra::Works
     end
 
     autoload :FitsDocument, 'hydra/works/characterization/fits_document.rb'
+    autoload :BlenderDocument, 'hydra/works/characterization/blender_document.rb'
 
     autoload_under 'schema' do
       autoload :AudioSchema
