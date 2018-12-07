@@ -211,6 +211,7 @@ $(document).on('turbolinks:load', function() {
     // If editing the form, the formats requirement may have already been fulfilled by previous uploads.
     if (window.location.href.indexOf("/edit?") > -1) {
       checkFormatsRequirement();
+      updateAcceptedFormatsMessage();
     }
 
     // Whenever a file is uploaded, check to see if it fulfills the formats requirement, and update the unallowed files message if the file is the wrong extension.
