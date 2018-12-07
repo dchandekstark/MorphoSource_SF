@@ -15,8 +15,4 @@
 <% if f.object.persisted? %>
   <h2><%= t("hyrax.works.form.in_this_work") %></h2>
   <%= render 'form_child_work_relationships', f: f %>
-  <%# Below renders a hidden list of previously uploaded files used by upload_formats.js to evalute the file formats requirement on Media works %>
-  <% if f.object.model_name.name == 'Media' %>
-    <%= render 'form_uploads_list', f: f %>
-  <% end %>
 <% end %>
