@@ -66,7 +66,7 @@ RSpec.feature 'update Media file formats', js: true do
       click_link "Descriptions"
       select('Mesh or point cloud (*.stl, *.ply, .etc, with optional associated texture or color file)', from: 'Media Type')
       click_link "Files"
-      expect(page).to have_content (".bmp, .dcm, .dicom, .gif, .gltf, .jp2, .jpeg, .jpg, .mtl, .obj, .obj, .ply, .png,. stl, .tif, .tiff, .wrl, .x3d, .zip")
+      expect(page).to have_content (".bmp, .dcm, .dicom, .gif, .gltf, .jp2, .jpeg, .jpg, .mtl, .obj, .ply, .png, .stl, .tif, .tiff, .wrl, .x3d, .zip")
 
     end
   end

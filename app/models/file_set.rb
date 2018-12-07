@@ -3,6 +3,7 @@ class FileSet < ActiveFedora::Base
 
   include ::Hyrax::FileSetBehavior
 
+
   # MS_CUSTOMIZATION : override FileSetIndexer
   #self.indexer = ::FileSetIndexer
   self.indexer = ::MsFileSetIndexer
@@ -12,7 +13,7 @@ class FileSet < ActiveFedora::Base
 
   # for dicom
   delegate(
-    :spacing_between_slices, 
+    :spacing_between_slices,
     :modality,
     :secondary_capture_device_manufacturer,
     :secondary_capture_device_software_vers,
@@ -44,4 +45,9 @@ class FileSet < ActiveFedora::Base
     :window_center_and_width_explanation,
     to: :characterization_proxy
   )
+
+    # Used to validate uploaded file is appropriate for selected media type
+    def file_extension
+      File.extname(self.original_file.original_name).downcase
+    end
 end
