@@ -44,4 +44,12 @@ class FileSet < ActiveFedora::Base
     :window_center_and_width_explanation,
     to: :characterization_proxy
   )
+  
+  # for mesh
+  delegate(
+    :point_count,
+    :face_count,
+    to: :characterization_proxy
+  )
+  
 end

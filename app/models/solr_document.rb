@@ -481,4 +481,13 @@ class SolrDocument
   def light_source
       self[Solrizer.solr_name('light_source', :stored_searchable)]
   end
+
+  # mesh
+  def point_count
+    self[Solrizer.solr_name('point_count', :stored_searchable)]
+  end
+
+  def face_count
+    self[Solrizer.solr_name('face_count', :stored_searchable)]
+  end
 end

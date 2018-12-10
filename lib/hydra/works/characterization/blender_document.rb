@@ -9,17 +9,12 @@ module Hydra::Works::Characterization
         t.identity do
           t.format_label(path: { attribute: 'format' })
           t.mime_type(path: { attribute: 'mimetype' })
-          t.tool(attributes: { toolname: "Exiftool" }) do
-            t.exif_tool_version(path: { attribute: 'toolversion' })
-          end
         end
       end
       t.fileinfo do
         t.file_size(path: 'size')
-        t.last_modified(path: 'lastmodified', attributes: { toolname: "Exiftool" })
         t.filename(path: 'filename')
         t.original_checksum(path: 'md5checksum')
-        t.date_created(path: 'created', attributes: { toolname: "Exiftool" })
         t.rights_basis(path: 'rightsBasis')
         t.copyright_basis(path: 'copyrightBasis')
         t.copyright_note(path: 'copyrightNote')
@@ -31,10 +26,8 @@ module Hydra::Works::Characterization
       end
       t.metadata do
         t.mesh do
-          t.modality(path: 'modality')
-          t.spacing_between_slices(path: 'spacingBetweenSlices')
-          t.secondary_capture_device_manufacturer(path: 'secondaryCaptureDeviceManufacturer')
-          t.secondary_capture_device_software_vers(path: 'secondaryCaptureDeviceSoftwareVers')
+          t.point_count(path: 'pointCount')
+          t.face_count(path: 'faceCount')
         end
       end
       # fits_version needs a different name than it's target node since they're at the same level
@@ -42,12 +35,9 @@ module Hydra::Works::Characterization
       t.format_label(proxy: [:identification, :identity, :format_label])
       # Can't use .mime_type because it's already defined for this dcoument so method missing won't work.
       t.file_mime_type(proxy: [:identification, :identity, :mime_type])
-      t.exif_tool_version(proxy: [:identification, :identity, :tool, :exif_tool_version])
       t.file_size(proxy: [:fileinfo, :file_size])
-      t.date_modified(proxy: [:fileinfo, :last_modified])
       t.filename(proxy: [:fileinfo, :filename])
       t.original_checksum(proxy: [:fileinfo, :original_checksum])
-      t.date_created(proxy: [:fileinfo, :date_created])
       t.rights_basis(proxy: [:fileinfo, :rights_basis])
       t.copyright_basis(proxy: [:fileinfo, :copyright_basis])
       t.copyright_note(proxy: [:fileinfo, :copyright_note])
@@ -56,10 +46,8 @@ module Hydra::Works::Characterization
       t.filestatus_message(proxy: [:filestatus, :status_message])
 
       # mesh specific attributes 
-      t.modality(proxy: [:metadata, :mesh, :modality])
-      t.spacing_between_slices(proxy: [:metadata, :mesh, :spacing_between_slices])
-      t.secondary_capture_device_manufacturer(proxy: [:metadata, :mesh, :secondary_capture_device_manufacturer])
-      t.secondary_capture_device_software_vers(proxy: [:metadata, :mesh, :secondary_capture_device_software_vers])
+      t.point_count(proxy: [:metadata, :mesh, :point_count])
+      t.face_count(proxy: [:metadata, :mesh, :face_count])
     end
 
     # Cleanup phase; ugly name to avoid collisions.

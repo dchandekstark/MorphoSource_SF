@@ -3,7 +3,8 @@ module Hyrax
 
     def self.characterization_terms
       super + [
-        :bits_per_sample, 
+        :bits_per_sample,
+        # dicom
         :spacing_between_slices,
         :modality,
         :secondary_capture_device_manufacturer,
@@ -33,7 +34,10 @@ module Hyrax
         :window_width,
         :rescale_intercept,
         :rescale_slope,
-        :window_center_and_width_explanation
+        :window_center_and_width_explanation,
+        # mesh
+        :point_count,
+        :face_count
       ]
     end
 
@@ -72,5 +76,12 @@ module Hyrax
               :rescale_slope,
               :window_center_and_width_explanation,
               to: :solr_document
+
+    # mesh
+    delegate  :point_count,
+              :face_count,
+              to: :solr_document
+
+  
   end
 end

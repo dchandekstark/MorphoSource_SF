@@ -35,6 +35,9 @@ class MsFileSetIndexer < Hyrax::FileSetIndexer
       solr_doc['rescale_intercept_tesim'] = object.rescale_intercept
       solr_doc['rescale_slope_tesim'] = object.rescale_slope
       solr_doc['window_center_and_width_explanation_tesim'] = object.window_center_and_width_explanation
+      # mesh
+      solr_doc['point_count_tesim'] = object.point_count
+      solr_doc['face_count_tesim'] = object.face_count
     end
   end
 end

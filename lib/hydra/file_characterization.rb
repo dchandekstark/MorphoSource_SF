@@ -63,7 +63,7 @@ module Hydra
     #
     # @see Hydra::FileCharacterization.configure
     def self.characterize(*args)
-byebug
+#byebug
       content, filename, tool_names = extract_arguments(args)
       tool_names = Array(tool_names).flatten.compact
       custom_paths = {}

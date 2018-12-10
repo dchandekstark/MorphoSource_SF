@@ -77,7 +77,6 @@ byebug
         omdoc.class.terminology.terms.each_pair do |key, target|
           # a key is a proxy if its target responds to proxied_term
           next unless target.respond_to? :proxied_term
-#byebug
           begin
             h[key] = omdoc.send(key)
           rescue NoMethodError
