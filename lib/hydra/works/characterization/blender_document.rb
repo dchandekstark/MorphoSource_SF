@@ -28,6 +28,21 @@ module Hydra::Works::Characterization
         t.mesh do
           t.point_count(path: 'pointCount')
           t.face_count(path: 'faceCount')
+          t.boundingboxdimensions do
+            t.bounding_box_x(path: 'boundingBoxX')
+            t.bounding_box_y(path: 'boundingBoxY')
+            t.bounding_box_z(path: 'boundingBoxZ')
+          end
+          t.centroid do
+            t.centroid_x(path: 'centroidX')
+            t.centroid_y(path: 'centroidY')
+            t.centroid_z(path: 'centroidZ')
+          end
+          t.edges_per_face(path: 'edgesPerFace')
+          t.color_format(path: 'colorFormat')
+          t.normals_format(path: 'normalsFormat')
+          t.has_uv_space(path: 'hasUvSpace')
+          t.vertex_color(path: 'vertexColor')
         end
       end
       # fits_version needs a different name than it's target node since they're at the same level
@@ -48,6 +63,17 @@ module Hydra::Works::Characterization
       # mesh specific attributes 
       t.point_count(proxy: [:metadata, :mesh, :point_count])
       t.face_count(proxy: [:metadata, :mesh, :face_count])
+      t.bounding_box_x(proxy: [:metadata, :mesh, :boundingboxdimensions, :bounding_box_x])
+      t.bounding_box_y(proxy: [:metadata, :mesh, :boundingboxdimensions, :bounding_box_y])
+      t.bounding_box_z(proxy: [:metadata, :mesh, :boundingboxdimensions, :bounding_box_z])
+      t.centroid_x(proxy: [:metadata, :mesh, :centroid, :centroid_x])
+      t.centroid_y(proxy: [:metadata, :mesh, :centroid, :centroid_y])
+      t.centroid_z(proxy: [:metadata, :mesh, :centroid, :centroid_z])
+      t.edges_per_face(proxy: [:metadata, :mesh, :edges_per_face])
+      t.color_format(proxy: [:metadata, :mesh, :color_format])
+      t.normals_format(proxy: [:metadata, :mesh, :normals_format])
+      t.has_uv_space(proxy: [:metadata, :mesh, :has_uv_space])
+      t.vertex_color(proxy: [:metadata, :mesh, :vertex_color])
     end
 
     # Cleanup phase; ugly name to avoid collisions.

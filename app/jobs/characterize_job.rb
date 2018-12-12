@@ -10,7 +10,12 @@ class CharacterizeJob < Hyrax::ApplicationJob
     raise "#{file_set.class.characterization_proxy} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
 
-    # Run blender first, then FITS, otherwise blender possibly fails if run after fits.  
+    # Run FITS , then blender.  Since mesh files are not recognized by FITS, mime type will be overwritten by blender 
+ 
+# todo: add back after testing
+#    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
+ #   Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
+
     blender_options = {
       "parser_class" => Hydra::Works::Characterization::BlenderDocument, 
       "tool_class" => :blender
@@ -18,9 +23,6 @@ class CharacterizeJob < Hyrax::ApplicationJob
     Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, blender_options)
     Rails.logger.debug "Ran Blender characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
 
-    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
-    Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
-    
     file_set.characterization_proxy.save!
     file_set.update_index
     file_set.parent&.in_collections&.each(&:update_index)
