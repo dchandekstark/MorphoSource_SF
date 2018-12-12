@@ -1,7 +1,6 @@
 class Media < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
-  validates_with Morphosource::UploadFormatsValidator
 
   self.work_requires_files = true
 

@@ -11,12 +11,12 @@ module Morphosource
 
       # Allowed formats for uploads based on selected Media type
       MEDIA_FORMATS = {
-        'Image' => :image_formats,
-        'Video' => :video_formats,
-        'CTImageStack' => :ct_formats,
-        'PhotogrammetryImageStack' => :photogrammetry_formats,
-        'Mesh' => :mesh_formats,
-        'Other' => :other_formats
+        'Image' => {:extensions => :image_formats, :label => "Image"},
+        'Video' => {:extensions => :video_formats, :label => "Video"},
+        'CTImageStack' => {:extensions => :ct_formats, :label => "CT/MRI Image Stack"},
+        'PhotogrammetryImageStack' => {:extensions => :photogrammetry_formats, :label => "Photogrammetry Image Stack"},
+        'Mesh' => {:extensions => :mesh_formats, :label => "Mesh or Point Cloud"},
+        'Other' => {:extensions => :other_formats, :label => "Image"}
       }
 
       mattr_accessor :all_formats do
