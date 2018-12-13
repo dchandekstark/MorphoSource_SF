@@ -46,8 +46,4 @@ class FileSet < ActiveFedora::Base
     to: :characterization_proxy
   )
 
-    # Used to validate uploaded file is appropriate for selected media type
-    def file_extension
-      File.extname(self.original_file.original_name).downcase
-    end
 end

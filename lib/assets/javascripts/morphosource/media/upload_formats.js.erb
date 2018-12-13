@@ -21,11 +21,20 @@ function regularExpressionize(list) {
   return new RegExp('(\\' + list.replace(/, /g,'|\\') + ')$','i');
 }
 
+const mediaFormatLabels = {
+  'Image': "<%= Morphosource::MEDIA_FORMATS['Image'][:label] %>",
+  'Video': "<%= Morphosource::MEDIA_FORMATS['Video'][:label] %>",
+  'CTImageStack': "<%= Morphosource::MEDIA_FORMATS['CTImageStack'][:label] %>",
+  'PhotogrammetryImageStack': "<%= Morphosource::MEDIA_FORMATS['PhotogrammetryImageStack'][:label] %>",
+  'Mesh': "<%= Morphosource::MEDIA_FORMATS['Mesh'][:label] %>",
+  'Other': "<%= Morphosource::MEDIA_FORMATS['Other'][:label] %>"
+}
+
 // Set allowed formats for each Media Type in lib/morphosource/configurable.
 // Returns a formats object.
 function mediaTypeFormats() {
   let mediaType = $('#media_media_type').val();
-  let mediaTitle = $("#media_media_type option:selected").html().split(' (')[0];
+  let mediaTitle = mediaFormatLabels[mediaType];
   let acceptedFormatsMessage = "Accepted formats for " + mediaTitle + " files are: ";
   let allFormats = (<%= Morphosource.all_formats %>).join(', ');
   let formats = {};
@@ -207,12 +216,9 @@ $(document).on('turbolinks:load', function() {
     // Adds file formats requirement to the Requirements list
     // Inserts placeholders for allowed formats and uploaded files with the wrong format.
     setupMatchingFormatRequirement();
-
-    // If editing the form, the formats requirement may have already been fulfilled by previous uploads.
-    if (window.location.href.indexOf("/edit?") > -1) {
-      checkFormatsRequirement();
-      updateAcceptedFormatsMessage();
-    }
+    // In case on edit form or reloading after a failed validation, check formats requirement and update the accepted formats message.
+    updateAcceptedFormatsMessage();
+    checkFormatsRequirement();
 
     // Whenever a file is uploaded, check to see if it fulfills the formats requirement, and update the unallowed files message if the file is the wrong extension.
     $('#fileupload').bind('fileuploadcompleted', function() {

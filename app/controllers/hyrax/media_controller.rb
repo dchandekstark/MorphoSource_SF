@@ -50,17 +50,26 @@ module Hyrax
 
       # Checks that uploaded files are the correct format for selected media type.
       def validate_file_formats
+        files = []
         invalid_files = []
         media_type = attributes_for_actor["media_type"].first
 
+        # New uploads
         attributes_for_actor["uploaded_files"].each do |file_id|
-          file_name = Hyrax::UploadedFile.find(file_id)["file"]
+          files << Hyrax::UploadedFile.find(file_id)["file"]
+        end
 
-          invalid_files << file_name unless Morphosource.send(Morphosource::MEDIA_FORMATS[media_type]).include? File.extname(file_name)
+        # Previous uploads
+        self.curation_concern.file_sets.each do |file_set|
+          files << file_set.original_file.original_name
+        end
+
+        files.each do |file|
+          invalid_files << file unless Morphosource::MEDIA_FORMATS[media_type][:extensions].include? File.extname(file)
         end
 
         if invalid_files.length != 0
-          curation_concern.errors.add(:base, "Invalid files: #{invalid_files.uniq.join(', ')} for Media Type: #{media_type}.")
+          curation_concern.errors.add(:base, "Invalid files: #{invalid_files.uniq.join(', ')} for Media Type: #{Morphosource::MEDIA_FORMATS[media_type][:label]}.")
         end
       end
 

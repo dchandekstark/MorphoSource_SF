@@ -10,15 +10,6 @@ module Morphosource
       end
 
       # Allowed formats for uploads based on selected Media type
-      MEDIA_FORMATS = {
-        'Image' => :image_formats,
-        'Video' => :video_formats,
-        'CTImageStack' => :ct_formats,
-        'PhotogrammetryImageStack' => :photogrammetry_formats,
-        'Mesh' => :mesh_formats,
-        'Other' => :other_formats
-      }
-
       mattr_accessor :all_formats do
         [".avi", ".bmp", ".dcm", ".dicom", ".gif", ".gltf", ".jp2", ".jpeg", ".jpg", ".m4v", ".mov", ".mp4", ".mpg", ".mpeg", ".mtl", ".obj", ".pdf", ".ply", ".png", ".stl", ".tif", ".tiff", ".wmv", ".wrl", ".x3d", ".zip"]
       end
@@ -48,6 +39,14 @@ module Morphosource
         self.all_formats
       end
 
+      MEDIA_FORMATS = {
+        'Image' => {extensions: image_formats, label: I18n.t('morphosource.media.format_labels.image')},
+        'Video' => {extensions: video_formats, label: I18n.t('morphosource.media.format_labels.video')},
+        'CTImageStack' => {extensions: ct_formats, label: I18n.t('morphosource.media.format_labels.ct_mri')},
+        'PhotogrammetryImageStack' => {extensions: photogrammetry_formats, label: I18n.t('morphosource.media.format_labels.photogrammetry')},
+        'Mesh' => {extensions: mesh_formats, label: I18n.t('morphosource.media.format_labels.mesh')},
+        'Other' => {extensions: other_formats, label: I18n.t('morphosource.media.format_labels.other')}
+      }
     end
 
   end
