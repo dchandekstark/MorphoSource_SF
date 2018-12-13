@@ -8,3 +8,11 @@ en:
         title: 'Your work must have a title.'
         vouchered: 'Missing value in vouchered? field. Does the object you are adding still physically exist?'
     fallback_object_title: "%{voucher} object contributed by %{user}"
+    media:
+      format_labels:
+        image: 'Image'
+        video: 'Video'
+        ct_mri: 'CT/MRI Image Stack'
+        photogrammetry: 'Photogrammetry Image Stack'
+        mesh: 'Mesh or Point Cloud'
+        other: 'Other'
