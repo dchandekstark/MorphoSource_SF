@@ -9,10 +9,11 @@ module Hydra::FileCharacterization::Characterizers
       def command
         ######    "#{tool_path} -i \"#{filename}\""
         #####     "/vagrant/blender/blender --background --python /vagrant/blender/test/testply.py -- /vagrant/blender/test/turkey_femur_sbu_77.ply"
-#byebug
-        "/vagrant/blender/blender --background --python /vagrant/blender/test/blender_characterize_mesh.py -- #{filename}"
+        #"/vagrant/downloads/blender/blender --background --python /vagrant/downloads/blender/scripts/blender_characterize_mesh.py -- #{filename}"
+        byebug
+        "#{tool_path}/blender --background --python #{tool_path}/scripts/blender_characterize_mesh.py -- #{filename}"
       end
-
+  
       # Remove any non-XML output that precedes the <?xml> tag
       # todo: remove 'blender output' at the end
       def post_process(raw_output)

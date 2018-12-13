@@ -17,7 +17,6 @@ module Hydra::FileCharacterization
   end
 
   def characterize_with(tool_name, path_to_file, path_to_tool)
-byebug
     if path_to_tool.respond_to?(:call)
       path_to_tool.call(path_to_file)
     else
@@ -30,5 +29,4 @@ end
 
 require 'hydra/file_characterization/characterizers/fits'
 require 'hydra/file_characterization/characterizers/ffprobe'
-# blender changes
 require 'hydra/file_characterization/characterizers/blender'

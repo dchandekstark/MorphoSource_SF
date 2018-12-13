@@ -50,6 +50,8 @@ byebug
       def extract_metadata(content)
         Hydra::FileCharacterization.characterize(content, file_name, tools) do |cfg|
           cfg[:fits] = Hydra::Derivatives.fits_path
+          # get the Blender path from ENV var
+          cfg[:blender] = Hyrax.config.blender_path
         end
       end
 
