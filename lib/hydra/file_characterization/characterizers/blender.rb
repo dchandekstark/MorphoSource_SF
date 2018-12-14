@@ -7,17 +7,12 @@ module Hydra::FileCharacterization::Characterizers
     protected
 
       def command
-        ######    "#{tool_path} -i \"#{filename}\""
-        #####     "/vagrant/blender/blender --background --python /vagrant/blender/test/testply.py -- /vagrant/blender/test/turkey_femur_sbu_77.ply"
-        #"/vagrant/downloads/blender/blender --background --python /vagrant/downloads/blender/scripts/blender_characterize_mesh.py -- #{filename}"
-        byebug
         "#{tool_path}/blender --background --python #{tool_path}/scripts/blender_characterize_mesh.py -- #{filename}"
       end
   
       # Remove any non-XML output that precedes the <?xml> tag
-      # todo: remove 'blender output' at the end
+      # todo: possibly remove blender errors and non-xml output
       def post_process(raw_output)
-#byebug        
         md = /\A(.*)(<\?xml.*)\Z/m.match(raw_output)
         logger.warn "----- WARNING ----- Blender produced non-xml output: \"#{md[1].chomp}\"" unless md[1].empty?
         md[2]

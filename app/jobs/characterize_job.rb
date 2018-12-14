@@ -12,9 +12,8 @@ class CharacterizeJob < Hyrax::ApplicationJob
 
     # Run FITS , then blender.  Since mesh files are not recognized by FITS, mime type will be overwritten by blender 
  
-# todo: add back after testing
-#    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
- #   Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
+    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
+    Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
 
     blender_options = {
       "parser_class" => Hydra::Works::Characterization::BlenderDocument, 

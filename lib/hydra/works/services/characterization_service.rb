@@ -17,11 +17,8 @@ module Hydra::Works
       @object       = object
       @source       = source
       @mapping      = options.fetch(:parser_mapping, Hydra::Works::Characterization.mapper)
-      #@parser_class = options.fetch(:parser_class, Hydra::Works::Characterization::FitsDocument)
-      #@tools        = options.fetch(:ch12n_tool, :fits)
       @parser_class = options.fetch("parser_class", Hydra::Works::Characterization::FitsDocument)
       @tools        = options.fetch("tool_class", :fits)
-#      @tools        = options.fetch(:ch12n_tool, :blender)
     end
 
     # Get given source into form that can be passed to Hydra::FileCharacterization
@@ -32,7 +29,6 @@ module Hydra::Works
       content = source_to_content
       extracted_md = extract_metadata(content)
       terms = parse_metadata(extracted_md)
-byebug
       store_metadata(terms)
     end
 
