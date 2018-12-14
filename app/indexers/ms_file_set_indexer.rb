@@ -35,6 +35,20 @@ class MsFileSetIndexer < Hyrax::FileSetIndexer
       solr_doc['rescale_intercept_tesim'] = object.rescale_intercept
       solr_doc['rescale_slope_tesim'] = object.rescale_slope
       solr_doc['window_center_and_width_explanation_tesim'] = object.window_center_and_width_explanation
+      # mesh
+      solr_doc['point_count_tesim'] = object.point_count
+      solr_doc['face_count_tesim'] = object.face_count
+      solr_doc['edges_per_face_tesim'] = object.edges_per_face
+      solr_doc['bounding_box_x_tesim'] = object.bounding_box_x
+      solr_doc['bounding_box_y_tesim'] = object.bounding_box_y
+      solr_doc['bounding_box_z_tesim'] = object.bounding_box_z
+      solr_doc['color_format_tesim'] = object.color_format
+      solr_doc['normals_format_tesim'] = object.normals_format
+      solr_doc['has_uv_space_tesim'] = object.has_uv_space
+      solr_doc['vertex_color_tesim'] = object.vertex_color
+      solr_doc['centroid_x_tesim'] = object.centroid_x
+      solr_doc['centroid_y_tesim'] = object.centroid_y
+      solr_doc['centroid_z_tesim'] = object.centroid_z
     end
   end
 end

@@ -477,4 +477,57 @@ class SolrDocument
   def light_source
       self[Solrizer.solr_name('light_source', :stored_searchable)]
   end
+
+  # mesh
+  def point_count
+    self[Solrizer.solr_name('point_count', :stored_searchable)]
+  end
+
+  def face_count
+    self[Solrizer.solr_name('face_count', :stored_searchable)]
+  end
+
+  def edges_per_face
+    self[Solrizer.solr_name('edges_per_face', :stored_searchable)]
+  end
+  
+  def color_format
+    self[Solrizer.solr_name('color_format', :stored_searchable)]
+  end
+
+  def normals_format
+    self[Solrizer.solr_name('normals_format', :stored_searchable)]
+  end
+
+  def has_uv_space
+    self[Solrizer.solr_name('has_uv_space', :stored_searchable)]
+  end
+
+  def vertex_color
+    self[Solrizer.solr_name('vertex_color', :stored_searchable)]
+  end
+
+  def bounding_box_x
+    self[Solrizer.solr_name('bounding_box_x', :stored_searchable)]
+  end
+
+  def bounding_box_y
+    self[Solrizer.solr_name('bounding_box_y', :stored_searchable)]
+  end
+
+  def bounding_box_z
+    self[Solrizer.solr_name('bounding_box_z', :stored_searchable)]
+  end
+
+  def centroid_x
+    self[Solrizer.solr_name('centroid_x', :stored_searchable)]
+  end
+
+  def centroid_y
+    self[Solrizer.solr_name('centroid_y', :stored_searchable)]
+  end
+
+  def centroid_z
+    self[Solrizer.solr_name('centroid_z', :stored_searchable)]
+  end
 end

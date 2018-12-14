@@ -3,7 +3,8 @@ module Hyrax
 
     def self.characterization_terms
       super + [
-        :bits_per_sample, 
+        :bits_per_sample,
+        # dicom
         :spacing_between_slices,
         :modality,
         :secondary_capture_device_manufacturer,
@@ -33,7 +34,21 @@ module Hyrax
         :window_width,
         :rescale_intercept,
         :rescale_slope,
-        :window_center_and_width_explanation
+        :window_center_and_width_explanation,
+        # mesh
+        :point_count,
+        :face_count,
+        :edges_per_face,
+        :bounding_box_x,
+        :bounding_box_y,
+        :bounding_box_z,
+        :centroid_x,
+        :centroid_y,
+        :centroid_z,
+        :color_format,
+        :normals_format,
+        :has_uv_space,
+        :vertex_color
       ]
     end
 
@@ -72,5 +87,22 @@ module Hyrax
               :rescale_slope,
               :window_center_and_width_explanation,
               to: :solr_document
+
+    # mesh
+    delegate  :point_count,
+              :face_count,
+              :edges_per_face,
+              :bounding_box_x,
+              :bounding_box_y,
+              :bounding_box_z,
+              :centroid_x,
+              :centroid_y,
+              :centroid_z,
+              :color_format,
+              :normals_format,
+              :has_uv_space,
+              :vertex_color,
+              to: :solr_document
+  
   end
 end
