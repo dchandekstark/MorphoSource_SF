@@ -10,18 +10,22 @@ class CharacterizeJob < Hyrax::ApplicationJob
     raise "#{file_set.class.characterization_proxy} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
 
-    # Run FITS , then blender.  Since mesh files are not recognized by FITS, mime type will be overwritten by blender 
- 
+    # Run FITS , then blender (if it is a mesh file type).  
+    # For mesh files:
+    # - we want blender to overwrite the mime type output from FITS
+    # - we still want to run FITS to get basic file info (e.g. checksum) 
     Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
     Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
 
-    blender_options = {
-      "parser_class" => Hydra::Works::Characterization::BlenderDocument, 
-      "tool_class" => :blender
-    }
-    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, blender_options)
-    Rails.logger.debug "Ran Blender characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
-
+    ext = File.extname(filepath)
+    if (ext =~ /\.(gltf|obj|ply|stl|wrl|x3d)$/)
+      blender_options = {
+        "parser_class" => Hydra::Works::Characterization::BlenderDocument, 
+        "tool_class" => :blender
+      }
+      Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, blender_options)
+      Rails.logger.debug "Ran Blender characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
+    end
     file_set.characterization_proxy.save!
     file_set.update_index
     file_set.parent&.in_collections&.each(&:update_index)
