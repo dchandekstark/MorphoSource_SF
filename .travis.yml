@@ -41,6 +41,7 @@ before_install:
   - tar xjf blender.tar.bz2
   - mv blender-2.79b-linux-glibc219-x86_64 blender
   - curl -o blender_characterize_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_characterize_mesh.py
+  - mkdir blender/scripts
   - cp blender_characterize_mesh.py blender/scripts/.
   - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
   - $TRAVIS_BUILD_DIR/download/blender/blender -v
