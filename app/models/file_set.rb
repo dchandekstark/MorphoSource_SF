@@ -46,4 +46,22 @@ class FileSet < ActiveFedora::Base
     to: :characterization_proxy
   )
 
+  # for mesh
+  delegate(
+    :point_count,
+    :face_count,
+    :edges_per_face,
+    :bounding_box_x,
+    :bounding_box_y,
+    :bounding_box_z,
+    :centroid_x,
+    :centroid_y,
+    :centroid_z,
+    :color_format,
+    :normals_format,
+    :has_uv_space,
+    :vertex_color,
+    to: :characterization_proxy
+  )
+  
 end

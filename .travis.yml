@@ -34,6 +34,21 @@ before_install:
   # verify fits are configured properly
   # - fits.sh -i "/home/travis/build/MorphoSource/MorphoSource_SF/spec/fixtures/CMB06020_R-m1_011.dcm"
   # end FITS setup --------
+  
+  # begin Blender setup --------
+  - cd $TRAVIS_BUILD_DIR/download
+  - curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
+  - tar xjf blender.tar.bz2
+  - mv blender-2.79b-linux-glibc219-x86_64 blender
+  - curl -o blender_characterize_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_characterize_mesh.py
+  - mkdir blender/scripts
+  - cp blender_characterize_mesh.py blender/scripts/.
+  - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
+  - $TRAVIS_BUILD_DIR/download/blender/blender -v
+  # verify blender is configured properly
+  #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
+  # end Blender setup --------
+
   - cd $TRAVIS_BUILD_DIR
 before_script:
   - "cp .rspec.travis .rspec"
