@@ -46,7 +46,7 @@ before_install:
   - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
   - $TRAVIS_BUILD_DIR/download/blender/blender -v
   # verify blender is configured properly
-  - $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
+  #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
   # end Blender setup --------
 
   - cd $TRAVIS_BUILD_DIR
