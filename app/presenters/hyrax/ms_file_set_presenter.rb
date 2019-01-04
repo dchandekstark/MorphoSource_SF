@@ -3,7 +3,10 @@ module Hyrax
 
     def self.characterization_terms
       super + [
+        # image
         :bits_per_sample,
+        :color_space,
+        :compression,
         # dicom
         :spacing_between_slices,
         :modality,
@@ -53,7 +56,10 @@ module Hyrax
     end
 
     # for images
-    delegate :bits_per_sample, to: :solr_document
+    delegate  :bits_per_sample, 
+              :color_space,
+              :compression,
+              to: :solr_document
       
     # for dicom  
     delegate  :spacing_between_slices, 

@@ -206,6 +206,14 @@ class SolrDocument
   def bits_per_sample
     self[Solrizer.solr_name('bits_per_sample', :stored_searchable)]
   end
+  
+  def color_space
+    self[Solrizer.solr_name('color_space', :stored_searchable)]
+  end
+  
+  def compression
+    self[Solrizer.solr_name('compression', :stored_searchable)]
+  end
 
   # dicom
   def spacing_between_slices

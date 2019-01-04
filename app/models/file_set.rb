@@ -9,7 +9,7 @@ class FileSet < ActiveFedora::Base
   self.indexer = ::MsFileSetIndexer
 
   # for images
-  delegate(:bits_per_sample, to: :characterization_proxy)
+  delegate(:bits_per_sample, :color_space, :compression, to: :characterization_proxy)
 
   # for dicom
   delegate(
