@@ -4,6 +4,8 @@ class MsFileSetIndexer < Hyrax::FileSetIndexer
     super.tap do |solr_doc|
       # images
       solr_doc['bits_per_sample_tesim'] = object.bits_per_sample
+      solr_doc['color_space_tesim'] = object.color_space
+      solr_doc['compression_tesim'] = object.compression
       # dicom
       solr_doc['spacing_between_slices_tesim'] = object.spacing_between_slices
       solr_doc['modality_tesim'] = object.modality
