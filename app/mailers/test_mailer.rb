@@ -1,8 +1,8 @@
 class TestMailer < ApplicationMailer
   def test_email
     mail(
-      from: "simon.choy@duke.edu",
-      to: "simon.choy@duke.edu",
+      from: "info@morphosource.org",
+      to: "info@morphosource.org",
       subject: "Test mail",
       body: "Test mail body"
     )
