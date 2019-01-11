@@ -5,6 +5,13 @@ en:
         title: 'Your work must have a title.'
         vouchered: 'Missing value in vouchered? field. Does the object you are adding still physically exist?'
     fallback_object_title: "%{voucher} object contributed by %{user}"
+    file_visibility:
+      default:
+        note_html: Use the same visibility settings as above.
+      restricted:
+        note_html: Keep attached files to myself with option to share.
+        new_work_warning_html: '<p> <strong>Please note</strong>, this determines the initial visibility setting for files added to this work. Visibility settings for individual files can be changed manually after this work is saved. </p>'
+        edit_work_warning_html: '<p> <strong>Please note</strong>, this determines the initial visibility setting for <strong>NEW</strong> files added to this work. Visibility settings for individual files can be changed manually after this work is saved. </p>'
     media:
       format_labels:
         image: 'Image'

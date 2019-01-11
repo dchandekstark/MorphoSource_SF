@@ -60,6 +60,7 @@ module Hyrax
         file_set.date_modified = now
         file_set.creator = [user.user_key]
         if assign_visibility?(file_set_params)
+
           env = Actors::Environment.new(file_set, ability, file_set_params)
           CurationConcern.file_set_create_actor.create(env)
         end
@@ -72,7 +73,15 @@ module Hyrax
         acquire_lock_for(work.id) do
           # Ensure we have an up-to-date copy of the members association, so that we append to the end of the list.
           work.reload unless work.new_record?
-          file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
+          # If File Visibility - private is selected, make the file set private.
+          if work.fileset_visibility == ['restricted']
+            file_set.embargo_id = nil
+            file_set.lease_id = nil
+            file_set.visibility = 'restricted'
+          else
+            file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
+            # file_set.visibility = work.visibility
+          end
           work.ordered_members << file_set
           work.representative = file_set if work.representative_id.blank?
           work.thumbnail = file_set if work.thumbnail_id.blank?

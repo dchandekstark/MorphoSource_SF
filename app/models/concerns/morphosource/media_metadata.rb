@@ -71,6 +71,9 @@ module Morphosource
     index.as :stored_searchable
     end
 
+    # Stores user-selected default setting for file set visibility
+    property :fileset_visibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetVisibility")
+
     # -- Media type-specific metadata --
 
     # ImageStack fields

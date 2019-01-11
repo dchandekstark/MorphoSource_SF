@@ -1,0 +1,34 @@
+<!--
+Add Default File Visibility section to Media Works
+  - If editing the work, adds 'selected_fileset_visibility' class to previously selected file visibility radio input used by file_set_visibility.js.erb.
+-->
+
+<fieldset>
+  <legend class="legend-save-work">Default File Visibility</legend>
+  <ul class="visibility file-set-visibility" id="fs-visibility">
+    <li class="radio">
+      <% f.object.model.fileset_visibility == ['restricted'] ? selected = "" : selected = "selected_fileset_visibility" %>
+      <label>
+        <%= f.radio_button :fileset_visibility, 'default', class: selected %>
+        <%= t('morphosource.file_visibility.default.note_html') %>
+      </label>
+    </li>
+
+    <li class="radio">
+      <% f.object.model.fileset_visibility == ['restricted'] ? selected = "selected_fileset_visibility" : selected = "" %>
+      <label>
+        <%= f.radio_button :fileset_visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, data: { 'target':'#collapseFilesetRestricted', 'toggle':'collapse'}, class: selected %>
+        <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
+        <br/>
+        <%= t('morphosource.file_visibility.restricted.note_html') %>
+        <div class="collapse" id="collapseFilesetRestricted">
+          <% if f.object.persisted? %>
+            <%= t('morphosource.file_visibility.restricted.edit_work_warning_html') %>
+          <% else %>
+            <%= t('morphosource.file_visibility.restricted.new_work_warning_html') %>
+          <% end %>
+        </div>
+      </label>
+    </li>
+  </ul>
+</fieldset>
