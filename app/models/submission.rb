@@ -11,7 +11,10 @@ class Submission
                 :imaging_event_id,
                 :institution_id,
                 :media_id,
-                :raw_or_derived_media
+                :processing_event_id,
+                :raw_or_derived_media,
+                :immediate_parents_count,
+                :parent_media_type
 
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'
@@ -22,4 +25,7 @@ class Submission
                           klass: CulturalHeritageObject,
                           label: CulturalHeritageObject.human_readable_type }
 
+  PARENT_MEDIA_IN_MORPHOSOURCE = 'Parent media is in MorphoSource'
+  PARENT_MEDIA_NOT_AVAILABLE = 'Parent media is unavailable to me, but I have metadata'
+  PARENT_MEDIA_TO_BE_UPLOADED = 'I have parent media and can upload it to MorphoSource'
 end

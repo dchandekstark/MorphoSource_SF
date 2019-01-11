@@ -1,0 +1,11 @@
+<div id="submission_parent_details" class="derived_media hide">  
+  <%= f.input :parent_media_type,
+              as: :radio_buttons,
+              collection: [ 
+                Submission::PARENT_MEDIA_IN_MORPHOSOURCE, 
+                Submission::PARENT_MEDIA_NOT_AVAILABLE, 
+                Submission::PARENT_MEDIA_TO_BE_UPLOADED
+              ] %>
+
+  <%= f.submit 'Continue', id: 'btn_parent_details_continue', class: 'btn btn-primary' %>
+</div>

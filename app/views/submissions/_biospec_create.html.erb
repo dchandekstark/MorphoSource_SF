@@ -1,4 +1,4 @@
-<div id="submission_create_biospec" class="hidden">
+<div id="submission_create_biospec" class="hide">
   <%= simple_form_for @biological_specimen_form, url: stage_biological_specimen_submissions_url do |f| %>
     <div class="form-group">
       <%= render partial: 'work_creation_metadata', locals: {f: f} %>

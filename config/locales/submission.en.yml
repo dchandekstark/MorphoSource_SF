@@ -2,10 +2,11 @@ en:
   morphosource:
     submission:
       page_title: 'Submit Media // MorphoSource'
-      page_header: 'Submit Media File(s)'
+      page_header: 'Submission page header here'
       biospec_search: 'Search for a Biological Specimen already in MorphoSource or iDigBio, or create a new Biological Specimen'
       device_select: 'Select the device used to capture this media, or create new device'
       image_capture_details: 'Enter image capture details'
+      processing_event_details: 'Enter processing event details'
       institution_select: 'If this object or device is managed by an institution, select it here or create a new institution. Or select “no institution”'
   simple_form:
     labels:
@@ -20,3 +21,5 @@ en:
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
         raw_or_derived_media: 'Is this media raw or derived?'
+        immediate_parents_count: 'How many immediate parents created this media?'
+        parent_media_type: 'For this parent media, which of the following is true...'
