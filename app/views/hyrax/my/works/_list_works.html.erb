@@ -1,5 +1,4 @@
 <tr id="document_<%= document.id %>">
-
   <td>
     <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
     <%= render 'hyrax/batch_select/add_button', document: document %>&nbsp;
@@ -33,7 +32,16 @@
   <td class='text-center'>
     <span class="fa <%= current_user.trophies.where(work_id: document.id).exists? ? 'fa-star highlighted-work' : 'fa-star-o trophy-off' %>" aria-hidden="true"></span></td>
   <td><%= render_visibility_link document %></td>
-
+  <td>
+    <div style="display:flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
+      <% unless document.file_set_visibilities.nil? %>
+        <% document.file_set_visibilities.each do |visibility| %>
+          <%= visibility_badge(visibility) %>
+          <div style="height: 3px;"></div>
+        <% end %>
+      <% end %>
+    </div>
+  </td>
   <td>
     <%= render 'work_action_menu', document: document %>
   </td>

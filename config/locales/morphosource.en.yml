@@ -1,5 +1,9 @@
 en:
   morphosource:
+    dashboard:
+      my:
+        heading:
+          file_visibility: 'File Visibility'
     validation:
       missing:
         title: 'Your work must have a title.'
