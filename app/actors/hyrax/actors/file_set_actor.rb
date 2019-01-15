@@ -60,7 +60,7 @@ module Hyrax
         file_set.date_modified = now
         file_set.creator = [user.user_key]
         if assign_visibility?(file_set_params)
-
+          
           env = Actors::Environment.new(file_set, ability, file_set_params)
           CurationConcern.file_set_create_actor.create(env)
         end
@@ -80,7 +80,6 @@ module Hyrax
             file_set.visibility = 'restricted'
           else
             file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
-            # file_set.visibility = work.visibility
           end
           work.ordered_members << file_set
           work.representative = file_set if work.representative_id.blank?

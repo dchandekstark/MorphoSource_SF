@@ -130,4 +130,30 @@ RSpec.describe Hyrax::MediaController do
       end
     end
   end
+
+  describe "#set_fileset_visibility" do
+    let(:work)        { Media.new(title: ["Test Media Work"]) }
+    before do
+      allow(subject).to receive(:curation_concern).and_return(work)
+    end
+
+    context 'when user selects same file visibility as the work visibility' do
+      before do
+        allow(subject).to receive(:params).and_return({"media"=> {"fileset_visibility" => "default"}})
+      end
+      it 'sets curation_concern.fileset_visibility to an array containing an empty string' do
+        subject.send(:set_fileset_visibility)
+        expect(subject.curation_concern.fileset_visibility).to match_array([""])
+      end
+    end
+    context 'when user selects private file visibility' do
+      before do
+        allow(subject).to receive(:params).and_return({"media"=> {"fileset_visibility" => "restricted"}})
+      end
+      it 'sets curation_concern.fileset_visibility to an array containing "restricted"' do
+        subject.send(:set_fileset_visibility)
+        expect(subject.curation_concern.fileset_visibility).to match_array(["restricted"])
+      end
+    end
+  end
 end
