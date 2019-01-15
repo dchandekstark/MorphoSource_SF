@@ -78,4 +78,17 @@
       </dl>
     <% end %>
   <% end %>
+
+  <h4>Processing event create Params</h4>
+  <% if @processing_event_create_params.present? %>
+    <% @processing_event_create_params.each do |k, v| %>
+      <dl class="row">
+        <dt class="col-sm-3"><%= k %></dt>
+        <dd class="col-sm-9"><%= v %></dd>
+      </dl>
+    <% end %>
+  <% end %>
+  
+  
+  
 </div>

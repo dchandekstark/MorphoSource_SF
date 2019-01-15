@@ -53,4 +53,16 @@ module MorphosourceHelper
     valid_types.sort.join(', ')
   end
 
+  def media_selector
+    sortable_title_field = Solrizer.solr_name('title', :stored_sortable)
+    hits = media
+    hits.map { |hit| [ hit[sortable_title_field], hit.id ] }
+  end
+
+  def media
+    sortable_title_field = Solrizer.solr_name('title', :stored_sortable)
+    qry = "#{Solrizer.solr_name('has_model', :symbol)}:Media"
+    ActiveFedora::SolrService.query(qry, rows: 999999, sort: "#{sortable_title_field} ASC")
+  end
+
 end

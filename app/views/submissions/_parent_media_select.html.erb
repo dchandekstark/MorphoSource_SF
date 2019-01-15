@@ -1,0 +1,14 @@
+<div id="submission_media_select" class="derived_media hide">
+  <% if media.present? %>
+    <h5><%= t('morphosource.submission.media_select') %></h5>
+    <div class="form-group">
+      <div class="form-inline">
+        <%= f.input :parent_media_id, collection: media_selector, prompt: 'Select media',
+                    input_html: {style: 'width: 400px'}, label: false %>
+      </div>
+      <div>
+        <%= f.submit 'Continue with selected parent media', name: 'parent_media_select', class: 'btn btn-info', role: 'button' %>  
+      </div>
+    </div>
+  <% end %>
+</div>

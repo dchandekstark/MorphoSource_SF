@@ -2,10 +2,9 @@ $(document).on('turbolinks:load', function(){
   
   if ($('div[class="submission_flow"]').length) { // check if the page is submission new page 
   
-    console.log('in submission_flow');
+    // possibly not needed. remove later
     //$("#submission_device_id").select2();
     //$("#submission_institution_id").select2();
-
     //$('div#submission_new div#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');;
     //$('div#submission_new div#submission_biospec').addClass('hide').removeClass('show');
 
@@ -59,6 +58,11 @@ $(document).on('turbolinks:load', function(){
 
     $('#btn_parent_details_continue').click(function(event){
       event.preventDefault();
+    });
+    
+    $('#submission_parent_media_type_parent_media_is_in_morphosource').click(function(event){
+      
+      $('#submission_media_select').addClass('show').removeClass('hide');
     });
 
   }

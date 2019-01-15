@@ -14,7 +14,8 @@ class Submission
                 :processing_event_id,
                 :raw_or_derived_media,
                 :immediate_parents_count,
-                :parent_media_type
+                :parent_media_type,
+                :parent_media_id,
 
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'
@@ -28,4 +29,5 @@ class Submission
   PARENT_MEDIA_IN_MORPHOSOURCE = 'Parent media is in MorphoSource'
   PARENT_MEDIA_NOT_AVAILABLE = 'Parent media is unavailable to me, but I have metadata'
   PARENT_MEDIA_TO_BE_UPLOADED = 'I have parent media and can upload it to MorphoSource'
+
 end

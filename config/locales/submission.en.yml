@@ -8,6 +8,7 @@ en:
       image_capture_details: 'Enter image capture details'
       processing_event_details: 'Enter processing event details'
       institution_select: 'If this object or device is managed by an institution, select it here or create a new institution. Or select “no institution”'
+      media_select: 'Select parent media'
   simple_form:
     labels:
       submission:

@@ -11,6 +11,9 @@ class SubmissionsController < ApplicationController
 
   def create
     reinstantiate_submission
+    
+    # is there a need to separate raw and derived flow?
+    
     if params['biospec_search'].present?
       store_submission
       @docs = search_biospec
@@ -27,6 +30,10 @@ class SubmissionsController < ApplicationController
       session[:submission][:device_id] = submission_params[:device_id]
       store_submission
       render 'image_capture'
+    elsif params['parent_media_select'].present? # T3, O1
+      session[:submission][:parent_media_id] = submission_params[:parent_media_id]
+      store_submission
+      render 'processing_event'
     else
       finish_submission
     end
@@ -151,15 +158,11 @@ class SubmissionsController < ApplicationController
     create_work(ImagingEvent, params)
   end
 
-  
-  
   def create_processing_event(params)
     parent_attributes = {}
-    if @submission.imaging_event_id.present?
-      parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
-    end
-    if @submission.media_id.present?
-      parent_attributes.merge!({ '1' => { "id" => @submission.media_id, "_destroy" => "false" } })
+    byebug
+    if @submission.parent_media_id.present? # User selects O1 on T3
+      parent_attributes.merge!({ '0' => { "id" => @submission.parent_media_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -167,9 +170,6 @@ class SubmissionsController < ApplicationController
     create_work(ProcessingEvent, params)
   end
 
-  
-  
-  
   def create_institution(params)
     create_work(Institution, params)
   end
@@ -178,6 +178,9 @@ class SubmissionsController < ApplicationController
     parent_attributes = {}
     if @submission.imaging_event_id.present?
       parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
+    end
+    if @submission.processing_event_id.present?
+      parent_attributes.merge!({ '1' => { "id" => @submission.processing_event_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -236,24 +239,32 @@ class SubmissionsController < ApplicationController
 
   def store_submission
     session[:submission] = { biospec_id: @submission.biospec_id,
-                             biospec_or_cho: @submission.biospec_or_cho,
-                             device_id: @submission.device_id,
-                             institution_id: @submission.institution_id,
-                             raw_or_derived_media: @submission.raw_or_derived_media }
+                              biospec_or_cho: @submission.biospec_or_cho,
+                              device_id: @submission.device_id,
+                              institution_id: @submission.institution_id,
+                              raw_or_derived_media: @submission.raw_or_derived_media,
+                              immediate_parents_count: @submission.immediate_parents_count, 
+                              parent_media_type: @submission.parent_media_type,
+                              parent_media_id: @submission.parent_media_id
+      }
   end
 
   def submission_params
-    params.fetch(:submission, {}).permit(:biospec_id,
-                                         :biospec_or_cho,
-                                         :biospec_search_catalog_number,
-                                         :biospec_search_collection_code,
-                                         :biospec_search_institution_code,
-                                         :biospec_search_occurrence_id,
-                                         :device_id,
-                                         :imaging_event_id,
-                                         :institution_id,
-                                         :media_id,
-                                         :processing_event_id,
-                                         :raw_or_derived_media)
+    params.fetch(:submission, {}).permit( :biospec_id,
+                                          :biospec_or_cho,
+                                          :biospec_search_catalog_number,
+                                          :biospec_search_collection_code,
+                                          :biospec_search_institution_code,
+                                          :biospec_search_occurrence_id,
+                                          :device_id,
+                                          :imaging_event_id,
+                                          :institution_id,
+                                          :media_id,
+                                          :processing_event_id,
+                                          :raw_or_derived_media,
+                                          :immediate_parents_count, 
+                                          :parent_media_type,
+                                          :parent_media_id
+      )
   end
 end
