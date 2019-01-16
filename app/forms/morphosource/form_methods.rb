@@ -2,7 +2,7 @@ module Morphosource
   # Adds methods to add work to parent work
   module FormMethods
 
-    delegate :work_parents_attributes=, to: :model
+    delegate :work_parents_attributes=, :fileset_visibility, to: :model
 
     def self.included(base)
       base.extend(FormMethods)

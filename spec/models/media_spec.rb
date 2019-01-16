@@ -85,6 +85,70 @@ RSpec.describe Media do
 
     end
 
-  end
+    describe "#file_set_visibilities" do
+      subject { described_class.new(title: ["Test Media Work"]) }
 
+      let (:file_set1)  { FileSet.create(id: "1") }
+      let (:file_set2)  { FileSet.create(id: "2") }
+      let (:file_set3)  { FileSet.create(id: "3") }
+      let (:file_set4)  { FileSet.create(id: "4") }
+      let (:file_set5)  { FileSet.create(id: "5") }
+      let (:file_sets)  { [file_set1, file_set2, file_set3, file_set4, file_set5] }
+
+      context 'all file visibilities are public' do
+        before do
+          file_sets.each do |f|
+            f.visibility =       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+            f.save
+            subject.ordered_members << f
+          end
+          subject.save
+        end
+        it 'returns ["open"]' do
+          expect(subject.file_set_visibilities).to match_array([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC])
+        end
+      end
+      context 'all file visibilities are private' do
+        before do
+          file_sets.each do |f|
+            f.visibility =       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+            f.save
+            subject.ordered_members << f
+          end
+          subject.save
+        end
+        it 'returns ["restricted"]' do
+          expect(subject.file_set_visibilities).to match_array([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE])
+        end
+      end
+      context 'file visibilities include public, private, embargo, lease, institution' do
+        before do
+          file_set1.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          file_set2.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+          file_set3.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+
+          file_set4.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          allow(file_set4).to receive(:embargo_id).and_return('abc123')
+
+          file_set5.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          allow(file_set5).to receive(:lease_id).and_return('def123')
+
+          file_sets.each do |f|
+            subject.ordered_members << f
+          end
+          subject.save
+        end
+        it 'returns an array matching all valid file visibilities' do
+          all_visibilities = [
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO,
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE,
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE ]
+
+          expect(subject.file_set_visibilities).to match_array(all_visibilities)
+        end
+      end
+    end
+  end
 end

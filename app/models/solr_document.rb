@@ -55,6 +55,11 @@ class SolrDocument
     self[Solrizer.solr_name('title', :stored_sortable)]
   end
 
+  # Add custom column to dashboard works list
+  def file_set_visibilities
+    self["file_set_visibilities_ssim"]
+  end
+
   # Media Fields
   def agreement_uri
     self[Solrizer.solr_name('agreement_uri', :stored_searchable)]
@@ -206,11 +211,11 @@ class SolrDocument
   def bits_per_sample
     self[Solrizer.solr_name('bits_per_sample', :stored_searchable)]
   end
-  
+
   def color_space
     self[Solrizer.solr_name('color_space', :stored_searchable)]
   end
-  
+
   def compression
     self[Solrizer.solr_name('compression', :stored_searchable)]
   end
@@ -498,7 +503,7 @@ class SolrDocument
   def edges_per_face
     self[Solrizer.solr_name('edges_per_face', :stored_searchable)]
   end
-  
+
   def color_format
     self[Solrizer.solr_name('color_format', :stored_searchable)]
   end

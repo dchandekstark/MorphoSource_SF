@@ -12,6 +12,8 @@ module Hyrax
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::MediaPresenter
 
+    before_action :set_fileset_visibility, only: [:create, :update]
+
     # Overriding WorksControllerBehavior to add file format validation
     # Could not do this as an ActiveModel validation because new file uploads are not added until after create
     def create
@@ -76,6 +78,14 @@ module Hyrax
       def file_formats_valid?
         validate_file_formats
         curation_concern.errors.empty? ? true : false
+      end
+
+      def set_fileset_visibility
+        if params["media"]["fileset_visibility"] == "restricted"
+          curation_concern.fileset_visibility = ["restricted"]
+        else
+          curation_concern.fileset_visibility = [""]
+        end
       end
   end
 end
