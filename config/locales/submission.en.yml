@@ -9,6 +9,7 @@ en:
       processing_event_details: 'Enter processing event details'
       institution_select: 'If this object or device is managed by an institution, select it here or create a new institution. Or select “no institution”'
       media_select: 'Select parent media'
+      parents_in_ms: 'If parent(s) of this media are in MorphoSource, select them. Or select “parents not in MorphoSource”'
   simple_form:
     labels:
       submission:
@@ -22,5 +23,4 @@ en:
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
         raw_or_derived_media: 'Is this media raw or derived?'
-        immediate_parents_count: 'How many immediate parents created this media?'
         parent_media_type: 'For this parent media, which of the following is true...'

@@ -47,7 +47,7 @@ $(document).on('turbolinks:load', function(){
   
     // functions for Derived device 
     $('input#submission_raw_or_derived_media_derived').click(function(event){
-      $('div#submission_immediate_parents').addClass('show').removeClass('hide');
+      $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
     });
     
     $('#btn_immediate_parents_continue').click(function(event){

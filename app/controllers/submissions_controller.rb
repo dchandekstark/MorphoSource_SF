@@ -12,7 +12,7 @@ class SubmissionsController < ApplicationController
   def create
     reinstantiate_submission
     
-    # is there a need to separate raw and derived flow?
+    # todo: is there a need to separate raw and derived flow in two if and else?
     
     if params['biospec_search'].present?
       store_submission
@@ -30,7 +30,7 @@ class SubmissionsController < ApplicationController
       session[:submission][:device_id] = submission_params[:device_id]
       store_submission
       render 'image_capture'
-    elsif params['parent_media_select'].present? # T3, O1
+    elsif params['parent_media_select'].present? 
       session[:submission][:parent_media_id] = submission_params[:parent_media_id]
       store_submission
       render 'processing_event'
@@ -160,9 +160,18 @@ class SubmissionsController < ApplicationController
 
   def create_processing_event(params)
     parent_attributes = {}
-    byebug
-    if @submission.parent_media_id.present? # User selects O1 on T3
-      parent_attributes.merge!({ '0' => { "id" => @submission.parent_media_id, "_destroy" => "false" } })
+    if @submission.parent_media_id.present?
+      idx = 0
+      @submission.parent_media_id.each do |this_id|
+        byebug
+        # todo: need to figure out why the first element is empty in the array, e.g.
+        # (byebug) @submission.parent_media_id
+          # ["", "08612n52b", "c247ds08x"]
+        if this_id != ''
+          parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
+          idx += 1
+        end
+      end
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -264,7 +273,7 @@ class SubmissionsController < ApplicationController
                                           :raw_or_derived_media,
                                           :immediate_parents_count, 
                                           :parent_media_type,
-                                          :parent_media_id
+                                          :parent_media_id => []
       )
   end
 end

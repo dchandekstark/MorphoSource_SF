@@ -9,7 +9,7 @@
     <%= render(partial: 'physical_object', locals: { f: f }) %>
     <%= render(partial: 'biospec_search', locals: {f: f }) %>
     <% # Derived media flow %>
-    <%= render(partial: 'immediate_parents', locals: { f: f }) %>
+    <%= render(partial: 'parents_in_ms', locals: { f: f }) %>
     <%= render(partial: 'parent_details', locals: { f: f }) %>
   <% end %>
 </div>
