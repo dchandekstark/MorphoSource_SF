@@ -50,10 +50,10 @@ $(document).on('turbolinks:load', function(){
       $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
     });
     
-    $('#btn_immediate_parents_continue').click(function(event){
+    $('#btn_parents_not_in_morphosource').click(function(event){
       event.preventDefault();
       $('#btn_immediate_parents_continue').addClass('hide').removeClass('show');
-      $('div#submission_parent_details').addClass('show').removeClass('hide');
+      $('div#submission_parents_not_in_ms').addClass('show').removeClass('hide');
     });
 
     $('#btn_parent_details_continue').click(function(event){

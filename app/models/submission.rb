@@ -13,8 +13,7 @@ class Submission
                 :media_id,
                 :processing_event_id,
                 :raw_or_derived_media,
-                :immediate_parents_count,
-                :parent_media_type,
+                :parent_media_how_to_proceed,
                 :parent_media_id,
 
   MEDIA_DERIVED = 'Derived'
@@ -26,8 +25,6 @@ class Submission
                           klass: CulturalHeritageObject,
                           label: CulturalHeritageObject.human_readable_type }
 
-  PARENT_MEDIA_IN_MORPHOSOURCE = 'Parent media is in MorphoSource'
-  PARENT_MEDIA_NOT_AVAILABLE = 'Parent media is unavailable to me, but I have metadata'
-  PARENT_MEDIA_TO_BE_UPLOADED = 'I have parent media and can upload it to MorphoSource'
-
+  PARENT_MEDIA_UPLOAD_FILE_LATER = 'Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.'
+  PARENT_MEDIA_UPLOAD_FILE_NOW = 'Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later'
 end

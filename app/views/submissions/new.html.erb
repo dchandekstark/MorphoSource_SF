@@ -5,12 +5,14 @@
 
 <div class="submission_flow" id="submission_new">
   <%= simple_form_for @submission do |f| %>
-    <%= render(partial: 'raw_derived_media', locals: { f: f }) %>
+    <% if session[:submission][:parent_media_how_to_proceed] != PARENT_MEDIA_UPLOAD_FILE_LATER %>
+      <%= render(partial: 'raw_derived_media', locals: { f: f }) %>
+    <% end %>
     <%= render(partial: 'physical_object', locals: { f: f }) %>
     <%= render(partial: 'biospec_search', locals: {f: f }) %>
     <% # Derived media flow %>
     <%= render(partial: 'parents_in_ms', locals: { f: f }) %>
-    <%= render(partial: 'parent_details', locals: { f: f }) %>
+    <%= render(partial: 'parents_not_in_ms', locals: { f: f }) %>
   <% end %>
 </div>
 

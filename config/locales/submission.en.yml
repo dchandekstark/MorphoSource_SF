@@ -9,7 +9,10 @@ en:
       processing_event_details: 'Enter processing event details'
       institution_select: 'If this object or device is managed by an institution, select it here or create a new institution. Or select “no institution”'
       media_select: 'Select parent media'
-      parents_in_ms: 'If parent(s) of this media are in MorphoSource, select them. Or select “parents not in MorphoSource”'
+      #parents_in_ms: 'If parent(s) of this media are in MorphoSource, select them. Or select “parents not in MorphoSource”'
+      parent_media_upload_file_later: 'Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.'
+      parent_media_upload_file_now: 'Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later'
+
   simple_form:
     labels:
       submission:
@@ -23,4 +26,4 @@ en:
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
         raw_or_derived_media: 'Is this media raw or derived?'
-        parent_media_type: 'For this parent media, which of the following is true...'
+        parent_media_how_to_proceed: 'Select how to proceed, concerning parent media'

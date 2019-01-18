@@ -34,6 +34,11 @@ class SubmissionsController < ApplicationController
       session[:submission][:parent_media_id] = submission_params[:parent_media_id]
       store_submission
       render 'processing_event'
+    elsif params['parent_media_how_to_proceed_continue'].present? 
+      byebug
+      session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
+      store_submission
+      render 'new'
     else
       finish_submission
     end
@@ -164,9 +169,11 @@ class SubmissionsController < ApplicationController
       idx = 0
       @submission.parent_media_id.each do |this_id|
         byebug
-        # todo: need to figure out why the first element is empty in the array, e.g.
+        # todo: currently the first element is empty in the array, e.g.
         # (byebug) @submission.parent_media_id
           # ["", "08612n52b", "c247ds08x"]
+        # the array is set when using the form multiple select element.
+        # we should possibly change it to auto-populate text box, similar to add parent/child in relationship tab
         if this_id != ''
           parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
           idx += 1
@@ -252,8 +259,7 @@ class SubmissionsController < ApplicationController
                               device_id: @submission.device_id,
                               institution_id: @submission.institution_id,
                               raw_or_derived_media: @submission.raw_or_derived_media,
-                              immediate_parents_count: @submission.immediate_parents_count, 
-                              parent_media_type: @submission.parent_media_type,
+                              parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
                               parent_media_id: @submission.parent_media_id
       }
   end
@@ -271,8 +277,7 @@ class SubmissionsController < ApplicationController
                                           :media_id,
                                           :processing_event_id,
                                           :raw_or_derived_media,
-                                          :immediate_parents_count, 
-                                          :parent_media_type,
+                                          :parent_media_how_to_proceed,
                                           :parent_media_id => []
       )
   end
