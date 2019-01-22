@@ -35,7 +35,6 @@ class SubmissionsController < ApplicationController
       store_submission
       render 'processing_event'
     elsif params['parent_media_how_to_proceed_continue'].present? 
-      byebug
       session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
       store_submission
       render 'new'
@@ -168,7 +167,6 @@ class SubmissionsController < ApplicationController
     if @submission.parent_media_id.present?
       idx = 0
       @submission.parent_media_id.each do |this_id|
-        byebug
         # todo: currently the first element is empty in the array, e.g.
         # (byebug) @submission.parent_media_id
           # ["", "08612n52b", "c247ds08x"]

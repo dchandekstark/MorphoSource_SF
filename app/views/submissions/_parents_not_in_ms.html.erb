@@ -3,10 +3,10 @@
     <%= f.input :parent_media_how_to_proceed,
                 as: :radio_buttons,
                 collection: [ 
-                  Submission::PARENT_MEDIA_UPLOAD_FILE_LATER, 
-                  Submission::PARENT_MEDIA_UPLOAD_FILE_NOW 
+                  Submission::PARENT_MEDIA_LATER, 
+                  Submission::PARENT_MEDIA_NOW 
                 ] %>
-    <%= f.submit 'Continue', name: 'parent_media_how_to_proceed_continue', class: 'btn btn-info', role: 'button' %>  
+    <%= f.submit 'Continue', id: 'btn_parent_media_how_to_proceed_continue', name: 'parent_media_how_to_proceed_continue', class: 'btn btn-info', role: 'button' %>  
   <% end %>
 </div>
 

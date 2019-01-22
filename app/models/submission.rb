@@ -25,6 +25,6 @@ class Submission
                           klass: CulturalHeritageObject,
                           label: CulturalHeritageObject.human_readable_type }
 
-  PARENT_MEDIA_UPLOAD_FILE_LATER = 'Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.'
-  PARENT_MEDIA_UPLOAD_FILE_NOW = 'Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later'
+  PARENT_MEDIA_LATER = ['Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.', 'later']
+  PARENT_MEDIA_NOW = ['Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later', 'now']
 end
