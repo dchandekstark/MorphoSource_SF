@@ -1,5 +1,8 @@
 en:
   morphosource:
+    base:
+      form_progress:
+        required_format: 'File formats match selected media type'
     dashboard:
       my:
         heading:
