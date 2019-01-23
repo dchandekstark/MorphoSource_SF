@@ -1,12 +1,12 @@
 <% if f.object.embargo_release_date %>
   <%= render 'form_permission_under_embargo', f: f %>
     <% if f.object.model_name.name == 'Media' %>
-      <%= render 'file_set_visibility', f: f %>
+      <%= render 'hyrax/base/file_set_visibility', f: f %>
     <% end %>
 <% elsif f.object.lease_expiration_date %>
   <%= render 'form_permission_under_lease', f: f %>
     <% if f.object.model_name.name == 'Media' %>
-      <%= render 'file_set_visibility', f: f %>
+      <%= render 'hyrax/base/file_set_visibility', f: f %>
     <% end %>
 <% else %>
     <fieldset>
@@ -79,6 +79,6 @@
     </fieldset>
     <br />
     <% if f.object.model_name.name == 'Media' %>
-     <%= render 'file_set_visibility', f: f %>
+     <%= render 'hyrax/base/file_set_visibility', f: f %>
    <% end %>
 <% end %>
