@@ -81,16 +81,6 @@ function mediaTypeFormats() {
 }
 
 function setupMatchingFormatRequirement() {
-  // required-files li item
-  let requiredFiles = $('#required-files');
-
-  // Create new file format requirement and insert after 'Add files' requirement
-  let formatLi = document.createElement('li');
-  formatLi.className = "incomplete";
-  $(formatLi).attr('id','required-format');
-  $(formatLi).text("File formats match selected media type");
-  $(formatLi).insertAfter(requiredFiles);
-
   // Create placeholder for message in the file upload form listing allowed file formats.
   let uploadForm = $('#fileupload');
   let acceptedFormatsMessage = document.createElement('p');

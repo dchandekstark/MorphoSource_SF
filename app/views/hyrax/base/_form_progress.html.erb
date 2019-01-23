@@ -11,6 +11,9 @@
           <%# Override the logic for including the 'files' requirement by using a helper method. %>
           <% if files_required?(curation_concern) %>
             <li class="incomplete" id="required-files"><%= t('.required_files') %></li>
+            <% if curation_concern.model_name.name == "Media" %>
+              <li class="incomplete" id="required-format"><%= t('morphosource.base.form_progress.required_format') %></li>
+            <% end %>
           <% end %>
           <% if Flipflop.show_deposit_agreement? && Flipflop.active_deposit_agreement_acceptance? %>
             <li class="incomplete" id="required-agreement"><%= t('.required_agreement') %></li>
