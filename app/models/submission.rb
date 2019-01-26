@@ -14,8 +14,8 @@ class Submission
                 :processing_event_id,
                 :raw_or_derived_media,
                 :parent_media_how_to_proceed,
-                :parent_media_id,
-
+                :parent_media_id
+  
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'
   PHYSICAL_OBJECT_BIOSPEC = { code: 'biospec',

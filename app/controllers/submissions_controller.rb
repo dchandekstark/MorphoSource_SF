@@ -164,19 +164,18 @@ class SubmissionsController < ApplicationController
 
   def create_processing_event(params)
     parent_attributes = {}
+    byebug
     if @submission.parent_media_id.present?
-      idx = 0
-      @submission.parent_media_id.each do |this_id|
-        # todo: currently the first element is empty in the array, e.g.
-        # (byebug) @submission.parent_media_id
-          # ["", "08612n52b", "c247ds08x"]
-        # the array is set when using the form multiple select element.
-        # we should possibly change it to auto-populate text box, similar to add parent/child in relationship tab
-        if this_id != ''
-          parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
-          idx += 1
-        end
-      end
+      parent_attributes.merge!({ '0' => { "id" => @submission.parent_media_id, "_destroy" => "false" } })
+      
+      # todo: change this to an array later when the UI is set up to add multiple parent media
+      #idx = 0
+      #@submission.parent_media_id.each do |this_id|
+      #  if this_id != ''
+      #    parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
+      #    idx += 1
+      #  end
+      #end
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -276,7 +275,9 @@ class SubmissionsController < ApplicationController
                                           :processing_event_id,
                                           :raw_or_derived_media,
                                           :parent_media_how_to_proceed,
-                                          :parent_media_id => []
+                                          :parent_media_id
+                                          # todo: change this to an array when UI allows adding multiple parent media
+                                          #:parent_media_id => []
       )
   end
 end

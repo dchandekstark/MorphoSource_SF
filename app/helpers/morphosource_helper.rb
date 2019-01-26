@@ -65,4 +65,8 @@ module MorphosourceHelper
     ActiveFedora::SolrService.query(qry, rows: 999999, sort: "#{sortable_title_field} ASC")
   end
 
+  def find_media_autocomplete_url
+    Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
+  end
+  
 end
