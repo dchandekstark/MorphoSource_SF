@@ -1,12 +1,17 @@
 <div class="form-inline">
-<!-- todo: need to add the ability to add more than one parent media -->
-<%= f.input_field :parent_media_id,
+  <%= f.input_field :parent_media_id,
                   prompt: :translate,
                   autocomplete: 'off',
                   data: {
                       autocomplete: :parent_media_id,
                       'autocomplete-url' => find_media_autocomplete_url
                   } %>
+  <a id="btn_add_parent" class="btn btn-primary">Add</a>
+</div>
+<div style="margin:10px">
+  <%= f.input :parent_media_list, 
+    input_html: { style: 'width:300px' }
+  %>
 </div>
 
 <script>

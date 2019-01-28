@@ -84,21 +84,16 @@ $(document).on('turbolinks:load', function(){
       $('.radio_buttons').prop('checked', false);
     }
     
-    /*
-    $('#btn_parent_details_continue').click(function(event){
+    $('#btn_add_parent').click(function(event){
       event.preventDefault();
+      var temp = $('input[id="submission_parent_media_list"]').val();
+      // todo: need to check if the parent has already been added
+      if (temp != '')
+        temp += ',';
+      temp += $('input[id="submission_parent_media_id"]').val();
+      $('input[id="submission_parent_media_list"]').val(temp);
+      $('input[id="submission_parent_media_id"]').val('');
     });
-    
-    $('#submission_parent_media_type_parent_media_is_in_morphosource').click(function(event){
-      
-      $('#submission_media_select').addClass('show').removeClass('hide');
-    }); 
-    
-    if ($('#parent_media_how_to_proceed').text() == 'PARENT_MEDIA_UPLOAD_FILE_LATER') {
-      $("input#submission_raw_or_derived_media_raw").trigger("click");
-      $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
-    } 
-    */
 
   }
 });

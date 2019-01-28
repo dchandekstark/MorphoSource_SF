@@ -31,7 +31,7 @@ class SubmissionsController < ApplicationController
       store_submission
       render 'image_capture'
     elsif params['parent_media_select'].present? 
-      session[:submission][:parent_media_id] = submission_params[:parent_media_id]
+      session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       store_submission
       render 'processing_event'
     elsif params['parent_media_how_to_proceed_continue'].present? 
@@ -165,17 +165,15 @@ class SubmissionsController < ApplicationController
   def create_processing_event(params)
     parent_attributes = {}
     byebug
-    if @submission.parent_media_id.present?
-      parent_attributes.merge!({ '0' => { "id" => @submission.parent_media_id, "_destroy" => "false" } })
-      
-      # todo: change this to an array later when the UI is set up to add multiple parent media
-      #idx = 0
-      #@submission.parent_media_id.each do |this_id|
-      #  if this_id != ''
-      #    parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
-      #    idx += 1
-      #  end
-      #end
+    if @submission.parent_media_list.present?
+      idx = 0
+      @submission.parent_media_list.split(',').each do |this_id|
+    byebug
+        if this_id != ''
+          parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
+          idx += 1
+        end
+      end
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -257,7 +255,7 @@ class SubmissionsController < ApplicationController
                               institution_id: @submission.institution_id,
                               raw_or_derived_media: @submission.raw_or_derived_media,
                               parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
-                              parent_media_id: @submission.parent_media_id
+                              parent_media_list: @submission.parent_media_list
       }
   end
 
@@ -275,9 +273,7 @@ class SubmissionsController < ApplicationController
                                           :processing_event_id,
                                           :raw_or_derived_media,
                                           :parent_media_how_to_proceed,
-                                          :parent_media_id
-                                          # todo: change this to an array when UI allows adding multiple parent media
-                                          #:parent_media_id => []
+                                          :parent_media_list
       )
   end
 end
