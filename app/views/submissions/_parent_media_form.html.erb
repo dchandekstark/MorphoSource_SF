@@ -1,22 +1,54 @@
 <div class="form-inline">
-  <%= f.input_field :parent_media_id,
+  <!--%= f.input_field :parent_media_id,
                   prompt: :translate,
                   autocomplete: 'off',
                   data: {
                       autocomplete: :parent_media_id,
                       'autocomplete-url' => find_media_autocomplete_url
-                  } %>
+                  } % -->
+  <%= f.input :parent_media_search,
+  input_html: {
+    class: 'form-control',
+    data: { 
+      'autocomplete-url' => find_media_autocomplete_url,
+      'autocomplete' => :parent_media_search
+      }
+  } %>
+
   <a id="btn_add_parent" class="btn btn-primary">Add</a>
 </div>
-<div style="margin:10px">
-  <%= f.input :parent_media_list, 
-    input_html: { style: 'width:300px' }
-  %>
+<div id="parents" class="container-fluid" style="margin:10px">
+  <input class="parent_title" type="hidden" name="parent_title" value="" />
+  <input class="parent_id" type="hidden" name="parent_id" value="" />
+  <div class="parent_row">
+  </div>
 </div>
+<%= f.input :parent_media_list, 
+  wrapper_html: { class: 'hide' },
+  input_html: { style: 'width:300px' }
+%>
 
+<!-- todo: move styles to css later -->
+<style>
+#submission_parent_media_search {
+  width:250px;
+}
+.parent_row {
+  clear:both;
+}
+</style>
 <script>
 $(function(){
-  $('#submission_parent_media_id').autocomplete({
+  $('#submission_parent_media_search').autocomplete({
+    select: function(event, ui) {
+        event.preventDefault();
+        $("input.parent_id").val(ui.item.value);
+        $("input.parent_title").val(ui.item.label);
+    },
+    focus: function(event, ui) {
+        event.preventDefault();
+        $("#submission_parent_media_search").val(ui.item.label);
+    },
     source: function (request, response) {
       $.ajax({
         url: "<%= find_media_autocomplete_url %>" + request.term,
@@ -30,5 +62,7 @@ $(function(){
     },
     autoFocus: true
   });
+
 });    
+
 </script>

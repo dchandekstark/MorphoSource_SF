@@ -164,11 +164,9 @@ class SubmissionsController < ApplicationController
 
   def create_processing_event(params)
     parent_attributes = {}
-    byebug
     if @submission.parent_media_list.present?
       idx = 0
       @submission.parent_media_list.split(',').each do |this_id|
-    byebug
         if this_id != ''
           parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
           idx += 1
@@ -273,6 +271,7 @@ class SubmissionsController < ApplicationController
                                           :processing_event_id,
                                           :raw_or_derived_media,
                                           :parent_media_how_to_proceed,
+                                          :parent_media_search,
                                           :parent_media_list
       )
   end

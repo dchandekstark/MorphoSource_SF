@@ -77,7 +77,7 @@ $(document).on('turbolinks:load', function(){
     // End Derived media flow 
     
     var clearForms = function() {
-      // todo: if there are other forms (or radios) on the page that should not be cleared. Add condition here.
+      // if there are other forms (or radios) on the page that should not be cleared. Add condition here.
       $('form').each(function() {
         this.reset();
       });
@@ -86,14 +86,50 @@ $(document).on('turbolinks:load', function(){
     
     $('#btn_add_parent').click(function(event){
       event.preventDefault();
-      var temp = $('input[id="submission_parent_media_list"]').val();
-      // todo: need to check if the parent has already been added
-      if (temp != '')
-        temp += ',';
-      temp += $('input[id="submission_parent_media_id"]').val();
-      $('input[id="submission_parent_media_list"]').val(temp);
-      $('input[id="submission_parent_media_id"]').val('');
+      var currentParentList = $('input[id="submission_parent_media_list"]').val();
+      var selectedId = $("input.parent_id").val();
+      if (currentParentList.indexOf(selectedId) != -1) {
+        // parent has already been added
+      } else {
+        if (currentParentList != '')
+          currentParentList += ',';
+        currentParentList += selectedId;
+        $('input[id="submission_parent_media_list"]').val(currentParentList);
+
+        var newParentRow = '<div class="parent_row ' + selectedId + '">'
+          + '<div class="col-sm-3"><div class="parent_title">'
+          + $("input.parent_title").val() + '</div></div>' 
+          + '<div class="col-sm-3"><a class="btn_remove_parent" class="btn btn-primary" onClick="removeParent(\'' + selectedId + '\')">Remove</a> ' + selectedId + ' </div>'
+          + '</div>';
+          $('.parent_row:last-child').after(newParentRow);
+      }
+      $('input[id="submission_parent_media_search"]').val('');
+      $("input.parent_id").val('');
+      $("input.parent_title").val('');
     });
 
+    
+    removeParent = function(id){
+      event.preventDefault();
+      $('div.' + id).remove();
+      var currentParentList = $('input[id="submission_parent_media_list"]').val();
+      var newParentList = removeValue(currentParentList, id);
+      $('input[id="submission_parent_media_list"]').val(newParentList);
+    }
+    
+    function removeValue(list, value) {
+      list = list.split(',');
+      list.splice(list.indexOf(value), 1);
+      return list.join(',');
+    }
+
+    /*  
+    $('.btn_remove_parent').click(function(event){
+      event.preventDefault();
+      var removeId = $(this).attr('data-remove-id').val();
+      alert('removing ' + removeId);
+      
+    }); 
+    */
   }
 });
