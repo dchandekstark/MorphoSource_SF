@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/JuliaWinchester/pul_uv_rails.git
-  revision: 9d014a4cfc09670446add377da632fd33c73b096
+  revision: 97cc1ea7758332d8f657ceac3b62205f13f9e151
   specs:
     pul_uv_rails (2.9)
 
@@ -899,4 +899,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.5
+   1.17.3
