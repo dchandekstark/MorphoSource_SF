@@ -3,12 +3,6 @@
   <h1><%= t('morphosource.submission.page_header') %></h1>
 <% end %>
 
-<div id="parent_media_how_to_proceed" style='color:red'>
-<% if session[:submission][:parent_media_how_to_proceed] == Submission::PARENT_MEDIA_LATER %>--- 
-PARENT_MEDIA_LATER
-<% end %>
-</div>
-
 <div class="submission_flow" id="submission_new">
   <%= simple_form_for @submission do |f| %>
     <%= render(partial: 'raw_derived_media', locals: { f: f }) %>

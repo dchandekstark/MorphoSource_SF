@@ -90,25 +90,29 @@ $(document).on('turbolinks:load', function(){
       var selectedId = $("input.parent_id").val();
       if (currentParentList.indexOf(selectedId) != -1) {
         // parent has already been added
+        // todo: see if it is possible to exclude the already-added parents from the autocomplete dropdown
+        alert('already added');
       } else {
         if (currentParentList != '')
           currentParentList += ',';
         currentParentList += selectedId;
         $('input[id="submission_parent_media_list"]').val(currentParentList);
-
-        var newParentRow = '<div class="parent_row ' + selectedId + '">'
-          + '<div class="col-sm-4"><div class="parent_title">'
-          + $("input.parent_title").val() + '</div></div>' 
-          + '<div class="col-sm-2"><a class="btn_remove_parent btn btn-primary" onClick="removeParent(\'' + selectedId + '\')">Remove</a> <!--' + selectedId + '--></div>'
-          + '</div>';
-          $('.parent_row:last-child').after(newParentRow);
+        // display a new parent media row
+        $('.parent_row:last-child').after(newParentRow(selectedId));
       }
       $('input[id="submission_parent_media_search"]').val('');
       $("input.parent_id").val('');
       $("input.parent_title").val('');
     });
 
-    
+    var newParentRow = function(id){
+      var row = '<div class="parent_row ' + id + '">'
+        + '<div class="col-sm-4"><div class="parent_title">'
+        + $("input.parent_title").val() + '</div></div>' 
+        + '<div class="col-sm-2"><a class="btn_remove_parent btn btn-primary" onClick="removeParent(\'' + id + '\')">Remove</a> <!--' + id + '--></div>'
+        + '</div>';
+      return row;
+    }
     removeParent = function(id){
       event.preventDefault();
       $('div.' + id).remove();

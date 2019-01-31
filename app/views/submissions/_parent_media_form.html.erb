@@ -17,9 +17,13 @@
   <div class="parent_row">
   </div>
 </div>
+<% 
+# the value: '' below will clear the parent list every time the form is loaded.
+# Remove this option if the value needs to be retained later (e.g. reloading the page)
+%>
 <%= f.input :parent_media_list, 
   wrapper_html: { class: 'hide' },
-  input_html: { style: 'width:300px' }
+  input_html: { style: 'width:300px', value: '' }
 %>
 
 
