@@ -3,21 +3,7 @@
     <h5><%= t('morphosource.submission.media_select') %></h5>
     <div class="form-group">
       <div class="form-inline">
-        <!--%= f.input :parent_media_id, collection: media_selector, prompt: 'Select media',
-                    input_html: {multiple: true, style: 'width: 400px'}, label: false % -->
-        <%
-        # todo: if multi-select dropdown is used, the first element is empty in the array, e.g.
-        # (byebug) @submission.parent_media_id
-          # ["", "08612n52b", "c247ds08x"]
-        # the array is set when using the form multiple select element.
-        # we should possibly change it to auto-populate text box, similar to add parent/child in relationship tab
-        %>
-        <%#= f.select :parent_media_ids, 
-           # options_for_select(media_selector), {}, 
-            #{:multiple => true, :class => "multi_select", :style => "width:450px;" } %>
-        
         <%= render 'parent_media_form', f: f %>
-
       </div>
       <div>
         <%= f.submit 'Continue with selected parent media', name: 'parent_media_select', class: 'btn btn-info', role: 'button' %>  

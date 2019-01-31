@@ -1,12 +1,6 @@
 <div class="form-inline">
-  <!--%= f.input_field :parent_media_id,
-                  prompt: :translate,
-                  autocomplete: 'off',
-                  data: {
-                      autocomplete: :parent_media_id,
-                      'autocomplete-url' => find_media_autocomplete_url
-                  } % -->
   <%= f.input :parent_media_search,
+  placeholder: "Enter parent media title here",
   input_html: {
     class: 'form-control',
     data: { 
@@ -28,15 +22,7 @@
   input_html: { style: 'width:300px' }
 %>
 
-<!-- todo: move styles to css later -->
-<style>
-#submission_parent_media_search {
-  width:250px;
-}
-.parent_row {
-  clear:both;
-}
-</style>
+
 <script>
 $(function(){
   $('#submission_parent_media_search').autocomplete({
@@ -62,7 +48,5 @@ $(function(){
     },
     autoFocus: true
   });
-
 });    
-
 </script>

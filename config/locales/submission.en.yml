@@ -25,4 +25,3 @@ en:
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
         raw_or_derived_media: 'Is this media raw or derived?'
-        parent_media_how_to_proceed: 'Select how to proceed, concerning parent media'

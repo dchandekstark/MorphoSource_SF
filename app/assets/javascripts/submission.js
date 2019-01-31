@@ -97,9 +97,9 @@ $(document).on('turbolinks:load', function(){
         $('input[id="submission_parent_media_list"]').val(currentParentList);
 
         var newParentRow = '<div class="parent_row ' + selectedId + '">'
-          + '<div class="col-sm-3"><div class="parent_title">'
+          + '<div class="col-sm-4"><div class="parent_title">'
           + $("input.parent_title").val() + '</div></div>' 
-          + '<div class="col-sm-3"><a class="btn_remove_parent" class="btn btn-primary" onClick="removeParent(\'' + selectedId + '\')">Remove</a> ' + selectedId + ' </div>'
+          + '<div class="col-sm-2"><a class="btn_remove_parent btn btn-primary" onClick="removeParent(\'' + selectedId + '\')">Remove</a> <!--' + selectedId + '--></div>'
           + '</div>';
           $('.parent_row:last-child').after(newParentRow);
       }
