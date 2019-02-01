@@ -3,7 +3,7 @@
   <h1><%= t('morphosource.submission.page_header') %></h1>
 <% end %>
 
-<div id="select_institution">
+<div class="submission_flow" id="select_institution">
   <%= simple_form_for @submission do |f| %>
     <%= render(partial: 'institution_select', locals: { f: f }) %>
   <% end %>

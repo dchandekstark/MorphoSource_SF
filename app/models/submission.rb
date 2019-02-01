@@ -11,8 +11,12 @@ class Submission
                 :imaging_event_id,
                 :institution_id,
                 :media_id,
-                :raw_or_derived_media
-
+                :processing_event_id,
+                :raw_or_derived_media,
+                :parent_media_how_to_proceed,
+                :parent_media_list,
+                :parent_media_search
+  
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'
   PHYSICAL_OBJECT_BIOSPEC = { code: 'biospec',
@@ -22,4 +26,6 @@ class Submission
                           klass: CulturalHeritageObject,
                           label: CulturalHeritageObject.human_readable_type }
 
+  PARENT_MEDIA_LATER = ['Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.', 'later']
+  PARENT_MEDIA_NOW = ['Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later', 'now']
 end

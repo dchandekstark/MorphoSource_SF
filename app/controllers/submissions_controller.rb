@@ -11,6 +11,9 @@ class SubmissionsController < ApplicationController
 
   def create
     reinstantiate_submission
+    
+    # todo: is there a need to separate raw and derived flow in two if and else?
+    
     if params['biospec_search'].present?
       store_submission
       @docs = search_biospec
@@ -27,6 +30,14 @@ class SubmissionsController < ApplicationController
       session[:submission][:device_id] = submission_params[:device_id]
       store_submission
       render 'image_capture'
+    elsif params['parent_media_select'].present? 
+      session[:submission][:parent_media_list] = submission_params[:parent_media_list]
+      store_submission
+      render 'processing_event'
+    elsif params['parent_media_how_to_proceed_continue'].present? 
+      session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
+      store_submission
+      render 'new'
     else
       finish_submission
     end
@@ -79,6 +90,15 @@ class SubmissionsController < ApplicationController
     finish_submission
   end
 
+  def stage_processing_event
+    reinstantiate_submission
+    @submission.processing_event_id = 'new'
+    store_submission
+    processing_event_model_params = Hyrax::ProcessingEventForm.model_attributes(params[:processing_event])
+    session[:submission_processing_event_create_params] = processing_event_model_params
+    render 'media'
+  end
+
   def finish_submission
     reinstantiate_submission
     # The various object '_create_params' are defined as instance variables so they are available to the
@@ -89,6 +109,7 @@ class SubmissionsController < ApplicationController
     @institution_create_params = session[:submission_institution_create_params]
     @device_create_params = session[:submission_device_create_params]
     @media_create_params = session[:submission_media_create_params]
+    @processing_event_create_params = session[:submission_processing_event_create_params]
     media_uploaded_files = session[:submission_media_uploaded_files]
     if @institution_create_params.present?
       @submission.institution_id = create_institution(@institution_create_params)
@@ -101,6 +122,9 @@ class SubmissionsController < ApplicationController
     end
     if @imaging_event_create_params.present?
       @submission.imaging_event_id = create_imaging_event(@imaging_event_create_params)
+    end
+    if @processing_event_create_params.present?
+      @submission.processing_event_id = create_processing_event(@processing_event_create_params)
     end
     if @media_create_params.present?
       @submission.media_id = create_media(@media_create_params, media_uploaded_files)
@@ -138,6 +162,23 @@ class SubmissionsController < ApplicationController
     create_work(ImagingEvent, params)
   end
 
+  def create_processing_event(params)
+    parent_attributes = {}
+    if @submission.parent_media_list.present?
+      idx = 0
+      @submission.parent_media_list.split(',').each do |this_id|
+        if this_id != ''
+          parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
+          idx += 1
+        end
+      end
+    end
+    unless parent_attributes.empty?
+      params.merge!('work_parents_attributes' => parent_attributes)
+    end
+    create_work(ProcessingEvent, params)
+  end
+
   def create_institution(params)
     create_work(Institution, params)
   end
@@ -146,6 +187,9 @@ class SubmissionsController < ApplicationController
     parent_attributes = {}
     if @submission.imaging_event_id.present?
       parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
+    end
+    if @submission.processing_event_id.present?
+      parent_attributes.merge!({ '1' => { "id" => @submission.processing_event_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -163,6 +207,7 @@ class SubmissionsController < ApplicationController
     session[:submission_biospec_create_params] = nil
     session[:submission_device_create_params] = nil
     session[:submission_imaging_event_create_params] = nil
+    session[:submission_processing_event_create_params] = nil
     session[:submission_institution_create_params] = nil
     session[:submission_media_create_params] = nil
   end
@@ -182,6 +227,7 @@ class SubmissionsController < ApplicationController
     @biological_specimen_form = Hyrax::WorkFormService.build(BiologicalSpecimen.new, current_ability, self)
     @device_form = Hyrax::WorkFormService.build(Device.new, current_ability, self)
     @imaging_event_form = Hyrax::WorkFormService.build(ImagingEvent.new, current_ability, self)
+    @processing_event_form = Hyrax::WorkFormService.build(ProcessingEvent.new, current_ability, self)
     @institution_form = Hyrax::WorkFormService.build(Institution.new, current_ability, self)
     @media_form = Hyrax::WorkFormService.build(Media.new, current_ability, self)
   end
@@ -202,23 +248,31 @@ class SubmissionsController < ApplicationController
 
   def store_submission
     session[:submission] = { biospec_id: @submission.biospec_id,
-                             biospec_or_cho: @submission.biospec_or_cho,
-                             device_id: @submission.device_id,
-                             institution_id: @submission.institution_id,
-                             raw_or_derived_media: @submission.raw_or_derived_media }
+                              biospec_or_cho: @submission.biospec_or_cho,
+                              device_id: @submission.device_id,
+                              institution_id: @submission.institution_id,
+                              raw_or_derived_media: @submission.raw_or_derived_media,
+                              parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
+                              parent_media_list: @submission.parent_media_list
+      }
   end
 
   def submission_params
-    params.fetch(:submission, {}).permit(:biospec_id,
-                                         :biospec_or_cho,
-                                         :biospec_search_catalog_number,
-                                         :biospec_search_collection_code,
-                                         :biospec_search_institution_code,
-                                         :biospec_search_occurrence_id,
-                                         :device_id,
-                                         :imaging_event_id,
-                                         :institution_id,
-                                         :media_id,
-                                         :raw_or_derived_media)
+    params.fetch(:submission, {}).permit( :biospec_id,
+                                          :biospec_or_cho,
+                                          :biospec_search_catalog_number,
+                                          :biospec_search_collection_code,
+                                          :biospec_search_institution_code,
+                                          :biospec_search_occurrence_id,
+                                          :device_id,
+                                          :imaging_event_id,
+                                          :institution_id,
+                                          :media_id,
+                                          :processing_event_id,
+                                          :raw_or_derived_media,
+                                          :parent_media_how_to_proceed,
+                                          :parent_media_search,
+                                          :parent_media_list
+      )
   end
 end

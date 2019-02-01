@@ -28,4 +28,24 @@ RSpec.describe 'submissions/new' do
       expect(rendered).to match(/#{partial_content}/)
     end
   end
+
+  describe 'parent media in MS partial' do
+    let(:partial_content) { 'parent media in MS content' }
+    it 'renders the partial' do
+      assign(:submission, Submission.new)
+      stub_template 'submissions/_parents_in_ms.html.erb' => partial_content
+      render
+      expect(rendered).to match(/#{partial_content}/)
+    end
+  end
+  describe 'parent media not in MS partial' do
+    let(:partial_content) { 'parent media not in MS content' }
+    it 'renders the partial' do
+      assign(:submission, Submission.new)
+      stub_template 'submissions/_parents_not_in_ms.html.erb' => partial_content
+      render
+      expect(rendered).to match(/#{partial_content}/)
+    end
+  end
+
 end

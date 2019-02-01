@@ -1,0 +1,24 @@
+.submission_flow {
+  input[type='text'].ui-autocomplete-loading {
+    background: image-url('loading.gif') right center no-repeat;
+    background-size: 20px;
+  }
+  #submission_parent_media_search {
+    width:250px;
+  }
+  .submission_parent_media_search {
+    label {
+      display: none;
+    }
+  }
+  .parent_row {
+    clear:both;
+  }
+  .btn_remove_parent {
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  .parent_title {
+    vertical-align: text-bottom;
+  }
+}
