@@ -42,6 +42,10 @@ class SubmissionsController < ApplicationController
       store_submission
       @docs = search_cho
       render 'cho'
+    elsif params['cho_select'].present?
+      session[:submission][:cho_id] = submission_params[:cho_id]
+      store_submission
+      render 'device'
     else
       finish_submission
     end
@@ -118,6 +122,7 @@ class SubmissionsController < ApplicationController
     # placeholder 'show' page for debugging purposes.  If they are not needed for that, they can become local
     # variables in this method instead.
     @biospec_create_params = session[:submission_biospec_create_params]
+    @cho_create_params = session[:submission_cho_create_params]
     @imaging_event_create_params = session[:submission_imaging_event_create_params]
     @institution_create_params = session[:submission_institution_create_params]
     @device_create_params = session[:submission_device_create_params]
@@ -129,6 +134,9 @@ class SubmissionsController < ApplicationController
     end
     if @biospec_create_params.present?
       @submission.biospec_id = create_biological_specimen(@biospec_create_params)
+    end
+    if @cho_create_params.present?
+      @submission.cho_id = create_cho(@cho_create_params)
     end
     if @device_create_params.present?
       @submission.device_id = create_device(@device_create_params)
@@ -157,17 +165,32 @@ class SubmissionsController < ApplicationController
     create_work(BiologicalSpecimen, params)
   end
 
+  def create_cho(params)
+    parent_attributes = {}
+    if @submission.institution_id.present?
+      parent_attributes.merge!({ '0' => { "id" => @submission.institution_id, "_destroy" => "false" } })
+    end
+    unless parent_attributes.empty?
+      params.merge!('work_parents_attributes' => parent_attributes)
+    end
+    create_work(CulturalHeritageObject, params)
+  end
+
   def create_device(params)
     create_work(Device, params)
   end
 
   def create_imaging_event(params)
     parent_attributes = {}
+  byebug
     if @submission.biospec_id.present?
       parent_attributes.merge!({ '0' => { "id" => @submission.biospec_id, "_destroy" => "false" } })
     end
+    if @submission.cho_id.present?
+      parent_attributes.merge!({ '1' => { "id" => @submission.cho_id, "_destroy" => "false" } })
+    end
     if @submission.device_id.present?
-      parent_attributes.merge!({ '1' => { "id" => @submission.device_id, "_destroy" => "false" } })
+      parent_attributes.merge!({ '2' => { "id" => @submission.device_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -218,6 +241,7 @@ class SubmissionsController < ApplicationController
   def clear_session_submission_settings
     session[:submission] = nil
     session[:submission_biospec_create_params] = nil
+    session[:submission_cho_create_params] = nil
     session[:submission_device_create_params] = nil
     session[:submission_imaging_event_create_params] = nil
     session[:submission_processing_event_create_params] = nil
@@ -238,6 +262,7 @@ class SubmissionsController < ApplicationController
 
   def instantiate_work_forms
     @biological_specimen_form = Hyrax::WorkFormService.build(BiologicalSpecimen.new, current_ability, self)
+    @cho_form = Hyrax::WorkFormService.build(CulturalHeritageObject.new, current_ability, self)
     @device_form = Hyrax::WorkFormService.build(Device.new, current_ability, self)
     @imaging_event_form = Hyrax::WorkFormService.build(ImagingEvent.new, current_ability, self)
     @processing_event_form = Hyrax::WorkFormService.build(ProcessingEvent.new, current_ability, self)
@@ -270,6 +295,7 @@ class SubmissionsController < ApplicationController
 
   def store_submission
     session[:submission] = { biospec_id: @submission.biospec_id,
+                              cho_id: @submission.cho_id,
                               biospec_or_cho: @submission.biospec_or_cho,
                               device_id: @submission.device_id,
                               institution_id: @submission.institution_id,
@@ -286,6 +312,11 @@ class SubmissionsController < ApplicationController
                                           :biospec_search_collection_code,
                                           :biospec_search_institution_code,
                                           :biospec_search_occurrence_id,
+                                          :cho_id,
+                                          :cho_search_catalog_number,
+                                          :cho_search_collection_code,
+                                          :cho_search_institution_code,
+                                          :cho_search_occurrence_id,
                                           :device_id,
                                           :imaging_event_id,
                                           :institution_id,
