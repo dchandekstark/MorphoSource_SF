@@ -38,6 +38,10 @@ class SubmissionsController < ApplicationController
       session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
       store_submission
       render 'new'
+    elsif params['cho_search'].present?
+      store_submission
+      @docs = search_cho
+      render 'cho'
     else
       finish_submission
     end
@@ -49,6 +53,15 @@ class SubmissionsController < ApplicationController
     store_submission
     biospec_model_params = Hyrax::BiologicalSpecimenForm.model_attributes(params[:biological_specimen])
     session[:submission_biospec_create_params] = biospec_model_params
+    render 'institution'
+  end
+
+  def stage_cho
+    reinstantiate_submission
+    @submission.cho_id = 'new'
+    store_submission
+    cho_model_params = Hyrax::CulturalHeritageObjectForm.model_attributes(params[:cultural_heritage_object])
+    session[:submission_cho_create_params] = cho_model_params
     render 'institution'
   end
 
@@ -244,6 +257,15 @@ class SubmissionsController < ApplicationController
       search_params[k.sub('biospec_search_', '')] = v
     end
     Morphosource::PhysicalObjectsSearchService.call(BiologicalSpecimen, search_params)
+  end
+
+  def search_cho
+    search_params = {}
+    cho_search_params = submission_params.select{ |k,v| k.match(/^cho_search_/) }.select{ |k,v| v.present? }
+    cho_search_params.each do |k,v|
+      search_params[k.sub('cho_search_', '')] = v
+    end
+    Morphosource::PhysicalObjectsSearchService.call(CulturalHeritageObject, search_params)
   end
 
   def store_submission

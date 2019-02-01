@@ -11,6 +11,7 @@ en:
       media_select: 'If parent(s) of this media are in MorphoSource, select them. Or select “parents not in MorphoSource”'
       parent_media_upload_file_later: 'Submit derived media and information for media acquisition involving single parent. Can add parent media file later. Can add information and file for additional parent media later as well.'
       parent_media_upload_file_now: 'Enter information and file for parent media now. This will start submission over. Can add information and file for derived media or additional parent media later'
+      cho_search: 'Search for a Cultural Heritage Object already in MorphoSource, or create a new Cultural Heritage Object'
 
   simple_form:
     labels:
@@ -25,3 +26,10 @@ en:
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
         raw_or_derived_media: 'Is this media raw or derived?'
+        cho_search_catalog_number: 'Catalog Number'
+        cho_search_collection_code: 'Collection Code'
+        cho_search_genus: 'Genus'
+        cho_search_institution_code: 'Institution Code'
+        cho_search_ms_specimen_id: 'MS Specimen ID'
+        cho_search_occurrence_id: 'Occurrence ID'
+        cho_search_species: 'Species'

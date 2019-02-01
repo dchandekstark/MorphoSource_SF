@@ -44,8 +44,8 @@ $(document).on('turbolinks:load', function(){
     });
 
     $('input#submission_biospec_or_cho_cho').click(function(event){
-      //$('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
-      alert('Not yet implemented');
+      $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+      $('div#submission_cho').addClass('show').removeClass('hide');
     });
 
     // End Raw media flow

@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       post 'stage_institution'
       post 'stage_media'
       post 'stage_processing_event'
+      post 'stage_cho'
     end
   end
 
