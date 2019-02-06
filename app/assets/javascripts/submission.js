@@ -11,16 +11,41 @@ $(document).on('turbolinks:load', function(){
     //$('.new_media, .derived_media').addClass('hide').removeClass('show');
     
     // Begin Raw media flow
+    $('#submission_choose_raw_or_derived_media_continue').click(function(event){
+      event.preventDefault();
+      var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
+      if (selected == 'Raw') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+      } else if (selected == 'Derived') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+      }
+    });
+    
+    /* should not be needed any more -- remove later
     $('input#submission_raw_or_derived_media_raw').click(function(event){
       $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
       $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
-    });
+    }); 
 
     $('input#submission_biospec_or_cho_biospec').click(function(event){
       $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
       $('div#submission_biospec').addClass('show').removeClass('hide');
-    });
+    }); */
 
+    $('#submission_choose_biospec_or_cho_continue').click(function(event){
+      event.preventDefault();
+      var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();
+      if (selected == 'biospec') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_biospec').addClass('show').removeClass('hide');
+      } else if (selected == 'cho') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_cho').addClass('show').removeClass('hide');
+      }
+    });
+    
     $('a#submission_show_create_biospec').click(function(event){
       event.preventDefault();
       $('div#submission_biospec_search').addClass('hide').removeClass('show');
@@ -42,19 +67,22 @@ $(document).on('turbolinks:load', function(){
       //$('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_device').addClass('show').removeClass('hide');
     });
-
+    
+    /*
     $('input#submission_biospec_or_cho_cho').click(function(event){
       $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
       $('div#submission_cho').addClass('show').removeClass('hide');
-    });
+    }); */
 
     // End Raw media flow
   
     // Begin Derived media flow 
+    
+    /* should not be needed any more -- remove later
     $('input#submission_raw_or_derived_media_derived').click(function(event){
       $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
       $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-    });
+    }); */
     
     $('#btn_parents_not_in_morphosource').click(function(event){
       event.preventDefault();

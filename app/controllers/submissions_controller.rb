@@ -5,8 +5,22 @@ class SubmissionsController < ApplicationController
   before_action :instantiate_work_forms
 
   def new
-    session[:submission] ||= {}
-    @submission = Submission.new(session[:submission])
+    
+    
+    # clear session when user request to start all over
+    #if
+    #clear_session_submission_settings
+    #end
+    #if session[:submission].present?
+      # Continue where the user has left off
+    #  if session[:submission]['cho_search_collection_code'].present?
+    #    @docs = search_cho
+    #    render 'cho'
+    #  end
+    #else
+      session[:submission] ||= {}
+      @submission = Submission.new(session[:submission])
+    #end
   end
 
   def create
@@ -39,6 +53,7 @@ class SubmissionsController < ApplicationController
       store_submission
       render 'new'
     elsif params['cho_search'].present?
+      session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
       store_submission
       @docs = search_cho
       render 'cho'
@@ -182,7 +197,6 @@ class SubmissionsController < ApplicationController
 
   def create_imaging_event(params)
     parent_attributes = {}
-  byebug
     if @submission.biospec_id.present?
       parent_attributes.merge!({ '0' => { "id" => @submission.biospec_id, "_destroy" => "false" } })
     end
@@ -301,7 +315,8 @@ class SubmissionsController < ApplicationController
                               institution_id: @submission.institution_id,
                               raw_or_derived_media: @submission.raw_or_derived_media,
                               parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
-                              parent_media_list: @submission.parent_media_list
+                              parent_media_list: @submission.parent_media_list,
+                              cho_search_collection_code: @submission.cho_search_collection_code
       }
   end
 

@@ -48,4 +48,14 @@ Rails.application.routes.draw do
     end
   end
 
+  # for now, redirect to submission flow initial page when using browser reload or back button
+  get '/submissions', to: redirect('/submissions/new')
+  get '/submissions/stage_biological_specimen', to: redirect('/submissions/new')
+  get '/submissions/stage_device', to: redirect('/submissions/new')
+  get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
+  get '/submissions/stage_institution', to: redirect('/submissions/new')
+  get '/submissions/stage_media', to: redirect('/submissions/new')
+  get '/submissions/stage_processing_event', to: redirect('/submissions/new')
+  get '/submissions/stage_cho', to: redirect('/submissions/new')
+  
 end
