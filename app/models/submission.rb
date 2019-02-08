@@ -20,7 +20,9 @@ class Submission
                 :cho_search_catalog_number,
                 :cho_search_collection_code,
                 :cho_search_institution_code,
-                :cho_search_occurrence_id
+                :cho_search_occurrence_id,
+                :is_start_over,
+                :saved_step
 
   
   MEDIA_DERIVED = 'Derived'

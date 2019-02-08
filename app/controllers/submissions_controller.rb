@@ -5,29 +5,30 @@ class SubmissionsController < ApplicationController
   before_action :instantiate_work_forms
 
   def new
-    
-    
     # clear session when user request to start all over
-    #if
-    #clear_session_submission_settings
-    #end
-    #if session[:submission].present?
+    if cookies[:ms_submission_start_over].present?
+        cookies.delete :ms_submission_start_over
+        clear_session_submission_settings
+    end
+    
+    if session[:submission].present?
       # Continue where the user has left off
-    #  if session[:submission]['cho_search_collection_code'].present?
-    #    @docs = search_cho
-    #    render 'cho'
-    #  end
-    #else
+      if session[:submission]['saved_step'] == "cho_search"
+          @docs = search_cho
+          render 'cho'
+      elsif session[:submission]['saved_step'] == "cho_select"
+          render 'device'
+      end
+    else
       session[:submission] ||= {}
       @submission = Submission.new(session[:submission])
-    #end
+    end
   end
 
   def create
     reinstantiate_submission
     
     # todo: is there a need to separate raw and derived flow in two if and else?
-    
     if params['biospec_search'].present?
       store_submission
       @docs = search_biospec
@@ -54,11 +55,13 @@ class SubmissionsController < ApplicationController
       render 'new'
     elsif params['cho_search'].present?
       session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
+      @submission.saved_step = "cho_search"
       store_submission
       @docs = search_cho
       render 'cho'
     elsif params['cho_select'].present?
       session[:submission][:cho_id] = submission_params[:cho_id]
+      @submission.saved_step = "cho_select"
       store_submission
       render 'device'
     else
@@ -316,7 +319,8 @@ class SubmissionsController < ApplicationController
                               raw_or_derived_media: @submission.raw_or_derived_media,
                               parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
                               parent_media_list: @submission.parent_media_list,
-                              cho_search_collection_code: @submission.cho_search_collection_code
+                              cho_search_collection_code: @submission.cho_search_collection_code,
+                              saved_step: @submission.saved_step
       }
   end
 
