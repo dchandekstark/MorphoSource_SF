@@ -1,6 +1,9 @@
-this partial has been moved to biospec_create (full page).  Delete this partial later.
+<% provide :page_title, t('morphosource.submission.page_title') %>
+<% provide :page_header do %>
+  <h1><%= t('morphosource.submission.page_header') %></h1>
+<% end %>
 
-<div id="submission_create_biospec" class="hide">
+<div class="submission_flow" id="submission_biospec_search">
   <%= simple_form_for @biological_specimen_form, url: stage_biological_specimen_submissions_url do |f| %>
     <div class="form-group">
       <%= render partial: 'work_creation_metadata', locals: {f: f} %>
@@ -10,3 +13,5 @@ this partial has been moved to biospec_create (full page).  Delete this partial 
     </div>
   <% end %>
 </div>
+
+<%= render(partial: 'footer') %>

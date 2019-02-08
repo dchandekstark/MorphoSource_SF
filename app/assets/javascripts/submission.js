@@ -27,12 +27,14 @@ $(document).on('ready', function(){
       }
     });
     
+
+    /* remove later
     $('a#submission_show_create_biospec').click(function(event){
       event.preventDefault();
       $('div#submission_biospec_search').addClass('hide').removeClass('show');
       $('div#submission_choose_create_biospec').addClass('hide').removeClass('show');;
       $('div#submission_create_biospec').addClass('show').removeClass('hide');
-    });
+    }); */
 
     $('a#submission_show_create_cho').click(function(event){
       event.preventDefault();

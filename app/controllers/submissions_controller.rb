@@ -37,10 +37,24 @@ class SubmissionsController < ApplicationController
       session[:submission][:biospec_id] = submission_params[:biospec_id]
       store_submission
       render 'device'
+    elsif params['biospec_will_create'].present?
+      # possibly need to store other flow data here
+      @submission.saved_step = "biospec_will_create"
+      store_submission
+      render 'institution'
     elsif params['institution_select'].present?
       session[:submission][:institution_id] = submission_params[:institution_id]
       store_submission
-      render 'device'
+      if @submission.saved_step == "biospec_will_create"
+        @submission.saved_step = "biospec_institution_select"
+        render 'biospec_create'
+      elsif
+        @submission.saved_step = "xxx_institution_select"
+        # todo: will figure out where else to go depending on where the user comes from
+        #render 'device'
+      else
+        # should not end up here
+      end
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
       store_submission
@@ -75,7 +89,7 @@ class SubmissionsController < ApplicationController
     store_submission
     biospec_model_params = Hyrax::BiologicalSpecimenForm.model_attributes(params[:biological_specimen])
     session[:submission_biospec_create_params] = biospec_model_params
-    render 'institution'
+    render 'device'
   end
 
   def stage_cho
