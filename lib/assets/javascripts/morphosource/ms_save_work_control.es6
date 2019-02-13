@@ -27,6 +27,7 @@ export default class MorphosourceSaveWorkControl extends SaveWorkControl {
     this.watchFormatRequirement()
     this.formChanged()
     this.addFileUploadEventListeners()
+    this.checkValidFormats()
   }
 
   // Overrides to include validateFormats requirement.
@@ -42,7 +43,6 @@ export default class MorphosourceSaveWorkControl extends SaveWorkControl {
   // Checks whether formats requirement has been fulfilled.
   // Check mark happens in upload_formats #fulfill_requirement.
   validateFormats() {
-    this.checkValidFormats();
     // Return true if not on Media Work form.
     if ($('form[id*="media"]').length == 0) {
       return true
