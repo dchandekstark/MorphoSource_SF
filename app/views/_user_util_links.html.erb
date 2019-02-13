@@ -19,6 +19,12 @@
         <li><%= link_to t("hyrax.toolbar.profile.logout"), main_app.destroy_user_session_path %></li>
       </ul>
     </li><!-- /.btn-group -->
+    <!-- Show shopping cart icon if user signed in -->
+    <li>
+      <%= link_to main_app.my_cart_path do %>
+        <span class="fa fa-shopping-cart" aria-hidden="true"></span>
+      <% end %>
+    </li>
   <% else %>
     <li>
       <%= link_to main_app.new_user_session_path do %>

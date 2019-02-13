@@ -5,14 +5,15 @@
     <th class="check-all"><label for="check_all" class="sr-only"><%= t("hyrax.dashboard.my.sr.check_all_label") %></label><%= render_check_all %></th>
     <th><%= t("hyrax.dashboard.my.heading.title") %></th>
     <th><%= t("hyrax.dashboard.my.heading.date_uploaded") %></th>
-    <th><%= t("hyrax.dashboard.my.heading.highlighted") %></th>
     <th><%= t("hyrax.dashboard.my.heading.visibility") %></th>
+    <th><%= t("morphosource.dashboard.my.heading.file_visibility") %></th>
     <th><%= t("hyrax.dashboard.my.heading.action") %></th>
   </tr>
   </thead>
   <tbody>
   <% docs.each_with_index do |document, counter| %>
-      <%= render 'list_works', document: document, counter: counter, presenter: Hyrax::WorkShowPresenter.new(document, current_ability) %>
+    <% item = CartItem.where(:work_id => document.id)[0] %>
+    <%= render 'morphosource/my/cart_items/list_works', document: document, counter: counter, item: item, presenter: Hyrax::WorkShowPresenter.new(document, current_ability) %>
   <% end %>
   </tbody>
 </table>

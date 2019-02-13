@@ -1,5 +1,10 @@
 en:
   morphosource:
+    admin:
+      sidebar:
+        downloads: 'Downloads'
+        media_cart: 'Media Cart'
+        previous_downloads: 'Previous Downloads'
     base:
       form_progress:
         required_format: 'File formats match selected media type'
