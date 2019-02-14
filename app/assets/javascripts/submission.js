@@ -49,14 +49,6 @@ $(document).on('ready', function(){
       $('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
-
-    $('a#submission_show_create_device').click(function(event){
-      event.preventDefault();
-      $('div#submission_device_select').addClass('hide').removeClass('show');
-      // the following line might not be needed.  remove it later
-      //$('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
-      $('div#submission_create_device').addClass('show').removeClass('hide');
-    });
     
     validateSelectedCho = function() {
       if ($('input[name="submission[cho_id]"]:checked').val() === undefined) {
@@ -96,9 +88,11 @@ $(document).on('ready', function(){
         // set a cookie to clear all session variables when loading the initial page
         var cookieName = 'ms_submission_start_over';
         var cookieValue = 'yes';
-        var myDate = new Date();
-        myDate.setMonth(myDate.getMonth() + 3);
-        document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate 
+        var now = new Date();
+        var time = now.getTime();
+        time += 60 * 60 * 1000 * 1; // 1 hr
+        now.setTime(time);
+        document.cookie = cookieName +"=" + cookieValue + ";expires=" + now.toUTCString()
                           + ";path=/";
         location.href = "/submissions/new";
       }

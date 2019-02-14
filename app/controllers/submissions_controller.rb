@@ -13,7 +13,12 @@ class SubmissionsController < ApplicationController
     
     if session[:submission].present?
       # Continue where the user has left off
-      if session[:submission]['saved_step'] == "cho_search"
+      if session[:submission]['saved_step'] == "biospec_search"
+          @docs = search_biospec
+          render 'biospec'
+      elsif session[:submission]['saved_step'] == "biospec_select"
+          render 'device'
+      elsif session[:submission]['saved_step'] == "cho_search"
           @docs = search_cho
           render 'cho'
       elsif session[:submission]['saved_step'] == "cho_select"
@@ -30,10 +35,12 @@ class SubmissionsController < ApplicationController
     
     # todo: is there a need to separate raw and derived flow in two if and else?
     if params['biospec_search'].present?
+      @submission.saved_step = "biospec_search"
       store_submission
       @docs = search_biospec
       render 'biospec'
     elsif params['biospec_select'].present?
+      @submission.saved_step = "biospec_select"
       session[:submission][:biospec_id] = submission_params[:biospec_id]
       store_submission
       render 'device'
@@ -48,17 +55,22 @@ class SubmissionsController < ApplicationController
       if @submission.saved_step == "biospec_will_create"
         @submission.saved_step = "biospec_institution_select"
         render 'biospec_create'
-      elsif
-        @submission.saved_step = "xxx_institution_select"
-        # todo: will figure out where else to go depending on where the user comes from
-        #render 'device'
+      elsif @submission.saved_step == "device_will_create"
+        @submission.saved_step = "device_institution_select"
+        render 'device_create'
       else
         # should not end up here
       end
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
+      #@submission.saved_step = "device_select"
       store_submission
       render 'image_capture'
+    elsif params['device_will_create'].present?
+      # possibly need to store other flow data here
+      @submission.saved_step = "device_will_create"
+      store_submission
+      render 'institution'
     elsif params['parent_media_select'].present? 
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       store_submission
@@ -69,6 +81,7 @@ class SubmissionsController < ApplicationController
       render 'new'
     elsif params['cho_search'].present?
       session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
+      # todo: add the other 3 search fields here
       @submission.saved_step = "cho_search"
       store_submission
       @docs = search_cho
@@ -125,7 +138,16 @@ class SubmissionsController < ApplicationController
     store_submission
     institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
     session[:submission_institution_create_params] = institution_model_params
-    render 'device'
+    if @submission.saved_step == "device_will_create"
+      render 'device_create'
+    elsif @submission.saved_step == "biospec_will_create"
+      render 'biospec_create'
+    # todo : handle below case later
+    #elsif @submission.saved_step == "cho_will_create"
+    #  render 'cho_create'
+    else
+      #should not be here
+    end
   end
 
   def stage_media
