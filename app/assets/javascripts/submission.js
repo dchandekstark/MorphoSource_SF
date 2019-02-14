@@ -50,14 +50,6 @@ $(document).on('ready', function(){
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
     
-    validateSelectedCho = function() {
-      if ($('input[name="submission[cho_id]"]:checked').val() === undefined) {
-        // nothing selected
-        return false;
-      } else {
-        return true;
-      }
-    }
     // End Raw media flow
   
     // Begin Derived media flow 
@@ -148,6 +140,26 @@ $(document).on('ready', function(){
       list = list.split(',');
       list.splice(list.indexOf(value), 1);
       return list.join(',');
+    }
+
+    isRadioSelected = function(inputName) {
+      // this function check and make sure a radio button is selected
+      if ($('input[name="' + inputName + '"]:checked').val() === undefined) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    isDropdownSelected = function(selectName) {
+      // this function check and make sure an option is selected in a dropdown
+      if ($('select[name="' + selectName + '"]').prop('selectedIndex') == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
     }
 
   }

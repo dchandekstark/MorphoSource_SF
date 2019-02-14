@@ -3,19 +3,10 @@
     <h5><%= t('morphosource.submission.device_select') %></h5>
     <div class="form-group">
       <div class="form-inline">
-
-        
-        
-        
-        
-        
-        
-        <%# TODO: Width set to an arbitrary pixel value for now.  This is probably not appropriate for accessibility. %>
-        <%= f.input :device_id, collection: device_selector, prompt: 'Select device',
-                    input_html: {style: 'width: 400px'}, label: false %>
+        <%= f.input :device_id, collection: device_selector, prompt: 'Select device', label: false %>
       </div>
       <div>
-        <%= f.submit 'Continue with selected device', name: 'device_select', class: 'btn btn-info', role: 'button' %>
+        <%= f.submit 'Continue with selected device', name: 'device_select', class: 'btn btn-info', role: 'button', onclick: 'return isDropdownSelected("submission[device_id]")' %>
       </div>
     </div>
   <% end %>

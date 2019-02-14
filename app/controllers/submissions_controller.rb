@@ -58,6 +58,9 @@ class SubmissionsController < ApplicationController
       elsif @submission.saved_step == "device_will_create"
         @submission.saved_step = "device_institution_select"
         render 'device_create'
+      elsif @submission.saved_step == "cho_will_create"
+        @submission.saved_step = "cho_institution_select"
+        render 'cho_create'
       else
         # should not end up here
       end
@@ -91,6 +94,11 @@ class SubmissionsController < ApplicationController
       @submission.saved_step = "cho_select"
       store_submission
       render 'device'
+    elsif params['cho_will_create'].present?
+      # possibly need to store other flow data here
+      @submission.saved_step = "cho_will_create"
+      store_submission
+      render 'institution'
     else
       finish_submission
     end
@@ -111,7 +119,7 @@ class SubmissionsController < ApplicationController
     store_submission
     cho_model_params = Hyrax::CulturalHeritageObjectForm.model_attributes(params[:cultural_heritage_object])
     session[:submission_cho_create_params] = cho_model_params
-    render 'institution'
+    render 'device'
   end
 
   def stage_device
@@ -142,9 +150,8 @@ class SubmissionsController < ApplicationController
       render 'device_create'
     elsif @submission.saved_step == "biospec_will_create"
       render 'biospec_create'
-    # todo : handle below case later
-    #elsif @submission.saved_step == "cho_will_create"
-    #  render 'cho_create'
+    elsif @submission.saved_step == "cho_will_create"
+      render 'cho_create'
     else
       #should not be here
     end
