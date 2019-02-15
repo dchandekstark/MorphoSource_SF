@@ -58,4 +58,13 @@ Rails.application.routes.draw do
   get '/submissions/stage_processing_event', to: redirect('/submissions/new')
   get '/submissions/stage_cho', to: redirect('/submissions/new')
   
+  scope module: :morphosource do
+    scope module: :my do
+      get 'dashboard/my/downloads', action: :index, controller: :cart_items, as: 'my_downloads'
+      get 'dashboard/my/cart', action: :index, controller: :cart_items, as: 'my_cart'
+      post 'add_to_cart', action: :create, controller: :cart_items
+      delete '/cart_items/:id', to: 'cart_items#destroy', as: 'remove_from_cart'
+    end
+  end
+
 end

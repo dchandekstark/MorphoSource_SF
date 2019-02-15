@@ -31,6 +31,15 @@ module Morphosource
                                  presenter_class: Hyrax::WorkShowPresenter,
                                  presenter_args: presenter_factory_arguments)
     end
-    
+
+    # media cart method
+    def works_in_cart
+      current_ability.current_user.work_ids_in_cart
+    end
+
+    def downloaded_works
+      current_ability.current_user.downloaded_work_ids 
+    end
+
   end
 end
