@@ -73,6 +73,7 @@ module Hyrax
     # GET /concern/file_sets/zip?ids[]=filesetid1&ids[]=filesetid2
     def zip
       if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
+        params[:ids].each{|i| authorize! :read, i}
         files = ::FileSet.where(id: params[:ids]).map{|f| [f.original_file.uri.to_s, f.label]}
         Rails.logger.debug("Files for zip: #{files.inspect}")
         file_mappings = files.lazy.map{|url,path| [open(url), path]}
