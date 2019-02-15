@@ -72,8 +72,8 @@ module Hyrax
 
     # GET /concern/file_sets/zip?ids[]=filesetid1&ids[]=filesetid2
     def zip
-      if params[:ids] && params[:ids].any?
-        files = params[:ids].collect{|i| ::FileSet.find(i)}.map{|f| [f.original_file.uri.to_s, f.label]}
+      if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
+        files = ::FileSet.where(id: params[:ids]).map{|f| [f.original_file.uri.to_s, f.label]}
         Rails.logger.debug("Files for zip: #{files.inspect}")
         file_mappings = files.lazy.map{|url,path| [open(url), path]}
         zipline(file_mappings, "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}.zip")
