@@ -1,0 +1,44 @@
+<% if @cart %>
+  <% provide :page_title, t("morphosource.admin.sidebar.media_cart") %>
+<% else %>
+  <% provide :page_title, t("morphosource.admin.sidebar.downloads") %>
+<% end %>
+
+<nav class="breadcrumb" role="region" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/?locale=en">Home</a></li>
+    <li><a href="/dashboard?locale=en">Dashboard</a></li>
+    <% if @cart %>
+      <li class="active">Media Cart</li>
+    <% else %>
+      <li class="active">Downloads</li>
+    <% end %>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-xs-12 main-header">
+    <h1>
+      <% if @cart %>
+        <span class="fa fa-shopping-cart" aria-hidden="true"></span>
+        Media Cart ( <%= @count_text %> )
+      <% else %>
+        <span class="fa fa-download" aria-hidden="true"></span>
+        Downloads ( <%= @count_text %> )
+      <% end %>
+    </h1>
+    <div class="pull-right"></div>
+  </div>
+</div>
+
+<script>
+//<![CDATA[
+  <%= render partial: 'morphosource/my/scripts', formats: [:js] %>
+//]]>
+</script>
+
+<div class="panel-body">
+  <h2 class="sr-only">Works listing</h2>
+  <%= render 'morphosource/my/document_list' %>
+  <%= render 'morphosource/my/cart_items/results_pagination' %>
+</div>
