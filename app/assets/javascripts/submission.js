@@ -1,32 +1,47 @@
-$(document).on('turbolinks:load', function(){
+$(document).on('ready', function(){
   
   if ($('div[class="submission_flow"]').length) { // check if the page is submission new page 
   
-    // possibly not needed. remove later
-    //$("#submission_device_id").select2();
-    //$("#submission_institution_id").select2();
-    //$('div#submission_new div#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');;
-    //$('div#submission_new div#submission_biospec').addClass('hide').removeClass('show');
-
-    //$('.new_media, .derived_media').addClass('hide').removeClass('show');
-    
     // Begin Raw media flow
-    $('input#submission_raw_or_derived_media_raw').click(function(event){
-      $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-      $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+    $('#submission_choose_raw_or_derived_media_continue').click(function(event){
+      event.preventDefault();
+      var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
+      if (selected == 'Raw') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+      } else if (selected == 'Derived') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+      }
     });
-
-    $('input#submission_biospec_or_cho_biospec').click(function(event){
-      $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
-      $('div#submission_biospec').addClass('show').removeClass('hide');
+    
+    $('#submission_choose_biospec_or_cho_continue').click(function(event){
+      event.preventDefault();
+      var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();
+      if (selected == 'biospec') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_biospec').addClass('show').removeClass('hide');
+      } else if (selected == 'cho') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_cho').addClass('show').removeClass('hide');
+      }
     });
+    
 
+    /* remove later
     $('a#submission_show_create_biospec').click(function(event){
       event.preventDefault();
       $('div#submission_biospec_search').addClass('hide').removeClass('show');
       $('div#submission_choose_create_biospec').addClass('hide').removeClass('show');;
       $('div#submission_create_biospec').addClass('show').removeClass('hide');
-    });
+    }); */
+
+    $('a#submission_show_create_cho').click(function(event){
+      event.preventDefault();
+      $('div#submission_cho_search').addClass('hide').removeClass('show');
+      $('div#submission_choose_create_cho').addClass('hide').removeClass('show');;
+      $('div#submission_create_cho').addClass('show').removeClass('hide');
+    }); 
 
     $('a#submission_show_create_institution').click(function(event){
       event.preventDefault();
@@ -34,27 +49,10 @@ $(document).on('turbolinks:load', function(){
       $('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
-
-    $('a#submission_show_create_device').click(function(event){
-      event.preventDefault();
-      $('div#submission_device_select').addClass('hide').removeClass('show');
-      // the following line might not be needed.  remove it later
-      //$('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
-      $('div#submission_create_device').addClass('show').removeClass('hide');
-    });
-
-    $('input#submission_biospec_or_cho_cho').click(function(event){
-      //$('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
-      alert('Not yet implemented');
-    });
-
+    
     // End Raw media flow
   
     // Begin Derived media flow 
-    $('input#submission_raw_or_derived_media_derived').click(function(event){
-      $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-      $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-    });
     
     $('#btn_parents_not_in_morphosource').click(function(event){
       event.preventDefault();
@@ -76,6 +74,22 @@ $(document).on('turbolinks:load', function(){
     });
     // End Derived media flow 
     
+    $('#start_over').click(function(event){
+      event.preventDefault();
+      if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
+        // set a cookie to clear all session variables when loading the initial page
+        var cookieName = 'ms_submission_start_over';
+        var cookieValue = 'yes';
+        var now = new Date();
+        var time = now.getTime();
+        time += 60 * 60 * 1000 * 1; // 1 hr
+        now.setTime(time);
+        document.cookie = cookieName +"=" + cookieValue + ";expires=" + now.toUTCString()
+                          + ";path=/";
+        location.href = "/submissions/new";
+      }
+    });
+
     var clearForms = function() {
       // if there are other forms (or radios) on the page that should not be cleared. Add condition here.
       $('form').each(function() {
@@ -113,6 +127,7 @@ $(document).on('turbolinks:load', function(){
         + '</div>';
       return row;
     }
+
     removeParent = function(id){
       event.preventDefault();
       $('div.' + id).remove();
@@ -127,13 +142,25 @@ $(document).on('turbolinks:load', function(){
       return list.join(',');
     }
 
-    /*  
-    $('.btn_remove_parent').click(function(event){
-      event.preventDefault();
-      var removeId = $(this).attr('data-remove-id').val();
-      alert('removing ' + removeId);
-      
-    }); 
-    */
+    isRadioSelected = function(inputName) {
+      // this function check and make sure a radio button is selected
+      if ($('input[name="' + inputName + '"]:checked').val() === undefined) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    isDropdownSelected = function(selectName) {
+      // this function check and make sure an option is selected in a dropdown
+      if ($('select[name="' + selectName + '"]').prop('selectedIndex') == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+
   }
 });

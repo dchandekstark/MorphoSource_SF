@@ -15,7 +15,15 @@ class Submission
                 :raw_or_derived_media,
                 :parent_media_how_to_proceed,
                 :parent_media_list,
-                :parent_media_search
+                :parent_media_search,
+                :cho_id,
+                :cho_search_catalog_number,
+                :cho_search_collection_code,
+                :cho_search_institution_code,
+                :cho_search_occurrence_id,
+                :is_start_over,
+                :saved_step
+
   
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'

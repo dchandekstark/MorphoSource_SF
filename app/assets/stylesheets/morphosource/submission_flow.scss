@@ -21,4 +21,11 @@
   .parent_title {
     vertical-align: text-bottom;
   }
+  select {
+    min-width:220px;
+  }
+}
+
+.submission_footer {
+  margin-top:20px;
 }

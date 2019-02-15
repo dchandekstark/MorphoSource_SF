@@ -4,6 +4,10 @@
   <h1><%= t('morphosource.submission.page_header') %></h1>
 <% end %>
 
+<style>
+  h4 {background-color:#ccc}
+</style>
+
 <div>
   <dl class="row">
     <dt class="col-sm-3">raw_or_derived_media</dt>
@@ -16,6 +20,10 @@
   <dl class="row">
     <dt class="col-sm-3">biospec_id</dt>
     <dd class="col-sm-9"><%= @submission.biospec_id %></dd>
+  </dl>
+  <dl class="row">
+    <dt class="col-sm-3">cho_id</dt>
+    <dd class="col-sm-9"><%= @submission.cho_id %></dd>
   </dl>
   <dl class="row">
     <dt class="col-sm-3">institution_id</dt>
@@ -36,6 +44,15 @@
   <h4>Biological Specimen Create Params</h4>
     <% if @biospec_create_params.present? %>
     <% @biospec_create_params.each do |k,v| %>
+      <dl class="row">
+        <dt class="col-sm-3"><%= k %></dt>
+        <dd class="col-sm-9"><%= v %></dd>
+      </dl>
+    <% end %>
+    <% end %>
+  <h4>CHO Create Params</h4>
+    <% if @cho_create_params.present? %>
+    <% @cho_create_params.each do |k,v| %>
       <dl class="row">
         <dt class="col-sm-3"><%= k %></dt>
         <dd class="col-sm-9"><%= v %></dd>

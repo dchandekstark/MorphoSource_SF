@@ -37,22 +37,57 @@ RSpec.describe SubmissionsController, type: :controller do
       end
     end
 
-    describe 'institution_select' do
+    describe 'institution_select when creating new BSO' do
+      let(:saved_step) {'biospec_will_create'}
       let(:institution_id) { 'abc123' }
       let(:form_params) { { submission: { institution_id: institution_id }, institution_select: 'foo' } }
       before do
-        @request.session['submission'] = {}
+        @request.session['submission'] = {saved_step: saved_step}
       end
       it 'sets the institution id in the session' do
         post :create, params: form_params
         expect(@request.session[:submission]).to include({ institution_id: institution_id })
       end
-      it 'renders the device view' do
+      it 'renders the biospec create view' do
         post :create, params: form_params
-        expect(response).to render_template(:device)
+        expect(response).to render_template(:biospec_create) 
       end
     end
 
+    describe 'institution_select when creating new device' do
+      let(:saved_step) {'device_will_create'}
+      let(:institution_id) { 'abc123' }
+      let(:form_params) { { submission: { institution_id: institution_id }, institution_select: 'foo' } }
+      before do
+        @request.session['submission'] = {saved_step: saved_step}
+      end
+      it 'sets the institution id in the session' do
+        post :create, params: form_params
+        expect(@request.session[:submission]).to include({ institution_id: institution_id })
+      end
+      it 'renders the device create view' do
+        post :create, params: form_params
+        expect(response).to render_template(:device_create) 
+      end
+    end
+
+    describe 'institution_select when creating new CHO' do
+      let(:saved_step) {'cho_will_create'}
+      let(:institution_id) { 'abc123' }
+      let(:form_params) { { submission: { institution_id: institution_id }, institution_select: 'foo' } }
+      before do
+        @request.session['submission'] = {saved_step: saved_step}
+      end
+      it 'sets the institution id in the session' do
+        post :create, params: form_params
+        expect(@request.session[:submission]).to include({ institution_id: institution_id })
+      end
+      it 'renders the CHO create view' do
+        post :create, params: form_params
+        expect(response).to render_template(:cho_create) 
+      end
+    end
+    
     describe 'device_select' do
       let(:device_id) { 'abc123' }
       let(:form_params) { { submission: { device_id: device_id }, device_select: 'foo' } }
@@ -90,7 +125,7 @@ RSpec.describe SubmissionsController, type: :controller do
     end
     it 'renders the institution view' do
       post :stage_biological_specimen, params: form_params
-      expect(response).to render_template(:institution)
+      expect(response).to render_template(:device)
     end
   end
 
@@ -126,7 +161,11 @@ RSpec.describe SubmissionsController, type: :controller do
     end
   end
 
-  describe '#stage_institution' do
+  describe '#stage_institution when creating new biospec' do
+    let(:saved_step) {'biospec_will_create'}
+    before do
+      @request.session['submission'] = {saved_step: saved_step}
+    end
     let(:form_attributes) do
       { 'title' => 'Institution', 'institution_code' => 'inst' }
     end
@@ -136,9 +175,49 @@ RSpec.describe SubmissionsController, type: :controller do
       post :stage_institution, params: form_params
       expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
     end
-    it 'renders the media view' do
+    it 'renders the biospec create view' do
       post :stage_institution, params: form_params
-      expect(response).to render_template(:device)
+      expect(response).to render_template(:biospec_create)
+    end
+  end
+
+  describe '#stage_institution when creating new device' do
+    let(:saved_step) {'device_will_create'}
+    before do
+      @request.session['submission'] = {saved_step: saved_step}
+    end
+    let(:form_attributes) do
+      { 'title' => 'Institution', 'institution_code' => 'inst' }
+    end
+    let(:form_params) { { institution: form_attributes } }
+    let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
+    it 'stores the model attributes in the session' do
+      post :stage_institution, params: form_params
+      expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
+    end
+    it 'renders the device create view' do
+      post :stage_institution, params: form_params
+      expect(response).to render_template(:device_create)
+    end
+  end
+
+  describe '#stage_institution when creating new cho' do
+    let(:saved_step) {'cho_will_create'}
+    before do
+      @request.session['submission'] = {saved_step: saved_step}
+    end
+    let(:form_attributes) do
+      { 'title' => 'Institution', 'institution_code' => 'inst' }
+    end
+    let(:form_params) { { institution: form_attributes } }
+    let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
+    it 'stores the model attributes in the session' do
+      post :stage_institution, params: form_params
+      expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
+    end
+    it 'renders the cho create view' do
+      post :stage_institution, params: form_params
+      expect(response).to render_template(:cho_create)
     end
   end
 
