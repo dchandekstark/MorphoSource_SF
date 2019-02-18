@@ -35,9 +35,14 @@ class SubmissionsController < ApplicationController
     
     # todo: is there a need to separate raw and derived flow in two if and else?
     if params['biospec_search'].present?
-      @submission.saved_step = "biospec_search"
-      store_submission
       @docs = search_biospec
+      if @docs.empty?
+        # if no search result, user might need to go back to initial step
+        @submission.saved_step = ""
+      else
+        @submission.saved_step = "biospec_search"
+      end
+      store_submission
       render 'biospec'
     elsif params['biospec_select'].present?
       @submission.saved_step = "biospec_select"
