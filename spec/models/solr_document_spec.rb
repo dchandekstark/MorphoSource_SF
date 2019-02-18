@@ -24,7 +24,7 @@ RSpec.describe ::SolrDocument, type: :model do
 
 	describe "#mesh?" do
 		context "when label is a mesh filename" do
-			mesh_filenames = ['test.ply', 'test.stl', 'test.obj', 'test.gltf']
+			mesh_filenames = ['test.ply', 'test.stl', 'test.obj', 'test.glb', 'test.gltf']
 			mesh_filenames.each do |f|
 				describe "#{f}" do
 					let!(:attributes) { { label_tesim: f} }
@@ -59,6 +59,7 @@ RSpec.describe ::SolrDocument, type: :model do
 			mesh_mime_types = { "test.ply" => "application/ply",
                         	"test.stl" => "application/sla",
                         	"test.obj" => "text/plain",
+                        	"test.glb" => "model/gltf+json",
                         	"test.gltf" => "model/gltf+json" }
 
 			mesh_mime_types.each do |f, mime_type|

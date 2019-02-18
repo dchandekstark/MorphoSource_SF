@@ -18,7 +18,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
     Rails.logger.debug "Ran FITS characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
 
     ext = File.extname(filepath)
-    if (ext =~ /\.(gltf|obj|ply|stl|wrl|x3d)$/)
+    if (ext =~ /\.(glb|gltf|obj|ply|stl|wrl|x3d)$/)
       blender_options = {
         "parser_class" => Hydra::Works::Characterization::BlenderDocument, 
         "tool_class" => :blender
