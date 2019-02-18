@@ -34,7 +34,7 @@ class SolrDocument
   end
 
   def mesh? # TODO: Needs to be adjusted to use mime types when FITS issue is dealt with
-    accepted_formats = [".ply", ".stl", ".obj", ".gltf"]
+    accepted_formats = [".ply", ".stl", ".obj", ".glb", ".gltf"]
     accepted_formats.include? file_ext
   end
 
@@ -42,6 +42,7 @@ class SolrDocument
     mesh_mime_types = { ".ply" => "application/ply",
                         ".stl" => "application/sla",
                         ".obj" => "text/plain",
+                        ".glb" => "model/gltf+json",
                         ".gltf" => "model/gltf+json" }
     mesh_mime_types[file_ext]
   end
