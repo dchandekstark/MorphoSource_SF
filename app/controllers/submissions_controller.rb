@@ -49,8 +49,10 @@ class SubmissionsController < ApplicationController
       @submission.saved_step = "biospec_will_create"
       store_submission
       render 'institution'
-    elsif params['institution_select'].present?
-      session[:submission][:institution_id] = submission_params[:institution_id]
+    elsif params['institution_select'].present? || params['no_institution'].present?
+      if params['institution_select'].present?
+        session[:submission][:institution_id] = submission_params[:institution_id]
+      end
       store_submission
       if @submission.saved_step == "biospec_will_create"
         @submission.saved_step = "biospec_institution_select"
