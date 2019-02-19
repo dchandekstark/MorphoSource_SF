@@ -8,8 +8,14 @@ class SubmissionsController < ApplicationController
     # clear session when user request to start all over
     if cookies[:ms_submission_start_over].present?
         cookies.delete :ms_submission_start_over
+        cookies.delete :saved_step
         clear_session_submission_settings
     end
+    
+    
+    
+    // check the cookie instead of session?
+    
     
     if session[:submission].present?
       # Continue where the user has left off
@@ -58,7 +64,6 @@ class SubmissionsController < ApplicationController
       if params['institution_select'].present?
         session[:submission][:institution_id] = submission_params[:institution_id]
       end
-      store_submission
       if @submission.saved_step == "biospec_will_create"
         @submission.saved_step = "biospec_institution_select"
         render 'biospec_create'
@@ -71,6 +76,7 @@ class SubmissionsController < ApplicationController
       else
         # should not end up here
       end
+      store_submission
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
       #@submission.saved_step = "device_select"
@@ -372,6 +378,9 @@ class SubmissionsController < ApplicationController
                               cho_search_collection_code: @submission.cho_search_collection_code,
                               saved_step: @submission.saved_step
       }
+    if @submission.saved_step.present?
+      cookies.permanent[:saved_step] = @submission.saved_step
+    end
   end
 
   def submission_params

@@ -1,7 +1,7 @@
 $(document).on('ready', function(){
   
-  if ($('div[class="submission_flow"]').length) { // check if the page is submission new page 
-  
+  if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page 
+    var cookie_expired_days = 90;
     // Begin Raw media flow
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
@@ -9,9 +9,11 @@ $(document).on('ready', function(){
       if (selected == 'Raw') {
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        setCookie('saved_step', selected, cookie_expired_days);
       } else if (selected == 'Derived') {
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+        setCookie('saved_step', selected, cookie_expired_days);
       }
     });
     
@@ -21,9 +23,11 @@ $(document).on('ready', function(){
       if (selected == 'biospec') {
         $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
         $('div#submission_biospec').addClass('show').removeClass('hide');
+        setCookie('saved_step', selected, cookie_expired_days);
       } else if (selected == 'cho') {
         $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
         $('div#submission_cho').addClass('show').removeClass('hide');
+        setCookie('saved_step', selected, cookie_expired_days);
       }
     });
     
@@ -161,6 +165,72 @@ $(document).on('ready', function(){
         return true;
       }
     }
+    
+    gotoStep = function(step) {
+      event.preventDefault();
+      setCookie("saved_step", step, cookie_expired_days);
+      location.reload();
+    }
+    /*
+    saved_step = getCookie('saved_step');
+    console.log('saved_step = '+ saved_step);
+    if (saved_step == 'Raw') {
+      $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
+      $('#submission_choose_raw_or_derived_media_continue').trigger("click");
+    }
+    */
+    if (getCookie('saved_step')) {
+      saved_step = getCookie('saved_step');
+      console.log('saved_step = '+ saved_step);
+      switch(saved_step) {
+        case 'Raw':
+          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
+          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
+          break;
+        case 'Derived':
+          $("input[id='submission_raw_or_derived_media_derived']").prop("checked", true).trigger("click");
+          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
+          break;
+        case 'biospec':
+          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
+          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
+          $("input[id='submission_biospec_or_cho_biospec']").prop("checked", true).trigger("click");
+          $('#submission_choose_biospec_or_cho_continue').trigger("click");
+          break;
+        case 'cho':
+          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
+          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
+          $("input[id='submission_biospec_or_cho_cho']").prop("checked", true).trigger("click");
+          $('#submission_choose_biospec_or_cho_continue').trigger("click");
+          break;
+        default:
+          // code block
+      }
+      
+    }
 
-  }
+  } // end if the page is submission flow page 
 });
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
