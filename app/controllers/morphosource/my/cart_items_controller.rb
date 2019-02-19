@@ -8,7 +8,7 @@ module Morphosource
       before_action :get_curation_concern, only: [:create]
 
       def search_builder_class
-        if cart?
+        if @cart
           Morphosource::My::CartItems::CartItemsSearchBuilder
         else
           Morphosource::My::CartItems::DownloadsSearchBuilder
@@ -29,12 +29,22 @@ module Morphosource
         after_create_response(@curation_concern)
       end
 
-       def index
-        @cart = cart?
-        @items = current_user.cart_items
+      def index
+        count_text(@items)
         super
-        @count_text = count_text
         render 'index'
+      end
+
+      def media_cart
+        @cart = true
+        @items = current_user.items_in_cart
+        self.index
+      end
+
+      def previous_downloads
+        @cart = false
+        @items = current_user.downloaded_items
+        self.index
       end
 
       def destroy
@@ -48,10 +58,6 @@ module Morphosource
       end
 
        private
-
-        def cart?
-          request.original_fullpath.include? '/dashboard/my/cart'
-        end
 
         def works_in_cart
           current_user.work_ids_in_cart
@@ -74,8 +80,9 @@ module Morphosource
           work_to_render = (params[:work_type].downcase.concat('/show'))
         end
 
-        def count_text
-          @document_list.count.to_s.concat(@document_list.count == 1 ? " Item" : " Items")
+        def count_text(items)
+          count = items.count
+          @item_count = count.to_s.concat(count == 1 ? " Item" : " Items")
         end
 
      end
