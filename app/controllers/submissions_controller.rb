@@ -11,23 +11,19 @@ class SubmissionsController < ApplicationController
         cookies.delete :saved_step
         clear_session_submission_settings
     end
-    
-    
-    
-    // check the cookie instead of session?
-    
-    
     if session[:submission].present?
       # Continue where the user has left off
-      if session[:submission]['saved_step'] == "biospec_search"
+      # if needed, read the var from session instead: session[:submission]['saved_step']
+      saved_step = cookies[:saved_step]
+      if saved_step == "biospec_search"
           @docs = search_biospec
           render 'biospec'
-      elsif session[:submission]['saved_step'] == "biospec_select"
+      elsif saved_step == "biospec_select"
           render 'device'
-      elsif session[:submission]['saved_step'] == "cho_search"
+      elsif saved_step == "cho_search"
           @docs = search_cho
           render 'cho'
-      elsif session[:submission]['saved_step'] == "cho_select"
+      elsif saved_step == "cho_select"
           render 'device'
       end
     else

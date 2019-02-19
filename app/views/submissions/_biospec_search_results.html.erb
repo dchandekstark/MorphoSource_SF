@@ -4,7 +4,7 @@
   </div>
   <% if @docs.nil? || @docs.empty? %>
     <div id="empty_search_results">
-      No Biological Specimens found in MorphoSource that match the search criteria.  
+      No Biological Specimens found in MorphoSource that match the search criteria.  Search again or create a new Biological Specimen.
     </div>
   <% else %>
     <div id="submission_select_biospec">
@@ -16,7 +16,7 @@
       <%= f.submit 'Continue with selected Biological Specimen', name: 'biospec_select', class: 'btn btn-primary', onclick: 'return isRadioSelected("submission[biospec_id]")' %>
     </div>
   <% end %>
-  <div id="submission_choose_create_biospec">
+  <div>
     <a href="#" onclick="gotoStep('biospec')" class="btn btn-primary">Search again</a>
     <%= f.submit 'Create New Biological Specimen', name: 'biospec_will_create', class: 'btn btn-primary' %>
   </div>
