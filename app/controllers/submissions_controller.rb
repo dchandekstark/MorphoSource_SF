@@ -7,8 +7,6 @@ class SubmissionsController < ApplicationController
   def new
     # clear session when user request to start all over
     if cookies[:ms_submission_start_over].present?
-        cookies.delete :ms_submission_start_over
-        cookies.delete :saved_step
         clear_session_submission_settings
     end
     if session[:submission].present?
@@ -16,15 +14,19 @@ class SubmissionsController < ApplicationController
       # if needed, read the var from session instead: session[:submission]['saved_step']
       saved_step = cookies[:saved_step]
       if saved_step == "biospec_search"
-          @docs = search_biospec
-          render 'biospec'
+        @docs = search_biospec
+        render 'biospec'
       elsif saved_step == "biospec_select"
-          render 'device'
+         render 'device'
       elsif saved_step == "cho_search"
-          @docs = search_cho
-          render 'cho'
+        @docs = search_cho
+        render 'cho'
       elsif saved_step == "cho_select"
-          render 'device'
+        render 'device'
+      elsif saved_step == "device_select"
+        render 'image_capture'
+      elsif saved_step == "imaging_event_staged"
+        render 'media'
       end
     else
       session[:submission] ||= {}
@@ -75,7 +77,7 @@ class SubmissionsController < ApplicationController
       store_submission
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
-      #@submission.saved_step = "device_select"
+      @submission.saved_step = "device_select"
       store_submission
       render 'image_capture'
     elsif params['device_will_create'].present?
@@ -143,6 +145,7 @@ class SubmissionsController < ApplicationController
   def stage_imaging_event
     reinstantiate_submission
     @submission.imaging_event_id = 'new'
+    @submission.saved_step = 'imaging_event_staged'
     store_submission
     imaging_event_model_params = Hyrax::ImagingEventForm.model_attributes(params[:imaging_event])
     session[:submission_imaging_event_create_params] = imaging_event_model_params
@@ -316,6 +319,8 @@ class SubmissionsController < ApplicationController
     session[:submission_processing_event_create_params] = nil
     session[:submission_institution_create_params] = nil
     session[:submission_media_create_params] = nil
+    cookies.delete :ms_submission_start_over
+    cookies.delete :saved_step
   end
 
   def create_work(model, form_params)

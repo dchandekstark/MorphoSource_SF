@@ -6,7 +6,7 @@
         <%= f.input :device_id, collection: device_selector, prompt: 'Select device', label: false %>
       </div>
       <div>
-        <%= f.submit 'Continue with selected device', name: 'device_select', class: 'btn btn-info', role: 'button', onclick: 'return isDropdownSelected("submission[device_id]")' %>
+        <%= f.submit 'Continue with selected device', name: 'device_select', class: 'btn btn-primary', role: 'button', onclick: 'return isDropdownSelected("submission[device_id]")' %>
       </div>
     </div>
   <% end %>
