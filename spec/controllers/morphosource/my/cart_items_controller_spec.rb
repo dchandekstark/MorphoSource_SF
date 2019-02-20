@@ -30,7 +30,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
     context "user views the media cart" do
       before do
-        allow(subject).to receive_message_chain(:request, :original_fullpath).and_return('/dashboard/my/cart')
+        get :media_cart
       end
 
       it 'returns the CartItems Search Builder' do
@@ -40,7 +40,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
     context "user views their previous downloads" do
       before do
-        allow(subject).to receive_message_chain(:request, :original_fullpath).and_return('/dashboard/my/downloads')
+        get :previous_downloads
       end
 
       it 'returns the Downloads Search Builder' do
