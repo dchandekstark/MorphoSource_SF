@@ -166,9 +166,10 @@ $(document).on('ready', function(){
       }
     }
     
-    gotoStep = function(step) {
+    gotoStep = function(pg, step) {
       event.preventDefault();
       setCookie("saved_step", step, cookie_expired_days);
+      setCookie("last_render", pg, cookie_expired_days);
       location.reload();
     }
     /*
@@ -181,7 +182,9 @@ $(document).on('ready', function(){
     */
     if (getCookie('saved_step')) {
       saved_step = getCookie('saved_step');
+      last_render = getCookie('last_render');
       console.log('saved_step = '+ saved_step);
+      console.log('last_render = '+ last_render);
       switch(saved_step) {
         case 'Raw':
           $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
