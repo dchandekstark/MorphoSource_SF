@@ -19,7 +19,7 @@ class Media < Morphosource::Works::Base
   # array of all visibilities that apply to the file sets of a Media work
   # used to populate File Visibility column in dashboard works list
   def file_set_visibilities
-    
+
     all_visibilities = [
       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
@@ -30,9 +30,9 @@ class Media < Morphosource::Works::Base
     file_visibilities = []
 
     file_sets.each do |file|
-      if file.embargo_id.present?
+      if file.embargo&.active?
         file_visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
-      elsif file.lease_id.present?
+      elsif file.lease&.active?
         file_visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE
       else
         file_visibilities << file.visibility

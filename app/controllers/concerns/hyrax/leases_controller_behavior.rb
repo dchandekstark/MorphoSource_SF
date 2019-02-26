@@ -16,7 +16,9 @@ module Hyrax
       Hyrax::Actors::LeaseActor.new(curation_concern).destroy
       flash[:notice] = curation_concern.lease_history.last
       if curation_concern.work? && curation_concern.file_sets.present?
-        redirect_to confirm_permission_path
+        # Do not modify fileset visibility if they are marked private
+        return redirect_to [main_app, curation_concern] if curation_concern.fileset_visibility == ["restricted"]
+        redirect_to main_app.copy_hyrax_permission_path(curation_concern)
       else
         redirect_to edit_lease_path
       end

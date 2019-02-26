@@ -28,6 +28,16 @@ Rails.application.routes.draw do
     end
   end
 
+  # Permissions routes
+  namespace :hyrax, path: :concern do
+    resources :permissions, only: [] do
+      member do
+        get :copy_access
+        get :copy
+      end
+    end
+  end
+
   curation_concerns_basic_routes
   concern :exportable, Blacklight::Routes::Exportable.new
 

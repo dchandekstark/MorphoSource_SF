@@ -16,7 +16,9 @@ module Hyrax
       Hyrax::Actors::EmbargoActor.new(curation_concern).destroy
       flash[:notice] = curation_concern.embargo_history.last
       if curation_concern.work? && curation_concern.file_sets.present?
-        redirect_to confirm_permission_path
+        # Do not modify fileset visibility if they have been marked private
+        return redirect_to [main_app, curation_concern] if curation_concern.fileset_visibility == ["restricted"]
+        redirect_to main_app.copy_hyrax_permission_path(curation_concern)
       else
         redirect_to edit_embargo_path
       end

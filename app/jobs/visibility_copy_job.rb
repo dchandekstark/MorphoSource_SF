@@ -1,3 +1,5 @@
+# Overriding to update work index after its file sets' visibilities are changed in order to have the correct file_set_visibilities.
+
 # Responsible for copying the following attributes from the work to each file in the file_sets
 #
 # * visibility
@@ -13,6 +15,7 @@ class VisibilityCopyJob < Hyrax::ApplicationJob
       copy_visibility_modifier(work: work, file: file, modifier: :embargo)
       file.save!
     end
+    work.update_index
   end
 
   private
