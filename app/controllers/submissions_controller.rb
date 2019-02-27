@@ -18,22 +18,6 @@ class SubmissionsController < ApplicationController
       # if needed, read the var from session instead: session[:submission]['saved_step']
       saved_step = cookies[:saved_step]
       last_render = cookies[:last_render]
-#      if saved_step == "biospec_search"
-#        @docs = search_biospec
-#        render 'biospec'
-#      elsif saved_step == "biospec_select"
-#        render 'device'
-      #if saved_step == "cho_search"
-      #  @docs = search_cho
-       # render 'cho'
-#      elsif saved_step == "cho_select"
-#        render 'device'
-#      elsif saved_step == "device_select"
-#        render 'image_capture'
-#      elsif saved_step == "imaging_event_staged"
-#        render 'media'
-#      elsif saved_step == "device_will_create"
-#        render 'institution'
       if last_render.present?
         # certain pages require getting back the search result before rendering
         if last_render == 'biospec'
@@ -342,6 +326,7 @@ class SubmissionsController < ApplicationController
     session[:submission_media_create_params] = nil
     cookies.delete :ms_submission_start_over
     cookies.delete :saved_step
+    cookies.delete :last_render
   end
 
   def create_work(model, form_params)
