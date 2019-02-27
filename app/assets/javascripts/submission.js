@@ -30,15 +30,6 @@ $(document).on('ready', function(){
         saveClick('#submission_biospec_or_cho_cho,#submission_choose_biospec_or_cho_continue', false);
       }
     });
-    
-
-    /* remove later
-    $('a#submission_show_create_biospec').click(function(event){
-      event.preventDefault();
-      $('div#submission_biospec_search').addClass('hide').removeClass('show');
-      $('div#submission_choose_create_biospec').addClass('hide').removeClass('show');;
-      $('div#submission_create_biospec').addClass('show').removeClass('hide');
-    }); */
 
     $('a#submission_show_create_cho').click(function(event){
       event.preventDefault();
@@ -66,11 +57,11 @@ $(document).on('ready', function(){
     });
     
     saveClick = function(id, fromStart) {
-      var saved_step = '';
-      if (!fromStart && getCookie('saved_step')) {
-        var saved_step = getCookie('saved_step') + ',';
+      var saved_clicks = '';
+      if (!fromStart && getCookie('saved_clicks')) {
+        var saved_clicks = getCookie('saved_clicks') + ',';
       }
-      setCookie('saved_step', saved_step + id, cookie_expired_days);
+      setCookie('saved_clicks', saved_clicks + id, cookie_expired_days);
     }
 
     $('#btn_parent_media_how_to_proceed_continue').click(function(event){
@@ -79,8 +70,9 @@ $(document).on('ready', function(){
       if ( $('input[name="submission[parent_media_how_to_proceed]"]:checked').val() == 'now' ) {
         // start over
         $('div#submission_choose_raw_or_derived_media').addClass('show').removeClass('hide');
-        deleteCookie('saved_step');
+        deleteCookie('saved_clicks');
         deleteCookie('last_render');
+        deleteCookie('saved_step');
       } else {
         // go to phsyical object 
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
@@ -177,51 +169,17 @@ $(document).on('ready', function(){
       saveClick(steps);
       location.reload();
     }
-    /*
-    saved_step = getCookie('saved_step');
-    console.log('saved_step = '+ saved_step);
-    if (saved_step == 'Raw') {
-      $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
-      $('#submission_choose_raw_or_derived_media_continue').trigger("click");
-    }
-    */
-    if (getCookie('saved_step')) {
-      saved_step = getCookie('saved_step');
-      last_render = getCookie('last_render');
-      //console.log('saved_step = '+ saved_step);
-      console.log('last_render = '+ last_render);
-      switch(saved_step) {
 
-        /*
-        case 'Raw':
-          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
-          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
-          break;
-        case 'Derived':
-          $("input[id='submission_raw_or_derived_media_derived']").prop("checked", true).trigger("click");
-          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
-          break;
-        case 'biospec':
-          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
-          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
-          $("input[id='submission_biospec_or_cho_biospec']").prop("checked", true).trigger("click");
-          $('#submission_choose_biospec_or_cho_continue').trigger("click");
-          break;
-        case 'cho':
-          $("input[id='submission_raw_or_derived_media_raw']").prop("checked", true).trigger("click");
-          $('#submission_choose_raw_or_derived_media_continue').trigger("click");
-          $("input[id='submission_biospec_or_cho_cho']").prop("checked", true).trigger("click");
-          $('#submission_choose_biospec_or_cho_continue').trigger("click");
-          break;
-        */
-        default:
-          var clickElements = saved_step.split();
-          for (var i = 0; i < clickElements.length; i++) {
-            console.log('clicking ' + clickElements[i]);
-            $(clickElements[i]).trigger('click');
-          }
+    if (getCookie('saved_clicks')) {
+      saved_clicks = getCookie('saved_clicks');
+      last_render = getCookie('last_render');
+      //console.log('saved_clicks = '+ saved_clicks);
+      //console.log('last_render = '+ last_render);
+      var clickElements = saved_clicks.split();
+      for (var i = 0; i < clickElements.length; i++) {
+        //console.log('clicking ' + clickElements[i]);
+        $(clickElements[i]).trigger('click');
       }
-      
     }
 
   } // end if the page is submission flow page 

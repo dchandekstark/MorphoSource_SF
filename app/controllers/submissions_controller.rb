@@ -117,6 +117,9 @@ class SubmissionsController < ApplicationController
   def render_and_save(pg)
     # save this page to render again if user reloads the page
     cookies.permanent[:last_render] = pg 
+    if (pg != 'new')
+      cookies.delete :saved_clicks
+    end
     render pg
   end
 
@@ -229,7 +232,8 @@ class SubmissionsController < ApplicationController
       @submission.media_id = create_media(@media_create_params, media_uploaded_files)
     end
     clear_session_submission_settings
-    render 'show'
+    #render 'show'
+    redirect_to '/concern/media/' + @submission.media_id
   end
 
   def create_biological_specimen(params)
@@ -327,6 +331,7 @@ class SubmissionsController < ApplicationController
     cookies.delete :ms_submission_start_over
     cookies.delete :saved_step
     cookies.delete :last_render
+    cookies.delete :saved_clicks
   end
 
   def create_work(model, form_params)
