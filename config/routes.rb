@@ -21,7 +21,12 @@ Rails.application.routes.draw do
   root 'hyrax/homepage#index'
   
   namespace :hyrax, path: :concern do
-    resources 'file_sets', only: [] do
+    namespaced_resources 'media' do
+      collection do
+        get :zip, action: :zip
+      end
+    end
+    namespaced_resources 'file_sets' do
       collection do
         get :zip, action: :zip
       end
