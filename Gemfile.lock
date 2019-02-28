@@ -852,9 +852,9 @@ GEM
     xpath (3.1.0)
       nokogiri (~> 1.8)
     zip_tricks (4.7.1)
-    zipline (1.0.2)
+    zipline (1.1.0)
       curb (>= 0.8.0, < 0.10)
-      rails (>= 3.2.1, < 5.3)
+      rails (>= 3.2.1, < 6.1)
       zip_tricks (>= 4.2.1, <= 5.0.0)
 
 PLATFORMS

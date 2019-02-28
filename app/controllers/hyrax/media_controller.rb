@@ -28,10 +28,10 @@ module Hyrax
           # Unzipped filename will be e.g. "Structured Light-2514nk481/bun_zipper_res2-nc580m649.ply"
           output_dirname = "#{m.title.join('-').tr('[]','')}-#{m.id}"
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
-          [f.original_file.uri.to_s, "#{output_dirname}/#{output_filename}"]
+          [f.original_file.uri.to_s, "#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
         Rails.logger.debug("Files for zip: #{files.inspect}")
-        file_mappings = files.lazy.map{|url,path| [open(url), path]}
+        file_mappings = files.lazy.map{|url,path,options| [open(url), path, options]}
         zipline(file_mappings, "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}.zip")
       end
     end
