@@ -19,6 +19,7 @@ module Hyrax
     before_action :set_fileset_visibility, only: [:create, :update]
     skip_load_and_authorize_resource only: [:zip]
 
+    # GET /concern/media/zip?ids[]=filesetid1&ids[]=filesetid2
     def zip
       if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
         params[:ids].uniq!

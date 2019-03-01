@@ -26,11 +26,6 @@ Rails.application.routes.draw do
         get :zip, action: :zip
       end
     end
-    namespaced_resources 'file_sets' do
-      collection do
-        get :zip, action: :zip
-      end
-    end
   end
 
   curation_concerns_basic_routes

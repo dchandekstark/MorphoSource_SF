@@ -4,12 +4,8 @@ module Hyrax
     include Blacklight::AccessControls::Catalog
     include Hyrax::Breadcrumbs
 
-    include ActionController::Streaming
-    include Zipline
-    require 'open-uri'
-
     before_action :authenticate_user!, except: [:show, :citation, :stats]
-    load_and_authorize_resource class: ::FileSet, except: [:show, :zip]
+    load_and_authorize_resource class: ::FileSet, except: :show
     before_action :build_breadcrumbs, only: [:show, :edit, :stats]
 
     # provides the help_text view method
@@ -68,17 +64,6 @@ module Hyrax
       flash[:error] = error.message
       logger.error "FileSetsController::update rescued #{error.class}\n\t#{error.message}\n #{error.backtrace.join("\n")}\n\n"
       render action: 'edit'
-    end
-
-    # GET /concern/file_sets/zip?ids[]=filesetid1&ids[]=filesetid2
-    def zip
-      if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
-        params[:ids].each{|i| authorize! :read, i}
-        files = ::FileSet.where(id: params[:ids]).map{|f| [f.original_file.uri.to_s, f.label]}
-        Rails.logger.debug("Files for zip: #{files.inspect}")
-        file_mappings = files.lazy.map{|url,path| [open(url), path]}
-        zipline(file_mappings, "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}.zip")
-      end
     end
 
     # GET /files/:id/stats
