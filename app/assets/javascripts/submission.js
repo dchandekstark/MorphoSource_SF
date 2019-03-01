@@ -15,6 +15,7 @@ $(document).on('ready', function(){
         $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
         saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
       }
+      $('#start_over').show();
     });
     
     $('#submission_choose_biospec_or_cho_continue').click(function(event){
@@ -143,6 +144,16 @@ $(document).on('ready', function(){
       return list.join(',');
     }
 
+    isTextValid = function(inputName) {
+      // this function check and make sure a input text box is filled and valid
+      if ($('input[name="' + inputName + '"]').val().length == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+
     isRadioSelected = function(inputName) {
       // this function check and make sure a radio button is selected
       if ($('input[name="' + inputName + '"]:checked').val() === undefined) {
@@ -170,6 +181,7 @@ $(document).on('ready', function(){
       location.reload();
     }
 
+    // trigger click events if needed
     if (getCookie('saved_clicks')) {
       saved_clicks = getCookie('saved_clicks');
       last_render = getCookie('last_render');
@@ -179,6 +191,10 @@ $(document).on('ready', function(){
       for (var i = 0; i < clickElements.length; i++) {
         //console.log('clicking ' + clickElements[i]);
         $(clickElements[i]).trigger('click');
+      }
+    } else {
+      if ($('div#submission_choose_raw_or_derived_media').length) {
+        $('#start_over').hide();
       }
     }
 

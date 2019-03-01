@@ -9,11 +9,12 @@
   <% else %>
     <div id="submission_select_cho">
       <%= f.input :cho_id,
-                  as: :radio_buttons,
+                  as: :select,
+                  :input_html => { :size => 1 },
                   collection: @docs.map{ |doc| [ doc.sortable_title, doc.id ]} %>
     </div>
     <div>
-      <%= f.submit 'Continue with selected Cultural Heritage Object', name: 'cho_select', class: 'btn btn-primary', onclick: 'return isRadioSelected("submission[cho_id]")'  %>
+      <%= f.submit 'Continue with selected Cultural Heritage Object', name: 'cho_select', class: 'btn btn-primary', onclick: 'return isDropdownSelected("submission[cho_id]")'  %>
     </div>
   <% end %>
   <div>

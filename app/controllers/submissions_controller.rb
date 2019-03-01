@@ -39,7 +39,7 @@ class SubmissionsController < ApplicationController
     # todo: is there a need to separate raw and derived flow in two if and else?
     if params['biospec_search'].present?
       @docs = search_biospec
-      if @docs.empty?
+      if @docs.nil? || @docs.empty?
         # if no search result, user might need to go back to initial step
         @submission.saved_step = ""
       else
@@ -232,8 +232,8 @@ class SubmissionsController < ApplicationController
       @submission.media_id = create_media(@media_create_params, media_uploaded_files)
     end
     clear_session_submission_settings
-    #render 'show'
-    redirect_to '/concern/media/' + @submission.media_id
+    render 'show'
+    #redirect_to '/concern/media/' + @submission.media_id
   end
 
   def create_biological_specimen(params)
