@@ -32,9 +32,12 @@ module Morphosource
     def filter_on_institution(hits)
       inst_doc = institution_doc
       inst_member_ids = inst_doc[Solrizer.solr_name('member_ids', :symbol)]
-#byebug
-      # todo: bug -- inst_member_ids is returning nil when searching for institution code. 
-      hits.select { |hit| inst_member_ids.include?(hit.id) }
+      if inst_member_ids.present?
+        hits.select { |hit| inst_member_ids.include?(hit.id) }
+      else
+        # inst_member_ids will return nil if institution code is not found, in that case, return empty set 
+        [] 
+      end
     end
 
     def institution_doc

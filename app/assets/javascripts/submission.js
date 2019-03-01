@@ -1,7 +1,7 @@
 $(document).on('ready', function(){
   
-  if ($('div[class="submission_flow"]').length) { // check if the page is submission new page 
-  
+  if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page 
+    cookie_expired_days = 90;
     // Begin Raw media flow
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
@@ -9,10 +9,13 @@ $(document).on('ready', function(){
       if (selected == 'Raw') {
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
       } else if (selected == 'Derived') {
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
       }
+      $('#start_over').show();
     });
     
     $('#submission_choose_biospec_or_cho_continue').click(function(event){
@@ -21,20 +24,13 @@ $(document).on('ready', function(){
       if (selected == 'biospec') {
         $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
         $('div#submission_biospec').addClass('show').removeClass('hide');
+        saveClick('#submission_biospec_or_cho_biospec,#submission_choose_biospec_or_cho_continue', false);
       } else if (selected == 'cho') {
         $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
         $('div#submission_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_biospec_or_cho_cho,#submission_choose_biospec_or_cho_continue', false);
       }
     });
-    
-
-    /* remove later
-    $('a#submission_show_create_biospec').click(function(event){
-      event.preventDefault();
-      $('div#submission_biospec_search').addClass('hide').removeClass('show');
-      $('div#submission_choose_create_biospec').addClass('hide').removeClass('show');;
-      $('div#submission_create_biospec').addClass('show').removeClass('hide');
-    }); */
 
     $('a#submission_show_create_cho').click(function(event){
       event.preventDefault();
@@ -58,17 +54,30 @@ $(document).on('ready', function(){
       event.preventDefault();
       $('div#submission_parents_in_ms').addClass('hide').removeClass('show');
       $('div#submission_parents_not_in_ms').addClass('show').removeClass('hide');
+      saveClick('#btn_parents_not_in_morphosource', false);
     });
     
+    saveClick = function(id, fromStart) {
+      var saved_clicks = '';
+      if (!fromStart && getCookie('saved_clicks')) {
+        var saved_clicks = getCookie('saved_clicks') + ',';
+      }
+      setCookie('saved_clicks', saved_clicks + id, cookie_expired_days);
+    }
+
     $('#btn_parent_media_how_to_proceed_continue').click(function(event){
       event.preventDefault();
       $('div#submission_parents_not_in_ms').addClass('hide').removeClass('show');
       if ( $('input[name="submission[parent_media_how_to_proceed]"]:checked').val() == 'now' ) {
         // start over
         $('div#submission_choose_raw_or_derived_media').addClass('show').removeClass('hide');
+        deleteCookie('saved_clicks');
+        deleteCookie('last_render');
+        deleteCookie('saved_step');
       } else {
         // go to phsyical object 
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
       }
       clearForms();
     });
@@ -78,14 +87,7 @@ $(document).on('ready', function(){
       event.preventDefault();
       if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
         // set a cookie to clear all session variables when loading the initial page
-        var cookieName = 'ms_submission_start_over';
-        var cookieValue = 'yes';
-        var now = new Date();
-        var time = now.getTime();
-        time += 60 * 60 * 1000 * 1; // 1 hr
-        now.setTime(time);
-        document.cookie = cookieName +"=" + cookieValue + ";expires=" + now.toUTCString()
-                          + ";path=/";
+        setCookie('ms_submission_start_over', 'yes', cookie_expired_days);
         location.href = "/submissions/new";
       }
     });
@@ -142,6 +144,16 @@ $(document).on('ready', function(){
       return list.join(',');
     }
 
+    isTextValid = function(inputName) {
+      // this function check and make sure a input text box is filled and valid
+      if ($('input[name="' + inputName + '"]').val().length == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+
     isRadioSelected = function(inputName) {
       // this function check and make sure a radio button is selected
       if ($('input[name="' + inputName + '"]:checked').val() === undefined) {
@@ -161,6 +173,58 @@ $(document).on('ready', function(){
         return true;
       }
     }
+    
+    gotoStep = function(pg, steps) {
+      event.preventDefault();
+      setCookie("last_render", pg, cookie_expired_days);
+      saveClick(steps);
+      location.reload();
+    }
 
-  }
+    // trigger click events if needed
+    if (getCookie('saved_clicks')) {
+      saved_clicks = getCookie('saved_clicks');
+      last_render = getCookie('last_render');
+      //console.log('saved_clicks = '+ saved_clicks);
+      //console.log('last_render = '+ last_render);
+      var clickElements = saved_clicks.split();
+      for (var i = 0; i < clickElements.length; i++) {
+        //console.log('clicking ' + clickElements[i]);
+        $(clickElements[i]).trigger('click');
+      }
+    } else {
+      if ($('div#submission_choose_raw_or_derived_media').length) {
+        $('#start_over').hide();
+      }
+    }
+
+  } // end if the page is submission flow page 
 });
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function deleteCookie(cname) {
+  var expires = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  
+  document.cookie = cname + "=;" + expires + ";path=/";
+}

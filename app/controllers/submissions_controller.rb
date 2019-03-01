@@ -7,22 +7,25 @@ class SubmissionsController < ApplicationController
   def new
     # clear session when user request to start all over
     if cookies[:ms_submission_start_over].present?
-        cookies.delete :ms_submission_start_over
         clear_session_submission_settings
     end
-    
     if session[:submission].present?
       # Continue where the user has left off
-      if session[:submission]['saved_step'] == "biospec_search"
+      # last_render saves the page that needs to be rendered if the user reload the page, or
+      # come back to when the user has left off later
+      # saved_step stores the last page usually. it's needed when, for example, the user needs to go back
+      # to new device after creating / selecting an institution. 
+      # if needed, read the var from session instead: session[:submission]['saved_step']
+      saved_step = cookies[:saved_step]
+      last_render = cookies[:last_render]
+      if last_render.present?
+        # certain pages require getting back the search result before rendering
+        if last_render == 'biospec'
           @docs = search_biospec
-          render 'biospec'
-      elsif session[:submission]['saved_step'] == "biospec_select"
-          render 'device'
-      elsif session[:submission]['saved_step'] == "cho_search"
+        elsif last_render == 'cho'
           @docs = search_cho
-          render 'cho'
-      elsif session[:submission]['saved_step'] == "cho_select"
-          render 'device'
+        end
+        render last_render
       end
     else
       session[:submission] ||= {}
@@ -35,73 +38,89 @@ class SubmissionsController < ApplicationController
     
     # todo: is there a need to separate raw and derived flow in two if and else?
     if params['biospec_search'].present?
-      @submission.saved_step = "biospec_search"
-      store_submission
       @docs = search_biospec
-      render 'biospec'
+      if @docs.nil? || @docs.empty?
+        # if no search result, user might need to go back to initial step
+        @submission.saved_step = ""
+      else
+        @submission.saved_step = "biospec_search"
+      end
+      store_submission
+      render_and_save 'biospec'
     elsif params['biospec_select'].present?
       @submission.saved_step = "biospec_select"
       session[:submission][:biospec_id] = submission_params[:biospec_id]
       store_submission
-      render 'device'
+      render_and_save 'device'
     elsif params['biospec_will_create'].present?
       # possibly need to store other flow data here
       @submission.saved_step = "biospec_will_create"
       store_submission
-      render 'institution'
-    elsif params['institution_select'].present?
-      session[:submission][:institution_id] = submission_params[:institution_id]
-      store_submission
+      render_and_save 'institution'
+    elsif params['institution_select'].present? || params['no_institution'].present?
+      if params['institution_select'].present?
+        session[:submission][:institution_id] = submission_params[:institution_id]
+      end
       if @submission.saved_step == "biospec_will_create"
         @submission.saved_step = "biospec_institution_select"
-        render 'biospec_create'
+        render_and_save 'biospec_create'
       elsif @submission.saved_step == "device_will_create"
         @submission.saved_step = "device_institution_select"
-        render 'device_create'
+        render_and_save 'device_create'
       elsif @submission.saved_step == "cho_will_create"
         @submission.saved_step = "cho_institution_select"
-        render 'cho_create'
+        render_and_save 'cho_create'
       else
         # should not end up here
       end
+      store_submission
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
-      #@submission.saved_step = "device_select"
+      @submission.saved_step = "device_select"
       store_submission
-      render 'image_capture'
+      render_and_save 'image_capture'
     elsif params['device_will_create'].present?
       # possibly need to store other flow data here
       @submission.saved_step = "device_will_create"
       store_submission
-      render 'institution'
+      render_and_save 'institution'
     elsif params['parent_media_select'].present? 
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       store_submission
-      render 'processing_event'
+      render_and_save 'processing_event'
     elsif params['parent_media_how_to_proceed_continue'].present? 
       session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
       store_submission
-      render 'new'
+      render_and_save 'new'
     elsif params['cho_search'].present?
       session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
       # todo: add the other 3 search fields here
       @submission.saved_step = "cho_search"
       store_submission
       @docs = search_cho
-      render 'cho'
+      render_and_save 'cho'
     elsif params['cho_select'].present?
       session[:submission][:cho_id] = submission_params[:cho_id]
       @submission.saved_step = "cho_select"
       store_submission
-      render 'device'
+      render_and_save 'device'
     elsif params['cho_will_create'].present?
       # possibly need to store other flow data here
       @submission.saved_step = "cho_will_create"
       store_submission
-      render 'institution'
+      render_and_save 'institution'
     else
       finish_submission
     end
+  end
+
+  def render_and_save(pg)
+    # save this page to render again if user reloads the page
+    cookies.permanent[:last_render] = pg 
+    if (pg != 'new')
+      cookies.delete :saved_clicks
+    end
+    render pg
   end
 
   def stage_biological_specimen
@@ -110,7 +129,7 @@ class SubmissionsController < ApplicationController
     store_submission
     biospec_model_params = Hyrax::BiologicalSpecimenForm.model_attributes(params[:biological_specimen])
     session[:submission_biospec_create_params] = biospec_model_params
-    render 'device'
+    render_and_save 'device'
   end
 
   def stage_cho
@@ -119,7 +138,7 @@ class SubmissionsController < ApplicationController
     store_submission
     cho_model_params = Hyrax::CulturalHeritageObjectForm.model_attributes(params[:cultural_heritage_object])
     session[:submission_cho_create_params] = cho_model_params
-    render 'device'
+    render_and_save 'device'
   end
 
   def stage_device
@@ -128,16 +147,17 @@ class SubmissionsController < ApplicationController
     store_submission
     device_model_params = Hyrax::DeviceForm.model_attributes(params[:device])
     session[:submission_device_create_params] = device_model_params
-    render 'image_capture'
+    render_and_save 'image_capture'
   end
 
   def stage_imaging_event
     reinstantiate_submission
     @submission.imaging_event_id = 'new'
+    @submission.saved_step = 'imaging_event_staged'
     store_submission
     imaging_event_model_params = Hyrax::ImagingEventForm.model_attributes(params[:imaging_event])
     session[:submission_imaging_event_create_params] = imaging_event_model_params
-    render 'media'
+    render_and_save 'media'
   end
 
   def stage_institution
@@ -147,11 +167,11 @@ class SubmissionsController < ApplicationController
     institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
     session[:submission_institution_create_params] = institution_model_params
     if @submission.saved_step == "device_will_create"
-      render 'device_create'
+      render_and_save 'device_create'
     elsif @submission.saved_step == "biospec_will_create"
-      render 'biospec_create'
+      render_and_save 'biospec_create'
     elsif @submission.saved_step == "cho_will_create"
-      render 'cho_create'
+      render_and_save 'cho_create'
     else
       #should not be here
     end
@@ -174,7 +194,7 @@ class SubmissionsController < ApplicationController
     store_submission
     processing_event_model_params = Hyrax::ProcessingEventForm.model_attributes(params[:processing_event])
     session[:submission_processing_event_create_params] = processing_event_model_params
-    render 'media'
+    render_and_save 'media'
   end
 
   def finish_submission
@@ -213,6 +233,7 @@ class SubmissionsController < ApplicationController
     end
     clear_session_submission_settings
     render 'show'
+    #redirect_to '/concern/media/' + @submission.media_id
   end
 
   def create_biological_specimen(params)
@@ -307,6 +328,10 @@ class SubmissionsController < ApplicationController
     session[:submission_processing_event_create_params] = nil
     session[:submission_institution_create_params] = nil
     session[:submission_media_create_params] = nil
+    cookies.delete :ms_submission_start_over
+    cookies.delete :saved_step
+    cookies.delete :last_render
+    cookies.delete :saved_clicks
   end
 
   def create_work(model, form_params)
@@ -365,6 +390,9 @@ class SubmissionsController < ApplicationController
                               cho_search_collection_code: @submission.cho_search_collection_code,
                               saved_step: @submission.saved_step
       }
+    if @submission.saved_step.present?
+      cookies.permanent[:saved_step] = @submission.saved_step
+    end
   end
 
   def submission_params
