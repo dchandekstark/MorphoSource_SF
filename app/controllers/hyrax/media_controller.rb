@@ -24,17 +24,18 @@ module Hyrax
       if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
         params[:ids].uniq!
         params[:ids].each{|i| authorize! :read, i} unless (Rails.env == 'test')
+        output_prefix = "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}"
         files = ::Media.where(id: params[:ids]).map{|m| m.file_sets}.flatten.map do |f|
           authorize!(:read, f.id) unless (Rails.env == 'test')
           m = f.parent
           # Unzipped filename will be e.g. "Structured Light-2514nk481/bun_zipper_res2-nc580m649.ply"
           output_dirname = "#{m.title.join('-').tr('[]','')}-#{m.id}"
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
-          [f.original_file.uri.to_s, "#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
+          [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
         Rails.logger.debug("Files for zip: #{files.inspect}")
         file_mappings = files.lazy.map{|url,path,options| [open(url), path, options]}
-        zipline(file_mappings, "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}.zip")
+        zipline(file_mappings, "#{output_prefix}.zip")
       end
     end
 
