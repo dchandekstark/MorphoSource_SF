@@ -11,7 +11,7 @@ module Morphosource
 
       # Allowed formats for uploads based on selected Media type
       mattr_accessor :all_formats do
-        [".avi", ".bmp", ".dcm", ".dicom", ".gif", ".glb", ".gltf", ".jp2", ".jpeg", ".jpg", ".m4v", ".mov", ".mp4", ".mpg", ".mpeg", ".mtl", ".obj", ".pdf", ".ply", ".png", ".stl", ".tif", ".tiff", ".wmv", ".wrl", ".x3d", ".zip"]
+        [".avi", ".bin", ".bmp", ".dcm", ".dicom", ".gif", ".glb", ".gltf", ".bin", ".jp2", ".jpeg", ".jpg", ".m4v", ".mov", ".mp4", ".mpg", ".mpeg", ".mtl", ".obj", ".pdf", ".ply", ".png", ".stl", ".tif", ".tiff", ".wmv", ".wrl", ".x3d", ".zip"]
       end
 
       mattr_accessor :image_formats do
@@ -31,7 +31,7 @@ module Morphosource
       end
 
       mattr_accessor :mesh_formats do
-        [".bmp", ".dcm", ".dicom", ".gif", ".glb", ".gltf", ".jp2", ".jpeg", ".jpg", ".mtl", ".obj", ".obj", ".ply", ".png", ".stl", ".tif", ".tiff", ".wrl", ".x3d", ".zip"]
+        [".bin", ".bmp", ".dcm", ".dicom", ".gif", ".glb", ".gltf", ".jp2", ".jpeg", ".jpg", ".mtl", ".obj", ".obj", ".ply", ".png", ".stl", ".tif", ".tiff", ".wrl", ".x3d", ".zip"]
       end
 
       # right now same as all formats
