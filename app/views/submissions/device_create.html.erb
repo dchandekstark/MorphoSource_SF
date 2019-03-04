@@ -1,4 +1,9 @@
-<div id="submission_create_device" class="hide">
+<% provide :page_title, t('morphosource.submission.page_title') %>
+<% provide :page_header do %>
+  <h1><%= t('morphosource.submission.page_header') %></h1>
+<% end %>
+
+<div class="submission_flow" id="submission_create_device">
   <%= simple_form_for @device_form, url: stage_device_submissions_url do |f| %>
     <div class="form-group">
       <%= render partial: 'work_creation_metadata', locals: { f: f } %>
@@ -8,3 +13,5 @@
     </div>
   <% end %>
 </div>
+
+<%= render(partial: 'footer') %>

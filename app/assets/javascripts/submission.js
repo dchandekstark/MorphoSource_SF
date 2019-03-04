@@ -1,32 +1,43 @@
-$(document).on('turbolinks:load', function(){
+$(document).on('ready', function(){
   
-  if ($('div[class="submission_flow"]').length) { // check if the page is submission new page 
-  
-    // possibly not needed. remove later
-    //$("#submission_device_id").select2();
-    //$("#submission_institution_id").select2();
-    //$('div#submission_new div#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');;
-    //$('div#submission_new div#submission_biospec').addClass('hide').removeClass('show');
-
-    //$('.new_media, .derived_media').addClass('hide').removeClass('show');
-    
+  if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page 
+    cookie_expired_days = 90;
     // Begin Raw media flow
-    $('input#submission_raw_or_derived_media_raw').click(function(event){
-      $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-      $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
-    });
-
-    $('input#submission_biospec_or_cho_biospec').click(function(event){
-      $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
-      $('div#submission_biospec').addClass('show').removeClass('hide');
-    });
-
-    $('a#submission_show_create_biospec').click(function(event){
+    $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
-      $('div#submission_biospec_search').addClass('hide').removeClass('show');
-      $('div#submission_choose_create_biospec').addClass('hide').removeClass('show');;
-      $('div#submission_create_biospec').addClass('show').removeClass('hide');
+      var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
+      if (selected == 'Raw') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
+      } else if (selected == 'Derived') {
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
+      }
+      $('#start_over').show();
     });
+    
+    $('#submission_choose_biospec_or_cho_continue').click(function(event){
+      event.preventDefault();
+      var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();
+      if (selected == 'biospec') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_biospec').addClass('show').removeClass('hide');
+        saveClick('#submission_biospec_or_cho_biospec,#submission_choose_biospec_or_cho_continue', false);
+      } else if (selected == 'cho') {
+        $('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
+        $('div#submission_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_biospec_or_cho_cho,#submission_choose_biospec_or_cho_continue', false);
+      }
+    });
+
+    $('a#submission_show_create_cho').click(function(event){
+      event.preventDefault();
+      $('div#submission_cho_search').addClass('hide').removeClass('show');
+      $('div#submission_choose_create_cho').addClass('hide').removeClass('show');;
+      $('div#submission_create_cho').addClass('show').removeClass('hide');
+    }); 
 
     $('a#submission_show_create_institution').click(function(event){
       event.preventDefault();
@@ -34,48 +45,53 @@ $(document).on('turbolinks:load', function(){
       $('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
-
-    $('a#submission_show_create_device').click(function(event){
-      event.preventDefault();
-      $('div#submission_device_select').addClass('hide').removeClass('show');
-      // the following line might not be needed.  remove it later
-      //$('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
-      $('div#submission_create_device').addClass('show').removeClass('hide');
-    });
-
-    $('input#submission_biospec_or_cho_cho').click(function(event){
-      //$('#submission_choose_biospec_or_cho').addClass('hide').removeClass('show');
-      alert('Not yet implemented');
-    });
-
+    
     // End Raw media flow
   
     // Begin Derived media flow 
-    $('input#submission_raw_or_derived_media_derived').click(function(event){
-      $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-      $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-    });
     
     $('#btn_parents_not_in_morphosource').click(function(event){
       event.preventDefault();
       $('div#submission_parents_in_ms').addClass('hide').removeClass('show');
       $('div#submission_parents_not_in_ms').addClass('show').removeClass('hide');
+      saveClick('#btn_parents_not_in_morphosource', false);
     });
     
+    saveClick = function(id, fromStart) {
+      var saved_clicks = '';
+      if (!fromStart && getCookie('saved_clicks')) {
+        var saved_clicks = getCookie('saved_clicks') + ',';
+      }
+      setCookie('saved_clicks', saved_clicks + id, cookie_expired_days);
+    }
+
     $('#btn_parent_media_how_to_proceed_continue').click(function(event){
       event.preventDefault();
       $('div#submission_parents_not_in_ms').addClass('hide').removeClass('show');
       if ( $('input[name="submission[parent_media_how_to_proceed]"]:checked').val() == 'now' ) {
         // start over
         $('div#submission_choose_raw_or_derived_media').addClass('show').removeClass('hide');
+        deleteCookie('saved_clicks');
+        deleteCookie('last_render');
+        deleteCookie('saved_step');
       } else {
         // go to phsyical object 
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
       }
       clearForms();
     });
     // End Derived media flow 
     
+    $('#start_over').click(function(event){
+      event.preventDefault();
+      if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
+        // set a cookie to clear all session variables when loading the initial page
+        setCookie('ms_submission_start_over', 'yes', cookie_expired_days);
+        location.href = "/submissions/new";
+      }
+    });
+
     var clearForms = function() {
       // if there are other forms (or radios) on the page that should not be cleared. Add condition here.
       $('form').each(function() {
@@ -113,6 +129,7 @@ $(document).on('turbolinks:load', function(){
         + '</div>';
       return row;
     }
+
     removeParent = function(id){
       event.preventDefault();
       $('div.' + id).remove();
@@ -127,13 +144,87 @@ $(document).on('turbolinks:load', function(){
       return list.join(',');
     }
 
-    /*  
-    $('.btn_remove_parent').click(function(event){
+    isTextValid = function(inputName) {
+      // this function check and make sure a input text box is filled and valid
+      if ($('input[name="' + inputName + '"]').val().length == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    isRadioSelected = function(inputName) {
+      // this function check and make sure a radio button is selected
+      if ($('input[name="' + inputName + '"]:checked').val() === undefined) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    isDropdownSelected = function(selectName) {
+      // this function check and make sure an option is selected in a dropdown
+      if ($('select[name="' + selectName + '"]').prop('selectedIndex') == 0) {
+        // nothing selected
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    gotoStep = function(pg, steps) {
       event.preventDefault();
-      var removeId = $(this).attr('data-remove-id').val();
-      alert('removing ' + removeId);
-      
-    }); 
-    */
-  }
+      setCookie("last_render", pg, cookie_expired_days);
+      saveClick(steps);
+      location.reload();
+    }
+
+    // trigger click events if needed
+    if (getCookie('saved_clicks')) {
+      saved_clicks = getCookie('saved_clicks');
+      last_render = getCookie('last_render');
+      //console.log('saved_clicks = '+ saved_clicks);
+      //console.log('last_render = '+ last_render);
+      var clickElements = saved_clicks.split();
+      for (var i = 0; i < clickElements.length; i++) {
+        //console.log('clicking ' + clickElements[i]);
+        $(clickElements[i]).trigger('click');
+      }
+    } else {
+      if ($('div#submission_choose_raw_or_derived_media').length) {
+        $('#start_over').hide();
+      }
+    }
+
+  } // end if the page is submission flow page 
 });
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function deleteCookie(cname) {
+  var expires = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  
+  document.cookie = cname + "=;" + expires + ";path=/";
+}

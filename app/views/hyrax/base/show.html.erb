@@ -5,6 +5,15 @@
 <div class="row work-type">
   <div class="col-xs-12">
     <%= render 'work_type', presenter: @presenter %>
+    <div class="pull-right">
+      <% if signed_in? %>
+        <% if @presenter.works_in_cart.include? params[:id] %>
+          <%= link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-danger' %>
+        <% else %>
+          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name), class: 'btn btn-info', :method => :post %>
+        <% end %>
+      <% end %>   
+    </div>
   </div>
   <div class="col-xs-12">&nbsp;</div>
   <div itemscope itemtype="http://schema.org/CreativeWork" class="col-xs-12">

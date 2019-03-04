@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  has_one :media_cart, dependent: :destroy
+  has_many :cart_items, through: :media_cart
+
+  after_create :create_user_media_cart
+
   # Connects this user object to Hydra behaviors.
   include Hydra::User
   # Connects this user object to Role-management behaviors.
@@ -8,8 +13,6 @@ class User < ApplicationRecord
   # Connects this user object to Hyrax behaviors.
   include Hyrax::User
   include Hyrax::UserUsageStats
-
-
 
   if Blacklight::Utils.needs_attr_accessible?
     attr_accessible :email, :password, :password_confirmation
@@ -32,5 +35,26 @@ class User < ApplicationRecord
   # in order to send emails
   def mailboxer_email(_object)
     email
+  end
+
+  # Create shopping cart for user when they create an account
+  def create_user_media_cart
+    MediaCart.create( { user_id: self.id } )
+  end
+
+  def items_in_cart
+    cart_items.select{ |i| i.downloaded? == false }
+  end
+
+  def work_ids_in_cart
+    items_in_cart.map{ |i| i.work_id }
+  end
+
+  def downloaded_items
+    cart_items.select{ |i| i.downloaded? == true }
+  end
+
+  def downloaded_work_ids
+    downloaded_items.map{ |i| i.work_id }
   end
 end
