@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
-  let(:user)  { User.create(id: 1, email: "example@email.com", password: "password") }
+  let(:user)  { User.create(email: "example@email.com", password: "password") }
   let(:media_cart)    { MediaCart.where(user_id: user.id)[0] }
-  let(:cartItem1)     { CartItem.create(id: 1, media_cart_id: media_cart.id, work_id: "aaa") }
-  let(:cartItem2)     { CartItem.create(id: 2, media_cart_id: media_cart.id, work_id: "bbb") }
-  let(:cartItem3)     { CartItem.create(id: 3, media_cart_id: media_cart.id, work_id: "ccc") }
-  let(:cartItem4)     { CartItem.create(id: 4, media_cart_id: media_cart.id, work_id: "ddd", downloaded: true) }
-  let(:cartItem5)     { CartItem.create(id: 5, media_cart_id: media_cart.id, work_id: "eee", downloaded: true) }
+  let(:cartItem1)     { CartItem.create(id: 1, media_cart_id: media_cart.id, work_id: "aaa", in_cart: true) }
+  let(:cartItem2)     { CartItem.create(id: 2, media_cart_id: media_cart.id, work_id: "bbb", in_cart: true) }
+  let(:cartItem3)     { CartItem.create(id: 3, media_cart_id: media_cart.id, work_id: "ccc", in_cart: true) }
+  let(:cartItem4)     { CartItem.create(id: 4, media_cart_id: media_cart.id, work_id: "ddd", in_cart: false, date_downloaded: Time.current) }
+  let(:cartItem5)     { CartItem.create(id: 5, media_cart_id: media_cart.id, work_id: "eee", in_cart: false, date_downloaded: Time.current) }
 
   let(:allCartItems)  { [cartItem1, cartItem2, cartItem3, cartItem4, cartItem5] }
 

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
   root 'hyrax/homepage#index'
-  
+
   namespace :hyrax, path: :concern do
     namespaced_resources 'media' do
       collection do
@@ -73,7 +73,9 @@ Rails.application.routes.draw do
       get 'dashboard/my/downloads', action: :previous_downloads, controller: :cart_items, as: 'my_downloads'
       get 'dashboard/my/cart', action: :media_cart, controller: :cart_items, as: 'my_cart'
       post 'add_to_cart', action: :create, controller: :cart_items
-      delete '/cart_items/:id', to: 'cart_items#destroy', as: 'remove_from_cart'
+      post 'batch_create_items', action: :batch_create, controller: :cart_items
+      delete '/cart_items', action: :batch_destroy, controller: :cart_items, as: 'batch_destroy_items'
+      get 'download_items', action: :download, controller: :cart_items, as: 'download_items'
     end
   end
 
