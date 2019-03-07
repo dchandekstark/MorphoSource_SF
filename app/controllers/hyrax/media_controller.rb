@@ -33,6 +33,9 @@ module Hyrax
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
           [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
+        aup_filename = 'MorphoSource_Download_Use_Agreement.pdf'
+        aup_path = File.join(Rails.root, %w{app assets documents}, aup_filename)
+        files.unshift([aup_path, "#{output_prefix}/#{aup_filename}", modification_time: Time.now])
         Rails.logger.debug("Files for zip: #{files.inspect}")
         file_mappings = files.lazy.map{|url,path,options| [open(url), path, options]}
         zipline(file_mappings, "#{output_prefix}.zip")
