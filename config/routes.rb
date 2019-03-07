@@ -1,5 +1,16 @@
 Rails.application.routes.draw do
 
+  scope module: :hyrax do
+    resources :physical_objects, only: [ :show ] do
+      get '/physical_objects/:id', to: 'physical_objects#show'
+    end
+  end
+#  scope module: :hyrax do
+#    resources :biological_specimens, only: [ :show ] do
+#      get '/biological_specimens/:id', to: 'biological_specimens#show'
+#    end
+#  end
+
   require "resque_web"
   mount ResqueWeb::Engine => "/queues"
 
