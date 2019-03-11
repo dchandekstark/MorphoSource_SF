@@ -1,0 +1,17 @@
+
+<div style="color:red">
+
+<h3> CHO GENERAL details </h3>
+
+
+
+
+<div>source of record: </div>
+Data Created On / Uploaded On 
+<%= presenter.attribute_to_html(:date_created, html_dl: true) %>
+<%= presenter.attribute_to_html(:date_uploaded, html_dl: true) %>
+<div>institution: <%= presenter.parent_institution_title %> </div>
+
+
+</div>
+<hr>

@@ -11,5 +11,13 @@ module Hyrax
 
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::BiologicalSpecimenPresenter
+
+    def showcase
+#       @presenter = Hyrax::BiologicalSpecimenPresenter
+       @presenter = show_presenter.new(curation_concern_from_search_results, current_ability, request)
+
+      render '/hyrax/physical_objects/showcase', presenter: @presenter
+    end
   end
+
 end

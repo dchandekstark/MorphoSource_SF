@@ -11,6 +11,7 @@ module Hyrax
 
 
 
+   	# todo: this method should not be needed any more. Remove later 
    	def parent_title(type)
     	title = ''
     	grouped_presenters(filtered_by: type).each_pair do |_, items| 
@@ -22,6 +23,31 @@ module Hyrax
 			title 
     end
 
+   	def parent_institution_title
+    	title = Institution.where('member_ids_ssim' => solr_document.id).first.title.first
+    	if title.nil?
+    		title = ''
+    	end
+			title
+    end
+
+   	def parent_institution_code
+    	code = Institution.where('member_ids_ssim' => solr_document.id).first.institution_code.first
+    	if code.nil?
+    		code = ''
+    	end
+			code
+    end
+
+    def general_details_partial
+    	'general_details_biological_specimens'
+#    	'general_details_' + @presenter.model_name.plural 
+    end
+
+
+    def identifiers_partial
+    	'identifiers_biological_specimens'
+    end
 
   end
 end
