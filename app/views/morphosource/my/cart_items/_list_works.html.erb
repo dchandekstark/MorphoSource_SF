@@ -2,7 +2,7 @@
 
   <td>
     <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
-    <%= render 'hyrax/batch_select/add_button', document: document %>&nbsp;
+    <%= render 'morphosource/batch_select/add_button', item: item %>&nbsp;
   </td>
 
   <td>
@@ -28,21 +28,23 @@
       </div>
     </div>
   </td>
-  <!-- Date Cart Item was created -->
-    <td class="date"><%= item.created_at.strftime("%Y-%m-%d") %></td>
-    <td><%= render_visibility_link document %></td>
-    <td>
-      <div style="display:flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
-        <% unless document.file_set_visibilities.nil? %>
-          <% document.file_set_visibilities.each do |visibility| %>
-            <%= visibility_badge(visibility) %>
-            <div style="height: 3px;"></div>
-          <% end %>
+  <td><%= render_visibility_link document %></td>
+  <td>
+    <div style="display:flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
+      <% unless document.file_set_visibilities.nil? %>
+        <% document.file_set_visibilities.each do |visibility| %>
+          <%= render_visibility_link document %>
+          <div style="height: 3px;"></div>
         <% end %>
-      </div>
-    </td>
-    <!-- Delete Cart Item -->
-    <td>
-      <%= link_to "Remove", main_app.remove_from_cart_path(item), class: 'btn btn-sm btn-danger delete', :method => :delete %>
-    </td>
-  </tr>
+      <% end %>
+    </div>
+  </td>
+
+  <% if @cart %>
+    <!-- Date Cart Item was created -->
+    <td class="date"><%= item.created_at.strftime("%Y-%m-%d") %></td>
+  <% else %>
+    <!-- Date Cart Item was downloaded -->
+    <td class="date"><%= item.date_downloaded.strftime("%Y-%m-%d") %></td>
+  <% end %>
+</tr>

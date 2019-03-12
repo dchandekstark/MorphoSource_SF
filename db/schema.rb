@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190211161505) do
+ActiveRecord::Schema.define(version: 20190306225507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,9 +30,10 @@ ActiveRecord::Schema.define(version: 20190211161505) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "media_cart_id", null: false
     t.string "work_id", null: false
-    t.boolean "downloaded", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "date_downloaded"
+    t.boolean "in_cart", default: true
     t.index ["media_cart_id"], name: "index_cart_items_on_media_cart_id"
     t.index ["work_id"], name: "index_cart_items_on_work_id"
   end
