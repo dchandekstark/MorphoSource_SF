@@ -189,7 +189,9 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
       end
       it "redirects to media/#zip with the work ids as params" do
         work_ids = [cartItem1.work_id, cartItem2.work_id]
-        expect(response).to redirect_to(zip_hyrax_media_index_path(ids: work_ids))
+        redirect_params = Rack::Utils.parse_query(URI.parse(response.location).query)
+        expect(response).to redirect_to %r(\Ahttp://test.host/concern/media/zip?)
+        expect(redirect_params["ids[]"]).to match_array(work_ids)
       end
     end
     context "the user clicks the 'download all' button" do
@@ -205,7 +207,9 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
       end
       it "redirects to media/#zip with the work ids as params" do
         work_ids = [cartItem1.work_id, cartItem2.work_id, cartItem3.work_id, cartItem4.work_id]
-        expect(response).to redirect_to(zip_hyrax_media_index_path(ids: work_ids))
+        redirect_params = Rack::Utils.parse_query(URI.parse(response.location).query)
+        expect(response).to redirect_to %r(\Ahttp://test.host/concern/media/zip?)
+        expect(redirect_params["ids[]"]).to match_array(work_ids)
       end
     end
   end
