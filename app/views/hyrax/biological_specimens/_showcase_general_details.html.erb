@@ -5,16 +5,18 @@
 
 
 
-
 <%= presenter.attribute_to_html(:description, label: 'Description', html_dl: true) %>
 <%= presenter.attribute_to_html(:sex, label: 'Sex', html_dl: true) %>
 <%= presenter.attribute_to_html(:is_type_specimen, html_dl: true) %>
+
 <div>source of record: </div>
 Data Created On / Uploaded On 
 <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
 <%= presenter.attribute_to_html(:date_uploaded, html_dl: true) %>
+
 <div>institution: <%= presenter.parent_institution_title %> </div>
 
+<%= presenter.attribute_to_html(:publisher, html_dl: true) %>
 
 </div>
 <hr>

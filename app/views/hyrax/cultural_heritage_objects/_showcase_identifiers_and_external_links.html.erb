@@ -1,0 +1,24 @@
+
+<div style="color:blue">
+
+<h3> cho IDENTIFIERS AND EXTERNAL LINKS </h3>
+
+
+
+<%= presenter.attribute_to_html(:identifier, html_dl: true) %>
+<div>institution code: <%= presenter.parent_institution_code %> </div>
+<%= presenter.attribute_to_html(:collection_code, label: 'Collection Code', html_dl: true) %>
+<%= presenter.attribute_to_html(:catalog_number, html_dl: true) %>
+
+
+<%= presenter.attribute_to_html(:related_url, render_as: :linked) %>
+
+https://www.idigbio.org/portal/records/
+<%= presenter.attribute_to_html(:idigbio_uuid, render_as: :linked) %>
+
+https://www.idigbio.org/portal/recordsets/
+<%= presenter.attribute_to_html(:idigbio_recordset_id, render_as: :linked) %>
+
+
+</div>
+<hr>

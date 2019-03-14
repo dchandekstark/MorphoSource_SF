@@ -1,6 +1,23 @@
-<%= render "showcase_general_details", presenter: @presenter %>
+<%= render 'work_title', presenter: @presenter %>
 
-<%= render "showcase_identifiers", presenter: @presenter %>
+<%= render @presenter.general_details_partial, presenter: @presenter %>
+
+<%= render @presenter.taxonomy_partial, presenter: @presenter %>
+
+<%= render @presenter.identifiers_and_external_links_partial, presenter: @presenter %>
+
+<%= render @presenter.time_and_place_details_partial, presenter: @presenter %>
+
+<%= render @presenter.bibliographic_citations_partial, presenter: @presenter %>
+
+<%= render @presenter.media_partial, presenter: @presenter %>
+
+<%= render @presenter.collections_partial, presenter: @presenter %>
+
+<%= render @presenter.tags_partial, presenter: @presenter %>
+
+<%= render @presenter.citation_and_download_partial, presenter: @presenter %>
+
 
 <div class="row work-type">
   <div class="col-sm-12">

@@ -13,7 +13,7 @@ module Hyrax
     self.show_presenter = Hyrax::CulturalHeritageObjectPresenter
 
     def showcase
-       @presenter = show_presenter.new(curation_concern_from_search_results, current_ability, request)
+      @presenter = show_presenter.new(curation_concern_from_search_results, current_ability, request)
       render '/hyrax/physical_objects/showcase', presenter: @presenter
     end
 

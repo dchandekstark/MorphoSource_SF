@@ -1,0 +1,20 @@
+
+<div style="color:red">
+
+<h3> TIME AND PLACE DETAILS </h3>
+
+
+<%= presenter.attribute_to_html(:periodic_time, label: 'Time Period', html_dl: true) %>
+
+<%= presenter.attribute_to_html(:based_near_label, label: 'Current Location', html_dl: true) %>
+
+<%= presenter.attribute_to_html(:original_location, html_dl: true) %>
+
+<%= presenter.attribute_to_html(:geographic_coordinates, html_dl: true) %>
+
+<%= presenter.attribute_to_html(:numeric_time, label: 'Absolute Age', html_dl: true) %>
+
+
+
+</div>
+<hr>

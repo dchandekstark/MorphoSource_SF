@@ -41,5 +41,59 @@ module Morphosource
       current_ability.current_user.downloaded_work_ids 
     end
 
+    # physical objects showcase page methods
+    def parent_institution_title
+      title = Institution.where('member_ids_ssim' => solr_document.id).first.title.first
+      if title.nil?
+        title = ''
+      end
+      title
+    end
+
+    def parent_institution_code
+      code = Institution.where('member_ids_ssim' => solr_document.id).first.institution_code.first
+      if code.nil?
+        code = ''
+      end
+      code
+    end
+
+
+    def general_details_partial
+      'showcase_general_details'
+    end
+
+    def taxonomy_partial
+      'showcase_taxonomy'
+    end
+
+    def identifiers_and_external_links_partial
+      'showcase_identifiers_and_external_links'
+    end
+
+    def time_and_place_details_partial
+      '/hyrax/physical_objects/showcase_time_and_place_details'
+    end
+
+    def bibliographic_citations_partial
+      '/hyrax/physical_objects/showcase_bibliographic_citations'
+    end
+
+    def media_partial
+      '/hyrax/physical_objects/showcase_media'
+    end
+
+    def collections_partial
+      '/hyrax/physical_objects/showcase_collections'
+    end
+
+    def tags_partial
+      '/hyrax/physical_objects/showcase_tags'
+    end
+
+    def citation_and_download_partial
+      '/hyrax/physical_objects/showcase_citation_and_download'
+    end
+
   end
 end
