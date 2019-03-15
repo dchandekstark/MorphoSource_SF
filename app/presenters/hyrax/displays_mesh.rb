@@ -22,7 +22,7 @@ module Hyrax
       #   Hyrax.config.iiif_image_size_default
       # )
 
-      format = mesh_mime_type;
+      format = mime_type;
       type = 'PhysicalObject';
 
       # @see https://github.com/samvera-labs/iiif_manifest TODO: Change this to eventual mesh3D fork?

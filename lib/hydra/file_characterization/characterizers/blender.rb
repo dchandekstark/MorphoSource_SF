@@ -7,7 +7,7 @@ module Hydra::FileCharacterization::Characterizers
     protected
 
       def command
-        "#{tool_path}/blender --background --python #{tool_path}/scripts/blender_characterize_mesh.py -- #{filename}"
+        "#{tool_path}/blender --background --factory-startup --addons io_scene_gltf2 --python #{tool_path}/scripts/blender_characterize_mesh.py -- #{filename}"
       end
   
       # Remove any non-XML output that precedes the <?xml> tag
