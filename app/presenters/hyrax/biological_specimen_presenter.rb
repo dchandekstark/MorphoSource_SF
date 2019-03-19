@@ -8,13 +8,5 @@ module Hyrax
              :periodic_time, :vouchered, :idigbio_recordset_id, :idigbio_uuid, :is_type_specimen, :occurrence_id, :sex,
              :geographic_coordinates, :member_ids,  to: :solr_document
   
-
-    def parent_media
-      byebug
-       
-#      media_id = Media.where('member_ids_ssim' => solr_document.id).first
- #     media_id
-    end
-
   end
 end

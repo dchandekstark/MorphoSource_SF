@@ -178,7 +178,7 @@ class SolrDocument
   end
 
   def member_ids
-    self[Solrizer.solr_name('member_ids', :stored_searchable)]
+    self[Solrizer.solr_name('member_ids', :symbol)]
   end
 
   # Biological Specimens only

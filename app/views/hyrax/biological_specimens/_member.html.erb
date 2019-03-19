@@ -1,0 +1,6 @@
+  <div class="thumbnail col-xs-12" style="display:inline-block;width:160px;height:240px">
+    <%= render_thumbnail_tag member %><br>
+    <%= link_to(member.link_name, contextual_path(member, @presenter)) %><br>
+    <%= member.part %><br>
+    <%= member.modality %><br>
+  </div>

@@ -1,0 +1,12 @@
+
+
+<%  array_of_ids = presenter.list_of_item_ids_to_display %>
+
+<h4><%= array_of_ids.count %> MEDIA REPRESENTING PHYSICAL OBJECT </h4>
+
+<%  members = presenter.member_presenters_for(array_of_ids) %>
+<% if members.present? %>
+
+    <%= render partial: 'member', collection: members %>
+
+<% end %>

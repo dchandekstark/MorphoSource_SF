@@ -58,6 +58,42 @@ module Morphosource
       code
     end
 
+    def list_of_item_ids_to_display
+      # get the media from
+      # BiologicalSpecimen > ImagingEvent > Media > File set
+      child_ids = solr_document.member_ids  # todo: might need to handle more than one members
+      imaging_event = ImagingEvent.where('id' => child_ids).first
+      temp = nil
+      media_file_set_ids = []
+
+      if imaging_event.present?
+        child_ids = imaging_event.member_ids  # todo: might need to handle more than one members
+        media = Media.where('id' => child_ids).first
+        
+        if media.present?
+          media_file_set_ids = media.file_set_ids
+          # Find child media: Media > ProcessingEvent > Media
+          media.member_ids.each do |id|
+            if ProcessingEvent.where('id' => id).present?
+              temp = ProcessingEvent.where('id' => id).first
+            end
+          end
+          if temp.present?
+            processing_event = temp
+            child_ids = processing_event.member_ids  # todo: might need to handle more than one members
+            child_media = Media.where('id' => child_ids).first
+            child_media_file_set_ids = child_media.file_set_ids
+          end
+  
+        end
+      end
+      # add child medias if any
+      if child_media_file_set_ids.present?
+        media_file_set_ids += child_media_file_set_ids
+      end
+      media_file_set_ids
+    end
+
 
     def general_details_partial
       'showcase_general_details'
