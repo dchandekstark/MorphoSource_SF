@@ -1,20 +1,5 @@
 Rails.application.routes.draw do
 
-#  scope module: :hyrax do
-#    resources :physical_objects, only: [ :show ] do
-#      get '/physical_objects/:id', to: 'physical_objects#show'
-#    end
-#  end
-
-  scope module: :hyrax do
-      get 'biological_specimens/:id', to: 'biological_specimens#showcase'
-  end
-
-  scope module: :hyrax do
-      get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
-  end
-
-
   require "resque_web"
   mount ResqueWeb::Engine => "/queues"
 
@@ -65,13 +50,6 @@ Rails.application.routes.draw do
 
   # for now, redirect to submission flow initial page when using browser reload or back button
   get '/submissions', to: redirect('/submissions/new')
-  get '/submissions/stage_biological_specimen', to: redirect('/submissions/new')
-  get '/submissions/stage_device', to: redirect('/submissions/new')
-  get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
-  get '/submissions/stage_institution', to: redirect('/submissions/new')
-  get '/submissions/stage_media', to: redirect('/submissions/new')
-  get '/submissions/stage_processing_event', to: redirect('/submissions/new')
-  get '/submissions/stage_cho', to: redirect('/submissions/new')
 
   scope module: :morphosource do
     scope module: :my do
@@ -80,6 +58,15 @@ Rails.application.routes.draw do
       post 'add_to_cart', action: :create, controller: :cart_items
       delete '/cart_items/:id', to: 'cart_items#destroy', as: 'remove_from_cart'
     end
+  end
+
+  # Physical Object show case pages
+  scope module: :hyrax do
+    get 'biological_specimens/:id', to: 'biological_specimens#showcase'
+  end
+
+  scope module: :hyrax do
+    get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
   end
 
 end

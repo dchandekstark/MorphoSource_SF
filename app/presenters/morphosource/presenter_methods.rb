@@ -58,7 +58,9 @@ module Morphosource
       code
     end
 
-    def list_of_item_ids_to_display
+    # this method is cloned from list_of_item_ids_to_display (for defaut view), 
+    # to get a list of media images for PO showpage
+    def list_of_item_ids_to_display_for_showpage
       # get the media from
       # BiologicalSpecimen > ImagingEvent > Media > File set
       child_ids = solr_document.member_ids  # todo: might need to handle more than one members
@@ -94,7 +96,7 @@ module Morphosource
       media_file_set_ids
     end
 
-
+    # methods for showcase partials
     def showcase_general_details_partial
       'showcase_general_details'
     end
