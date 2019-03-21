@@ -1,7 +1,7 @@
 
-<%= render 'work_title', presenter: @presenter %>
-
+<%= render @presenter.showcase_work_title_partial, presenter: @presenter %>
 <%= render @presenter.showcase_general_details_partial, presenter: @presenter %>
+<%= render @presenter.showcase_preview_image_partial, presenter: @presenter %>
 <%= render @presenter.showcase_taxonomy_partial, presenter: @presenter %>
 <%= render @presenter.showcase_identifiers_and_external_links_partial, presenter: @presenter %>
 <%= render @presenter.showcase_time_and_place_details_partial, presenter: @presenter %>

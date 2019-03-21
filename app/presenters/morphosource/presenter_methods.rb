@@ -97,6 +97,18 @@ module Morphosource
     end
 
     # methods for showcase partials
+    def showcase_work_title_partial
+      'showcase_work_title'
+    end
+
+    def showcase_show_actions_partial
+      '/hyrax/physical_objects/showcase_show_actions'
+    end
+
+    def showcase_preview_image_partial
+      'showcase_preview_image'
+    end
+
     def showcase_general_details_partial
       'showcase_general_details'
     end

@@ -14,22 +14,11 @@ div {border:1px solid green;}
   </head>
 
   <body>
-    <div class="skip-to-content">
-      <%= link_to "Skip to Content", "#skip-to-content", data: { turbolinks: false } %>
-    </div>
+
     <%= render '/masthead' %>
-    <%= content_for(:navbar) %>
-    <%= content_for(:precontainer_content) %>
+
     <div id="content-wrapper" class="container" role="main">
-      <%= render '/flash_msg' %>
-      <%= render_breadcrumbs builder: Hyrax::BootstrapBreadcrumbsBuilder %>
-      <% if content_for?(:page_header) %>
-        <div class="row">
-          <div class="col-xs-12 main-header">
-            <%= yield(:page_header) %>
-          </div>
-        </div>
-      <% end %>
+
 
         <a name="skip-to-content" id="skip-to-content"></a>
         <%= content_for?(:content) ? yield(:content) : yield %>

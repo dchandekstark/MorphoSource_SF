@@ -34,11 +34,19 @@ module Hyrax
     end
 
     def in_collection_badge
-      in_collection_badge_class.new(solr_document.vouchered.first).render
+      in_collection_badge_class.new(solr_document.vouchered).render
     end
 
     def in_collection_badge_class
       InCollectionBadge
+    end
+
+    def supplied_record_badge
+      supplied_record_badge_class.new(solr_document.idigbio_uuid).render
+    end
+
+    def supplied_record_badge_class
+      SuppliedRecordBadge
     end
 
     def display_microdata?

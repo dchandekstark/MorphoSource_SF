@@ -1,0 +1,16 @@
+<% presenter.title.each_with_index do |title, index| %>
+  <div class="row">
+    <div class="col-sm-8">
+        <h2><%= title %>
+          <small class="text-muted">
+            <span class="label label-primary">Cultural Heritage Object</span> 
+            <%= presenter.in_collection_badge %> 
+            <%= presenter.supplied_record_badge %> 
+          </small>
+        </h2>
+    </div>
+    <div class="col-sm-4 text-right">
+        <%= render @presenter.showcase_show_actions_partial, presenter: presenter %>
+    </div>
+  </div>
+<% end %>

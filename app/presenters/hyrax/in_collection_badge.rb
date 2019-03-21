@@ -16,10 +16,14 @@ module Hyrax
     private
 
       def text
-        if @is_voucher == 'Yes'
-          'In Collection'
+        if @is_voucher.present?
+          if @is_voucher.first == 'Yes'
+            'In Collection'
+          else
+            'Not in Collection'
+          end
         else
-          'Not in Collection'
+          # should not be here since the field is set by a dropdown Yes / No
         end
       end
 
