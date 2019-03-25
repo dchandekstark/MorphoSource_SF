@@ -22,8 +22,8 @@ RSpec.describe BiologicalSpecimen do
       expect(subject.valid_parent_concerns).to match_array([Institution])
     end
 
-    it "has ImagingEvent and Attachment as valid child concerns" do
-      expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
+    it "has ImagingEvent, Attachment, and Taxonomy as valid child concerns" do
+      expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment, Taxonomy])
     end
 
   end
@@ -41,7 +41,7 @@ RSpec.describe BiologicalSpecimen do
       end
 
       it "has ImagingEvent and Attachment as valid child concerns" do
-        expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
+        expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment, Taxonomy])
       end
 
     end
