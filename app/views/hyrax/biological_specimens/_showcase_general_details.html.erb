@@ -1,10 +1,5 @@
 
-<div style="color:red">
-
-<h3> GENERAL details </h3>
-
-
-
+<h3> GENERAL DETAILS </h3>
 <%= presenter.attribute_to_html(:description, label: 'Description', html_dl: true) %>
 <%= presenter.attribute_to_html(:sex, label: 'Sex', html_dl: true) %>
 <%= presenter.attribute_to_html(:is_type_specimen, html_dl: true) %>
@@ -17,6 +12,3 @@ Data Created On / Uploaded On
 <div>institution: <%= presenter.parent_institution_title %> </div>
 
 <%= presenter.attribute_to_html(:publisher, html_dl: true) %>
-
-</div>
-<hr>

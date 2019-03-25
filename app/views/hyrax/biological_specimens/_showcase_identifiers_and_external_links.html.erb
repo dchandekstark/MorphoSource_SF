@@ -1,11 +1,4 @@
-
-<div style="color:blue">
-
 <h3> IDENTIFIERS AND EXTERNAL LINKS </h3>
-
-
-
-
 <%= presenter.attribute_to_html(:occurrence_id, label: 'Occurrence ID', html_dl: true) %>
 <%= presenter.attribute_to_html(:identifier, html_dl: true) %>
 <div>institution code: <%= presenter.parent_institution_code %> </div>
@@ -21,8 +14,3 @@ https://www.idigbio.org/portal/records/
 https://www.idigbio.org/portal/recordsets/
 <%= presenter.attribute_to_html(:idigbio_recordset_id, render_as: :linked) %>
 
-
-
-
-</div>
-<hr>

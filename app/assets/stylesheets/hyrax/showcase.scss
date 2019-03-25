@@ -1,0 +1,65 @@
+div.showcase {
+
+
+	/* div {border:1px dotted red;} */
+
+	@media (min-width: 600px) {
+
+
+	}
+
+	/* .label-ms-badge {
+		background-color: red;
+	} */
+	
+	.show-actions {
+	  padding: 15px 0;
+	}
+
+	.badge-wrapper {
+		display: block;
+
+		div {
+			margin-top: 6px;		
+			display: inline-block;	
+		}
+	}
+
+	#po-title {
+		padding-bottom: 8px;
+		border-bottom: 2px solid #337ab7;
+	}
+
+	.dropdown-menu, .twitter-typeahead .tt-menu {
+		min-width: 88px;
+	}
+
+	h3 {
+		background-color: #efefef;	
+		padding: 12px 20px;
+    font-size: 1.8vw;
+	}
+
+	div.preview {
+		margin-top: 20px;
+		background-color: #efefef;
+		border: 1px solid #efefef;
+	}
+
+	.preview-image {
+		width:70%;
+    margin: 10vw auto;
+    display: block;
+
+  	@media (min-width: 768px) {
+			width:35%;
+		}
+	}
+
+	.thumbnail {
+		display:inline-block;
+		width:33.3%;
+		height:240px;
+	}
+
+}

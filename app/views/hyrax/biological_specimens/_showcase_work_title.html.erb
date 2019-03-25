@@ -1,15 +1,15 @@
 <% presenter.title.each_with_index do |title, index| %>
   <div class="row">
-    <div class="col-sm-8">
-        <h2><%= title %>
-          <small class="text-muted">
-            <span class="label label-primary">Biological Specimen Object</span> 
-            <%= presenter.in_collection_badge %> 
-            <%= presenter.supplied_record_badge %> 
+    <div class="col-sm-9">
+        <h2><div id="po-title"><%= title %></div>
+          <small class="text-muted badge-wrapper">
+            <div><span class="label label-primary">Biological Specimen Object</span></div>
+            <div><%= presenter.in_collection_badge %></div>
+            <div><%= presenter.supplied_record_badge %></div>
           </small>
         </h2>
     </div>
-    <div class="col-sm-4 text-right">
+    <div class="col-sm-3 text-right">
         <%= render @presenter.showcase_show_actions_partial, presenter: presenter %>
     </div>
   </div>
