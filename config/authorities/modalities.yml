@@ -13,8 +13,8 @@ terms:
   - id: PositronEmissionTomography
     term: Positron Emission Tomography (PET)
     active: true
-  - id: SynchotronImaging
-    term: Synchotron Imaging
+  - id: SynchrotronImaging
+    term: Synchrotron Imaging
     active: true
   - id: NeutrinoImaging
     term: Neutrino Imaging
