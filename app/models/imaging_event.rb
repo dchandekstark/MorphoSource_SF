@@ -1,6 +1,7 @@
 class ImagingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
+  after_create :add_id_to_title
 
   self.work_requires_files = false
   self.indexer = ImagingEventIndexer
@@ -24,4 +25,9 @@ class ImagingEvent < Morphosource::Works::Base
 #    index.as :stored_searchable
  # end
 
+  private
+    def add_id_to_title
+      self.title.set("IE#{self.id.to_s}: #{self.title.first.to_s}")
+      self.save!
+    end
 end
