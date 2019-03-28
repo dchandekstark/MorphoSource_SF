@@ -9,10 +9,38 @@ module Hyrax
     include Hyrax::ChildWorkRedirect
     self.curation_concern_type = ::Media
 
+    include ActionController::Streaming
+    include Zipline
+    require 'open-uri'
+
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::MediaPresenter
 
     before_action :set_fileset_visibility, only: [:create, :update]
+    skip_load_and_authorize_resource only: [:zip]
+
+    # GET /concern/media/zip?ids[]=filesetid1&ids[]=filesetid2
+    def zip
+      if params[:ids] && params[:ids].is_a?(Array) && params[:ids].any?
+        params[:ids].uniq!
+        params[:ids].each{|i| authorize! :read, i} unless (Rails.env == 'test')
+        output_prefix = "morphosource-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}"
+        files = ::Media.where(id: params[:ids]).map{|m| m.file_sets}.flatten.map do |f|
+          authorize!(:read, f.id) unless (Rails.env == 'test')
+          m = f.parent
+          # Unzipped filename will be e.g. "Structured Light-2514nk481/bun_zipper_res2-nc580m649.ply"
+          output_dirname = "#{m.title.join('-').tr('[]','')}-#{m.id}"
+          output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
+          [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
+        end
+        aup_filename = 'MorphoSource_Download_Use_Agreement.pdf'
+        aup_path = File.join(Rails.root, %w{app assets documents}, aup_filename)
+        files.unshift([aup_path, "#{output_prefix}/#{aup_filename}", modification_time: Time.now])
+        Rails.logger.debug("Files for zip: #{files.inspect}")
+        file_mappings = files.lazy.map{|url,path,options| [open(url), path, options]}
+        zipline(file_mappings, "#{output_prefix}.zip")
+      end
+    end
 
     # Overriding WorksControllerBehavior to add file format validation
     # Could not do this as an ActiveModel validation because new file uploads are not added until after create
