@@ -1,7 +1,7 @@
 class Ability
   include Hydra::Ability
 
-  include Hyrax::Ability
+  include Morphosource::Ability
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
   # Define any customized permissions here.
@@ -23,6 +23,7 @@ class Ability
 
     if registered_user?
       can [ :create, :stage_biological_specimen, :stage_cultural_heritage_object, :stage_device, :stage_imaging_event, :stage_institution, :stage_media, :stage_processing_event, :stage_cho ], Submission
+      can [ :zip ], Media
       can [ :showcase ], BiologicalSpecimen
       can [ :showcase ], CulturalHeritageObject
     end
