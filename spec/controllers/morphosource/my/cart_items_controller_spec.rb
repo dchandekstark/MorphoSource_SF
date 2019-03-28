@@ -168,7 +168,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
       it "displays a flash message" do
         get :batch_create, params: {:batch_document_ids => [cartItem7.id, cartItem8.id]}
-        expect(response.flash[:notice]).to eq("0 Items Added to Cart; 2 Items: Test Media Work, Test Work Title Already in Your Cart.")
+        expect(response.flash[:notice]).to eq("0 Items Added to Cart; 2 Items: Maaa: Test Media Work, Test Work Title Already in Your Cart.")
       end
     end
   end
