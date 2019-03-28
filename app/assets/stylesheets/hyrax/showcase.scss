@@ -1,39 +1,60 @@
 div.showcase {
 
-
+	max-width: 1200px;
+	border: 2px solid #efefef;
+	margin-top: 18px;
+	
 	/* div {border:1px dotted red;} */
-
-	@media (min-width: 600px) {
-
-
-	}
 
 	/* .label-ms-badge {
 		background-color: red;
 	} */
+
 	
 	.show-actions {
-	  padding: 15px 0;
+		 padding: 3.5vw 1vw 0 0;
+  	@media (min-width: 768px) {
+		  padding: 1.9vw 1vw 0 0;
+		}
 	}
 
 	.badge-wrapper {
 		display: block;
 
 		div {
-			margin-top: 6px;		
 			display: inline-block;	
+		}
+
+		.label {
+			font-size: 1.6vw;
+	  	@media (min-width: 768px) {
+	  		font-size: 70%; 
+			}
+
 		}
 	}
 
+	#showcase-title-wrapper {
+		background-color: #efefef;
+	}
+
 	#showcase-title {
+		margin-bottom: 0.5vw;
 		padding-bottom: 8px;
 		border-bottom: 2px solid #337ab7;
+		font-size: 4vw;
+  	@media (min-width: 768px) {
+  		font-size: 3vw; 
+		}
 	}
 
 	.dropdown-menu, .twitter-typeahead .tt-menu {
 		min-width: 88px;
 	}
 
+	h2 {
+		margin-top: 10px;
+	}
 	h3 {
 		background-color: #efefef;	
 		padding: 12px 20px;
@@ -56,14 +77,15 @@ div.showcase {
 		}
 	}
 
-	.thumbnail {
+	.media-block .thumbnail {
 		display:inline-block;
-		width:33.3%;
-		height:240px;
+		border: none;
 	}
 
+	.row {
+		padding:4px 12px;		
+	}
 	.showcase-label, .showcase-value {
-		padding:4px 38px;
     font-size: 14px;
 	}
 
