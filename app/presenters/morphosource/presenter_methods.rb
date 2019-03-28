@@ -58,6 +58,14 @@ module Morphosource
       code
     end
 
+    def source_of_record
+      if solr_document.idigbio_uuid.present?
+        'iDigBio'
+      else
+        ''
+      end
+    end
+
     # this method is cloned from list_of_item_ids_to_display (for defaut view), 
     # to get a list of media images for PO showpage
     def list_of_item_ids_to_display_for_showpage

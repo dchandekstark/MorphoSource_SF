@@ -25,7 +25,7 @@ div.showcase {
 		}
 	}
 
-	#po-title {
+	#showcase-title {
 		padding-bottom: 8px;
 		border-bottom: 2px solid #337ab7;
 	}
@@ -37,7 +37,7 @@ div.showcase {
 	h3 {
 		background-color: #efefef;	
 		padding: 12px 20px;
-    font-size: 1.8vw;
+    font-size:16px;
 	}
 
 	div.preview {
@@ -61,5 +61,19 @@ div.showcase {
 		width:33.3%;
 		height:240px;
 	}
+
+	.showcase-label, .showcase-value {
+		padding:4px 38px;
+    font-size: 14px;
+	}
+
+	/*
+	h3 {
+    font-size: 1.8vw; 
+	}
+	div {
+    font-size: 1.6vw; 		
+	}
+	*/
 
 }
