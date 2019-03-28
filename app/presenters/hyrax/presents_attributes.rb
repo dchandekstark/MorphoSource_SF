@@ -33,6 +33,7 @@ module Hyrax
       PermissionBadge
     end
 
+    # Begin Customization for MS 2.0: badges for physical object showcase page
     def in_collection_badge
       in_collection_badge_class.new(solr_document.vouchered).render
     end
@@ -48,6 +49,7 @@ module Hyrax
     def supplied_record_badge_class
       SuppliedRecordBadge
     end
+    # End Customization for MS 2.0: badges for physical object showcase page
 
     def display_microdata?
       Hyrax.config.display_microdata?
