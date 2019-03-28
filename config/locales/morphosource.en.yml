@@ -12,6 +12,7 @@ en:
       my:
         heading:
           file_visibility: 'File Visibility'
+          date_downloaded: 'Date Downloaded'
     validation:
       missing:
         title: 'Your work must have a title.'

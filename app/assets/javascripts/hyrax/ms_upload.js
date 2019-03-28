@@ -8,7 +8,7 @@ $( document ).ready(function() {
     Blacklight.onLoad(function() {
       var options = {
           maxNumberOfFiles:10,
-          acceptFileTypes: /(\.|\/)(zip|ply|stl|obj|x3d|glb|gltf|wrl|png|gif|bmp|dcm|dicom|jpe?g|jpeg2000|tif?f|mtl|pdf|wmv|mov|avi|mpe?g|m4v)$/i
+          acceptFileTypes: /(\.|\/)(zip|ply|stl|obj|x3d|glb|gltf|bin|wrl|png|gif|bmp|dcm|dicom|jpe?g|jpeg2000|tif?f|mtl|pdf|wmv|mov|avi|mpe?g|m4v)$/i
       };
       $('#fileupload').hyraxUploader(options);
       $('#fileuploadlogo').hyraxUploader({downloadTemplateId: 'logo-template-download'});
