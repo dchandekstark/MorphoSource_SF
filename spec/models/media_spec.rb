@@ -128,16 +128,16 @@ RSpec.describe Media do
           file_set3.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
 
           file_set4.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-          allow(file_set4).to receive(:embargo_id).and_return('abc123')
+          allow(file_set4).to receive_message_chain(:embargo, :active?).and_return(true)
 
-          file_set5.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-          allow(file_set5).to receive(:lease_id).and_return('def123')
+          file_set5.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          allow(file_set5).to receive_message_chain(:lease, :active?).and_return(true)
 
           file_sets.each do |f|
             subject.ordered_members << f
           end
-          subject.save
         end
+        
         it 'returns an array matching all valid file visibilities' do
           all_visibilities = [
             Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,

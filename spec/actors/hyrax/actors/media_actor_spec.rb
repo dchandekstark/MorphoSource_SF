@@ -32,8 +32,15 @@ RSpec.describe Hyrax::Actors::MediaActor do
       allow(subject).to receive(:save) { true }
       allow(subject).to receive(:run_callbacks) { true }
     end
-    it 'changes the title attribute' do
-      expect { subject.update(env) }.to change{env.attributes['title']}.to([ 'Spiffy Generated Title' ])
+
+    # When updating an embargo or lease, there won't be an env attribute for title
+    context 'the user updates the work from the work edit page' do
+      before do
+        allow(env).to receive(:attributes).and_return({ "title" => ['title'] })
+      end
+      it 'changes the title attribute' do
+        expect { subject.update(env) }.to change{env.attributes['title']}.to([ 'Spiffy Generated Title' ])
+      end
     end
   end
 

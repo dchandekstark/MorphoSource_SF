@@ -3,8 +3,9 @@
 require 'rails_helper'
 require 'iiif_manifest'
 include ActionDispatch::TestProcess
+include Warden::Test::Helpers
 
-RSpec.describe Hyrax::MediaController do
+RSpec.describe Hyrax::MediaController, type: :controller do
   let(:work_solr_document) do
     SolrDocument.new(id: '999',
                      title_tesim: ['My Title'],
@@ -23,8 +24,6 @@ RSpec.describe Hyrax::MediaController do
   end
 
   let(:ability) { double }
-
-  let(:request) { double('request', host: 'test.host') }
 
   let(:test_presenter) do
     Hyrax::MediaPresenter.new(work_solr_document, ability, request)
@@ -222,6 +221,153 @@ RSpec.describe Hyrax::MediaController do
       it 'sets curation_concern.fileset_visibility to an array containing "restricted"' do
         subject.send(:set_fileset_visibility)
         expect(subject.curation_concern.fileset_visibility).to match_array(["restricted"])
+      end
+    end
+  end
+
+  describe '#after_update_response' do
+    let(:curation_concern) { Media.create(title: ["title"]) }
+    let(:actor) { double(update: true) }
+
+    routes { Rails.application.routes }
+    let(:main_app) { Rails.application.routes.url_helpers }
+    let(:hyrax) { Hyrax::Engine.routes.url_helpers }
+
+    let(:file_path1)  { fixture_path + '/images/duke.png' }
+    let(:file_path2)  { fixture_path + '/images/ms.jpg' }
+    let(:file_path3)  { fixture_path + '/images/ms_2.jpg' }
+    let(:local_file1) { File.open(file_path1) }
+    let(:local_file2) { File.open(file_path2) }
+    let(:local_file3) { File.open(file_path3) }
+    let(:file_set_1)   { FileSet.new(visibility: "open") }
+    let(:file_set_2)   { FileSet.new(visibility: "open") }
+    let(:file_set_3)   { FileSet.new(visibility: "open") }
+
+    before do
+      sign_in depositor
+      allow(Hyrax::CurationConcern).to receive(:actor).and_return(actor)
+      allow(Media).to receive(:find).and_return(curation_concern)
+      allow(curation_concern).to receive(:visibility_changed?).and_return(false)
+      allow(controller).to receive(:authorize!).with(:update, curation_concern).and_return(true)
+      # allow(curation_concern).to receive(:file_sets).and_return(double(present?: true))
+      Hydra::Works::AddFileToFileSet.call(file_set_1, local_file1, :original_file, versioning: true)
+      Hydra::Works::AddFileToFileSet.call(file_set_2, local_file2, :original_file, versioning: true)
+      Hydra::Works::AddFileToFileSet.call(file_set_3, local_file3, :original_file, versioning: true)
+      curation_concern.ordered_members << file_set_1 << file_set_2 << file_set_3
+
+      allow(subject).to receive(:attributes_for_actor).and_return( { "media_type" => ["Image"]} )
+    end
+
+    # Meets one of the conditions to update file visibility
+    context 'saved fileset_visibility is changed' do
+      context 'the user selects the same fileset visibility as the work' do
+        before do
+          # results in fileset_visibility_changed? being true
+          curation_concern.fileset_visibility = ["restricted"]
+        end
+
+        context 'the work permissions are unchanged' do
+          before do
+            allow(controller).to receive(:permissions_changed?).and_return(false)
+            patch :update, params: { id: curation_concern, media: {fileset_visibility: "default"}, action: "update" }
+          end
+
+          it 'redirects to permissions/#copy' do
+            expect(response).to redirect_to(main_app.copy_hyrax_permission_path(curation_concern, locale: 'en'))
+          end
+        end
+
+        context 'the work permissions change' do
+          before do
+            allow(controller).to receive(:permissions_changed?).and_return(true)
+            patch :update, params: { id: curation_concern, media: {fileset_visibility: "default"}, action: "update" }
+          end
+
+          it 'redirects to permissions/#copy_access' do
+            expect(response).to redirect_to(hyrax.copy_access_permission_path(curation_concern, locale: 'en'))
+          end
+        end
+      end
+
+      context 'the user restricts the file visibility' do
+        before do
+          # results in fileset_visibility_changed? being true
+          curation_concern.fileset_visibility = [""]
+        end
+
+        context 'the work permissions change' do
+          before do
+            allow(controller).to receive(:permissions_changed?).and_return(true)
+          end
+
+          it 'calls the InheritPermissionsJob' do
+            expect(InheritPermissionsJob).to receive(:perform_later).with(curation_concern)
+            patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+          end
+        end
+
+        context 'the work permissions do not change' do
+          before do
+            allow(controller).to receive(:permissions_changed?).and_return(false)
+          end
+
+          it 'calls the InheritPermissionsJob' do
+            expect(InheritPermissionsJob).not_to receive(:perform_later).with(curation_concern)
+            patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+          end
+        end
+
+        it "sets the work's filesets' visibilities to 'restricted'" do
+          patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+          expect(file_set_1.visibility).to eq("restricted")
+          expect(file_set_2.visibility).to eq("restricted")
+          expect(file_set_3.visibility).to eq("restricted")
+        end
+
+        it 'redirects to the work show page' do
+          patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+          expect(response).to redirect_to main_app.hyrax_media_path(curation_concern, locale: 'en')
+        end
+
+        it 'displays a flash message' do
+          patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+          expect(response.flash[:notice]).to eq('Updating file permissions to restricted. This may take a few minutes. You may want to refresh your browser or return to this record later to see the updated file permissions.')
+        end
+      end
+    end
+
+    context 'fileset_visibility_changed? and curation_concern.visibility_changed? are false' do
+
+      context 'the user selects the same fileset visibility as the work' do
+        before do
+          # results in fileset_visibility_changed? being false
+          curation_concern.fileset_visibility = [""]
+          patch :update, params: { id: curation_concern, media: {fileset_visibility: "default"}, action: "update" }
+        end
+
+        it 'redirects to the work show page' do
+          expect(response).to redirect_to main_app.hyrax_media_path(curation_concern, locale: 'en')
+        end
+
+        it 'displays a flash message' do
+          expect(response.flash[:notice]).to eq("Work \"#{curation_concern}\" successfully updated.")
+        end
+      end
+
+      context 'the user restricts the file visibility' do
+        before do
+          # results in fileset_visibility_changed? being false
+          curation_concern.fileset_visibility = ["restricted"]
+          patch :update, params: { id: curation_concern, media: {fileset_visibility: "restricted"}, action: "update" }
+        end
+
+        it 'redirects to the work show page' do
+          expect(response).to redirect_to main_app.hyrax_media_path(curation_concern, locale: 'en')
+        end
+
+        it 'displays a flash message' do
+          expect(response.flash[:notice]).to eq("Work \"#{curation_concern}\" successfully updated.")
+        end
       end
     end
   end

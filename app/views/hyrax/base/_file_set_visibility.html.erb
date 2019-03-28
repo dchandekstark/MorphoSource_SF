@@ -4,7 +4,7 @@ Add Default File Visibility section to Media Works
 -->
 
 <fieldset>
-  <legend class="legend-save-work">Default File Visibility</legend>
+  <legend class="legend-save-work">File Visibility</legend>
   <ul class="visibility file-set-visibility" id="fs-visibility">
     <li class="radio">
       <% f.object.model.fileset_visibility == ['restricted'] ? selected = "" : selected = "selected_fileset_visibility" %>
@@ -22,11 +22,6 @@ Add Default File Visibility section to Media Works
         <br/>
         <%= t('morphosource.file_visibility.restricted.note_html') %>
         <div class="collapse" id="collapseFilesetRestricted">
-          <% if f.object.persisted? %>
-            <%= t('morphosource.file_visibility.restricted.edit_work_warning_html') %>
-          <% else %>
-            <%= t('morphosource.file_visibility.restricted.new_work_warning_html') %>
-          <% end %>
         </div>
       </label>
     </li>
