@@ -107,6 +107,7 @@ Hyrax.config do |config|
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
+  config.gltf_pipeline_path = ENV.fetch("GLTF_PIPELINE_PATH", "gltf-pipeline")
 
   # Option to enable/disable full text extraction from PDFs
   # Default is true, set to false to disable full text extraction
@@ -197,7 +198,7 @@ Hyrax.config do |config|
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  # config.derivatives_path = Rails.root.join('tmp', 'derivatives')
+  config.derivatives_path = Rails.root.join('derivatives')
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true

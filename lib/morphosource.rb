@@ -2,6 +2,7 @@ module Morphosource
   extend ActiveSupport::Autoload
 
   autoload :Configurable
+  autoload :Derivatives
 
   include Morphosource::Configurable
 
@@ -11,5 +12,4 @@ module Morphosource
     autoload :Base
     autoload :MimeTypes
   end
-
 end

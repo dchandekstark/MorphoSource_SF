@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   mount Hydra::RoleManagement::Engine => '/'
 
   mount Qa::Engine => '/authorities'
+
+  scope module: :morphosource do
+    resources :downloads, only: :show
+  end
+
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
   root 'hyrax/homepage#index'
@@ -76,5 +81,4 @@ Rails.application.routes.draw do
       delete '/cart_items/:id', to: 'cart_items#destroy', as: 'remove_from_cart'
     end
   end
-
 end

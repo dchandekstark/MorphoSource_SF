@@ -4,5 +4,6 @@ module Morphosource
 		extend ActiveSupport::Concern
 		include Hyrax::FileSetBehavior
 		include Morphosource::Works::MimeTypes
+		include Morphosource::FileSetDerivatives
 	end
 end
