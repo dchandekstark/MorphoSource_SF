@@ -70,13 +70,6 @@ Rails.application.routes.draw do
 
   # for now, redirect to submission flow initial page when using browser reload or back button
   get '/submissions', to: redirect('/submissions/new')
-  get '/submissions/stage_biological_specimen', to: redirect('/submissions/new')
-  get '/submissions/stage_device', to: redirect('/submissions/new')
-  get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
-  get '/submissions/stage_institution', to: redirect('/submissions/new')
-  get '/submissions/stage_media', to: redirect('/submissions/new')
-  get '/submissions/stage_processing_event', to: redirect('/submissions/new')
-  get '/submissions/stage_cho', to: redirect('/submissions/new')
 
   scope module: :morphosource do
     scope module: :my do
@@ -87,6 +80,15 @@ Rails.application.routes.draw do
       delete '/cart_items', action: :batch_destroy, controller: :cart_items, as: 'batch_destroy_items'
       get 'download_items', action: :download, controller: :cart_items, as: 'download_items'
     end
+  end
+
+  # Physical Object show case pages
+  scope module: :hyrax do
+    get 'biological_specimens/:id', to: 'biological_specimens#showcase'
+  end
+
+  scope module: :hyrax do
+    get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
   end
 
 end

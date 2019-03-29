@@ -1,0 +1,8 @@
+	<% array_of_ids = presenter.list_of_item_ids_to_display_for_showpage %>
+	<h3><%= array_of_ids.count %> MEDIA REPRESENTING PHYSICAL OBJECT </h3>
+	<%  members = presenter.member_presenters_for(array_of_ids) %>
+	<% if members.present? %>
+		<div class="row media-block">
+			<%= render partial: @presenter.showcase_media_items_member_partial, collection: members %>
+		</div>
+	<% end %>

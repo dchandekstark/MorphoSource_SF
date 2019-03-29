@@ -177,6 +177,10 @@ class SolrDocument
     self[Solrizer.solr_name('vouchered', :stored_searchable)]
   end
 
+  def member_ids
+    self[Solrizer.solr_name('member_ids', :symbol)]
+  end
+
   # Biological Specimens only
   def idigbio_recordset_id
     self[Solrizer.solr_name('idigbio_recordset_id', :stored_searchable)]
@@ -206,7 +210,6 @@ class SolrDocument
   def material
     self[Solrizer.solr_name('material', :stored_searchable)]
   end
-
 
   # images
   def bits_per_sample
