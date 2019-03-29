@@ -6,9 +6,9 @@ module Hyrax
         markup = ''
         return markup if values.blank? && !options[:include_empty]
         markup << %(<div class='row'>)
-        markup << %(<div class='col-xs-5 showcase-label'>#{label}</div>)
+        markup << %(<div class='col-xs-6 showcase-label'>#{label}</div>)
         attributes = microdata_object_attributes(field).merge(class: "attribute attribute-#{field}")
-        markup << %(<div class='col-xs-7 showcase-value'>)
+        markup << %(<div class='col-xs-6 showcase-value'>)
         if values.blank?
           markup << %((Not entered))
         else

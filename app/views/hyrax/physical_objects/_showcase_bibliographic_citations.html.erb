@@ -1,6 +1,2 @@
 <h3>BIBLIOGRAPHIC CITATIONS FOR THIS PHYSICAL OBJECT</h3>
-<%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
-
-doi:/fakedoi
-Winchester 2016. Dental topography of extant cercopithecoids. Fake Journal of Fake Science, pp. 76-82.
-
+<%= presenter.attribute_to_html(:bibliographic_citation, render_as: :showcase_doi_link, include_empty: true, html_dl: false) %>

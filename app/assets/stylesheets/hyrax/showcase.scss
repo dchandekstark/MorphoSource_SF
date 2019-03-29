@@ -27,9 +27,12 @@ div.showcase {
 
 		.label {
 			font-size: 1.6vw;
-	  	@media (min-width: 768px) {
-	  		font-size: 70%; 
+	  	@media (min-width: 768px) and (max-width: 1199px) {
+	  		font-size: 1.3vw; 
 			}
+	  	@media (min-width: 1200px) {
+	  		font-size: 16px;
+	  	}
 
 		}
 	}
@@ -43,13 +46,12 @@ div.showcase {
 		padding-bottom: 8px;
 		border-bottom: 2px solid #337ab7;
 		font-size: 4vw;
-  	@media (min-width: 768px) {
+  	@media (min-width: 768px) and (max-width: 1199px) {
   		font-size: 3vw; 
 		}
-	}
-
-	.dropdown-menu, .twitter-typeahead .tt-menu {
-		min-width: 88px;
+  	@media (min-width: 1200px) {
+  		font-size: 36px;
+  	}
 	}
 
 	h2 {
@@ -58,7 +60,31 @@ div.showcase {
 	h3 {
 		background-color: #efefef;	
 		padding: 12px 20px;
-    font-size:16px;
+    /* font-size:16px; */
+    font-size: 1.4vw; 
+  	@media (min-width: 1200px) {
+  		font-size: 17px;
+  	}
+	}
+
+	.showcase-label, .showcase-value,
+	.content-block .row > div {
+    /* font-size: 14px; */
+		font-size: 1.6vw;
+  	@media (min-width: 768px) and (max-width: 1199px) {
+  		font-size: 1.3vw; 
+		}
+  	@media (min-width: 1200px) {
+  		font-size: 16px;
+  	}
+	}
+
+	.showcase-link {
+		word-break: break-all;
+	}
+
+	.dropdown-menu, .twitter-typeahead .tt-menu {
+		min-width: 88px;
 	}
 
 	div.preview {
@@ -68,7 +94,7 @@ div.showcase {
 	}
 
 	.preview-image {
-		width:70%;
+		width:50%;
     margin: 10vw auto;
     display: block;
 
@@ -83,19 +109,9 @@ div.showcase {
 	}
 
 	.row {
-		padding:4px 12px;		
-	}
-	.showcase-label, .showcase-value {
-    font-size: 14px;
+		padding:4px 24px;		
 	}
 
-	/*
-	h3 {
-    font-size: 1.8vw; 
-	}
-	div {
-    font-size: 1.6vw; 		
-	}
-	*/
+
 
 }

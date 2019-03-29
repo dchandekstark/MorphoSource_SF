@@ -16,7 +16,7 @@ module Hyrax
             url = 'https://www.idigbio.org'
           end
           link = link_to(value, "#{url}#{value}")
-          markup << "<span class='glyphicon glyphicon-new-window'></span>&nbsp;#{link}"
+          markup << "<span class='glyphicon glyphicon-new-window'></span>&nbsp;<span class='showcase-link'>#{link}</span>"
           markup.html_safe
         end
     end
