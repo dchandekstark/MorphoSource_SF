@@ -52,3 +52,9 @@
 
 # FITS log file
 /fits.log
+
+# ---------------------------------------------------
+# MorphoSource specific changes
+# ---------------------------------------------------
+
+/derivatives
