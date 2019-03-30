@@ -107,7 +107,6 @@ Hyrax.config do |config|
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
-  config.gltf_pipeline_path = ENV.fetch("GLTF_PIPELINE_PATH", "gltf-pipeline")
 
   # Option to enable/disable full text extraction from PDFs
   # Default is true, set to false to disable full text extraction

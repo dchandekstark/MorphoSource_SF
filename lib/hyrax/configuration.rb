@@ -141,11 +141,6 @@ module Hyrax
     def blender_path
       @blender_path ||= 'blender'
     end
-
-    attr_writer :gltf_pipeline_path
-    def gltf_pipeline_path
-      @gltf_pipeline_path ||= 'gltf_pipeline'
-    end
     
     # Override characterization runner
     attr_accessor :characterization_runner

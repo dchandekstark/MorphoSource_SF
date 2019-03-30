@@ -11,7 +11,7 @@ module Morphosource::Derivatives
     class_attribute :tool_path
 
     attr_reader :source_path, :out_path
-    def initialize(source_path, out_path, tool_path = nil)
+    def initialize(source_path, out_path)
       @source_path = source_path
       @out_path = out_path
       @tool_path = tool_path
@@ -23,10 +23,6 @@ module Morphosource::Derivatives
       end
 
       internal_call # to do add some output/post-process controls
-    end
-
-    def tool_path
-      @tool_path || Morphosource::Derivatives.gltf_pipeline_path
     end
 
     def logger
@@ -59,7 +55,7 @@ module Morphosource::Derivatives
       end
 
       def command
-        "#{tool_path}/gltf-pipeline.js -i #{source_path} -o #{out_path} -d"
+        "gltf-pipeline -i #{source_path} -o #{out_path} -d"
       end
   end
 end
