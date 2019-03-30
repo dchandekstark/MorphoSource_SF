@@ -16,6 +16,7 @@ module Hyrax
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::MediaPresenter
 
+    before_action :save_fileset_visibility, only: [:update]
     before_action :set_fileset_visibility, only: [:create, :update]
     skip_load_and_authorize_resource only: [:zip]
 
@@ -33,6 +34,9 @@ module Hyrax
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
           [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
+        aup_filename = 'MorphoSource_Download_Use_Agreement.pdf'
+        aup_path = File.join(Rails.root, %w{app assets documents}, aup_filename)
+        files.unshift([aup_path, "#{output_prefix}/#{aup_filename}", modification_time: Time.now])
         Rails.logger.debug("Files for zip: #{files.inspect}")
         file_mappings = files.lazy.map{|url,path,options| [open(url), path, options]}
         zipline(file_mappings, "#{output_prefix}.zip")
@@ -80,15 +84,20 @@ module Hyrax
         files = []
         invalid_files = []
         media_type = attributes_for_actor["media_type"].first
-
         # New uploads
-        attributes_for_actor["uploaded_files"].each do |file_id|
-          files << Hyrax::UploadedFile.find(file_id)["file"]
+        if attributes_for_actor["uploaded_files"].present?
+          attributes_for_actor["uploaded_files"].each do |file_id|
+            files << Hyrax::UploadedFile.find(file_id)["file"]
+          end
         end
-
         # Previous uploads
         self.curation_concern.file_sets.each do |file_set|
-          files << file_set.original_file.original_name
+          if file_set.original_file.present?
+            files << file_set.original_file.original_name
+          # if a recent upload hasn't been processed yet, use the title instead.
+          else
+            files << file_set.title.first
+          end
         end
 
         files.each do |file|
@@ -101,8 +110,9 @@ module Hyrax
       end
 
       def file_formats_valid?
+        return true if params["commit"] == "Update Embargo" || params["commit"] == "Update Lease"
         validate_file_formats
-        curation_concern.errors.empty? ? true : false
+        curation_concern.errors.empty?
       end
 
       def set_fileset_visibility
@@ -111,6 +121,51 @@ module Hyrax
         else
           curation_concern.fileset_visibility = [""]
         end
+      end
+
+      def after_update_response
+        if (fileset_visibility_changed? || curation_concern.visibility_changed?)
+          if curation_concern.attributes["fileset_visibility"] == [""]
+            if permissions_changed?
+              return redirect_to hyrax.copy_access_permission_path(curation_concern)
+            else
+              return redirect_to main_app.copy_hyrax_permission_path(curation_concern)
+            end
+          end
+          if curation_concern.attributes["fileset_visibility"] == ["restricted"]
+            InheritPermissionsJob.perform_later(curation_concern) if permissions_changed?
+            restrict_all_filesets
+            flash_message = 'Updating file permissions to restricted. This may take a few minutes. You may want to refresh your browser or return to this record later to see the updated file permissions.'
+            return redirect_to [main_app, curation_concern], notice: flash_message
+          end
+        end
+        respond_to do |wants|
+          wants.html { redirect_to [main_app, curation_concern], notice: "Work \"#{curation_concern}\" successfully updated." }
+          wants.json { render :show, status: :ok, location: polymorphic_path([main_app, curation_concern]) }
+        end
+      end
+
+      # get the old file set visibility so we can tell if it is being changed
+      def save_fileset_visibility
+        if curation_concern.fileset_visibility == [""]
+          @saved_fileset_visibility = [""]
+        else
+          @saved_fileset_visibility = ["restricted"]
+        end
+      end
+
+      def fileset_visibility_changed?
+        @saved_fileset_visibility.first != curation_concern.fileset_visibility.first
+      end
+
+      def restrict_all_filesets
+        curation_concern.file_sets.each do |file|
+          file.embargo&.deactivate!
+          file.lease&.deactivate!
+          file.visibility = "restricted"
+          file.save!
+        end
+        curation_concern.update_index
       end
   end
 end

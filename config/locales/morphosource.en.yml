@@ -12,6 +12,7 @@ en:
       my:
         heading:
           file_visibility: 'File Visibility'
+          date_downloaded: 'Date Downloaded'
     validation:
       missing:
         title: 'Your work must have a title.'
@@ -22,8 +23,6 @@ en:
         note_html: Use the same visibility settings as above.
       restricted:
         note_html: Keep attached files to myself with option to share.
-        new_work_warning_html: '<p> <strong>Please note</strong>, this determines the initial visibility setting for files added to this work. Visibility settings for individual files can be changed manually after this work is saved. </p>'
-        edit_work_warning_html: '<p> <strong>Please note</strong>, this determines the initial visibility setting for <strong>NEW</strong> files added to this work. Visibility settings for individual files can be changed manually after this work is saved. </p>'
     media:
       format_labels:
         image: 'Image'
@@ -32,3 +31,7 @@ en:
         photogrammetry: 'Photogrammetry Image Stack'
         mesh: 'Mesh or Point Cloud'
         other: 'Other'
+    upload:
+      change_access_message_html: "<p>You have changed the access level on work <i>%{curation_concern}</i>, making it accessible to other users or groups to view or edit.</p><p>All attached files are now being updated with the same access level.</p>"
+      change_access_yes_message: Yes please.
+      change_access_no_message: No. I want to go back.

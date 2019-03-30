@@ -10,7 +10,10 @@ module Hyrax
       end
 
       def update(env)
-        env.attributes['title'] = [ generated_title(env) ]
+        # Will not have a title attributes when updating leases, embargoes
+        if env.attributes['title'].present?
+          env.attributes['title'] = [ generated_title(env) ]
+        end
         super
       end
 

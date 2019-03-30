@@ -43,7 +43,11 @@ class User < ApplicationRecord
   end
 
   def items_in_cart
-    cart_items.select{ |i| i.downloaded? == false }
+    cart_items.select{ |i| i.in_cart == true }
+  end
+
+  def item_ids_in_cart
+    items_in_cart.map{ |i| i.id }
   end
 
   def work_ids_in_cart
@@ -51,7 +55,11 @@ class User < ApplicationRecord
   end
 
   def downloaded_items
-    cart_items.select{ |i| i.downloaded? == true }
+    cart_items.select{ |i| i.date_downloaded.present? }
+  end
+
+  def downloaded_item_ids
+    downloaded_items.map{ |i| i.id }
   end
 
   def downloaded_work_ids

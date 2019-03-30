@@ -60,7 +60,6 @@ module Hyrax
         file_set.date_modified = now
         file_set.creator = [user.user_key]
         if assign_visibility?(file_set_params)
-          
           env = Actors::Environment.new(file_set, ability, file_set_params)
           CurationConcern.file_set_create_actor.create(env)
         end
@@ -75,9 +74,7 @@ module Hyrax
           work.reload unless work.new_record?
           # If File Visibility - private is selected, make the file set private.
           if work.fileset_visibility == ['restricted']
-            file_set.embargo_id = nil
-            file_set.lease_id = nil
-            file_set.visibility = 'restricted'
+            restrict_fileset(file_set)
           else
             file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
           end
@@ -171,6 +168,13 @@ module Hyrax
         end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/CyclomaticComplexity
+
+      def restrict_fileset(file_set)
+        file_set.embargo_id = nil
+        file_set.lease_id = nil
+        file_set.visibility = 'restricted'
+      end
+
     end
   end
 end
