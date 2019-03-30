@@ -34,12 +34,7 @@ before_install:
   # verify fits are configured properly
   # - fits.sh -i "/home/travis/build/MorphoSource/MorphoSource_SF/spec/fixtures/CMB06020_R-m1_011.dcm"
   # end FITS setup --------
-  
-  # begin gltf-pipeline setup --------
-  - npm install -g gltf-pipeline
-  - gltf-pipeline --version
-  # end gltf-pipeline setup --------
-  
+
   # begin Blender setup --------
   - cd $TRAVIS_BUILD_DIR/download
   - curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
@@ -57,6 +52,11 @@ before_install:
   # verify blender is configured properly
   #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
   # end Blender setup --------
+
+  # begin gltf-pipeline setup --------
+  - npm install -g gltf-pipeline
+  - gltf-pipeline --version
+  # end gltf-pipeline setup --------
 
   - cd $TRAVIS_BUILD_DIR
 before_script:
