@@ -2,6 +2,9 @@ require 'fileutils'
 require 'securerandom'
 
 module Morphosource::Derivatives::Processors
+	class TimeoutError < Hydra::Derivatives::TimeoutError
+  	end
+
 	class Mesh < Hydra::Derivatives::Processors::Processor
 		attr_accessor :glb_name
 		attr_accessor :draco_glb_name
@@ -19,7 +22,7 @@ module Morphosource::Derivatives::Processors
 		def process_with_timeout
 			Timeout.timeout(timeout) { create_mesh_derivative }
 		rescue Timeout::Error
-			raise Morphosource::Derivatives::TimeoutError, "Unable to process mesh derivative\nThe command took longer than #{timeout} seconds to execute"
+			raise Morphosource::Derivatives::Processors::TimeoutError, "Unable to process mesh derivative\nThe command took longer than #{timeout} seconds to execute"
 		end
 
 		protected

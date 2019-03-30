@@ -11,10 +11,10 @@ module Morphosource::Derivatives
     class_attribute :tool_path
 
     attr_reader :source_path, :out_path, :units
-    def initialize(source_path, out_path, units, tool_path = nil)
+    def initialize(source_path, out_path, units = nil, tool_path = nil)
       @source_path = source_path
       @out_path = out_path
-      @units = units
+      @units = units.presence || 'm'
       @tool_path = tool_path
     end
 
