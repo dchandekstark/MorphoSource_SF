@@ -1,6 +1,7 @@
 class Media < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
+  after_create :add_id_to_title
 
   self.work_requires_files = true
 
@@ -41,4 +42,10 @@ class Media < Morphosource::Works::Base
     # order unique visibilities in the order that they appear on the work form.
     all_visibilities & file_visibilities
   end
+
+  private
+    def add_id_to_title
+      self.title.set("M#{self.id.to_s}: #{self.title.first.to_s}")
+      self.save!
+    end
 end
