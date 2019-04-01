@@ -68,7 +68,7 @@ module MorphosourceHelper
   def find_media_autocomplete_url
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
   end
-  
+
   def collapse_expand_panel(block, state:"COLLAPSE", expand_button_text:"Show more", collapse_button_text:"Show less")
     content_tag :div, :class => "row collapse-button" do
       content_tag :div, :class => "panel-title" do
