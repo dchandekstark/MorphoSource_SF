@@ -43,9 +43,11 @@ RSpec.describe Hyrax::ImagingEventPresenter do
 
     let(:visibility)              { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     let(:user)                    { 'test@example.com' }
+    let(:id)                      { 'aaa' }
 
     let :work do
         ImagingEvent.create(
+            id: id,
             description: description,
             creator: creator,
             title: title,
@@ -87,7 +89,7 @@ RSpec.describe Hyrax::ImagingEventPresenter do
   it { is_expected.to have_attributes(
             description: description,
             creator: creator,
-            title: title,
+            title: ["IE#{id}: #{title.first}"],
             software: software,
             ie_modality: ie_modality,
 
