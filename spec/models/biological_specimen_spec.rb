@@ -19,29 +19,26 @@ RSpec.describe BiologicalSpecimen do
   describe "valid work relationships" do
 
     it "has only Institution as a valid parent" do
-      expect(subject.valid_parent_concerns).to match_array([Institution])
+      expect(subject.valid_parent_concerns).to match_array([Institution, Taxonomy])
     end
 
-    it "has ImagingEvent, Attachment, and Taxonomy as valid child concerns" do
-      expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment, Taxonomy])
+    it "has ImagingEvent and Attachment as valid child concerns" do
+      expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
     end
 
   end
 
   describe "instance" do
-    subject { BiologicalSpecimen.new({
-        title: ['Test Institution']
-      })
-    }
+    subject { BiologicalSpecimen.new }
 
     describe "valid work relationships" do
 
       it "has only Institution as a valid parent" do
-        expect(subject.valid_parent_concerns).to match_array([Institution])
+        expect(subject.valid_parent_concerns).to match_array([Institution, Taxonomy])
       end
 
       it "has ImagingEvent and Attachment as valid child concerns" do
-        expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment, Taxonomy])
+        expect(subject.valid_child_concerns).to match_array([ImagingEvent, Attachment])
       end
 
     end

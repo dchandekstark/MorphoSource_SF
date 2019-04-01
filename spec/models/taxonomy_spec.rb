@@ -6,12 +6,12 @@ RSpec.describe Taxonomy do
 
   describe "valid work relationships" do
 
-    it "has BiologicalSpecimen as its only valid parent" do
-      expect(subject.valid_parent_concerns).to match_array([BiologicalSpecimen])
+    it "has no valid parents" do
+      expect(subject.valid_parent_concerns).to match_array([])
     end
 
-    it "has no valid children" do
-      expect(subject.valid_child_concerns).to match_array([])
+    it "has Biological Specimen as its valid child concern" do
+      expect(subject.valid_child_concerns).to match_array([BiologicalSpecimen])
     end
   end
 
@@ -62,6 +62,18 @@ RSpec.describe Taxonomy do
       subject.source = ["some source"]
       subject.trusted = ["true"]
       expect(subject).to_not be_valid
+    end
+
+    describe "valid work relationships" do
+
+      it "has no valid parents" do
+        expect(subject.valid_parent_concerns).to match_array([])
+      end
+
+      it "has BiologicalSpecimen as its only valid child concern" do
+        expect(subject.valid_child_concerns).to match_array([BiologicalSpecimen])
+      end
+
     end
   end
 end
