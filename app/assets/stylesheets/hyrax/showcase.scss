@@ -66,6 +66,21 @@ div.showcase {
   		font-size: 17px;
   	}
 	}
+	h4.panel-title {
+		background-color: #efefef;	
+		padding: 0;
+		text-align: center;
+    /* font-size:16px; */
+    font-size: 1.3vw; 
+  	@media (min-width: 1200px) {
+  		font-size: 16px;
+  	}
+
+  	.glyphicon {
+	    top: 3px;
+	    margin: 0 5px;
+  	}
+	}
 
 	.showcase-label, .showcase-value,
 	.content-block .row > div {

@@ -69,4 +69,14 @@ module MorphosourceHelper
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
   end
   
+  def collapse_expand_panel(block)
+    content_tag :h4, :class => "panel-title" do
+      content_tag :a, :data => {:toggle => "collapse"}, :href => %(##{block}), :class => "btn #{block}" do
+        concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
+        concat "Expand for additional fields"
+        concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
+      end
+    end
+  end
+
 end
