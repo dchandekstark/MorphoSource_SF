@@ -1,7 +1,21 @@
- 	<div class="thumbnail col-xs-4">
-		<% member = showcase_media_items_member %>
-    <%= render_thumbnail_tag member %><br>
-    <%= link_to(member.link_name, contextual_path(member, @presenter)) %><br>
-    <%= member.part %><br>
-    <%= member.modality %><br>
-  </div>
+<% member = showcase_media_items_member %>
+
+<% if showcase_media_items_member_counter == 3 %>
+	<div id="collapse-block-media-items-member" class="panel-collapse collapse collapse-block row">
+<% end %>
+
+	<% if showcase_media_items_member_counter % 3 == 0 %>
+		<div class="row"><!-- starting a row div -->
+	<% end %>
+
+	 	<div class="thumbnail col-xs-4">
+	    <%= render_thumbnail_tag member %><br>
+	    <%= link_to(member.link_name, contextual_path(member, @presenter)) %><br>
+	    <%= member.part %><br>
+	    <%= member.modality %><br>
+			<% # todo: need to check and display "Child of XXXXXX" %>  
+	  </div>
+
+	<% if showcase_media_items_member_counter % 3 == 2 or showcase_media_items_member_counter == media_count-1 %>
+		</div><!-- closing a row div -->
+	<% end %>

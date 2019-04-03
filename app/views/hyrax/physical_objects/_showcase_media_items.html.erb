@@ -1,8 +1,19 @@
-	<% array_of_ids = presenter.list_of_item_ids_to_display_for_showpage %>
-	<h3><%= array_of_ids.count %> MEDIA REPRESENTING PHYSICAL OBJECT </h3>
+	<% 
+	array_of_ids = presenter.list_of_item_ids_to_display_for_showpage 
+	media_count = array_of_ids.count
+	%>
+	<h3><%= media_count %> MEDIA REPRESENTING PHYSICAL OBJECT </h3>
 	<%  members = presenter.member_presenters_for(array_of_ids) %>
 	<% if members.present? %>
 		<div class="row media-block">
-			<%= render partial: @presenter.showcase_media_items_member_partial, collection: members %>
+			<%= render partial: @presenter.showcase_media_items_member_partial, collection: members, as: :showcase_media_items_member, :locals => {:media_count => media_count} %>
+			
+			<% if media_count > 3 %>
+				</div><!-- closing the collapse-block-media-items-member div -->
+			<% end %>
+
 		</div>
+		
+		<%= collapse_expand_panel("collapse-block-media-items-member") %>
+
 	<% end %>
