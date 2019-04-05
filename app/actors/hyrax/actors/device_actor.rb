@@ -3,6 +3,10 @@
 module Hyrax
   module Actors
     class DeviceActor < Hyrax::Actors::BaseActor
+    	def create(env)
+    		# byebug
+    		super
+    	end
     end
   end
 end
