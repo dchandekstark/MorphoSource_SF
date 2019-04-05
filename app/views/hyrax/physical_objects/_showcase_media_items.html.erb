@@ -2,7 +2,7 @@
 	array_of_ids = presenter.list_of_item_ids_to_display_for_showpage 
 	media_count = array_of_ids.count
 	%>
-	<h3><%= media_count %> MEDIA REPRESENTING PHYSICAL OBJECT </h3>
+	<h2><%= media_count %> MEDIA REPRESENTING PHYSICAL OBJECT </h2>
 	<%  members = presenter.member_presenters_for(array_of_ids) %>
 	<% if members.present? %>
 		<div class="row media-block">

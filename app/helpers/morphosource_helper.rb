@@ -71,7 +71,7 @@ module MorphosourceHelper
   
   def collapse_expand_panel(block)
     content_tag :div, :class => "row collapse-button" do
-      content_tag :h4, :class => "panel-title" do
+      content_tag :div, :class => "panel-title" do
         content_tag :a, :data => {:toggle => "collapse"}, :href => %(##{block}), :class => "btn #{block}" do
           concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
           concat "Show more"
