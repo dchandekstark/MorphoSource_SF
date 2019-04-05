@@ -54,7 +54,7 @@ RSpec.feature 'update Media file formats', js: true do
       expect(page).to have_content (Morphosource.video_formats.join(', '))
 
       click_link "Descriptions"
-      select('CT/MRI image series (multiple files of type *.tiff, *.png, *.dcm, etc.)', from: 'Media Type')
+      select('CT/MRI image series (multiple files of type *.tiff, *.png, *.dcm, *.zip, etc.)', from: 'Media Type')
       click_link "Files"
       expect(page).to have_content (Morphosource.ct_formats.join(', '))
 

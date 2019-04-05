@@ -8,7 +8,7 @@ terms:
     term: Video (*.avi, *.mp4, *.mov, .etc.)
     active: true
   - id: CTImageSeries
-    term: CT/MRI image series (multiple files of type *.tiff, *.png, *.dcm, etc.)
+    term: CT/MRI image series (multiple files of type *.tiff, *.png, *.dcm, *.zip, etc.)
     active: true
   - id: PhotogrammetryImageSeries
     term: Photogrammetry image series (multiple files of type *.tiff, *.png, etc.) 
