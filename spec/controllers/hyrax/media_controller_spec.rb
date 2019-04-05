@@ -168,7 +168,7 @@ RSpec.describe Hyrax::MediaController, type: :controller do
 
     context "Previously uploaded files are correct and new uploads are incorrect for the selected media type" do
       before do
-        allow(subject).to receive(:attributes_for_actor).and_return( { "media_type" => ["CTImageStack"], "uploaded_files" => uploaded_file_ids} )
+        allow(subject).to receive(:attributes_for_actor).and_return( { "media_type" => ["CTImageSeries"], "uploaded_files" => uploaded_file_ids} )
         work.ordered_members << file_set_4
       end
 
