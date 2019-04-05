@@ -4,7 +4,7 @@ module Hyrax
   class MediaPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
 
-    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :side, :unit, :x_spacing, :y_spacing, :z_spacing, to: :solr_document
+    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, to: :solr_document
 
     def universal_viewer?
       representative_id.present? &&

@@ -12,7 +12,7 @@ module Hyrax
 
     # Customizing field terms
 
-    self.terms = [:modality, :media_type, :x_spacing, :y_spacing, :z_spacing,
+    self.terms = [:modality, :media_type, :x_spacing, :y_spacing, :z_spacing, :slice_thickness,
                     :scale_bar, :unit, :map_type,
                     :part, :side, :orientation,
                     :description, :keyword, :identifier, :related_url, :creator, :date_created,
@@ -26,7 +26,7 @@ module Hyrax
 
     self.required_fields = [:modality, :media_type]
 
-    self.single_valued_fields = [:media_type, :cite_as, :legacy_media_file_id, :legacy_media_group_id, :uuid, :ark, :doi, :available, :x_spacing, :y_spacing, :z_spacing, :unit]
+    self.single_valued_fields = [:media_type, :cite_as, :legacy_media_file_id, :legacy_media_group_id, :uuid, :ark, :doi, :available, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :unit]
 
   end
 end

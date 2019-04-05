@@ -391,6 +391,10 @@ class SolrDocument
       self[Solrizer.solr_name('software', :stored_searchable)]
   end
 
+  def slice_thickness
+      self[Solrizer.solr_name('slice_thickness', :stored_searchable)]
+  end
+
   def exposure_time
       self[Solrizer.solr_name('exposure_time', :stored_searchable)]
   end
