@@ -113,6 +113,7 @@ RSpec.describe Hyrax::MediaPresenter do
   describe "sample Media work" do
     subject(:presenter) { described_class.new(SolrDocument.new(work.to_solr), nil) }
 
+    let(:id)                { 'aaa' }
     let(:title)             {['Media Work Title']}
     let(:publisher)         {['Random House']}
     let(:identifier)        {['123ABC']}
@@ -139,7 +140,8 @@ RSpec.describe Hyrax::MediaPresenter do
     let(:user)              { 'test@example.com' }
 
     let :work do
-      Media.create(title:            title,
+      Media.create(id:               id,
+                   title:            title,
                    publisher:        publisher,
                    identifier:       identifier,
                    keyword:          keyword,
@@ -165,7 +167,7 @@ RSpec.describe Hyrax::MediaPresenter do
                    depositor:        user)
     end
 
-    it { is_expected.to have_attributes(title: title, publisher: publisher, identifier: identifier, keyword: keyword, date_created: date_created, related_url: related_url, rights_statement: rights_statement, agreement_uri: agreement_uri, cite_as: cite_as, funding: funding, map_type: map_type, media_type:  media_type, modality: modality, orientation: orientation, part: part, rights_holder: rights_holder,
+    it { is_expected.to have_attributes(title: ["M#{id}: #{title.first}"], publisher: publisher, identifier: identifier, keyword: keyword, date_created: date_created, related_url: related_url, rights_statement: rights_statement, agreement_uri: agreement_uri, cite_as: cite_as, funding: funding, map_type: map_type, media_type:  media_type, modality: modality, orientation: orientation, part: part, rights_holder: rights_holder,
     scale_bar: scale_bar, side: side, unit: unit, x_spacing: x_spacing, y_spacing: y_spacing, z_spacing: z_spacing) }
   end
 end
