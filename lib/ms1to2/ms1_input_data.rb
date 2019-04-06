@@ -12,7 +12,7 @@ module Ms1to2
 		def initialize(input_path)
 			@input_path = input_path
 			import_standard_tables
-			import_special_tables
+			# import_special_tables
 		end	
 
 		def import_standard_tables
@@ -29,14 +29,14 @@ module Ms1to2
 		end
 
 		# Combines ms_media_files and ms_media tables and includes file path information
-		def import_special_tables
-			@ms_media_combined = {}
-			ms_media_files.each do |mf_id, mf_hash|
-				m = ms_media[mf_hash[:media_id].first]
-				ms_media_combined[mf_id] = mf_hash.merge(
-					m.map {|k, v| [('m_'+k.to_s).to_sym, v] }.to_h)
-			end
-		end
+		# def import_special_tables
+		# 	@ms_media_combined = {}
+		# 	ms_media_files.each do |mf_id, mf_hash|
+		# 		m = ms_media[mf_hash[:media_id].first]
+		# 		ms_media_combined[mf_id] = mf_hash.merge(
+		# 			m.map {|k, v| [('m_'+k.to_s).to_sym, v] }.to_h)
+		# 	end
+		# end
 
 		def standard_tables
 			Ms1InputData.standard_tables

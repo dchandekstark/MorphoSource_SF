@@ -28,17 +28,20 @@ module Ms1to2
 
 		# Special case media methods
 
-		def import_media(csvfile, m)
+		def import_media(m)
 			@media = get_table(m)
-			@ie = get_table(csvfile(:ImagingEvent))
-			@pe = get_table(csvfile(:ProcessingEvent))
+			@ie = get_table(:ImagingEvent)
+			@pe = get_table(:ProcessingEvent)
 			combined_table = {}.merge(media).merge(ie).merge(pe)
-			
+
+			puts(ids_in_order.join(','))
 			ids_in_order.each do |id|
-				attrs = combined_table[id]
-				attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
-				csv_importer = Importer::CSVImporter.new('', '', { :model => to_model(id) })
-				csv_importer.import_batch_object(attrs)
+				if combined_table.key?(id)
+					attrs = combined_table[id]
+					attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
+					csv_importer = Importer::CSVImporter.new('', '', { :model => to_model(id) })
+					csv_importer.import_batch_object(attrs)
+				end
 			end
 		end
 
@@ -56,7 +59,7 @@ module Ms1to2
 		def ids_in_order
 			relations = {}
 			[media, ie, pe].each do |t|
-				t.each { |k, v| relations[k] = v[:parent_id] }
+				t.each { |k, v| relations[k] = v[:parent_id].first }
 			end
 			sort_order(relations)
 		end
@@ -74,7 +77,11 @@ module Ms1to2
 						relations.delete(id)
 					elsif relations.include?(parent_id)
 						nested_ids = get_nested_ids(id, relations).reverse
-						ordered = ordered + nested_ids
+						if ordered.include?(nested_ids[0])
+							ordered.insert(ordered.index(nested_ids[0])+1, *nested_ids.drop(1))
+						else
+							ordered = ordered + nested_ids
+						end
 						relations.delete_if { |v| nested_ids.include?(v) }
 					end
 				else
@@ -92,10 +99,10 @@ module Ms1to2
 			nested_ids
 		end
 
-		def get_table(csvfile)
+		def get_table(m)
 			{}.tap do |t|
-				CSVParser.new(File.join(input_path, csvfile)).each do |attrs|
-					t[attrs[:id]] = attrs
+				CSVParser.new(File.join(input_path, csvfile(m))).each do |attrs|
+					t[attrs[:id].first] = attrs
 				end
 			end
 		end
@@ -107,7 +114,7 @@ module Ms1to2
 		end
 
 		def models
-			[:Institution]
+			[:Institution, :Device, :BiologicalSpecimen, :Media]
 		end
 	end
 end

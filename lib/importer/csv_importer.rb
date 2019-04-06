@@ -26,6 +26,9 @@ module Importer
       count = 0
       parser.each do |attributes|
         attrs = attributes.merge(deposit_attributes)
+        if attrs[:id]&.first && model.constantize.exists?(attrs[:id]&.first)
+          next
+        end
         import_batch_object(attrs)
         count += 1
       end

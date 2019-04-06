@@ -18,7 +18,8 @@ module Ms1to2
 					:uuid => :idigbio_uuid,
 					:occurrence_id => :occurrence_id,
 					:type => :is_type_specimen,
-					:sex => :sex
+					:sex => :sex,
+					:reference_source => :vouchered
 				}
 			end
 
@@ -31,6 +32,10 @@ module Ms1to2
 					:sex => {
 						'F' => 'Female',
 						'M' => 'Male'
+					},
+					:reference_source => {
+						'0' => 'Yes',
+						'1' => 'No'
 					}
 				}
 			end

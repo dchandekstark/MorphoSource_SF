@@ -25,7 +25,7 @@ module Ms1to2
 			end
 
 			def process_facility_row(id, v)
-				ms2_table[id] = ::Ms1to2::Models::InstitutionFromFacility.new(
+				ms2_table[id] = "Ms1to2::Models::InstitutionFromFacility".constantize.new(
 					id, v, derive_special_fields(v)).ms2_attributes
 			end
 
