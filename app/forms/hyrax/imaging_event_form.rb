@@ -19,6 +19,7 @@ module Hyrax
         :creator,
         :software,
         :ie_modality,
+        :date_created,
         # X-ray CT metadata
         :exposure_time,
         :flux_normalization,
@@ -63,6 +64,7 @@ module Hyrax
         :title,
         :creator,
         :ie_modality,
+        :date_created,
         # X-ray CT metadata
         :exposure_time,
         :flux_normalization,
@@ -99,6 +101,7 @@ module Hyrax
             :description,
             :creator,
             :software,
+            :date_created,
             # X-ray CT metadata
             :exposure_time,
             :flux_normalization,
