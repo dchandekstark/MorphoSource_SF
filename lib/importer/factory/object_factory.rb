@@ -26,7 +26,6 @@ module Importer
 
       def create
         attrs = create_attributes
-        byebug
         @object = klass.new
         run_callbacks :save do
           run_callbacks :create do
@@ -67,13 +66,15 @@ module Importer
       # a way that is compatible with how the factory needs them.
       def transform_attributes
         based_near_values = attributes.delete(:based_near)
+        date_uploaded_values = attributes.delete(:date_uploaded)
         sanitized_attributes
             .merge(file_attributes)
             .merge(location_attributes(based_near_values))
-            .merge(nesting_attributes_direct_id)
             .merge(visibility_attributes)
             .merge(collection_membership_attributes)
             .merge(id_attributes)
+            .merge(nesting_attributes_direct_id)
+            .merge(date_uploaded_attributes(date_uploaded_values))
       end
 
       def sanitized_attributes
@@ -126,13 +127,6 @@ module Importer
         parent_arks.present? ? { in_works_ids: parent_arks.map { |ark| parent_id(ark) } } : {}
       end
 
-      # def nesting_attributes_direct_id
-      #   attributes[:parent_id] ? 
-      #     { 
-      #       in_works_ids: attributes[:parent_id] 
-      #     } : {}
-      # end
-
       def nesting_attributes_direct_id
         val = { work_parents_attributes: {} }
         if attributes[:parent_id]
@@ -145,6 +139,10 @@ module Importer
 
       def visibility_attributes
         visibility.present? ? { visibility: visibility.first } : { visibility: 'open' }
+      end
+
+      def date_uploaded_attributes(date_uploaded_values)
+        date_uploaded_values&.first ? { date_uploaded: DateTime.strptime(date_uploaded_values&.first,'%s') } : {}
       end
 
       def import_user(attrs)

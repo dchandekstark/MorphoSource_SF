@@ -3,7 +3,7 @@ module Importer
     class ImagingEventFactory < ObjectFactory
       include WithAssociatedCollection
 
-      self.klass = ImagingEventFactory
+      self.klass = ImagingEvent
 
     end
   end

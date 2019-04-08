@@ -5,7 +5,6 @@ module Hyrax
     class MediaActor < Hyrax::Actors::BaseActor
 
       def create(env)
-        byebug
         env.attributes['title'] = [ generated_title(env) ]
         super
       end

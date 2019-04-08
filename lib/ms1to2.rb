@@ -1,4 +1,8 @@
 module Ms1to2
 	extend ActiveSupport::Autoload
-	autoload :Ms1to2
+	autoload :CSVParser
+	autoload :Importer
+	autoload :Normalizer
+	autoload :Ms1InputData
+	autoload :Ms2OutputData
 end

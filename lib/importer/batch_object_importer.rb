@@ -14,7 +14,6 @@ module Importer
     end
 
     def call
-      byebug
       fc = factory_class(model)
       f = fc.new(attributes, files_directory)
       f.run

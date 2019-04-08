@@ -1,120 +1,156 @@
 module Ms1to2
-	class Importer
-		attr_accessor :input_path, :media, :ie, :pe
+  class Importer
+    attr_accessor :input_path, :media, :ie, :pe
 
-		def initialize(input_path)
-			@input_path = input_path
-		end
+    def initialize(input_path)
+      @input_path = input_path
+      ::Hyrax.config.whitelisted_ingest_dirs = input_path
+    end
 
-		def call
-			# Iterate through models and import table
-			models.each do |m|
-				puts(m)
-				import_table(m)
-			end
-		end
+    def call
+      models.each do |m|
+        puts(m)
+        import_table(m)
+      end
+    end
 
-		def import_table(m)
-			m == :Media ? import_media(m) : import_standard(m)
-		end
+    def import_table(m)
+      case m
+      when :Media
+        import_media(m)
+      when :Collection
+        import_collections(m)
+      else
+        import_standard(m)
+      end
+    end
 
-		def import_standard(m)
-			csv_importer = ::Importer::CSVImporter.new(
-				File.join(input_path, csvfile(m)),
-				'', 
-				{ :depositor => 'julia.m.winchester@gmail.com', :model => m.to_s } )
-			csv_importer.import_all
-		end
+    def import_collections(m)
+      # Create collection type
+      coll_type = Hyrax::CollectionType.where({:title => 'Project'})&.first
+      
+      if !coll_type
+        puts("Creating collection type")
+        coll_type = Hyrax::CollectionType.new(attributes={ :title => 'Project' })
+        coll_type.save!
+      end
 
-		# Special case media methods
+      # Create collections  
+      colls = get_table(:Collection)
+      colls.each do |collection_id, v|
+        if !Collection.exists?(collection_id)
+          puts('Creating collection ' + collection_id)
+          coll_attrs = {
+            :id => collection_id,
+            :title => v[:title],
+            :depositor => 'julia.m.winchester@gmail.com',
+            :visibility => 'open',
+            :collection_type => coll_type
+          }
+          coll = Collection.new(attributes=coll_attrs)
+          coll.save!
+          puts('Establishing collection permissions')
+          ::Hyrax::Collections::PermissionsCreateService.create_default(
+            collection: coll, 
+            creating_user: User.find_by_user_key('julia.m.winchester@gmail.com'))
+        end
+      end
+    end
 
-		def import_media(m)
-			@media = get_table(m)
-			@ie = get_table(:ImagingEvent)
-			@pe = get_table(:ProcessingEvent)
-			combined_table = {}.merge(media).merge(ie).merge(pe)
+    def import_standard(m)
+      csv_importer = ::Importer::CSVImporter.new(
+        File.join(input_path, csvfile(m)),
+        '', 
+        { :depositor => 'julia.m.winchester@gmail.com', :model => m.to_s } )
+      csv_importer.import_all
+    end
 
-			puts(ids_in_order.join(','))
-			ids_in_order.each do |id|
-				if combined_table.key?(id)
-					attrs = combined_table[id]
-					attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
-					csv_importer = Importer::CSVImporter.new('', '', { :model => to_model(id) })
-					csv_importer.import_batch_object(attrs)
-				end
-			end
-		end
+    # Special case media methods
 
-		def to_model(id)
-			case id[0]
-			when 'M'
-				:Media
-			when 'I'
-				:ImagingEvent
-			when 'P'
-				:ProcessingEvent
-			end
-		end
+    def import_media(m)
+      @media = get_table(m)
+      @ie = get_table(:ImagingEvent)
+      @pe = get_table(:ProcessingEvent)
+      combined_table = {}.merge(media).merge(ie).merge(pe)
 
-		def ids_in_order
-			relations = {}
-			[media, ie, pe].each do |t|
-				t.each { |k, v| relations[k] = v[:parent_id].first }
-			end
-			sort_order(relations)
-		end
+      ids_in_order.each do |id|
+        if combined_table.key?(id) && !to_model(id).to_s.constantize.exists?(id)
+          attrs = combined_table[id]
+          attrs = attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
+          csv_importer = ::Importer::CSVImporter.new('', input_path, { :model => to_model(id) })
+          csv_importer.import_batch_object(attrs)
+        end
+      end
+    end
 
-		def sort_order(relations)
-			relations = relations.clone
-			ordered = []
-			relations.each do |id, parent_id|
-				if ordered.include?(id)
-					relations.delete(id)
-				elsif parent_id.presence
-					if ordered.include?(parent_id)
-						# add id after parent_id
-						ordered.insert(ordered.index(parent_id)+1, id)
-						relations.delete(id)
-					elsif relations.include?(parent_id)
-						nested_ids = get_nested_ids(id, relations).reverse
-						if ordered.include?(nested_ids[0])
-							ordered.insert(ordered.index(nested_ids[0])+1, *nested_ids.drop(1))
-						else
-							ordered = ordered + nested_ids
-						end
-						relations.delete_if { |v| nested_ids.include?(v) }
-					end
-				else
-					ordered << relations.delete(id)
-				end
-			end
-			ordered
-		end
+    def to_model(id)
+      case id[0]
+      when 'M'
+        :Media
+      when 'I'
+        :ImagingEvent
+      when 'P'
+        :ProcessingEvent
+      end
+    end
 
-		def get_nested_ids(id, id_array, nested_ids=[])
-			nested_ids << id
-			if id_array[id].presence
-				nested_ids = get_nested_ids(id_array[id], id_array, nested_ids)
-			end
-			nested_ids
-		end
+    def ids_in_order
+      relations = {}
+      [media, ie, pe].each do |t|
+        t.each { |k, v| relations[k] = v[:parent_id].first }
+      end
+      sort_order(relations)
+    end
 
-		def get_table(m)
-			{}.tap do |t|
-				CSVParser.new(File.join(input_path, csvfile(m))).each do |attrs|
-					t[attrs[:id].first] = attrs
-				end
-			end
-		end
+    def sort_order(relations)
+      relations = relations.clone
+      ordered = []
+      relations.each do |id, parent_id|
+        if ordered.include?(id)
+          relations.delete(id)
+        elsif parent_id.presence
+          if ordered.include?(parent_id)
+            # add id after parent_id
+            ordered.insert(ordered.index(parent_id)+1, id)
+            relations.delete(id)
+          elsif relations.include?(parent_id)
+            nested_ids = get_nested_ids(id, relations).reverse
+            if ordered.include?(nested_ids[0])
+              ordered.insert(ordered.index(nested_ids[0])+1, *nested_ids.drop(1))
+            else
+              ordered = ordered + nested_ids
+            end
+            relations.delete_if { |v| nested_ids.include?(v) }
+          end
+        else
+          ordered << relations.delete(id)
+        end
+      end
+      ordered
+    end
 
-		# Utility methods
+    def get_nested_ids(id, id_array, nested_ids=[])
+      nested_ids << id
+      if id_array[id].presence
+        nested_ids = get_nested_ids(id_array[id], id_array, nested_ids)
+      end
+      nested_ids
+    end
 
-		def csvfile(m)
-			m.to_s.underscore+'.csv'
-		end
+    def get_table(m)
+      {}.tap do |t|
+        CSVParser.new(File.join(input_path, csvfile(m))).each do |attrs|
+          t[attrs[:id].first] = attrs
+        end
+      end
+    end
 
-		def models
-			[:Institution, :Device, :BiologicalSpecimen, :Media]
-		end
-	end
+    def csvfile(m)
+      m.to_s.underscore+'.csv'
+    end
+
+    def models
+      [:Collection, :Institution, :Device, :BiologicalSpecimen, :Media]
+    end
+  end
 end

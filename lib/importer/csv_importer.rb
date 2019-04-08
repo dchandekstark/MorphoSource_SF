@@ -58,6 +58,5 @@ module Importer
     def load_checksums
       Checksum.import_data(checksum_file)
     end
-
   end
 end

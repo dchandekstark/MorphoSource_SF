@@ -3,7 +3,7 @@ module Importer
     class ProcessingEventFactory < ObjectFactory
       include WithAssociatedCollection
 
-      self.klass = ProcessingEventFactory
+      self.klass = ProcessingEvent
 
     end
   end

@@ -1,16 +1,17 @@
 module Ms1to2
   module Models
-    class ProcessingEvent < BaseObject
+    class Collection < BaseObject
       def mappings
         {
-          :scanner_technicians => :creator,
+          :name => :title,
+          :abstract => :description,
           :created_on => :date_uploaded
         }
       end
 
       def expected_special_fields
-        [:depositor, :parent_id]
+        [:depositor]
       end
     end
-  end
 end
+end 
