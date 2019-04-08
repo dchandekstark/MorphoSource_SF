@@ -72,13 +72,10 @@ module Hyrax
               work_ids_to_add << v["id"]
             end
           end
-          #byebug
+
           work_ids_to_add.uniq.each do |work_id|
-            #byebug
             work = ::ActiveFedora::Base.find(work_id)
-            #byebug
             work.ordered_members << env.curation_concern
-            #byebug
             work.save!
           end
         end
