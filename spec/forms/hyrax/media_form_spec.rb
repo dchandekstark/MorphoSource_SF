@@ -18,7 +18,7 @@ RSpec.describe Hyrax::MediaForm do
                                                :visibility_after_embargo, :visibility_during_lease,
                                                :lease_expiration_date, :visibility_after_lease, :visibility,
                                                :ordered_member_ids, :in_works_ids, :member_of_collection_ids,
-                                               :admin_set_id)
+                                               :admin_set_id, :series_type, :slice_thickness)
 
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Hyrax::MediaForm do
       expect(described_class.single_valued_fields).to match_array([ :media_type, :cite_as, :legacy_media_file_id,
                                                                     :legacy_media_group_id, :uuid, :ark, :doi,
                                                                     :available, :x_spacing, :y_spacing, :z_spacing,
-                                                                    :unit ])
+                                                                    :series_type, :slice_thickness, :unit ])
     end
 
   end

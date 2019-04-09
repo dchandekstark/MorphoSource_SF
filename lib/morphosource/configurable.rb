@@ -42,8 +42,8 @@ module Morphosource
       MEDIA_FORMATS = {
         'Image' => {extensions: image_formats, label: I18n.t('morphosource.media.format_labels.image')},
         'Video' => {extensions: video_formats, label: I18n.t('morphosource.media.format_labels.video')},
-        'CTImageStack' => {extensions: ct_formats, label: I18n.t('morphosource.media.format_labels.ct_mri')},
-        'PhotogrammetryImageStack' => {extensions: photogrammetry_formats, label: I18n.t('morphosource.media.format_labels.photogrammetry')},
+        'CTImageSeries' => {extensions: ct_formats, label: I18n.t('morphosource.media.format_labels.ct_mri')},
+        'PhotogrammetryImageSeries' => {extensions: photogrammetry_formats, label: I18n.t('morphosource.media.format_labels.photogrammetry')},
         'Mesh' => {extensions: mesh_formats, label: I18n.t('morphosource.media.format_labels.mesh')},
         'Other' => {extensions: other_formats, label: I18n.t('morphosource.media.format_labels.other')}
       }

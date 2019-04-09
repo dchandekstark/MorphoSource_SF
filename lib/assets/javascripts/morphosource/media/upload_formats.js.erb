@@ -24,8 +24,8 @@ function regularExpressionize(list) {
 const mediaFormatLabels = {
   'Image': "<%= Morphosource::MEDIA_FORMATS['Image'][:label] %>",
   'Video': "<%= Morphosource::MEDIA_FORMATS['Video'][:label] %>",
-  'CTImageStack': "<%= Morphosource::MEDIA_FORMATS['CTImageStack'][:label] %>",
-  'PhotogrammetryImageStack': "<%= Morphosource::MEDIA_FORMATS['PhotogrammetryImageStack'][:label] %>",
+  'CTImageSeries': "<%= Morphosource::MEDIA_FORMATS['CTImageSeries'][:label] %>",
+  'PhotogrammetryImageSeries': "<%= Morphosource::MEDIA_FORMATS['PhotogrammetryImageSeries'][:label] %>",
   'Mesh': "<%= Morphosource::MEDIA_FORMATS['Mesh'][:label] %>",
   'Other': "<%= Morphosource::MEDIA_FORMATS['Other'][:label] %>"
 }
@@ -46,10 +46,10 @@ function mediaTypeFormats() {
     case 'Video':
       var list = (<%= Morphosource.video_formats %>).join(', ');
       break;
-    case 'CTImageStack':
+    case 'CTImageSeries':
       var list = (<%= Morphosource.ct_formats %>).join(', ');
       break;
-    case 'PhotogrammetryImageStack':
+    case 'PhotogrammetryImageSeries':
       var list = (<%= Morphosource.photogrammetry_formats %>).join(', ');
       break;
     case 'Mesh':
