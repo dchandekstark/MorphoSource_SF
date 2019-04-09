@@ -71,37 +71,62 @@ module Morphosource
     def list_of_item_ids_to_display_for_showpage
       # get the media from
       # BiologicalSpecimen > ImagingEvent > Media > File set
-      child_ids = solr_document.member_ids  # todo: might need to handle more than one members
+      child_ids = solr_document.member_ids  # todo: need to handle more than one imaging event?
       imaging_event = ImagingEvent.where('id' => child_ids).first
-      temp = nil
       media_file_set_ids = []
 
       if imaging_event.present?
-        child_ids = imaging_event.member_ids  # todo: might need to handle more than one members
+        child_ids = imaging_event.member_ids  # todo: need to handle more than one media work?
         media = Media.where('id' => child_ids).first
-        
         if media.present?
           media_file_set_ids = media.file_set_ids
-          # Find child media: Media > ProcessingEvent > Media
-          media.member_ids.each do |id|
-            if ProcessingEvent.where('id' => id).present?
-              temp = ProcessingEvent.where('id' => id).first
-            end
-          end
-          if temp.present?
-            processing_event = temp
-            child_ids = processing_event.member_ids  # todo: might need to handle more than one members
-            child_media = Media.where('id' => child_ids).first
-            child_media_file_set_ids = child_media.file_set_ids
-          end
-  
+          media_file_set_ids += child_media_file_set_ids(media, 3,media_file_set_ids)
         end
       end
-      # add child medias if any
-      if child_media_file_set_ids.present?
-        media_file_set_ids += child_media_file_set_ids
+
+      media_file_set_ids.uniq
+    end
+
+    def child_media_file_set_ids(media, level,media_file_set_ids)
+      if level == 0
+        return []
+      else
+        #media_file_set_ids = []
+        # add child medias, 1st level
+        child_medias = child_medias(media)
+        child_medias.each do |child_media|
+
+          media_file_set_ids += child_media.file_set_ids
+          level = level - 1
+          media_file_set_ids += child_media_file_set_ids(child_media, level,media_file_set_ids)
+
+        end
+        media_file_set_ids
       end
-      media_file_set_ids
+    end
+
+    def child_medias(media)
+      child_medias = []
+      temp = nil
+
+      # Find child media: Media > ProcessingEvent > Media
+      media.member_ids.each do |id|
+        if ProcessingEvent.where('id' => id).present? # todo: need to handle more than one processing event?
+          temp = ProcessingEvent.where('id' => id).first
+        end
+      end
+      if temp.present?
+        processing_event = temp
+        child_ids = processing_event.member_ids
+         # todo: need to handle more than one media work? 
+        child_ids.each do |id|
+          if Media.where('id' => id).present?
+            child_medias += Media.where('id' => id)
+          end
+        end
+      end
+
+      child_medias
     end
 
     # methods for showcase partials
