@@ -71,54 +71,56 @@ module Morphosource
     def list_of_item_ids_to_display_for_showpage
       # get the media from
       # BiologicalSpecimen > ImagingEvent > Media > File set
-      child_ids = solr_document.member_ids  # todo: need to handle more than one imaging event?
+      child_ids = solr_document.member_ids  # todo: do we need to handle more than one imaging event?
       imaging_event = ImagingEvent.where('id' => child_ids).first
       media_file_set_ids = []
 
       if imaging_event.present?
-        child_ids = imaging_event.member_ids  # todo: need to handle more than one media work?
+        child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work?
         media = Media.where('id' => child_ids).first
         if media.present?
+          # add current media file sets, then add child media file sets.  
+          # currently add up to 9 levels in the tree.  Later we should store the child medias in the work
+          # so there is no need to traverse the tree
           media_file_set_ids = media.file_set_ids
-          media_file_set_ids += child_media_file_set_ids(media, 3,media_file_set_ids)
+          media_file_set_ids += child_media_file_set_ids(media, 9, media_file_set_ids)
         end
       end
 
-      media_file_set_ids.uniq
+      media_file_set_ids.uniq # remove any duplicate IDs before returning
     end
 
-    def child_media_file_set_ids(media, level,media_file_set_ids)
+    # this method recursively traverse the tree up to X level to gather all file set ids of child medias
+    def child_media_file_set_ids(media, level, media_file_set_ids)
       if level == 0
         return []
       else
-        #media_file_set_ids = []
-        # add child medias, 1st level
         child_medias = child_medias(media)
         child_medias.each do |child_media|
 
           media_file_set_ids += child_media.file_set_ids
           level = level - 1
-          media_file_set_ids += child_media_file_set_ids(child_media, level,media_file_set_ids)
+          media_file_set_ids += child_media_file_set_ids(child_media, level, media_file_set_ids)
 
         end
         media_file_set_ids
       end
     end
 
+    # this method get a list of child media of a passed media 
     def child_medias(media)
       child_medias = []
       temp = nil
 
       # Find child media: Media > ProcessingEvent > Media
       media.member_ids.each do |id|
-        if ProcessingEvent.where('id' => id).present? # todo: need to handle more than one processing event?
+        if ProcessingEvent.where('id' => id).present? # todo: do we need to handle more than one processing event?
           temp = ProcessingEvent.where('id' => id).first
         end
       end
       if temp.present?
         processing_event = temp
         child_ids = processing_event.member_ids
-         # todo: need to handle more than one media work? 
         child_ids.each do |id|
           if Media.where('id' => id).present?
             child_medias += Media.where('id' => id)
