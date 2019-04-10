@@ -48,7 +48,7 @@ before_install:
   - git clone https://github.com/KhronosGroup/glTF-Blender-IO.git
   - cp -r glTF-Blender-IO/addons/io_scene_gltf2 blender/2.79/scripts/addons/
   - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
-  - $TRAVIS_BUILD_DIR/download/blender/blender -v
+  - $BLENDER_PATH/blender -v
   # verify blender is configured properly
   #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
   # end Blender setup --------
