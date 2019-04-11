@@ -147,7 +147,7 @@ RSpec.describe SubmissionsController, type: :controller do
 
   describe '#stage_imaging_event' do
     let(:form_attributes) do
-      { 'title' => 'Imaging Event', 'ie_modality' => 'NeutrinoImaging' }
+      { 'ie_modality' => 'NeutrinoImaging' }
     end
     let(:form_params) { { imaging_event: form_attributes } }
     let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
