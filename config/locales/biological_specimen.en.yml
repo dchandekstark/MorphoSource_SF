@@ -6,3 +6,7 @@ en:
       biological_specimen:
         description:        "Biological specimen works"
         name:               "Biological Specimen"
+  simple_form:
+    labels:
+      biological_specimen:
+        occurrence_id: Occurrence ID
