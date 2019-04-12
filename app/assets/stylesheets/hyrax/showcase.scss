@@ -100,9 +100,21 @@ div.showcase {
 	  }
 
   	.glyphicon {
-	    top: 2px;
+	    top: 3px;
 	    margin: 0 5px;
   	}
+	}
+
+	.panel-group {
+  	.glyphicon {
+			float:right;
+			top: 4px;
+		}	
+		.panel-collapse {
+			.showcase-label, .showcase-value {
+				padding-left: 30px;
+			}
+		}
 	}
 
 	.showcase-label, .showcase-value,
