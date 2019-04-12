@@ -15,7 +15,6 @@ module Hyrax
 
     self.terms = [
         :description,
-        :title,
         :creator,
         :software,
         :ie_modality,
@@ -55,13 +54,11 @@ module Hyrax
     #self.terms -= [:keyword, :license, :rights_statement, :subject, :language, :source, :resource_type]
 
     self.required_fields = [
-        :title,
         :ie_modality
     ]
 
     self.single_valued_fields = [
         :description,
-        :title,
         :creator,
         :ie_modality,
         :date_created,
