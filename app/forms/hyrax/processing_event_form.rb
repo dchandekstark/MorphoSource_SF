@@ -37,7 +37,8 @@ module Hyrax
       :rights,
       :rights_statement,
       :subject,
-      :source]
+      :source,
+      :title]
 
     self.single_valued_fields = [:description, :date_created]
 
