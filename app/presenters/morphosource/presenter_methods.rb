@@ -131,6 +131,7 @@ module Morphosource
       child_medias
     end
 
+
     # methods for showcase partials
     def showcase_work_title_partial
       'showcase_work_title'

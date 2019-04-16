@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   scope module: :hyrax do
     get 'biological_specimens/:id', to: 'biological_specimens#showcase'
     get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
-    # redirect the default BSO/CHO view to showcase view
+    get 'media/:id', to: 'media#showcase'
+    # redirect the default BSO/CHO view to showcase view, except for certain action (e.g. new)
+    get 'concern/biological_specimens/new', to: 'biological_specimens#new'
+    get 'concern/cultural_heritage_objects/new', to: 'cultural_heritage_objects#new'
     get 'concern/biological_specimens/:id', to: 'biological_specimens#showcase'
     get 'concern/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
   end
