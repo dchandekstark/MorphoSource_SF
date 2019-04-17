@@ -23,7 +23,7 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
     end
 
     it 'has expected single valued metadata terms' do
-      expect(described_class.single_valued_fields).to match_array([ :bibliographic_citation, :catalog_number,
+      expect(described_class.single_valued_fields).to match_array([ :catalog_number,
                                                                     :collection_code, :date_created, :description,
                                                                     :latitude, :longitude, :numeric_time,
                                                                     :original_location, :publisher, :vouchered,
