@@ -2,13 +2,15 @@
   <div class="row" id="showcase-title-wrapper">
     <div class="col-xs-9">
         <h1><div id="showcase-title"><%= title %></div>
-          <small class="text-muted badge-wrapper">
-            <div>Represents:</div>
-            <div><span class="label label-primary"><%= presenter.physical_object_type.titleize %></span></div>
-            <div><%= presenter.in_collection_badge %></div>
+          <% if presenter.physical_object_type.present? %>
+            <small class="text-muted badge-wrapper">
+              <div>Represents:</div>
+              <div><span class="label label-primary"><%= presenter.physical_object_type %></span></div>
+              <div><%= presenter.in_collection_badge %></div>
 
-            <div><%= link_to(presenter.physical_object_title, presenter.physical_object_link) %></div>
-          </small>
+              <div><%= link_to(presenter.physical_object_title, presenter.physical_object_link) %></div>
+            </small>
+          <% end %>
         </h1>
     </div>
     <div class="col-xs-3 text-right">

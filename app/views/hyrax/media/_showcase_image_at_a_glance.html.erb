@@ -7,8 +7,9 @@
 
 <%= presenter.attribute_to_html(:modality, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 
+<!-- todo: need to move this to presenter.  media might not be associated with a device 
 <div class="row">
 	<div class="col-xs-6 showcase-label">Device</div>
-	<div class="col-xs-6 showcase-value"><%= presenter.device_title %> (<%= link_to(presenter.device_facility, presenter.device_link) %>)
+	<div class="col-xs-6 showcase-value"><%#= presenter.device_title %> (<%#= link_to(presenter.device_facility, presenter.device_link) %>)
 </div>
-</div>
+</div> -->

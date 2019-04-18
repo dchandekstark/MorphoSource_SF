@@ -131,5 +131,42 @@ module Morphosource
       child_medias
     end
 
+    # this method recursively traverse the tree up to X level to gather all file set ids of parent medias
+    def parent_media_file_set_ids(media, level, media_file_set_ids)
+      if level == 0
+        return []
+      else
+        parent_medias = parent_medias(media)
+        parent_medias.each do |parent_media|
+
+          media_file_set_ids += parent_media.file_set_ids
+          level = level - 1
+          media_file_set_ids += parent_media_file_set_ids(parent_media, level, media_file_set_ids)
+
+        end
+        media_file_set_ids
+      end
+    end
+
+    # this method get a list of parent media of a passed media 
+    def parent_medias(media)
+      parent_medias = []
+
+#byebug
+      # Find parent media: Media < ProcessingEvent < Media    
+      processing_events = ProcessingEvent.where('member_ids_ssim' => media.id)
+      if processing_events.present?
+        processing_events.each do |processing_event|
+          medias = Media.where('member_ids_ssim' => processing_event.id)
+          if medias.present?
+            parent_medias += medias
+          end
+        end              
+      end
+#byebug
+
+      parent_medias
+    end
+
   end
 end

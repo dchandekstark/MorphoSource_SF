@@ -62,6 +62,25 @@ module Hyrax
       supplied_record_badge_class.new(@idigbio_uuid).render
     end
 
+    # this method is cloned from list_of_item_ids_to_display (for defaut view), 
+    # and override the method in presenter_methods
+    # to get a list of media images for MEDIA showpage
+    def list_of_item_ids_to_display_for_showpage
+
+      media_file_set_ids = []
+
+      # add current media file sets, then add child media file sets.  
+      # currently add up to 9 levels in the tree.  Later we should store the child medias in the work
+      # so there is no need to traverse the tree
+      media = Media.where('id' => solr_document.id).first
+      media_file_set_ids = media.file_set_ids
+      media_file_set_ids += child_media_file_set_ids(media, 9, media_file_set_ids)
+      media_file_set_ids += parent_media_file_set_ids(media, 9, media_file_set_ids)
+
+
+      media_file_set_ids.uniq # remove any duplicate IDs before returning
+    end
+
     # methods for showcase partials
     def showcase_work_title_partial
       'showcase_work_title'
@@ -87,12 +106,16 @@ module Hyrax
       'showcase_identifiers_and_external_links'
     end
 
+    def showcase_viewer_partial
+      'showcase_viewer'
+    end
+
     def showcase_media_items_partial
-      '/hyrax/physical_objects/showcase_media_items'
+      'showcase_media_items'
     end
 
     def showcase_media_items_member_partial
-      '/hyrax/physical_objects/showcase_media_items_member'
+      'showcase_media_items_member'
     end
 
     def showcase_collections_partial
