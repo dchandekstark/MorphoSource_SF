@@ -1,0 +1,19 @@
+terms:
+  - id: Raster-To-Mesh
+    term: Raster-To-Mesh
+  - id: Reconstruction
+    term: Reconstruction
+  - id: Simplification
+    term: Simplification
+  - id: Noise-Reduction / Smoothing
+    term: Noise-Reduction / Smoothing
+  - id: Alignment
+    term: Alignment
+  - id: Cropping
+    term: Cropping
+  - id: Histogram-Editing (raster only)
+    term: Histogram-Editing (raster only)
+  - id: Merge-n-datasets
+    term: Merge-n-datasets
+  - id: Other
+    term: Other
