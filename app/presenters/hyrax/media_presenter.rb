@@ -6,7 +6,7 @@ module Hyrax
 
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, to: :solr_document
 
-    attr_accessor :physical_object_type, :idigbio_uuid
+    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, :physical_object_title, :physical_object_link, :physical_object_id, :device_title, :device_facility, :device_link, :device
 
     def universal_viewer?
       representative_id.present? &&
@@ -25,18 +25,86 @@ module Hyrax
         cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => imaging_event.id).first
 
         if biological_specimen.present?
+          @physical_object_title = biological_specimen.title.first
+          @physical_object_id = biological_specimen.id
+          @physical_object_link = "/concern/biological_specimens/" + @physical_object_id
           @idigbio_uuid = biological_specimen.idigbio_uuid
+          @vouchered = biological_specimen.vouchered
           @physical_object_type = "BiologicalSpecimen"
         elsif cultural_heritage_object.present?
+          @physical_object_title = cultural_heritage_object.title.first
+          @physical_object_id = cultural_heritage_object.id
+          @physical_object_link = "/concern/cultural_heritage_object/" + @physical_object_id
           @idigbio_uuid = cultural_heritage_object.idigbio_uuid
+          @vouchered = cultural_heritage_object.vouchered
           @physical_object_type = "CulturalHeritageObject"
         end
+
+        # get device from imaging event
+        device = Device.where('member_ids_ssim' => imaging_event.id).first
+        if device.present?
+          @device_title = device.title.first
+          @device_facility = device.facility.first
+          @device = device.title.first + " (" + device.facility.first + ")"
+          @device_link = "/concern/devices/" + device.id
+        end
+
       end        
     end
 
+    def in_collection_badge
+      # override the method in presents_attributes, passing the vouchered retrieved from get_showcase_data
+      in_collection_badge_class.new(@vouchered).render
+    end
+
     def supplied_record_badge
-      # this method over the method in presents_attributes, passing the idigbio_uuid retrieved from get_showcase_data
+      # override the method in presents_attributes, passing the idigbio_uuid retrieved from get_showcase_data
       supplied_record_badge_class.new(@idigbio_uuid).render
+    end
+
+    # methods for showcase partials
+    def showcase_work_title_partial
+      'showcase_work_title'
+    end
+
+    def showcase_show_actions_partial
+      'showcase_show_actions'
+    end
+
+    def showcase_file_object_details_partial
+      'showcase_file_object_details'
+    end
+
+    def showcase_image_at_a_glance_partial
+      'showcase_image_at_a_glance'
+    end
+
+    def showcase_ownership_and_permissions_partial
+      'showcase_ownership_and_permissions'
+    end
+
+    def showcase_identifiers_and_external_links_partial
+      'showcase_identifiers_and_external_links'
+    end
+
+    def showcase_media_items_partial
+      '/hyrax/physical_objects/showcase_media_items'
+    end
+
+    def showcase_media_items_member_partial
+      '/hyrax/physical_objects/showcase_media_items_member'
+    end
+
+    def showcase_collections_partial
+      '/hyrax/physical_objects/showcase_collections'
+    end
+
+    def showcase_tags_partial
+      '/hyrax/physical_objects/showcase_tags'
+    end
+
+    def showcase_citation_and_download_partial
+      '/hyrax/physical_objects/showcase_citation_and_download'
     end
 
     private

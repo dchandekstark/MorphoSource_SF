@@ -1,0 +1,14 @@
+<h2>IMAGE ACQUISITION AND PROCESSING AT A GLANCE</h2>
+
+
+<div class="row"><div class="col-xs-6 showcase-label">Number of Parent Media</div><div class="col-xs-6 showcase-value">Not yet implemented</div></div>
+<div class="row"><div class="col-xs-6 showcase-label">Number of Processing Events</div><div class="col-xs-6 showcase-value">Not yet implemented</div></div>
+<div class="row"><div class="col-xs-6 showcase-label">Derived Directly From</div><div class="col-xs-6 showcase-value">Not yet implemented</div></div>
+
+<%= presenter.attribute_to_html(:modality, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+
+<div class="row">
+	<div class="col-xs-6 showcase-label">Device</div>
+	<div class="col-xs-6 showcase-value"><%= presenter.device_title %> (<%= link_to(presenter.device_facility, presenter.device_link) %>)
+</div>
+</div>

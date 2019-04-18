@@ -2,6 +2,17 @@
   <% if presenter.editor? %>
 
     <div class="btn-group">
+      <% # todo: The download button should (if the work is under restricted download) instead display the text “Request Download” and should lead to the request download UI flow (TBA) %> 
+      <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-lg btn-primary', role: 'button' %>
+
+      <% if signed_in? %>
+        <% if @presenter.works_in_cart.include? params[:id] %>
+          <%= link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-danger' %>
+        <% else %>
+          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name), class: 'btn btn-default', :method => :post %>
+        <% end %>
+      <% end %>
+
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Actions <span class="caret"></span>
       </button>

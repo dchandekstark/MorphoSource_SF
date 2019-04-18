@@ -23,8 +23,16 @@
 
 	<div class="col-sm-6 col-sm-pull-6">
 		<div class="content-block">
-			<%#= render @presenter.showcase_general_details_partial, presenter: @presenter %>
+			<%= render @presenter.showcase_file_object_details_partial, presenter: @presenter %>
 		</div>
+		<div class="content-block">
+			<%= render @presenter.showcase_image_at_a_glance_partial, presenter: @presenter %>
+		</div>
+		<div class="content-block">
+			<%= render @presenter.showcase_ownership_and_permissions_partial, presenter: @presenter %>
+		</div>
+
+
 		<div class="content-block">
 			<%#= render @presenter.showcase_identifiers_and_external_links_partial, presenter: @presenter %>
 		</div>
