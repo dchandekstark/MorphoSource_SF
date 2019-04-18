@@ -23,7 +23,7 @@ RSpec.describe Hyrax::Actors::BiologicalSpecimenActor do
   describe '#update' do
     let(:work) { BiologicalSpecimen.new(title: [ 'Previous title' ]) }
     let(:ability) { Ability.new(User.new) }
-    let(:attrs) { {} }
+    let(:attrs) { { "canonical_taxonomy"=>[] } }
     let(:env) { Hyrax::Actors::Environment.new(work, ability, attrs) }
     before do
       allow(subject).to receive(:generated_title) { 'Spiffy Generated Title' }
@@ -170,5 +170,40 @@ RSpec.describe Hyrax::Actors::BiologicalSpecimenActor do
       end
     end
   end
+  describe "#check_canonical_taxonomy" do
+    let(:work) { BiologicalSpecimen.new(title: [ 'Test title' ]) }
+    let(:ability) { Ability.new(User.new) }
+    let(:canonical_taxonomy_id) { ["3b5918592"] }
+    let(:env) { Hyrax::Actors::Environment.new(work, ability, attrs) }
 
+
+    before do
+      allow(subject).to receive(:save) { true }
+      allow(subject).to receive(:run_callbacks) { true }
+    end
+
+    context 'the canonical taxonomy is dissociated from the work' do
+      let(:attrs) { {"canonical_taxonomy"=> canonical_taxonomy_id, "work_parents_attributes"=>{"0"=>{"id"=>canonical_taxonomy_id.first, "_destroy"=>"true"}}} }
+
+      it "clears the canonical_taxonomy attribute" do
+        expect(subject.send(:check_canonical_taxonomy, env)).to eq('')
+      end
+    end
+
+    context 'a taxonomy other than the canonical taxonomy is dissociated' do
+      let(:attrs) { {"canonical_taxonomy"=> canonical_taxonomy_id, "work_parents_attributes"=>{"0"=>{"id"=>canonical_taxonomy_id.first, "_destroy"=>"false"}, "1"=>{"id"=>"abc123", "_destroy"=>"true"}}} }
+
+      it "keeps the canonical_taxonomy attribute value" do
+        expect(subject.send(:check_canonical_taxonomy, env)).to eq(canonical_taxonomy_id.first)
+      end
+    end
+
+    context 'there is no canonical taxonomy selected' do
+      let(:attrs) { {"canonical_taxonomy"=> [], "work_parents_attributes"=>{"0"=>{"id"=>"def456", "_destroy"=>"false"}, "1"=>{"id"=>"abc123", "_destroy"=>"true"}}} }
+
+      it "canonical taxonomy remains blank" do
+        expect(subject.send(:check_canonical_taxonomy, env)).to eq('')
+      end
+    end
+  end
 end
