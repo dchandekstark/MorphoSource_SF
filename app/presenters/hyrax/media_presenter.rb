@@ -67,18 +67,17 @@ module Hyrax
     # to get a list of media images for MEDIA showpage
     def list_of_item_ids_to_display_for_showpage
 
-      media_file_set_ids = []
+      media_ids = []
 
-      # add current media file sets, then add child media file sets.  
-      # currently add up to 9 levels in the tree.  Later we should store the child medias in the work
+      # add current media id, then add child media ids.  
+      # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
       # so there is no need to traverse the tree
       media = Media.where('id' => solr_document.id).first
-      media_file_set_ids = media.file_set_ids
-      media_file_set_ids += child_media_file_set_ids(media, 9, media_file_set_ids)
-      media_file_set_ids += parent_media_file_set_ids(media, 9, media_file_set_ids)
+      #media_ids << media.id
+      #media_ids << child_media_ids(media, 5, media_ids)
+      media_ids << parent_media_ids(media, 5, media_ids)
 
-
-      media_file_set_ids.uniq # remove any duplicate IDs before returning
+      media_ids.flatten.uniq # remove any duplicate IDs before returning
     end
 
     # methods for showcase partials

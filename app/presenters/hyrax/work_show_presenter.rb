@@ -55,14 +55,6 @@ module Hyrax
       Hyrax::Engine.routes.url_helpers.download_url(representative_presenter, host: request.host)
     end
 
-    def modality
-      Media.where('member_ids_ssim' => id).first.modality.first
-    end
-
-    def part
-      Media.where('member_ids_ssim' => id).first.part.first
-    end
-
     # @return [Boolean] render a IIIF viewer
     def iiif_viewer?
       representative_id.present? &&
