@@ -1,6 +1,6 @@
 $(document).on('ready', function(){
-  
-  if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page 
+
+  if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
     cookie_expired_days = 90;
     // Begin Raw media flow
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
@@ -17,7 +17,7 @@ $(document).on('ready', function(){
       }
       $('#start_over').show();
     });
-    
+
     $('#submission_choose_biospec_or_cho_continue').click(function(event){
       event.preventDefault();
       var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();
@@ -37,7 +37,7 @@ $(document).on('ready', function(){
       $('div#submission_cho_search').addClass('hide').removeClass('show');
       $('div#submission_choose_create_cho').addClass('hide').removeClass('show');;
       $('div#submission_create_cho').addClass('show').removeClass('hide');
-    }); 
+    });
 
     $('a#submission_show_create_institution').click(function(event){
       event.preventDefault();
@@ -45,18 +45,25 @@ $(document).on('ready', function(){
       $('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
-    
+
+    $('a#submission_show_create_taxonomy').click(function(event){
+      event.preventDefault();
+      $('div#submission_taxonomy_select').addClass('hide').removeClass('show');
+      $('div#submission_choose_create_taxonomy').addClass('hide').removeClass('show');;
+      $('div#submission_create_taxonomy').addClass('show').removeClass('hide');
+    });
+
     // End Raw media flow
-  
-    // Begin Derived media flow 
-    
+
+    // Begin Derived media flow
+
     $('#btn_parents_not_in_morphosource').click(function(event){
       event.preventDefault();
       $('div#submission_parents_in_ms').addClass('hide').removeClass('show');
       $('div#submission_parents_not_in_ms').addClass('show').removeClass('hide');
       saveClick('#btn_parents_not_in_morphosource', false);
     });
-    
+
     saveClick = function(id, fromStart) {
       var saved_clicks = '';
       if (!fromStart && getCookie('saved_clicks')) {
@@ -75,14 +82,14 @@ $(document).on('ready', function(){
         deleteCookie('last_render');
         deleteCookie('saved_step');
       } else {
-        // go to phsyical object 
+        // go to physical object
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
         saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
       }
       clearForms();
     });
-    // End Derived media flow 
-    
+    // End Derived media flow
+
     $('#start_over').click(function(event){
       event.preventDefault();
       if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
@@ -99,7 +106,7 @@ $(document).on('ready', function(){
       });
       $('.radio_buttons').prop('checked', false);
     }
-    
+
     $('#btn_add_parent').click(function(event){
       event.preventDefault();
       var currentParentList = $('input[id="submission_parent_media_list"]').val();
@@ -121,10 +128,26 @@ $(document).on('ready', function(){
       $("input.parent_title").val('');
     });
 
+    $('#btn_add_taxonomy').click(function(event){
+      event.preventDefault();
+      var currentParentList = $('input[id="submission_taxonomy_id"]').val();
+      var selectedId = $("input.parent_id").val();
+      currentParentList = selectedId;
+      $('input[id="submission_taxonomy_id"]').val(currentParentList);
+      // clear previous selection if any
+      $('#parents > div:nth-child(4)').remove();
+      // display a new parent media row
+      $('.parent_row:last-child').after(newParentRow(selectedId));
+      $('input[id="submission_taxonomy_search"]').val('');
+      $("input.parent_id").val('');
+      $("input.parent_title").val('');
+    });
+
+
     var newParentRow = function(id){
       var row = '<div class="parent_row ' + id + '">'
         + '<div class="col-sm-4"><div class="parent_title">'
-        + $("input.parent_title").val() + '</div></div>' 
+        + $("input.parent_title").val() + '</div></div>'
         + '<div class="col-sm-2"><a class="btn_remove_parent btn btn-primary" onClick="removeParent(\'' + id + '\')">Remove</a> <!--' + id + '--></div>'
         + '</div>';
       return row;
@@ -137,7 +160,7 @@ $(document).on('ready', function(){
       var newParentList = removeValue(currentParentList, id);
       $('input[id="submission_parent_media_list"]').val(newParentList);
     }
-    
+
     function removeValue(list, value) {
       list = list.split(',');
       list.splice(list.indexOf(value), 1);
@@ -163,7 +186,7 @@ $(document).on('ready', function(){
         return true;
       }
     }
-    
+
     isDropdownSelected = function(selectName) {
       // this function check and make sure an option is selected in a dropdown
       if ($('select[name="' + selectName + '"]').prop('selectedIndex') == 0) {
@@ -173,7 +196,7 @@ $(document).on('ready', function(){
         return true;
       }
     }
-    
+
     gotoStep = function(pg, steps) {
       event.preventDefault();
       setCookie("last_render", pg, cookie_expired_days);
@@ -198,7 +221,7 @@ $(document).on('ready', function(){
       }
     }
 
-  } // end if the page is submission flow page 
+  } // end if the page is submission flow page
 });
 
 function getCookie(cname) {
@@ -225,6 +248,6 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function deleteCookie(cname) {
-  var expires = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  
+  var expires = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = cname + "=;" + expires + ";path=/";
 }

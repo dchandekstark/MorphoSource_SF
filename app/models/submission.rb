@@ -21,10 +21,12 @@ class Submission
                 :cho_search_collection_code,
                 :cho_search_institution_code,
                 :cho_search_occurrence_id,
+                :taxonomy_id,
+                :taxonomy_search,
                 :is_start_over,
                 :saved_step
 
-  
+
   MEDIA_DERIVED = 'Derived'
   MEDIA_RAW = 'Raw'
   PHYSICAL_OBJECT_BIOSPEC = { code: 'biospec',

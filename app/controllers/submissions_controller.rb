@@ -14,7 +14,7 @@ class SubmissionsController < ApplicationController
       # last_render saves the page that needs to be rendered if the user reload the page, or
       # come back to when the user has left off later
       # saved_step stores the last page usually. it's needed when, for example, the user needs to go back
-      # to new device after creating / selecting an institution. 
+      # to new device after creating / selecting an institution.
       # if needed, read the var from session instead: session[:submission]['saved_step']
       saved_step = cookies[:saved_step]
       last_render = cookies[:last_render]
@@ -35,7 +35,6 @@ class SubmissionsController < ApplicationController
 
   def create
     reinstantiate_submission
-    
     # todo: is there a need to separate raw and derived flow in two if and else?
     if params['biospec_search'].present?
       @docs = search_biospec
@@ -63,7 +62,7 @@ class SubmissionsController < ApplicationController
       end
       if @submission.saved_step == "biospec_will_create"
         @submission.saved_step = "biospec_institution_select"
-        render_and_save 'biospec_create'
+        render_and_save 'taxonomy'
       elsif @submission.saved_step == "device_will_create"
         @submission.saved_step = "device_institution_select"
         render_and_save 'device_create'
@@ -74,6 +73,9 @@ class SubmissionsController < ApplicationController
         # should not end up here
       end
       store_submission
+    elsif params['taxonomy_select'].present?
+      @submission.saved_step = "biospec_taxonomy_select"
+      render_and_save 'biospec_create'
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
       @submission.saved_step = "device_select"
@@ -84,11 +86,11 @@ class SubmissionsController < ApplicationController
       @submission.saved_step = "device_will_create"
       store_submission
       render_and_save 'institution'
-    elsif params['parent_media_select'].present? 
+    elsif params['parent_media_select'].present?
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       store_submission
       render_and_save 'processing_event'
-    elsif params['parent_media_how_to_proceed_continue'].present? 
+    elsif params['parent_media_how_to_proceed_continue'].present?
       session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
       store_submission
       render_and_save 'new'
@@ -116,7 +118,7 @@ class SubmissionsController < ApplicationController
 
   def render_and_save(pg)
     # save this page to render again if user reloads the page
-    cookies.permanent[:last_render] = pg 
+    cookies.permanent[:last_render] = pg
     if (pg != 'new')
       cookies.delete :saved_clicks
     end
@@ -169,7 +171,7 @@ class SubmissionsController < ApplicationController
     if @submission.saved_step == "device_will_create"
       render_and_save 'device_create'
     elsif @submission.saved_step == "biospec_will_create"
-      render_and_save 'biospec_create'
+      render_and_save 'taxonomy'
     elsif @submission.saved_step == "cho_will_create"
       render_and_save 'cho_create'
     else
@@ -197,6 +199,15 @@ class SubmissionsController < ApplicationController
     render_and_save 'media'
   end
 
+  def stage_taxonomy
+    reinstantiate_submission
+    @submission.taxonomy_id = 'new'
+    store_submission
+    taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
+    session[:submission_taxonomy_create_params] = taxonomy_model_params
+    render_and_save 'biospec_create'
+  end
+
   def finish_submission
     reinstantiate_submission
     # The various object '_create_params' are defined as instance variables so they are available to the
@@ -209,9 +220,13 @@ class SubmissionsController < ApplicationController
     @device_create_params = session[:submission_device_create_params]
     @media_create_params = session[:submission_media_create_params]
     @processing_event_create_params = session[:submission_processing_event_create_params]
+    @taxonomy_create_params = session[:submission_taxonomy_create_params]
     media_uploaded_files = session[:submission_media_uploaded_files]
     if @institution_create_params.present?
       @submission.institution_id = create_institution(@institution_create_params)
+    end
+    if @taxonomy_create_params.present?
+      @submission.taxonomy_id = create_taxonomy(@taxonomy_create_params)
     end
     if @biospec_create_params.present?
       @submission.biospec_id = create_biological_specimen(@biospec_create_params)
@@ -240,6 +255,9 @@ class SubmissionsController < ApplicationController
     parent_attributes = {}
     if @submission.institution_id.present?
       parent_attributes.merge!({ '0' => { "id" => @submission.institution_id, "_destroy" => "false" } })
+    end
+    if @submission.taxonomy_id.present?
+      parent_attributes.merge!({ '1' => { "id" => @submission.taxonomy_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
@@ -296,6 +314,10 @@ class SubmissionsController < ApplicationController
     create_work(ProcessingEvent, params)
   end
 
+  def create_taxonomy(params)
+    create_work(Taxonomy, params)
+  end
+
   def create_institution(params)
     create_work(Institution, params)
   end
@@ -328,6 +350,7 @@ class SubmissionsController < ApplicationController
     session[:submission_processing_event_create_params] = nil
     session[:submission_institution_create_params] = nil
     session[:submission_media_create_params] = nil
+    session[:submission_taxonomy_create_params] = nil
     cookies.delete :ms_submission_start_over
     cookies.delete :saved_step
     cookies.delete :last_render
@@ -353,6 +376,7 @@ class SubmissionsController < ApplicationController
     @processing_event_form = Hyrax::WorkFormService.build(ProcessingEvent.new, current_ability, self)
     @institution_form = Hyrax::WorkFormService.build(Institution.new, current_ability, self)
     @media_form = Hyrax::WorkFormService.build(Media.new, current_ability, self)
+    @taxonomy_form = Hyrax::WorkFormService.build(Taxonomy.new, current_ability, self)
   end
 
   def reinstantiate_submission
@@ -387,6 +411,7 @@ class SubmissionsController < ApplicationController
                               raw_or_derived_media: @submission.raw_or_derived_media,
                               parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
                               parent_media_list: @submission.parent_media_list,
+                              taxonomy_id: @submission.taxonomy_id,
                               cho_search_collection_code: @submission.cho_search_collection_code,
                               saved_step: @submission.saved_step
       }
@@ -415,7 +440,9 @@ class SubmissionsController < ApplicationController
                                           :raw_or_derived_media,
                                           :parent_media_how_to_proceed,
                                           :parent_media_search,
-                                          :parent_media_list
+                                          :parent_media_list,
+                                          :taxonomy_search,
+                                          :taxonomy_id
       )
   end
 end

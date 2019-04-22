@@ -50,7 +50,7 @@ RSpec.describe SubmissionsController, type: :controller do
       end
       it 'renders the biospec create view' do
         post :create, params: form_params
-        expect(response).to render_template(:biospec_create) 
+        expect(response).to render_template(:taxonomy)
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe SubmissionsController, type: :controller do
       end
       it 'renders the device create view' do
         post :create, params: form_params
-        expect(response).to render_template(:device_create) 
+        expect(response).to render_template(:device_create)
       end
     end
 
@@ -84,10 +84,10 @@ RSpec.describe SubmissionsController, type: :controller do
       end
       it 'renders the CHO create view' do
         post :create, params: form_params
-        expect(response).to render_template(:cho_create) 
+        expect(response).to render_template(:cho_create)
       end
     end
-    
+
     describe 'device_select' do
       let(:device_id) { 'abc123' }
       let(:form_params) { { submission: { device_id: device_id }, device_select: 'foo' } }
@@ -175,9 +175,9 @@ RSpec.describe SubmissionsController, type: :controller do
       post :stage_institution, params: form_params
       expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
     end
-    it 'renders the biospec create view' do
+    it 'renders the taxonomy page' do
       post :stage_institution, params: form_params
-      expect(response).to render_template(:biospec_create)
+      expect(response).to render_template(:taxonomy)
     end
   end
 
@@ -248,6 +248,26 @@ RSpec.describe SubmissionsController, type: :controller do
         expect(subject).to receive(:finish_submission)
         post :stage_media, params: form_params
       end
+    end
+  end
+
+  describe '#stage_taxonomy' do
+    let(:saved_step) {'biospec_institution_select'}
+    before do
+      @request.session['submission'] = {saved_step: saved_step}
+    end
+    let(:form_attributes) do
+      { "taxonomy_domain"=> "domain", "taxonomy_kingdom"=> "kingdom", "taxonomy_phylum"=> "phylum", "taxonomy_superclass"=> "superclass", "taxonomy_class"=> "class", "taxonomy_subclass"=> "subclass", "taxonomy_superorder"=> "superorder", "taxonomy_order"=> "order", "taxonomy_suborder"=> "suborder", "taxonomy_superfamily"=> "superfamily", "taxonomy_family"=> "family", "taxonomy_subfamily"=> "subfamily", "taxonomy_tribe"=> "tribe", "taxonomy_genus"=> "genus", "taxonomy_subgenus"=> "subgenus", "taxonomy_species"=> "species", "taxonomy_subspecies"=> "subspecies"}
+    end
+    let(:form_params) { { taxonomy: form_attributes } }
+    let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
+    it 'stores the model attributes in the session' do
+      post :stage_taxonomy, params: form_params
+      expect(@request.session[:submission_taxonomy_create_params]).to include(model_attributes)
+    end
+    it 'renders the biospec create view' do
+      post :stage_taxonomy, params: form_params
+      expect(response).to render_template(:biospec_create)
     end
   end
 
