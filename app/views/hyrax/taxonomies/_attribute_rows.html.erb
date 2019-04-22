@@ -18,3 +18,10 @@
 <%= presenter.attribute_to_html(:taxonomy_subspecies, label: 'Subspecies', html_dl: true) %>
 <%= presenter.attribute_to_html(:source, label: 'Source', html_dl: true) %>
 <%= presenter.attribute_to_html(:trusted, html_dl: true) %>
+
+<% related_taxonomies =  presenter.attribute_to_html(:biological_specimens, render_as: :related_taxonomies, html_dl: true, locale: locale, id: params[:id]) %>
+
+<% unless related_taxonomies.blank? %>
+  <h4>Related Taxonomies</h4>
+  <%= related_taxonomies %>
+<% end %>

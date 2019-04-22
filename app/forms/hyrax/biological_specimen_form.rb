@@ -26,7 +26,8 @@ module Hyrax
         :idigbio_uuid,
         :is_type_specimen,
         :occurrence_id,
-        :sex
+        :sex,
+        :canonical_taxonomy
     ]
 
     self.terms -= [ :keyword, :license, :rights_statement, :subject, :title, :language, :source, :resource_type ]
@@ -49,7 +50,8 @@ module Hyrax
         :idigbio_uuid,
         :is_type_specimen,
         :occurrence_id,
-        :sex
+        :sex,
+        :canonical_taxonomy
     ]
 
     # These show above the fold
@@ -61,7 +63,8 @@ module Hyrax
           :collection_code,
           :date_created,
           :identifier,
-          :related_url
+          :related_url,
+          :canonical_taxonomy
       ]
     end
 

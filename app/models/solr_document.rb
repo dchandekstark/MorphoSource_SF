@@ -210,6 +210,10 @@ class SolrDocument
     self[Solrizer.solr_name('sex', :stored_searchable)]
   end
 
+  def canonical_taxonomy
+    self[Solrizer.solr_name('canonical_taxonomy', :stored_searchable)]
+  end
+
   # CHOs only
   def cho_type
     self[Solrizer.solr_name('cho_type', :stored_searchable)]

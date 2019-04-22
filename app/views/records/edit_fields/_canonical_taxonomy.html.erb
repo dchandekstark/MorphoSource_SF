@@ -1,0 +1,12 @@
+<% if @curation_concern.present? %>
+  <% @taxonomies =  Hash[@curation_concern.taxonomies.map{|t| [t.title.first, t.id]}] %>
+<% else %>
+  <% @taxonomies = [] %>
+<% end%>
+
+<%= f.input :canonical_taxonomy, as: :select,
+    label: 'Canonical Taxonomy',
+    collection: @taxonomies,
+    include_blank: true,
+    input_html: { class: 'form-control' }
+%>
