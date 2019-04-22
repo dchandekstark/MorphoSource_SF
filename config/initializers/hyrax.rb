@@ -104,6 +104,7 @@ Hyrax.config do |config|
   # Path to the file characterization tool
   config.fits_path = ENV.fetch("FITS_PATH", "fits.sh")
   config.blender_path = ENV.fetch("BLENDER_PATH", "blender")
+  config.fiji_path = ENV.fetch("FIJI_PATH", "blender")
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
