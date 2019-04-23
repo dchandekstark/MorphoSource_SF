@@ -1,19 +1,41 @@
 terms:
-  - id: Raster-To-Mesh
-    term: Raster-To-Mesh
+  - id: Reconstructed Tomography to Mesh
+    term: Reconstructed Tomography to Mesh
+  - id: Photos to Digital Elevation Model
+    term: Photos to Digital Elevation Model
+  - id: Photos to Sparse Point Cloud + Depth Map
+    term: Photos to Sparse Point Cloud + Depth Map
+  - id: Sparse Point Cloud + Depth Map to Dense Point Cloud
+    term: Sparse Point Cloud + Depth Map to Dense Point Cloud
+  - id: Photos to Sparse Mesh + Depth Map
+    term: Photos to Sparse Mesh + Depth Map
+  - id: Sparse Mesh + Depth Map to Mesh
+    term: Sparse Mesh + Depth Map to Mesh
+  - id: Photos to Dense Point Cloud
+    term: Photos to Dense Point Cloud
+  - id: Photos to Mesh
+    term: Photos to Mesh
+  - id: Mesh/Point Cloud Texturing
+    term: Mesh/Point Cloud Texturing
+  - id: Point Cloud to Mesh
+    term: Point Cloud to Mesh
+  - id: Mesh to Point Cloud
+    term: Mesh to Point Cloud
   - id: Reconstruction
     term: Reconstruction
+  - id: Smoothing/Noise Reduction
+    term: Smoothing/Noise Reduction
   - id: Simplification
     term: Simplification
-  - id: Noise-Reduction / Smoothing
-    term: Noise-Reduction / Smoothing
-  - id: Alignment
-    term: Alignment
-  - id: Cropping
-    term: Cropping
-  - id: Histogram-Editing (raster only)
-    term: Histogram-Editing (raster only)
-  - id: Merge-n-datasets
-    term: Merge-n-datasets
-  - id: Other
-    term: Other
+  - id: Histogram Editing
+    term: Histogram Editing
+  - id: Bit Depth Change
+    term: Bit Depth Change
+  - id: Image/Mesh Compression
+    term: Image/Mesh Compression
+  - id: Merge
+    term: Merge
+  - id: Crop
+    term: Crop
+  - id: Patch
+    term: Patch
