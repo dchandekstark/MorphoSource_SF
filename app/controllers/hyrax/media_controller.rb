@@ -34,7 +34,7 @@ module Hyrax
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
           [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
-        if files.length == 0
+        if ((files.length == 0) && (Rails.env != 'test'))
           head :bad_request
         else
           aup_filename = 'MorphoSource_Download_Use_Agreement.pdf'
