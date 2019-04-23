@@ -30,7 +30,7 @@ module Hyrax
           authorize!(:read, f.id) unless (Rails.env == 'test')
           m = f.parent
           # Unzipped filename will be e.g. "Structured Light-2514nk481/bun_zipper_res2-nc580m649.ply"
-          output_dirname = "#{m.title.join('-').tr('[]','')}-#{m.id}"
+          output_dirname = "#{m.title.join('-').tr('[]','').tr('/\\','-')}-#{m.id}"
           output_filename = File.basename(f.label, File.extname(f.label)) + "-#{f.id}" + File.extname(f.label)
           [f.original_file.uri.to_s, "#{output_prefix}/#{output_dirname}/#{output_filename}", modification_time: f.date_modified]
         end
