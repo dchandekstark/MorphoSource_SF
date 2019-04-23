@@ -70,13 +70,13 @@ module Morphosource
     # to get a list of media images for PO showpage
     def list_of_item_ids_to_display_for_showpage
       # get the media from
-      # BiologicalSpecimen > ImagingEvent > Media 
-      child_ids = solr_document.member_ids  # todo: do we need to handle more than one imaging event?
+      # BiologicalSpecimen/CulturalHeritageObject > ImagingEvent > Media 
+      child_ids = solr_document.member_ids  # todo: do we need to handle more than one imaging event per physical object?
       imaging_event = ImagingEvent.where('id' => child_ids).first
       media_ids = []
 
       if imaging_event.present?
-        child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work?
+        child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work per imaging event?
         media = Media.where('id' => child_ids).first
         if media.present?
           # add current media file sets, then add child media file sets.  
@@ -104,29 +104,6 @@ module Morphosource
       end
     end
 
-    # this method get a list of child media of a passed media 
-    def child_medias(media)
-      child_medias = []
-      processing_event = nil
-      child_media = nil
-      # Find child media: Media > ProcessingEvent > Media
-      media.member_ids.each do |id|
-        if ProcessingEvent.where('id' => id).present? # todo: do we need to handle more than one processing event?
-          processing_event = ProcessingEvent.where('id' => id).first
-        end
-      end
-      if processing_event.present?
-        child_ids = processing_event.member_ids
-        child_ids.each do |id|
-          if Media.where('id' => id).present?
-            child_media = Media.where('id' => id).first
-            child_medias << child_media
-          end
-        end
-      end
-      child_medias
-    end
-
     # this method recursively traverse the tree up to X level to gather all ids of parent medias
     def parent_media_ids(media, level, media_ids)
       if level == 0
@@ -140,6 +117,39 @@ module Morphosource
         end
         media_ids.flatten.uniq # remove any duplicate IDs before returning
       end
+    end
+
+    # this method recursively traverse the tree up to X level to gather all ids of parent medias
+    def sibling_media_ids(media, media_ids)
+      parent_medias = parent_medias(media)
+      parent_medias.each do |parent_media|
+        media_ids << child_media_ids(parent_media, 1, media_ids)
+      end
+      media_ids.flatten.uniq # remove any duplicate IDs before returning
+    end
+
+    # this method get a list of child media of a passed media 
+    def child_medias(media)
+      child_medias = []
+      processing_events = nil
+      # Find child media: Media > ProcessingEvent > Media
+      media.member_ids.each do |id|
+        processing_event = nil
+        child_media = nil
+        if ProcessingEvent.where('id' => id).present? 
+          processing_event = ProcessingEvent.where('id' => id).first
+        end
+        if processing_event.present?
+          child_ids = processing_event.member_ids
+          child_ids.each do |id|
+            if Media.where('id' => id).present?
+              child_media = Media.where('id' => id).first
+              child_medias << child_media
+            end
+          end  # end child_ids.each
+        end
+      end # end media.member_ids.each
+      child_medias
     end
 
     # this method get a list of parent media of a passed media 
