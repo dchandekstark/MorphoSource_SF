@@ -10,6 +10,10 @@ module Morphosource
       index.as :stored_searchable
     end
 
+    property :processing_activity, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/resourceCreationTechnique") do |index|
+      index.as :stored_searchable
+    end
+
     property :processing_activity_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/processingActivityType") do |index|
       index.as :stored_searchable
     end
