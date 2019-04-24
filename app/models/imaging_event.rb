@@ -1,6 +1,20 @@
+class ImagingEventParentDeviceModalityValidator < ActiveModel::Validator
+  def validate(imaging_event)
+    parent_devices = imaging_event.in_works.select{|w| w.class == Device}
+    if parent_devices.length > 0
+      parent_modalities = parent_devices.map{|d| d.modality.to_a}.flatten.uniq
+      if parent_modalities.length > 0
+        unless parent_modalities.include?(imaging_event.ie_modality.first)
+          imaging_event.errors[:ie_modality] << "Imaging Event modality \"#{imaging_event.ie_modality.first}\" does not match parent device modalities: #{parent_modalities.join(', ')}"
+        end
+      end
+    end
+  end
+end
+
 class ImagingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
-  validates_with Morphosource::ParentChildValidator
+  validates_with Morphosource::ParentChildValidator, ImagingEventParentDeviceModalityValidator
   after_create :add_id_to_title
 
   self.work_requires_files = false
