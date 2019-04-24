@@ -164,8 +164,13 @@ div.showcase {
   .row {
     padding:4px 24px;
   }
+
   .row.collapse-button {
     padding:4px 15px;
+  }
+
+  #taxonomy-accordion-group > div {
+    color: black;
   }
 
   .collapse-accordion {
@@ -180,8 +185,17 @@ div.showcase {
     padding-left: 8%;
   }
 
+  .row .taxonomy-label {
+    color: black;
+  }
+
   .row .taxonomy-title {
     font-style: italic;
+    color: black;
+  }
+
+  a.contributing-user {
+    font-style: normal;
   }
 
 

@@ -47,6 +47,14 @@ module Morphosource
         'Mesh' => {extensions: mesh_formats, label: I18n.t('morphosource.media.format_labels.mesh')},
         'Other' => {extensions: other_formats, label: I18n.t('morphosource.media.format_labels.other')}
       }
+
+      # taxonomy labels
+      TAXONOMY_LABELS = {
+        'canonical' => I18n.t('morphosource.taxonomy.labels.canonical'),
+        'trusted_canonical' => I18n.t('morphosource.taxonomy.labels.trusted_canonical'),
+        'trusted' => I18n.t('morphosource.taxonomy.labels.trusted'),
+        'user' => I18n.t('morphosource.taxonomy.labels.user')
+      }
     end
 
   end
