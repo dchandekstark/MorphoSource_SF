@@ -131,7 +131,6 @@ module Morphosource
     # this method get a list of child media of a passed media 
     def child_medias(media)
       child_medias = []
-      processing_events = nil
       # Find child media: Media > ProcessingEvent > Media
       media.member_ids.each do |id|
         processing_event = nil

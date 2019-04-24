@@ -199,4 +199,82 @@ div.showcase {
   }
 
 
+  .content-block-lg.row {
+    margin: 5px 0 30px 50px;    
+  }
+
+  .showcase-label, .showcase-value,
+  .content-block-lg .row > div,
+  .content-block .row > div {
+    font-size: 12px; 
+    /* font-size: 1.6vw; */
+    @media (min-width: 414px) {
+      font-size: 2.4vw; 
+    }
+    @media (min-width: 768px) {
+      font-size: 1.3vw; 
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+    }
+  }
+
+  .content-block-lg {
+    border: 2px solid #efefef; 
+  }
+
+  .showcase-link {
+    word-break: break-all;
+  }
+
+  .dropdown-menu, .twitter-typeahead .tt-menu {
+    min-width: 88px;
+  }
+
+  div.preview {
+    margin-top: 20px;
+    background-color: #efefef;
+    border: 1px solid #efefef;
+  }
+
+  .preview-image {
+    width:50%;
+    margin: 10vw auto;
+    display: block;
+
+    @media (min-width: 768px) {
+      width:35%;
+    }
+  }
+
+  .media-block .thumbnail {
+    display:inline-block;
+    border: none;
+  }
+
+  /* media showcase specific styles */
+  .media-showcase {
+    small.badge-wrapper div {
+      font-size: 1.4vw;
+      line-height: 2vw;
+    }
+    .show-actions {
+      padding: 0.6vw 0;
+      @media (min-width: 991px) { /* show 1 button on each line when smaller than this width */
+        padding: 2.7vw 0;
+      }
+      .btn {
+        margin-left: 0.5vw;
+        margin-bottom: 4px;
+        /* min-width: 86px; */
+        @media (max-width: 990px) { /* show 1 button on each line when smaller than this width */
+          float: none;
+          display: block;
+          min-width: 100px;
+        }
+      }
+    }   
+  }
+  /* /media showcase specific styles */
+
 }

@@ -3,10 +3,10 @@
 <div class="row">
 	<div class="col-sm-6 col-sm-push-6">
 		<div class="content-block preview">
-			<%= render @presenter.showcase_viewer_partial, presenter: @presenter %>
+			<%#= render @presenter.showcase_viewer_partial, presenter: @presenter %>
 		</div>
 		<div class="content-block">
-			<%= render @presenter.showcase_media_items_partial, presenter: @presenter %>
+			<%#= render @presenter.showcase_media_items_partial, presenter: @presenter %>
 		</div>
 
 		<div class="content-block">
@@ -26,7 +26,7 @@
 			<%= render @presenter.showcase_file_object_details_partial, presenter: @presenter %>
 		</div>
 		<div class="content-block">
-			<%= render @presenter.showcase_image_at_a_glance_partial, presenter: @presenter %>
+			<%= render @presenter.showcase_image_acquisition_partial, presenter: @presenter %>
 		</div>
 		<div class="content-block">
 			<%= render @presenter.showcase_ownership_and_permissions_partial, presenter: @presenter %>
@@ -38,4 +38,9 @@
 		</div>
 
 	</div>
+
+</div>
+
+<div class="row">
+	<%= render @presenter.showcase_image_acquisition_details_partial, presenter: @presenter %>
 </div>
