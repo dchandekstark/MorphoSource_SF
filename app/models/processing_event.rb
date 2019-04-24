@@ -1,7 +1,7 @@
 class ProcessingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
-  after_create :add_id_to_title
+  after_save :add_id_to_title
 
   self.indexer = ProcessingEventIndexer
   # Change this to restrict which works can be added as a child.
@@ -17,7 +17,8 @@ class ProcessingEvent < Morphosource::Works::Base
 
   private
     def add_id_to_title
-      self.title.set("PE#{self.id.to_s}: #{self.title.first.to_s}")
-      self.save!
+      unless self.title && self.id && self.title.first.to_s.start_with?("PE#{self.id.to_s}: ")
+        self.title.set("PE#{self.id.to_s}: #{self.title.first.to_s}")
+      end
     end
 end

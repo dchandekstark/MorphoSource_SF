@@ -1,7 +1,7 @@
 class Media < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
-  after_create :add_id_to_title
+  after_save :add_id_to_title
 
   self.work_requires_files = true
 
@@ -45,7 +45,8 @@ class Media < Morphosource::Works::Base
 
   private
     def add_id_to_title
-      self.title.set("M#{self.id.to_s}: #{self.title.first.to_s}")
-      self.save!
+      unless self.title && self.id && self.title.first.to_s.start_with?("M#{self.id.to_s}: ")
+        self.title.set("M#{self.id.to_s}: #{self.title.first.to_s}")
+      end
     end
 end
