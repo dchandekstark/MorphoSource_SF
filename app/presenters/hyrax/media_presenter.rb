@@ -7,7 +7,8 @@ module Hyrax
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, to: :solr_document
 
     attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, :physical_object_title, :physical_object_link, :physical_object_id, :device_title, :device_facility, :device_link, :device, :parent_media_id_list, :child_media_id_list,
-      :sibling_media_id_list, :parent_media_count, :direct_parent_title_list, :processing_event_count
+      :sibling_media_id_list, :parent_media_count, :direct_parent_title_list, :processing_event_count, :data_managed_by,
+      :download_permission, :ark, :doi
 
     def universal_viewer?
       representative_id.present? &&
@@ -79,6 +80,18 @@ module Hyrax
           @processing_event_count += 1
         end
       end # end media.member_ids.each
+
+      # todo: need to get the user name (and a link to user) from the email address
+      @data_managed_by = solr_document.depositor
+      
+      if media.fileset_visibility.include? 'restricted'
+        @download_permission = 'restricted'
+      else
+        @download_permission = 'open'
+      end
+
+      @ark = media.ark
+      @doi = media.doi
 
     end
 

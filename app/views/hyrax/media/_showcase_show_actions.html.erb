@@ -2,8 +2,14 @@
   <% if presenter.editor? %>
 
     <div class="btn-group">
-      <% # todo: The download button should (if the work is under restricted download) instead display the text “Request Download” and should lead to the request download UI flow (TBA) %> 
-      <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-sm btn-default', role: 'button' %>
+      <% # todo: The download button should (if the work is under restricted download) 
+         # instead display the text “Request Download” and should lead to the request download UI flow (TBA) 
+         # for now, the presenter checks for the fileset_visibility to determine the ability
+      if presenter.download_permission == 'open' %> 
+        <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-sm btn-default', role: 'button' %>
+      <% else %>
+        <%= link_to 'Request download', 'TBD' , class: 'btn btn-sm btn-default', role: 'button' %>      
+      <% end %>
 
       <% if signed_in? %>
         <% if @presenter.works_in_cart.include? params[:id] %>
