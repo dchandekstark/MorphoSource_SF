@@ -242,7 +242,6 @@ div.showcase {
     margin: 10vw auto;
     display: block;
 
-<<<<<<< HEAD
     @media (min-width: 768px) {
       width:35%;
     }
@@ -279,48 +278,3 @@ div.showcase {
   /* /media showcase specific styles */
 
 }
-=======
-  	@media (min-width: 768px) {
-			width:35%;
-		}
-	}
-
-	.media-block .thumbnail {
-		display:inline-block;
-		border: none;
-	}
-
-	.row {
-		padding:4px 24px;		
-	}
-	.row.collapse-button {
-		padding:4px 15px;
-	}
-
-	/* media showcase specific styles */
-	.media-showcase {
-		small.badge-wrapper div {
-			font-size: 1.4vw;
-			line-height: 2vw;
-		}
-		.show-actions {
-			padding: 0.6vw 0;
-	  	@media (min-width: 977px) { /* show 1 button on each line when smaller than this width */
-			  padding: 2.7vw 0;
-	  	}
-			.btn {
-				margin-left: 0.5vw;
-				margin-bottom: 4px;
-  			/* min-width: 86px; */
-		  	@media (max-width: 976px) { /* show 1 button on each line when smaller than this width */
-	  			float: none;
-	  			display: block;
-	  			min-width: 100px;
-		  	}
-			}
-		}		
-	}
-	/* /media showcase specific styles */
-
-} /* end div.showcase */
->>>>>>> ext links block, ownership, collections, renderer for doi, ark, license
