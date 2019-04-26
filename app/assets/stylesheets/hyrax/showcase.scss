@@ -1,22 +1,8 @@
-/*
-.navbar-inverse {
-    background-color: #000 !important;
-    border-color: #090909;
-}
-*/
-
 div.showcase {
 
   max-width: 1200px;
   border: 2px solid #efefef;
   margin-top: 18px;
-
-  /* div {border:1px dotted red;} */
-
-  /* .label-ms-badge {
-    background-color: red;
-  } */
-
 
   .show-actions {
      padding: 3.5vw 1vw 0 0;
@@ -120,7 +106,6 @@ div.showcase {
   .showcase-label, .showcase-value,
   .content-block .row > div {
     font-size: 12px;
-    /* font-size: 1.6vw; */
     @media (min-width: 414px) {
       font-size: 2.4vw;
     }
@@ -207,7 +192,6 @@ div.showcase {
   .content-block-lg .row > div,
   .content-block .row > div {
     font-size: 12px; 
-    /* font-size: 1.6vw; */
     @media (min-width: 414px) {
       font-size: 2.4vw; 
     }
