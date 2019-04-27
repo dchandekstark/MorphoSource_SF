@@ -6,9 +6,9 @@ module Hyrax
 
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, to: :solr_document
 
-    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, :physical_object_title, :physical_object_link, :physical_object_id, :device_and_facility, :device_facility, :device_link, :device, :parent_media_id_list, :child_media_id_list, :sibling_media_id_list, :parent_media_count, :direct_parent_title_list, 
+    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, :physical_object_title, :physical_object_link, :physical_object_id, :device_and_facility, :device_facility, :device_link, :device, :parent_media_id_list, :child_media_id_list, :sibling_media_id_list, :parent_media_count, :direct_parent_members, 
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, :other_details, 
-      :imaging_event_creator, :imaging_event_date_created
+      :imaging_event_creator, :imaging_event_date_created, :imaging_event_exist
 
     def universal_viewer?
       representative_id.present? &&
@@ -23,6 +23,7 @@ module Hyrax
       # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
       imaging_event = ImagingEvent.where('member_ids_ssim' => solr_document.id).first
       if imaging_event.present?
+        imaging_event_exist = true
         biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => imaging_event.id).first
         cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => imaging_event.id).first
 
@@ -47,7 +48,8 @@ module Hyrax
         if device.present?
           @device = device.title.first
           @device_facility = device.facility.first
-          @device_and_facility = device.title.first + " (" + device.facility.first + ")"
+          @device_and_facility = @device
+          @device_and_facility += " (" + @device_facility + ")" if @device_facility.present?
           @device_link = "/concern/devices/" + device.id
         end
 
@@ -55,13 +57,16 @@ module Hyrax
         @lens = ""
         @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
         @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
-        @other_details = ""
+        @other_details = []
         @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
-        @other_details << " / " + imaging_event.light_source.first + " light" if imaging_event.light_source.present?
-        @other_details << " / " + imaging_event.background_removal.first if imaging_event.background_removal.present?
+        @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
+        @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
+        @other_details = @other_details.join(' / ')
         @imaging_event_creator = imaging_event.creator
         @imaging_event_date_created = imaging_event.date_created
 
+      else
+        imaging_event_exist = false
       end # end if imaging_event present?
       
       # add current media id, then add child media ids.  
@@ -74,13 +79,16 @@ module Hyrax
       @sibling_media_id_list = sibling_media_ids(media, []).flatten.uniq
 
       # get direct parents
-      # todo: setup links using the media ids
-      @direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
-      @direct_parent_title_list = []
-      @direct_parent_id_list.each do |parent_id|
-        parent_media = Media.where('id' => parent_id).first
-        @direct_parent_title_list << parent_media.title.first
-      end
+      direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
+      @direct_parent_members = member_presenters_for(direct_parent_id_list) 
+
+      # should not need parent titles any more.  remove later
+      #@direct_parent_title_list = []
+      #@direct_parent_id_list.each do |parent_id|
+      #  parent_media = Media.where('id' => parent_id).first
+      #  @direct_parent_title_list << parent_media.title.first
+      #end
+      #@direct_parent_title_list = @direct_parent_title_list.join(', ')
 
       @processing_event_count = 0
       media.member_ids.each do |id|
@@ -145,6 +153,10 @@ module Hyrax
 
     def showcase_image_acquisition_details_partial
       'showcase_image_acquisition_details'
+    end
+
+    def showcase_direct_parents_member_partial
+      'showcase_direct_parents_member'
     end
 
     def showcase_ownership_and_permissions_partial
