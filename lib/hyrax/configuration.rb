@@ -51,7 +51,7 @@ module Hyrax
     # Path on the local file system where derivatives will be stored
     attr_writer :derivatives_path
     def derivatives_path
-      @derivatives_path ||= Rails.root.join('tmp', 'derivatives')
+      @derivatives_path ||= Rails.root.join('derivatives')
     end
 
     # Path on the local file system where originals will be staged before being ingested into Fedora.

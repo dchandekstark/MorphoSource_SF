@@ -34,20 +34,29 @@ before_install:
   # verify fits are configured properly
   # - fits.sh -i "/home/travis/build/MorphoSource/MorphoSource_SF/spec/fixtures/CMB06020_R-m1_011.dcm"
   # end FITS setup --------
-  
+
   # begin Blender setup --------
   - cd $TRAVIS_BUILD_DIR/download
   - curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
   - tar xjf blender.tar.bz2
   - mv blender-2.79b-linux-glibc219-x86_64 blender
   - curl -o blender_characterize_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_characterize_mesh.py
+  - curl -o blender_derive_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_derive_mesh.py
   - mkdir blender/scripts
   - cp blender_characterize_mesh.py blender/scripts/.
+  - cp blender_derive_mesh.py blender/scripts/.
+  - git clone https://github.com/KhronosGroup/glTF-Blender-IO.git
+  - cp -r glTF-Blender-IO/addons/io_scene_gltf2 blender/2.79/scripts/addons/
   - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
-  - $TRAVIS_BUILD_DIR/download/blender/blender -v
+  - $BLENDER_PATH/blender -v
   # verify blender is configured properly
   #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
   # end Blender setup --------
+
+  # begin gltf-pipeline setup --------
+  - npm install -g gltf-pipeline
+  - gltf-pipeline --version
+  # end gltf-pipeline setup --------
 
   - cd $TRAVIS_BUILD_DIR
 before_script:
