@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  # Physical Object show case pages
+  scope module: :hyrax do
+    get 'biological_specimens/:id', to: 'biological_specimens#showcase'
+    get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
+    # redirect the default BSO/CHO view to showcase view
+    get 'concern/biological_specimens/:id', to: 'biological_specimens#showcase'
+    get 'concern/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
+  end
+
   require "resque_web"
   mount ResqueWeb::Engine => "/queues"
 
@@ -85,14 +94,5 @@ Rails.application.routes.draw do
       delete '/cart_items', action: :batch_destroy, controller: :cart_items, as: 'batch_destroy_items'
       get 'download_items', action: :download, controller: :cart_items, as: 'download_items'
     end
-  end
-  
-  # Physical Object show case pages
-  scope module: :hyrax do
-    get 'biological_specimens/:id', to: 'biological_specimens#showcase'
-  end
-
-  scope module: :hyrax do
-    get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
   end
 end

@@ -24,6 +24,10 @@ module Morphosource
       property :sex, predicate: ::RDF::Vocab::DWC.sex do |index|
         index.as :stored_searchable, :facetable
       end
+
+      property :canonical_taxonomy, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/canonicalTaxonomy") do |index|
+        index.as :stored_searchable 
+      end
     end
 
   end

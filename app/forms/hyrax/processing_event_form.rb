@@ -37,11 +37,12 @@ module Hyrax
       :rights,
       :rights_statement,
       :subject,
-      :source]
+      :source,
+      :title]
 
-    self.single_valued_fields = [:title, :description, :date_created]
+    self.single_valued_fields = [:description, :date_created]
 
-    self.required_fields = [:title]
+    self.required_fields = []
 
     def primary_terms
       required_fields + [:creator, :date_created, :software, :description]

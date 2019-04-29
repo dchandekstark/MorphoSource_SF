@@ -27,8 +27,8 @@ en:
       format_labels:
         image: 'Image'
         video: 'Video'
-        ct_mri: 'CT/MRI Image Stack'
-        photogrammetry: 'Photogrammetry Image Stack'
+        ct_mri: 'CT/MRI Image Series'
+        photogrammetry: 'Photogrammetry Image Series'
         mesh: 'Mesh or Point Cloud'
         other: 'Other'
     upload:

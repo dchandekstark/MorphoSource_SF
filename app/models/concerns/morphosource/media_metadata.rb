@@ -21,6 +21,10 @@ module Morphosource
     index.as :stored_searchable, :facetable
     end
 
+    property :series_type, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subtypeLiteral") do |index|
+    index.as :stored_searchable, :facetable
+    end
+
     # Optional free text values
     property :part, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subjectPart") do |index|
     index.as :stored_searchable
@@ -76,12 +80,12 @@ module Morphosource
 
     # -- Media type-specific metadata --
 
-    # ImageStack fields
+    # ImageSeries fields
     property :number_of_images_in_set, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomNumberOfSeriesRelatedInstances"), multiple: false do |index|
     index.as :stored_searchable
     end
 
-    # CTImageStack fields
+    # CTImageSeries fields
     property :x_spacing, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/dicomPixelSpacingWidth") do |index|
     index.as :stored_searchable
     end
@@ -94,12 +98,16 @@ module Morphosource
     index.as :stored_searchable
     end
 
-    # PhotogrammetryImageStack fields
+    property :slice_thickness, predicate: ::RDF::URI.new("http://purl.org/healthcarevocab/v1#SliceThickness") do |index|
+    index.as :stored_searchable
+    end
+
+    # PhotogrammetryImageSeries fields
     property :scale_bar, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/scaleBar") do |index|
     index.as :stored_searchable
     end
 
-    # Mesh and CTImageStack field
+    # Mesh and CTImageSeries field
     property :unit, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/ACExt/units") do |index|
     index.as :stored_searchable, :facetable
     end

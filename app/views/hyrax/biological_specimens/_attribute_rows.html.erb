@@ -2,8 +2,6 @@
 
 <!-- Hyrax Basic Metadata -->
 <%= presenter.attribute_to_html(:date_modified, label: t('hyrax.base.show.last_modified'), html_dl: true) %>
-<%= presenter.attribute_to_html(:creator, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:contributor, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:publisher, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:identifier, render_as: :linked, search_field: 'identifier_tesim', html_dl: true) %>
 <%= presenter.attribute_to_html(:date_created, render_as: :linked, search_field: 'date_created_tesim', html_dl: true) %>
@@ -29,3 +27,15 @@
 <%= presenter.attribute_to_html(:is_type_specimen, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:occurrence_id, html_dl: true) %>
 <%= presenter.attribute_to_html(:sex, render_as: :faceted, html_dl: true) %>
+
+
+<% institutional_taxonomy = presenter.attribute_to_html(:canonical_taxonomy_object, label: presenter.canonical_taxonomy_label, render_as: :showcase_taxonomy, include_empty: false, html_dl: true, locale: locale) %>
+<% trusted_taxonomies = presenter.attribute_to_html(:trusted_taxonomies, label: 'MorphoSource Inferred', render_as: :showcase_taxonomy, include_empty: false, html_dl: true, locale: locale) %>
+<% user_taxonomies = presenter.attribute_to_html(:user_taxonomies, label: 'User-Supplied', render_as: :showcase_taxonomy, include_empty: false, html_dl: true, locale: locale) %>
+
+<% unless institutional_taxonomy.blank? && trusted_taxonomies.blank? && user_taxonomies.blank? %>
+  <h4>Taxonomies</h4>
+  <%= institutional_taxonomy %>
+  <%= trusted_taxonomies %>
+  <%= user_taxonomies %>
+<% end %>

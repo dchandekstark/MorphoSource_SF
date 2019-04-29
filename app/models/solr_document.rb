@@ -83,8 +83,16 @@ class SolrDocument
     self[Solrizer.solr_name('scale_bar', :stored_searchable)]
   end
 
+  def series_type
+    self[Solrizer.solr_name('series_type', :stored_searchable)]
+  end
+
   def side
     self[Solrizer.solr_name('side', :stored_searchable)]
+  end
+
+  def slice_thickness
+      self[Solrizer.solr_name('slice_thickness', :stored_searchable)]
   end
 
   def unit
@@ -181,6 +189,10 @@ class SolrDocument
 
   def sex
     self[Solrizer.solr_name('sex', :stored_searchable)]
+  end
+
+  def canonical_taxonomy
+    self[Solrizer.solr_name('canonical_taxonomy', :stored_searchable)]
   end
 
   # CHOs only
@@ -528,4 +540,79 @@ class SolrDocument
   def centroid_z
     self[Solrizer.solr_name('centroid_z', :stored_searchable)]
   end
+
+  # Taxonomy fields
+
+  def taxonomy_domain
+    self[Solrizer.solr_name('taxonomy_domain', :stored_searchable)]
+  end
+
+  def taxonomy_kingdom
+    self[Solrizer.solr_name('taxonomy_kingdom', :stored_searchable)]
+  end
+
+  def taxonomy_phylum
+    self[Solrizer.solr_name('taxonomy_phylum', :stored_searchable)]
+  end
+
+  def taxonomy_superclass
+    self[Solrizer.solr_name('taxonomy_superclass', :stored_searchable)]
+  end
+
+  def taxonomy_class
+    self[Solrizer.solr_name('taxonomy_class', :stored_searchable)]
+  end
+
+  def taxonomy_subclass
+    self[Solrizer.solr_name('taxonomy_subclass', :stored_searchable)]
+  end
+
+  def taxonomy_superorder
+    self[Solrizer.solr_name('taxonomy_superorder', :stored_searchable)]
+  end
+
+  def taxonomy_order
+    self[Solrizer.solr_name('taxonomy_order', :stored_searchable)]
+  end
+
+  def taxonomy_suborder
+    self[Solrizer.solr_name('taxonomy_suborder', :stored_searchable)]
+  end
+
+  def taxonomy_superfamily
+    self[Solrizer.solr_name('taxonomy_superfamily', :stored_searchable)]
+  end
+
+  def taxonomy_family
+    self[Solrizer.solr_name('taxonomy_family', :stored_searchable)]
+  end
+
+  def taxonomy_subfamily
+    self[Solrizer.solr_name('taxonomy_subfamily', :stored_searchable)]
+  end
+
+  def taxonomy_tribe
+    self[Solrizer.solr_name('taxonomy_tribe', :stored_searchable)]
+  end
+
+  def taxonomy_genus
+    self[Solrizer.solr_name('taxonomy_genus', :stored_searchable)]
+  end
+
+  def taxonomy_subgenus
+    self[Solrizer.solr_name('taxonomy_subgenus', :stored_searchable)]
+  end
+
+  def taxonomy_species
+    self[Solrizer.solr_name('taxonomy_species', :stored_searchable)]
+  end
+
+  def taxonomy_subspecies
+    self[Solrizer.solr_name('taxonomy_subspecies', :stored_searchable)]
+  end
+
+  def trusted
+    self[Solrizer.solr_name('trusted', :stored_searchable)]
+  end
+
 end
