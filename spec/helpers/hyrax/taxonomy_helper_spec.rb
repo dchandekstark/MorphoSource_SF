@@ -25,7 +25,7 @@ RSpec.describe Hyrax::TaxonomyHelper, type: :helper do
     context 'the user does not have a display name' do
       let(:user)      { User.new( id: 2, email: "example@email.com", display_name: nil) }
       let(:content) do
-        %(<a class="contributing-user" href="/users/example@email-dot-com:%20">example@email.com: </a>)
+        %(<a class="contributing-user" href="/users/example@email-dot-com">example@email.com: </a>)
       end
 
       it 'links the user email to the user profile page' do
