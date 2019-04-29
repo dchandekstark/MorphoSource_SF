@@ -46,6 +46,11 @@
     <dd class="col-sm-9"><%= @submission.media_id %></dd>
   </dl>
 
+  <dl class="row">
+    <dt class="col-sm-3">processing_event_id</dt>
+    <dd class="col-sm-9"><%= @submission.processing_event_id %></dd>
+  </dl>
+
   <h4>Biological Specimen Create Params</h4>
     <% if @biospec_create_params.present? %>
     <% @biospec_create_params.each do |k,v| %>

@@ -5,6 +5,7 @@ class SubmissionsController < ApplicationController
   before_action :instantiate_work_forms
 
   def new
+byebug
     # clear session when user request to start all over
     if cookies[:ms_submission_start_over].present?
         clear_session_submission_settings
@@ -90,10 +91,11 @@ class SubmissionsController < ApplicationController
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       store_submission
       render_and_save 'processing_event'
-    elsif params['parent_media_how_to_proceed_continue'].present?
-      session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
-      store_submission
-      render_and_save 'new'
+    # This button below is handled by js.  Remove later
+    #    elsif params['parent_media_how_to_proceed_continue'].present? 
+    #      session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
+    #      store_submission
+    #      render_and_save 'new'
     elsif params['cho_search'].present?
       session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
       # todo: add the other 3 search fields here
@@ -159,6 +161,13 @@ class SubmissionsController < ApplicationController
     store_submission
     imaging_event_model_params = Hyrax::ImagingEventForm.model_attributes(params[:imaging_event])
     session[:submission_imaging_event_create_params] = imaging_event_model_params
+    # need to go to proceesing event if coming from Derived media > Parents not in MorphoSource
+    # parent_media_how_to_proceed
+    if cookies[:will_create].present?
+      if cookies[:will_create].include? 'processing_event'
+        render_and_save 'processing_event'
+      end
+    end
     render_and_save 'media'
   end
 
@@ -355,6 +364,7 @@ class SubmissionsController < ApplicationController
     cookies.delete :saved_step
     cookies.delete :last_render
     cookies.delete :saved_clicks
+    cookies.delete :will_create
   end
 
   def create_work(model, form_params)

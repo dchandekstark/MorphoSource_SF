@@ -6,25 +6,25 @@
          # instead display the text “Request Download” and should lead to the request download UI flow (TBA) 
          # for now, the presenter checks for the fileset_visibility to determine the ability
       if presenter.download_permission == 'open' %> 
-        <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-sm btn-default', role: 'button' %>
+        <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-default', role: 'button' %>
       <% else %>
-        <%= link_to 'Request download', 'TBD' , class: 'btn btn-sm btn-default', role: 'button' %>      
+        <%= link_to 'Request download', 'TBD' , class: 'btn btn-default', role: 'button' %>      
       <% end %>
 
       <% if signed_in? %>
         <% if @presenter.works_in_cart.include? params[:id] %>
-          <%= link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-sm btn-default' %>
+          <%= link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-default' %>
         <% else %>
-          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name), class: 'btn btn-sm btn-default', :method => :post %>
+          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name), class: 'btn btn-default', :method => :post %>
         <% end %>
       <% end %>
 
-      <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Actions <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
         <li>
-          <%= link_to "Edit", edit_polymorphic_path([main_app, presenter]), class: 'btn btn-sm' %>
+          <%= link_to "Edit", edit_polymorphic_path([main_app, presenter]), class: 'btn' %>
         </li>
       </ul>
     </div>

@@ -80,8 +80,9 @@ module Hyrax
 
       # get direct parents
       direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
-      @direct_parent_members = member_presenters_for(direct_parent_id_list) 
-
+      @direct_parent_members = member_presenters_for(direct_parent_id_list)
+      this_media_list = [] << solr_document.id 
+      @this_media_member = member_presenters_for(direct_parent_id_list) 
       # should not need parent titles any more.  remove later
       #@direct_parent_title_list = []
       #@direct_parent_id_list.each do |parent_id|

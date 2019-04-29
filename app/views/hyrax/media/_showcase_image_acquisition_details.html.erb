@@ -52,6 +52,18 @@
 				<h3>Image Processing</h3>
 
 				<div class="col-sm-6">
+					<div class="content-block-intro">
+						<%
+						members = presenter.member_presenters_for(["fn106x94r"]) 
+						member =  members.first
+						%>
+						Derived media 
+				    <%= link_to(member.link_name, contextual_path(member, @presenter)) %> 
+					 	(this media) was created by processing raw media ... in ... steps
+					</div>
+					<div class="content-block">
+					</div>
+
 				</div>
 			</div>
 
