@@ -15,4 +15,21 @@ class Taxonomy < Morphosource::Works::Base
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata
+
+  def short_title
+    ranks = [:taxonomy_genus, :taxonomy_subgenus, :taxonomy_species, :taxonomy_subspecies]
+    title = ranks.map{|rank| self.send(rank).first}.compact.join(' ')
+    return title unless title.blank?
+    self.title.first
+  end
+
+  def user_supplied_title
+    contributing_user_link.concat(short_title)
+  end
+
+  def contributing_user
+    user = ::User.find_by_user_key(depositor)
+  end
+
+
 end

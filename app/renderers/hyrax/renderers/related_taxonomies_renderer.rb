@@ -2,16 +2,17 @@ module Hyrax
   module Renderers
     class RelatedTaxonomiesRenderer < ShowcaseDefaultAttributeRenderer
 
+      include Hyrax::TaxonomyHelper
+
       delegate :canonical_taxonomy_object, :trusted_taxonomies, :user_taxonomies, to: :@specimen
 
       private
 
         def attribute_value_to_html(value)
-
           @id = options[:id]
           @specimen = select_specimen(value)
           @markup = ''
-          return @markup if value.blank?
+          return @markup if (value.blank? || @specimen.taxonomies.length == 1)
 
           specimen_link = link_to(value, Rails.application.routes.url_helpers.hyrax_biological_specimen_path(select_specimen(value).id, locale: options[:locale]))
 
@@ -26,18 +27,23 @@ module Hyrax
 
         def create_links(category)
           taxonomies = self.send(category)
-          labels = {:canonical_taxonomy => "Institutional", :trusted_taxonomies => "MorphoSource Inferred", :user_taxonomies => "User-Supplied"}
+          labels = {:canonical_taxonomy => Morphosource::TAXONOMY_LABELS['canonical'],
+                    :trusted_canonical => Morphosource::TAXONOMY_LABELS['trusted_canonical'],
+                    :trusted_taxonomies => Morphosource::TAXONOMY_LABELS['trusted'],
+                    :user_taxonomies => Morphosource::TAXONOMY_LABELS['user']}
 
           if taxonomies.present?
             taxonomies.each do |taxonomy|
               next if taxonomy.id == @id
 
-              link = link_to(taxonomy.title.first, Rails.application.routes.url_helpers.hyrax_taxonomy_path(taxonomy.id, locale: options[:locale]))
+              contributing_user = (category == :user_taxonomies ? contributing_user_link(taxonomy) : '')
+
+              link = link_to(taxonomy.short_title, Rails.application.routes.url_helpers.hyrax_taxonomy_path(taxonomy.id, locale: options[:locale]))
 
               label = labels[category]
-              label = "Institutional / MorphoSource Inferred" if (category == :canonical_taxonomy && taxonomy.trusted == ["Yes"])
+              label = labels[:trusted_canonical] if (category == :canonical_taxonomy && taxonomy.trusted == ["Yes"])
 
-              @markup << "<ul><span>#{label} </span>&nbsp;<span class='showcase-link'>#{link}</span></ul>"
+              @markup << "<ul><span>#{label} </span>#{contributing_user}<span class='showcase-link'>#{link}</span></ul>"
             end
           end
         end

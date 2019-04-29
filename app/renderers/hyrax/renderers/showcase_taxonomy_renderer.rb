@@ -2,6 +2,8 @@ module Hyrax
   module Renderers
     class ShowcaseTaxonomyRenderer < AttributeRenderer
 
+      include Hyrax::TaxonomyHelper
+
       attr_accessor :output_buffer
 
       def render
@@ -10,7 +12,7 @@ module Hyrax
         Array(values).each do |value|
           block = create_block
           markup << "<div class='panel'>"
-          markup << taxonomy_title(block, options[:data_parent], options[:label], value.title.first, options[:is_collapsed])
+          markup << taxonomy_title(block, options[:data_parent], options[:label], value, options[:is_collapsed])
           markup << collapse_accordion_panel(block, options[:is_collapsed])
           markup << taxonomy_ranks(value)
           markup << "</div></div>"
@@ -36,24 +38,27 @@ module Hyrax
       # If an array of taxonomies, find the one whose title matches value
       def select_taxonomy(value)
         return @values if @values.class == Taxonomy
-        @values.select{|taxonomy| taxonomy.title.first == value}.first
+        @values.select{|taxonomy| taxonomy == value}.first
       end
 
       def construct_title(taxonomy)
-        ranks = [:taxonomy_genus, :taxonomy_subgenus, :taxonomy_species, :taxonomy_subspecies]
-        ranks.each_with_object([]){|rank, title| title << taxonomy.send(rank).first}.compact.join(' ')
+        user = contributing_user(taxonomy)
+        user.concat(taxonomy.short_title)
+      end
+
+      def contributing_user(taxonomy)
+        return '' unless options[:label] == Morphosource::TAXONOMY_LABELS['user']
+        contributing_user_link(taxonomy)
       end
 
       def taxonomy_title(block, data_parent, label, value, is_collapsed)
         taxonomy = select_taxonomy(value)
         title = construct_title(taxonomy)
         icon = is_collapsed ? "bottom" : "top"
-        content_tag :a, :data => {:toggle => "collapse", :parent => %(##{data_parent})}, :href => %(##{block}) do
-          content_tag :div, :class => "row" do
-            concat content_tag(:div, label, class: "col-xs-6 showcase-label")
-            concat content_tag(:div, title, class: "col-xs-5 showcase-value taxonomy-title")
-            concat content_tag(:span, "", class: "col-xs-1 glyphicon glyphicon-triangle-#{icon} #{block}")
-          end
+        content_tag :div, :class => "row" do
+          concat content_tag(:div, label, class: "col-xs-6 showcase-label taxonomy-label")
+          concat content_tag(:div, title, class: "col-xs-5 showcase-value taxonomy-title")
+          concat content_tag(:span, "", :data => {:toggle => "collapse", :parent => %(##{data_parent})}, :href => %(##{block}), class: "col-xs-1 glyphicon glyphicon-triangle-#{icon} #{block}")
         end
       end
 
