@@ -52,13 +52,12 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
 
     before do
       allow_any_instance_of(described_class).to receive(:create_block).and_return(block)
-      I18n.t("morphosource.taxonomy.labels")
     end
 
     context 'all ranks are filled out' do
       let(:field)                      { :canonical_taxonomy_object }
       let(:canonical_taxonomy_object)  { Taxonomy.new(full_attrs) }
-      let(:label)                      { Morphosource::TAXONOMY_LABELS['canonical']}
+      let(:label)                      { I18n.t('morphosource.taxonomy.labels.canonical')}
       let(:renderer)                   { described_class.new(field, [canonical_taxonomy_object], data_parent: "taxonomy-accordion-group", label: label, is_collapsed: true) }
 
       let(:content) do
@@ -151,7 +150,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
       let(:field)               { :trusted_taxonomies }
       let(:taxonomy1)           { Taxonomy.new(some_attrs) }
       let(:trusted_taxonomies)  { [ taxonomy1 ] }
-      let(:label)               { Morphosource::TAXONOMY_LABELS['trusted'] }
+      let(:label)               { I18n.t('morphosource.taxonomy.labels.trusted') }
       let(:renderer)            { described_class.new(field, trusted_taxonomies, data_parent: "taxonomy-accordion-group", label: label, is_collapsed: true) }
 
       let(:content) do
@@ -244,11 +243,11 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
     context 'canonical_taxonomy' do
       let(:field)                      { :canonical_taxonomy_object }
       let(:canonical_taxonomy_object)  { Taxonomy.new(full_attrs) }
-      let(:label)                      { Morphosource::TAXONOMY_LABELS['canonical']}
+      let(:label)                      { I18n.t('morphosource.taxonomy.labels.canonical')}
       let(:renderer)                   { described_class.new(field, [canonical_taxonomy_object], data_parent: "taxonomy-accordion-group", label: label, is_collapsed: true) }
 
       it 'displays the label for trusted taxonomies' do
-        expect(renderer.render).to include Morphosource::TAXONOMY_LABELS['canonical']
+        expect(renderer.render).to include I18n.t('morphosource.taxonomy.labels.canonical')
       end
     end
 
@@ -256,11 +255,11 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
       let(:field)               { :trusted_taxonomies }
       let(:taxonomy1)           { Taxonomy.new(some_attrs) }
       let(:trusted_taxonomies)  { [ taxonomy1 ] }
-      let(:label)               { Morphosource::TAXONOMY_LABELS['trusted'] }
+      let(:label)               { I18n.t('morphosource.taxonomy.labels.trusted') }
       let(:renderer)            { described_class.new(field, trusted_taxonomies, data_parent: "taxonomy-accordion-group", label: label, is_collapsed: true) }
 
       it 'displays the label for trusted taxonomies' do
-        expect(renderer.render).to include Morphosource::TAXONOMY_LABELS['trusted']
+        expect(renderer.render).to include I18n.t('morphosource.taxonomy.labels.trusted')
       end
     end
 
@@ -271,7 +270,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
       let(:user_taxonomies)     { [ taxonomy1, taxonomy2 ] }
       let(:user1)               { User.new(id: 1, email: "example@email.com", display_name: "T. Ruxpin") }
       let(:user2)               { User.new(id: 2, email: "test@email.com", display_name: nil) }
-      let(:renderer)            { described_class.new(field, user_taxonomies, data_parent: "taxonomy-accordion-group", label: Morphosource::TAXONOMY_LABELS['user'], is_collapsed: true) }
+      let(:renderer)            { described_class.new(field, user_taxonomies, data_parent: "taxonomy-accordion-group", label: I18n.t('morphosource.taxonomy.labels.user'), is_collapsed: true) }
       let(:markup)              { '' << renderer.render }
 
       before do
@@ -280,7 +279,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
       end
 
       it 'uses the user-supplied label' do
-        expect(markup).to include Morphosource::TAXONOMY_LABELS['user']
+        expect(markup).to include I18n.t('morphosource.taxonomy.labels.user')
       end
 
       it 'displays the display name of the taxonomy depositor' do

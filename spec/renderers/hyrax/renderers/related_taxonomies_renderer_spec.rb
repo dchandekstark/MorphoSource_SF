@@ -15,15 +15,6 @@ RSpec.describe Hyrax::Renderers::RelatedTaxonomiesRenderer do
   let(:taxonomy_methods)  {[:canonical_taxonomy_object, :trusted_taxonomies, :user_taxonomies]}
   let(:subject)           { Nokogiri::HTML(renderer.render) }
 
-  before do
-    stub_const("Morphosource::TAXONOMY_LABELS", {
-      'canonical' => I18n.t('morphosource.taxonomy.labels.canonical'),
-      'trusted_canonical' => I18n.t('morphosource.taxonomy.labels.trusted_canonical'),
-      'trusted' => I18n.t('morphosource.taxonomy.labels.trusted'),
-      'user' => I18n.t('morphosource.taxonomy.labels.user')
-    })
-  end
-
   it 'delegates taxonomy methods to @specimen' do
     taxonomy_methods.each do |method|
       expect(@specimen).to receive(method)
