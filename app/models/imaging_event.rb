@@ -15,7 +15,7 @@ end
 class ImagingEvent < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator, ImagingEventParentDeviceModalityValidator
-  after_create :add_id_to_title
+  after_save :add_id_to_title
 
   self.work_requires_files = false
   self.indexer = ImagingEventIndexer
@@ -41,7 +41,8 @@ class ImagingEvent < Morphosource::Works::Base
 
   private
     def add_id_to_title
-      self.title.set("IE#{self.id.to_s}: #{self.title.first.to_s}")
-      self.save!
+      unless self.title && self.id && self.title.first.to_s.start_with?("IE#{self.id.to_s}: ")
+        self.title.set("IE#{self.id.to_s}: #{self.title.first.to_s}")
+      end
     end
 end

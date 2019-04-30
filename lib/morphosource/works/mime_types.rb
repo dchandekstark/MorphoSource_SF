@@ -1,0 +1,18 @@
+module Morphosource
+	module Works
+		module MimeTypes
+			extend ActiveSupport::Concern
+			include Hydra::Works::MimeTypes
+
+			def mesh?
+				self.class.mesh_mime_types.include? mime_type
+			end
+
+			module ClassMethods
+				def mesh_mime_types
+					['application/ply', 'application/stl', 'text/prs.wavefront-obj', 'model/gltf+json', 'model/vrml', 'model/x3d+xml']
+				end
+			end
+		end
+	end
+end

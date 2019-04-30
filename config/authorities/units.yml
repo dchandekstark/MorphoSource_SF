@@ -12,12 +12,12 @@ terms:
     active: true
   - id: Km
     term: Kilometers
-  - id: Inch
+  - id: In
     term: Inches
     active: true
-  - id: Foot
+  - id: Ft
     term: Feet
     active: true
-  - id: Mile
+  - id: Mi
     term: Miles
     active: true

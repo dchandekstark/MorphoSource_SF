@@ -75,7 +75,7 @@ RSpec.describe Hyrax::MediaFileSetPresenter do
           end
 
           it { is_expected.to be_instance_of IIIFManifest::DisplayMesh }
-          its(:url) { is_expected.to eq "http://test.host/downloads/#{id}" }
+          its(:url) { is_expected.to eq "/downloads/#{id}?file=glb" }
 
           context "when the user doesn't have permission to view the image" do
             let(:read_permission) { false }

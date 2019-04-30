@@ -25,6 +25,11 @@ Rails.application.routes.draw do
   mount Hydra::RoleManagement::Engine => '/'
 
   mount Qa::Engine => '/authorities'
+
+  scope module: :morphosource do
+    resources :downloads, only: :show
+  end
+
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
   root 'hyrax/homepage#index'
@@ -90,7 +95,4 @@ Rails.application.routes.draw do
       get 'download_items', action: :download, controller: :cart_items, as: 'download_items'
     end
   end
-
-
-
 end

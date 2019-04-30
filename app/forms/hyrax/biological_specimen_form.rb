@@ -35,7 +35,6 @@ module Hyrax
     self.required_fields = [ :vouchered ]
 
     self.single_valued_fields = [
-        :bibliographic_citation,
         :catalog_number,
         :collection_code,
         :date_created,

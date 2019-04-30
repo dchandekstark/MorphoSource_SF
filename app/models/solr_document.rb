@@ -6,6 +6,8 @@ class SolrDocument
   # Adds Hyrax behaviors to the SolrDocument.
   include Hyrax::SolrDocumentBehavior
 
+  # Adds MorphoSource behaviors to the SolrDocument
+  include Morphosource::SolrDocumentBehavior
 
   # self.unique_key = 'id'
 
@@ -25,27 +27,6 @@ class SolrDocument
   # Do content negotiation for AF models.
 
   use_extension( Hydra::ContentNegotiation )
-
-  # MorphoSource customizations
-
-  # Fileset methods
-  def file_ext
-    File.extname(label)
-  end
-
-  def mesh? # TODO: Needs to be adjusted to use mime types when FITS issue is dealt with
-    accepted_formats = [".ply", ".stl", ".obj", ".glb", ".gltf"]
-    accepted_formats.include? file_ext
-  end
-
-  def mesh_mime_type # TODO: Temporary, should not exist forever
-    mesh_mime_types = { ".ply" => "application/ply",
-                        ".stl" => "application/sla",
-                        ".obj" => "text/plain",
-                        ".glb" => "model/gltf+json",
-                        ".gltf" => "model/gltf+json" }
-    mesh_mime_types[file_ext]
-  end
 
   # Add custom metadata fields to show view
   def in_works_ids

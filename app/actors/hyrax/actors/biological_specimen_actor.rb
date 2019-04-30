@@ -9,6 +9,7 @@ module Hyrax
 
       def update(env)
         env.attributes['title'] = [ generated_title(env) ]
+        env.attributes['canonical_taxonomy'] = [ check_canonical_taxonomy(env) ]
         super
       end
 
@@ -47,6 +48,20 @@ module Hyrax
         voucher_term = vouchered.first == 'Yes' ? 'Vouchered' : 'Unvouchered'
         user_term = user.display_name.present? ? user.display_name : user.user_key
         I18n.t('morphosource.fallback_object_title', voucher: voucher_term, user: user_term)
+      end
+
+      def check_canonical_taxonomy(env)
+        canonical_taxonomy = env.attributes["canonical_taxonomy"]
+        return '' if canonical_taxonomy.empty?
+        canonical_id = canonical_taxonomy.first
+        dissociated_parents = get_dissociated_parents(env)
+        dissociated_parents.include?(canonical_id) ? '' : canonical_id
+      end
+
+      def get_dissociated_parents(env)
+        env.attributes["work_parents_attributes"].each_value.with_object([]) do |v,ids|
+          ids << v["id"] if v["_destroy"] == "true"
+        end
       end
 
     end

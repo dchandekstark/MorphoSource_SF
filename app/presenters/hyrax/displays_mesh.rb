@@ -15,15 +15,16 @@ module Hyrax
       # original_file = ::FileSet.find(id).original_file
 
       # Need to find a different way to point to the public mesh file URL, or can I use the old one? Should test in console?
-      url = URI::join(request.base_url, '/downloads/', id).to_s;
+      # url = URI::join(request.base_url, '/downloads/', id).to_s;
+      url = Hyrax::Engine.routes.url_helpers.download_path(id, file: 'glb')
       # url = Hyrax.config.iiif_image_url_builder.call(
       #   original_file.id,
       #   request.base_url,
       #   Hyrax.config.iiif_image_size_default
       # )
 
-      format = mesh_mime_type;
-      type = 'PhysicalObject';
+      format = 'model/gltf+json'
+      type = 'PhysicalObject'
 
       # @see https://github.com/samvera-labs/iiif_manifest TODO: Change this to eventual mesh3D fork?
       IIIFManifest::DisplayMesh.new(url, 
