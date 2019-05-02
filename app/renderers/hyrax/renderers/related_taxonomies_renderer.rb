@@ -27,10 +27,10 @@ module Hyrax
 
         def create_links(category)
           taxonomies = self.send(category)
-          labels = {:canonical_taxonomy => Morphosource::TAXONOMY_LABELS['canonical'],
-                    :trusted_canonical => Morphosource::TAXONOMY_LABELS['trusted_canonical'],
-                    :trusted_taxonomies => Morphosource::TAXONOMY_LABELS['trusted'],
-                    :user_taxonomies => Morphosource::TAXONOMY_LABELS['user']}
+          labels = {:canonical_taxonomy => I18n.t('morphosource.taxonomy.labels.canonical'),
+                    :trusted_canonical => I18n.t('morphosource.taxonomy.labels.trusted_canonical'),
+                    :trusted_taxonomies => I18n.t('morphosource.taxonomy.labels.trusted'),
+                    :user_taxonomies => I18n.t('morphosource.taxonomy.labels.user')}
 
           if taxonomies.present?
             taxonomies.each do |taxonomy|

@@ -11,10 +11,10 @@ module Hyrax
     def canonical_taxonomy_label
       if canonical_taxonomy_object.present?
         if canonical_taxonomy_object.trusted == ["Yes"]
-          return Morphosource::TAXONOMY_LABELS['trusted_canonical']
+          return I18n.t('morphosource.taxonomy.labels.trusted_canonical')
         end
       end
-      Morphosource::TAXONOMY_LABELS['canonical']
+      I18n.t('morphosource.taxonomy.labels.canonical')
     end
 
     def canonical_taxonomy_presenter

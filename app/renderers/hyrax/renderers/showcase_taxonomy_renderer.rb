@@ -47,7 +47,7 @@ module Hyrax
       end
 
       def contributing_user(taxonomy)
-        return '' unless options[:label] == Morphosource::TAXONOMY_LABELS['user']
+        return '' unless options[:label] == I18n.t('morphosource.taxonomy.labels.user')
         contributing_user_link(taxonomy)
       end
 
