@@ -1,14 +1,26 @@
+require 'active_support/core_ext/numeric/conversions'
 # Generated via
 #  `rails generate hyrax:work Media`
 module Hyrax
   class MediaPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
 
-    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, to: :solr_document
+    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
 
-    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, :physical_object_title, :physical_object_link, :physical_object_id, :device_and_facility, :device_facility, :device_link, :device, :parent_media_id_list, :child_media_id_list, :sibling_media_id_list, :parent_media_count, :direct_parent_members, 
-      :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, :other_details, 
-      :imaging_event_creator, :imaging_event_date_created, :imaging_event_exist
+    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, 
+      :physical_object_title, :physical_object_link, :physical_object_id, 
+      :device_and_facility, :device_facility, :device_link, :device, 
+      :other_details, :imaging_event_creator, :imaging_event_date_created, 
+      :parent_media_id_list, :child_media_id_list, 
+      :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
+      :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
+      :raw_or_derived,
+      :imaging_event_exist,
+      :p_physical_object_title, :p_physical_object_link, :p_physical_object_id, 
+      :p_device_and_facility, :p_device_facility, :p_device_link, :p_device, 
+      :p_other_details, :p_imaging_event_creator, :p_imaging_event_date_created, :p_modality,
+      :p_raw_or_derived,
+      :file_size, :point_count, :face_count
 
     def universal_viewer?
       representative_id.present? &&
@@ -82,7 +94,8 @@ module Hyrax
       direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
       @direct_parent_members = member_presenters_for(direct_parent_id_list)
       this_media_list = [] << solr_document.id 
-      @this_media_member = member_presenters_for(direct_parent_id_list) 
+      @this_media_member = member_presenters_for(this_media_list).first 
+
       # should not need parent titles any more.  remove later
       #@direct_parent_title_list = []
       #@direct_parent_id_list.each do |parent_id|
@@ -90,17 +103,6 @@ module Hyrax
       #  @direct_parent_title_list << parent_media.title.first
       #end
       #@direct_parent_title_list = @direct_parent_title_list.join(', ')
-
-      @processing_event_count = 0
-      media.member_ids.each do |id|
-        processing_event = nil
-        if ProcessingEvent.where('id' => id).present? 
-          processing_event = ProcessingEvent.where('id' => id).first
-        end
-        if processing_event.present?
-          @processing_event_count += 1
-        end
-      end # end media.member_ids.each
 
       # todo: need to get the user name (and a link to user) from the email address
       @data_managed_by = solr_document.depositor
@@ -113,6 +115,105 @@ module Hyrax
 
       @ark = media.ark
       @doi = media.doi
+
+      # get file characterization metadata, and add up the values (face count, point count, file size, etc)
+      @file_size = 0
+      @point_count = 0
+      @face_count = 0
+      file_set_list = media.file_set_ids
+      file_set_list.each do |id|
+        file_set = ::FileSet.find(id)
+        @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
+        @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
+        @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
+      end
+      if @file_size == 0
+        @file_size = ""
+      else
+        @file_size = @file_size.to_s(:delimited) + " bytes" # todo: convert to pretty format later
+      end
+      if @point_count == 0
+        @point_count = ""
+      else
+        @point_count = @point_count.to_s(:delimited) 
+      end
+      if @face_count == 0
+        @face_count = ""
+      else
+        @face_count = @face_count.to_s(:delimited) 
+      end
+
+      # get processing event:  media < processing_event
+      processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
+      if processing_events.present?
+        @processing_event_count = processing_events.count 
+      else
+        @processing_event_count = 0
+      end
+
+
+      # get physical object and other metadata of parent
+      # Parent Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
+      # todo: later on we will need to handle more than 1 parent
+      #@direct_parent_id_list.each do |parent_id|
+      #  parent_media = Media.where('id' => parent_id).first
+      #end
+      @raw_or_derived = "Raw"
+      @p_raw_or_derived = "Raw"
+      if direct_parent_id_list.length > 0
+        @raw_or_derived = "Derived"
+        direct_parent_id = direct_parent_id_list.first
+        
+        p_media = Media.where('id' => direct_parent_id).first
+        @p_modality = p_media.modality.first
+        p_direct_parent_id_list = parent_media_ids(p_media, 1, []).flatten.uniq
+        if p_direct_parent_id_list.length > 0
+          @p_raw_or_derived = "Derived"
+        end
+
+        p_imaging_event = ImagingEvent.where('member_ids_ssim' => direct_parent_id).first
+        if p_imaging_event.present?
+          p_biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => p_imaging_event.id).first
+          p_cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => p_imaging_event.id).first
+
+          if p_biological_specimen.present?
+            @p_physical_object_title = p_biological_specimen.title.first
+            @p_physical_object_id = p_biological_specimen.id
+            @p_physical_object_link = "/concern/biological_specimens/" + @p_physical_object_id
+          elsif p_cultural_heritage_object.present?
+            @p_physical_object_title = p_cultural_heritage_object.title.first
+            @p_physical_object_id = p_cultural_heritage_object.id
+            @p_physical_object_link = "/concern/cultural_heritage_object/" + @p_physical_object_id
+          end
+
+          # get device from imaging event for parent media
+          p_device = Device.where('member_ids_ssim' => p_imaging_event.id).first
+          if p_device.present?
+            @p_device = p_device.title.first
+            @p_device_facility = p_device.facility.first
+            @p_device_and_facility = @p_device
+            @p_device_and_facility += " (" + @p_device_facility + ")" if @p_device_facility.present?
+            @p_device_link = "/concern/devices/" + p_device.id
+          end
+
+          # get imaging event details for parent media
+          @p_lens = ""
+          @p_lens << p_imaging_event.lens_make.first if p_imaging_event.lens_make.present?
+          @p_lens << " " + p_imaging_event.lens_model.first if p_imaging_event.lens_model.present?
+          @p_other_details = []
+          @p_other_details << p_imaging_event.focal_length_type.first + " focal length" if p_imaging_event.focal_length_type.present?
+          @p_other_details << p_imaging_event.light_source.first + " light" if p_imaging_event.light_source.present?
+          @p_other_details << p_imaging_event.background_removal.first if p_imaging_event.background_removal.present?
+          @p_other_details = @p_other_details.join(' / ')
+          @p_imaging_event_creator = p_imaging_event.creator
+          @p_imaging_event_date_created = p_imaging_event.date_created
+
+
+
+
+        end
+
+      end
 
     end
 

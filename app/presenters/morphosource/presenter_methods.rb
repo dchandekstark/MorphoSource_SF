@@ -79,7 +79,7 @@ module Morphosource
         child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work per imaging event?
         media = Media.where('id' => child_ids).first
         if media.present?
-          # add current media file sets, then add child media file sets.  
+          # add current media id, then add child media ids.  
           # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
           # so there is no need to traverse the tree
           media_ids << media.id

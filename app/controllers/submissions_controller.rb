@@ -5,11 +5,11 @@ class SubmissionsController < ApplicationController
   before_action :instantiate_work_forms
 
   def new
-byebug
+    # todo: remove the below few lines later, since the clear_session_submission_settings has been moved to clean start block.
     # clear session when user request to start all over
-    if cookies[:ms_submission_start_over].present?
-        clear_session_submission_settings
-    end
+    #if cookies[:ms_submission_start_over].present?
+    #    clear_session_submission_settings
+    #end
     if session[:submission].present?
       # Continue where the user has left off
       # last_render saves the page that needs to be rendered if the user reload the page, or
@@ -29,8 +29,10 @@ byebug
         render last_render
       end
     else
+      # clean start
       session[:submission] ||= {}
       @submission = Submission.new(session[:submission])
+      clear_session_submission_settings
     end
   end
 
@@ -166,9 +168,12 @@ byebug
     if cookies[:will_create].present?
       if cookies[:will_create].include? 'processing_event'
         render_and_save 'processing_event'
+      else
+        render_and_save 'media'
       end
+    else
+      render_and_save 'media'
     end
-    render_and_save 'media'
   end
 
   def stage_institution

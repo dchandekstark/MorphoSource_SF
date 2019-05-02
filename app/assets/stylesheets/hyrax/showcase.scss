@@ -1,6 +1,5 @@
 div.showcase {
 
-<<<<<<< HEAD
   max-width: 1200px;
   border: 2px solid #efefef;
   margin-top: 18px;
@@ -56,69 +55,6 @@ div.showcase {
     padding: 12px 20px;
     font-size:13px;
     /* font-size: 1.4vw;  */
-=======
-	max-width: 1200px;
-	border: 2px solid #efefef;
-	margin-top: 18px;
-	
-	/* div {border:1px dotted red;} */
-
-	/* .label-ms-badge {
-		background-color: red;
-	} */
-
-	
-	.show-actions {
-		padding: 3.5vw 1vw 0 0;
-  	@media (min-width: 768px) {
-		  padding: 1.9vw 1vw 0 0;
-		}
-	}
-
-	.badge-wrapper {
-		display: block;
-
-		div {
-			display: inline-block;	
-		}
-
-		.label {
-			font-size: 1.6vw;
-	  	@media (min-width: 768px) {
-	  		font-size: 1.3vw; 
-			}
-	  	@media (min-width: 1200px) {
-	  		font-size: 16px;
-	  	}
-
-		}
-	}
-
-	#showcase-title-wrapper {
-		background-color: #efefef;
-	}
-
-	#showcase-title {
-		margin-bottom: 0.5vw;
-		padding-bottom: 8px;
-		border-bottom: 2px solid #337ab7;
-		font-size: 3.4vw;
-  	@media (min-width: 768px) {
-  		font-size: 3vw; 
-		}
-  	@media (min-width: 1200px) {
-  		font-size: 32px;
-  	}
-	}
-
-	h1 {
-		margin-top: 10px;
-	}
-	h2 {
-		background-color: #efefef;	
-		padding: 12px 20px;
-    font-size:13px; 
->>>>>>> create image processing event in derived media flow, image acq block updates
     @media (min-width: 414px) {
       font-size: 2.6vw;
     }
@@ -290,7 +226,6 @@ div.showcase {
     margin: 10vw auto;
     display: block;
 
-<<<<<<< HEAD
     @media (min-width: 768px) {
       width:35%;
     }
@@ -327,41 +262,3 @@ div.showcase {
   /* /media showcase specific styles */
 
 }
-=======
-  	@media (min-width: 768px) {
-			width:35%;
-		}
-	}
-
-	.media-block .thumbnail {
-		display:inline-block;
-		border: none;
-	}
-
-	/* media showcase specific styles */
-	.media-showcase {
-		small.badge-wrapper div {
-			font-size: 1.4vw;
-			line-height: 2vw;
-		}
-		.show-actions {
-			padding: 0.6vw 0;
-	  	@media (min-width: 991px) { /* show 1 button on each line when smaller than this width */
-			  padding: 2.7vw 0;
-	  	}
-			.btn {
-				margin-left: 0.5vw;
-				margin-bottom: 4px;
-  			/* min-width: 86px; */
-		  	@media (max-width: 990px) { /* show 1 button on each line when smaller than this width */
-	  			float: none;
-	  			display: block;
-	  			min-width: 100px;
-		  	}
-			}
-		}		
-	}
-	/* /media showcase specific styles */
-
-} /* end div.showcase */
->>>>>>> create image processing event in derived media flow, image acq block updates

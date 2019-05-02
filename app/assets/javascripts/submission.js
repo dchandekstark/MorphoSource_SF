@@ -1,7 +1,7 @@
 $(document).on('ready', function(){
 
   if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
-    cookie_expired_days = 90;
+    cookie_expired_days = 7;
     // Begin Raw media flow
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
