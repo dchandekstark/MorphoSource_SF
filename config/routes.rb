@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       post 'stage_media'
       post 'stage_processing_event'
       post 'stage_cho'
+      post 'stage_taxonomy'
     end
   end
 
