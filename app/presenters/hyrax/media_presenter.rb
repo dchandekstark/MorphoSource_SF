@@ -31,70 +31,7 @@ module Hyrax
     end
 
     def get_showcase_data
-      # Get the physical object type from:
-      # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
-      imaging_event = ImagingEvent.where('member_ids_ssim' => solr_document.id).first
-      if imaging_event.present?
-        imaging_event_exist = true
-        biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => imaging_event.id).first
-        cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => imaging_event.id).first
-
-        if biological_specimen.present?
-          @physical_object_title = biological_specimen.title.first
-          @physical_object_id = biological_specimen.id
-          @physical_object_link = "/concern/biological_specimens/" + @physical_object_id
-          @idigbio_uuid = biological_specimen.idigbio_uuid
-          @vouchered = biological_specimen.vouchered
-          @physical_object_type = "BiologicalSpecimen"
-        elsif cultural_heritage_object.present?
-          @physical_object_title = cultural_heritage_object.title.first
-          @physical_object_id = cultural_heritage_object.id
-          @physical_object_link = "/concern/cultural_heritage_object/" + @physical_object_id
-          @idigbio_uuid = cultural_heritage_object.idigbio_uuid
-          @vouchered = cultural_heritage_object.vouchered
-          @physical_object_type = "CulturalHeritageObject"
-        end
-
-        # get device from imaging event
-        device = Device.where('member_ids_ssim' => imaging_event.id).first
-        if device.present?
-          @device = device.title.first
-          @device_facility = device.facility.first
-          @device_and_facility = @device
-          @device_and_facility += " (" + @device_facility + ")" if @device_facility.present?
-          @device_link = "/concern/devices/" + device.id
-        end
-
-        # get imaging event details
-        @lens = ""
-        @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
-        @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
-        @other_details = []
-        @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
-        @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
-        @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
-        @other_details = @other_details.join(' / ')
-        @imaging_event_creator = imaging_event.creator
-        @imaging_event_date_created = imaging_event.date_created
-
-      else
-        imaging_event_exist = false
-      end # end if imaging_event present?
-      
-      # add current media id, then add child media ids.  
-      # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
-      # so there is no need to traverse the tree
       media = Media.where('id' => solr_document.id).first
-      @parent_media_id_list = parent_media_ids(media, 5, []).flatten.uniq
-      @parent_media_count = @parent_media_id_list.length.to_s
-      @child_media_id_list = child_media_ids(media, 5, []).flatten.uniq
-      @sibling_media_id_list = sibling_media_ids(media, []).flatten.uniq
-
-      # get direct parents
-      direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
-      @direct_parent_members = member_presenters_for(direct_parent_id_list)
-      this_media_list = [] << solr_document.id 
-      @this_media_member = member_presenters_for(this_media_list).first 
 
       # should not need parent titles any more.  remove later
       #@direct_parent_title_list = []
@@ -142,6 +79,90 @@ module Hyrax
       else
         @face_count = @face_count.to_s(:delimited) 
       end
+
+
+      # Get parent medias    
+      # add current media id, then add child media ids.  
+      # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
+      # so there is no need to traverse the tree
+      @parent_media_id_list = parent_media_ids(media, 5, []).flatten.uniq
+      @parent_media_count = @parent_media_id_list.length.to_s
+      @child_media_id_list = child_media_ids(media, 5, []).flatten.uniq
+      @sibling_media_id_list = sibling_media_ids(media, []).flatten.uniq
+
+      # get the  parents
+      direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
+      @direct_parent_members = member_presenters_for(direct_parent_id_list)
+      this_media_list = [] << solr_document.id 
+      @this_media_member = member_presenters_for(this_media_list).first 
+
+
+      @raw_or_derived = "Raw"
+      @p_raw_or_derived = "Raw"
+      if direct_parent_id_list.length > 0
+        # If a media has a parent work and is derived, then that media’s raw ancestor media work 
+        # (whether parent, grandparent, etc) should be connected to an IE from which metadata should be derived.
+        @raw_or_derived = "Derived"
+        direct_parent_id = direct_parent_id_list.first
+        
+        target_media = Media.where('id' => direct_parent_id).first
+      else
+        # If a media is raw and has no parent media work, then get data from current media via the IE.
+        target_media = media
+      end
+
+      # Get the physical object type from:
+      # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
+      imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
+      if imaging_event.present?
+        imaging_event_exist = true
+        biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => imaging_event.id).first
+        cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => imaging_event.id).first
+
+        if biological_specimen.present?
+          @physical_object_title = biological_specimen.title.first
+          @physical_object_id = biological_specimen.id
+          @physical_object_link = "/concern/biological_specimens/" + @physical_object_id
+          @idigbio_uuid = biological_specimen.idigbio_uuid
+          @vouchered = biological_specimen.vouchered
+          @physical_object_type = "BiologicalSpecimen"
+        elsif cultural_heritage_object.present?
+          @physical_object_title = cultural_heritage_object.title.first
+          @physical_object_id = cultural_heritage_object.id
+          @physical_object_link = "/concern/cultural_heritage_object/" + @physical_object_id
+          @idigbio_uuid = cultural_heritage_object.idigbio_uuid
+          @vouchered = cultural_heritage_object.vouchered
+          @physical_object_type = "CulturalHeritageObject"
+        end
+
+        # get device from imaging event
+        device = Device.where('member_ids_ssim' => imaging_event.id).first
+        if device.present?
+          @device = device.title.first
+          @device_facility = device.facility.first
+          @device_and_facility = @device
+          @device_and_facility += " (" + @device_facility + ")" if @device_facility.present?
+          @device_link = "/concern/devices/" + device.id
+        end
+
+        # get imaging event details
+        @lens = ""
+        @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
+        @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
+        @other_details = []
+        @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
+        @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
+        @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
+        @other_details = @other_details.join(' / ')
+        @imaging_event_creator = imaging_event.creator
+        @imaging_event_date_created = imaging_event.date_created
+
+      else
+        imaging_event_exist = false
+      end # end if imaging_event present?
+ 
+
+
 
       # get processing event:  media < processing_event
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
