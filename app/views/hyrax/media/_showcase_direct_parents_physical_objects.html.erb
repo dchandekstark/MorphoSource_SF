@@ -1,9 +1,9 @@
 <div class="content-block-intro">
-	<%= @presenter.p_raw_or_derived %> media 
+	Raw media 
  	<%= link_to(member.link_name, contextual_path(member, @presenter)) %> 
 	was created by imaging physical object 
 	<!-- <%= member_counter %> 
       # todo: later on we will need to handle more than 1 parent
 	-->
-	<%= link_to(@presenter.p_physical_object_title, @presenter.p_physical_object_link) %>
+	<%= link_to(@presenter.physical_object_title, @presenter.physical_object_link) %>
 </div>

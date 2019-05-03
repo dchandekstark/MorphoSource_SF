@@ -28,7 +28,7 @@
 				</div>
 				<div class="content-block">
 					<% 
-					members = presenter.member_presenters_for(presenter.parent_media_id_list) 
+					members = presenter.direct_parent_members
 					member =  members.first
 					%>
 					<% if member.present? %>

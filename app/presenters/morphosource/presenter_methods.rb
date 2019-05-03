@@ -119,13 +119,24 @@ module Morphosource
       end
     end
 
-    # this method recursively traverse the tree up to X level to gather all ids of parent medias
+    # this method gets the top parent of a media
+    # todo: will need to handle multiple parents later
+    def top_parent_media_id(media)
+        parent_medias = parent_medias(media)
+        if parent_medias.empty?
+          return media.id
+        else
+          return top_parent_media_id(parent_medias.first)
+        end
+    end
+
+    # this method get siblings IDs from parents 1 level above
     def sibling_media_ids(media, media_ids)
       parent_medias = parent_medias(media)
       parent_medias.each do |parent_media|
-        media_ids << child_media_ids(parent_media, 1, media_ids)
+        media_ids = child_media_ids(parent_media, 1, media_ids)
       end
-      media_ids.flatten.uniq # remove any duplicate IDs before returning
+      media_ids.flatten.uniq - [media.id] # remove any duplicate IDs, and remove the current media id before returning
     end
 
     # this method get a list of child media of a passed media 

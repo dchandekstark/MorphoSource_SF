@@ -7,9 +7,9 @@ class SubmissionsController < ApplicationController
   def new
     # todo: remove the below few lines later, since the clear_session_submission_settings has been moved to clean start block.
     # clear session when user request to start all over
-    #if cookies[:ms_submission_start_over].present?
-    #    clear_session_submission_settings
-    #end
+    if cookies[:ms_submission_start_over].present?
+        clear_session_submission_settings
+    end
     if session[:submission].present?
       # Continue where the user has left off
       # last_render saves the page that needs to be rendered if the user reload the page, or
@@ -30,9 +30,9 @@ class SubmissionsController < ApplicationController
       end
     else
       # clean start
+byebug      
       session[:submission] ||= {}
       @submission = Submission.new(session[:submission])
-      clear_session_submission_settings
     end
   end
 

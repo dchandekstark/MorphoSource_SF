@@ -16,10 +16,12 @@ module Hyrax
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
       :raw_or_derived,
       :imaging_event_exist,
+
       :p_physical_object_title, :p_physical_object_link, :p_physical_object_id, 
       :p_device_and_facility, :p_device_facility, :p_device_link, :p_device, 
       :p_other_details, :p_imaging_event_creator, :p_imaging_event_date_created, :p_modality,
-      :p_raw_or_derived,
+
+      :direct_parent_members_raw_or_derived,
       :file_size, :point_count, :face_count
 
     def universal_viewer?
@@ -32,7 +34,7 @@ module Hyrax
 
     def get_showcase_data
       media = Media.where('id' => solr_document.id).first
-
+byebug
       # should not need parent titles any more.  remove later
       #@direct_parent_title_list = []
       #@direct_parent_id_list.each do |parent_id|
@@ -81,7 +83,7 @@ module Hyrax
       end
 
 
-      # Get parent medias    
+      # Get parent medias (all)    
       # add current media id, then add child media ids.  
       # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
       # so there is no need to traverse the tree
@@ -90,25 +92,24 @@ module Hyrax
       @child_media_id_list = child_media_ids(media, 5, []).flatten.uniq
       @sibling_media_id_list = sibling_media_ids(media, []).flatten.uniq
 
-      # get the  parents
-      direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
+      # get the top parent
+      direct_parent_id = top_parent_media_id(media)
+      #direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
+      direct_parent_id_list = [] << direct_parent_id
       @direct_parent_members = member_presenters_for(direct_parent_id_list)
       this_media_list = [] << solr_document.id 
       @this_media_member = member_presenters_for(this_media_list).first 
 
 
-      @raw_or_derived = "Raw"
-      @p_raw_or_derived = "Raw"
       if direct_parent_id_list.length > 0
         # If a media has a parent work and is derived, then that media’s raw ancestor media work 
         # (whether parent, grandparent, etc) should be connected to an IE from which metadata should be derived.
-        @raw_or_derived = "Derived"
-        direct_parent_id = direct_parent_id_list.first
-        
         target_media = Media.where('id' => direct_parent_id).first
+        @raw_or_derived = "Derived"
       else
         # If a media is raw and has no parent media work, then get data from current media via the IE.
         target_media = media
+        @raw_or_derived = "Raw"
       end
 
       # Get the physical object type from:
@@ -162,78 +163,12 @@ module Hyrax
       end # end if imaging_event present?
  
 
-
-
       # get processing event:  media < processing_event
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
       if processing_events.present?
         @processing_event_count = processing_events.count 
       else
         @processing_event_count = 0
-      end
-
-
-      # get physical object and other metadata of parent
-      # Parent Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
-      # todo: later on we will need to handle more than 1 parent
-      #@direct_parent_id_list.each do |parent_id|
-      #  parent_media = Media.where('id' => parent_id).first
-      #end
-      @raw_or_derived = "Raw"
-      @p_raw_or_derived = "Raw"
-      if direct_parent_id_list.length > 0
-        @raw_or_derived = "Derived"
-        direct_parent_id = direct_parent_id_list.first
-        
-        p_media = Media.where('id' => direct_parent_id).first
-        @p_modality = p_media.modality.first
-        p_direct_parent_id_list = parent_media_ids(p_media, 1, []).flatten.uniq
-        if p_direct_parent_id_list.length > 0
-          @p_raw_or_derived = "Derived"
-        end
-
-        p_imaging_event = ImagingEvent.where('member_ids_ssim' => direct_parent_id).first
-        if p_imaging_event.present?
-          p_biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => p_imaging_event.id).first
-          p_cultural_heritage_object = CulturalHeritageObject.where('member_ids_ssim' => p_imaging_event.id).first
-
-          if p_biological_specimen.present?
-            @p_physical_object_title = p_biological_specimen.title.first
-            @p_physical_object_id = p_biological_specimen.id
-            @p_physical_object_link = "/concern/biological_specimens/" + @p_physical_object_id
-          elsif p_cultural_heritage_object.present?
-            @p_physical_object_title = p_cultural_heritage_object.title.first
-            @p_physical_object_id = p_cultural_heritage_object.id
-            @p_physical_object_link = "/concern/cultural_heritage_object/" + @p_physical_object_id
-          end
-
-          # get device from imaging event for parent media
-          p_device = Device.where('member_ids_ssim' => p_imaging_event.id).first
-          if p_device.present?
-            @p_device = p_device.title.first
-            @p_device_facility = p_device.facility.first
-            @p_device_and_facility = @p_device
-            @p_device_and_facility += " (" + @p_device_facility + ")" if @p_device_facility.present?
-            @p_device_link = "/concern/devices/" + p_device.id
-          end
-
-          # get imaging event details for parent media
-          @p_lens = ""
-          @p_lens << p_imaging_event.lens_make.first if p_imaging_event.lens_make.present?
-          @p_lens << " " + p_imaging_event.lens_model.first if p_imaging_event.lens_model.present?
-          @p_other_details = []
-          @p_other_details << p_imaging_event.focal_length_type.first + " focal length" if p_imaging_event.focal_length_type.present?
-          @p_other_details << p_imaging_event.light_source.first + " light" if p_imaging_event.light_source.present?
-          @p_other_details << p_imaging_event.background_removal.first if p_imaging_event.background_removal.present?
-          @p_other_details = @p_other_details.join(' / ')
-          @p_imaging_event_creator = p_imaging_event.creator
-          @p_imaging_event_date_created = p_imaging_event.date_created
-
-
-
-
-        end
-
       end
 
     end
