@@ -14,13 +14,9 @@ module Hyrax
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
+      :processing_activity_type, :processing_activity_software, :processing_activity_description,
       :raw_or_derived,
       :imaging_event_exist,
-
-      :p_physical_object_title, :p_physical_object_link, :p_physical_object_id, 
-      :p_device_and_facility, :p_device_facility, :p_device_link, :p_device, 
-      :p_other_details, :p_imaging_event_creator, :p_imaging_event_date_created, :p_modality,
-
       :direct_parent_members_raw_or_derived,
       :file_size, :point_count, :face_count
 
@@ -34,7 +30,6 @@ module Hyrax
 
     def get_showcase_data
       media = Media.where('id' => solr_document.id).first
-byebug
       # should not need parent titles any more.  remove later
       #@direct_parent_title_list = []
       #@direct_parent_id_list.each do |parent_id|
@@ -167,6 +162,11 @@ byebug
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
       if processing_events.present?
         @processing_event_count = processing_events.count 
+        processing_events.each do |processing_event|
+          @processing_activity_type = processing_event.processing_activity_type 
+          @processing_activity_software = processing_event.processing_activity_software
+          @processing_activity_description = processing_event.processing_activity_description 
+        end
       else
         @processing_event_count = 0
       end
@@ -235,6 +235,10 @@ byebug
 
     def showcase_media_items_member_partial
       'showcase_media_items_member'
+    end
+
+    def showcase_processing_activites_member_partial
+      'showcase_processing_activites_member'
     end
 
     def showcase_collections_partial

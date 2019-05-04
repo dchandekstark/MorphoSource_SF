@@ -23,7 +23,7 @@ module Hyrax
 
     def canonical_taxonomy_solr
       Taxonomy.find(work.canonical_taxonomy.first).to_solr
-
+    end
   
     # methods for showcase partials
     def showcase_work_title_partial
