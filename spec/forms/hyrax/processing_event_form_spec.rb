@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::ProcessingEventForm do
-  let(:all_metadata_fields) { [:creator, :date_created, :description, :software, :title] }
-  let(:required_fields) { [:title] }
-  let(:single_value_fields) { [:title, :description, :date_created] }
+  let(:all_metadata_fields) { [:creator, :date_created, :description, :software, :processing_activity, :processing_activity_description, :processing_activity_software, :processing_activity_type] }
+  let(:required_fields) { [] }
+  let(:single_value_fields) { [:description, :date_created] }
 
   describe 'class attributes' do
 
     it 'has expected metadata terms' do
-      expect(described_class.terms).to include(:creator, :date_created, :description, :software, :title)
+      expect(described_class.terms).to include(:creator, :date_created, :description, :software)
     end
 
     it "has expected required metadata terms" do

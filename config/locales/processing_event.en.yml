@@ -10,7 +10,7 @@ en:
     labels:
       processing_event:
         description: Description
-        date_created: Date
+        date_created: Event Date
     hints:
       processing_event:
         software: Software used to process the media

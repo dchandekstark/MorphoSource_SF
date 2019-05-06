@@ -68,5 +68,41 @@ module MorphosourceHelper
   def find_media_autocomplete_url
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
   end
-  
+
+  def find_taxonomy_autocomplete_url
+    Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Taxonomy&id=NA&q='
+  end
+
+
+  def collapse_expand_panel(block, state:"COLLAPSE", expand_button_text:"Show more", collapse_button_text:"Show less")
+    content_tag :div, :class => "row collapse-button" do
+      content_tag :div, :class => "panel-title" do
+        content_tag :a, :data => {:toggle => "collapse"}, :href => %(##{block}), :class => "btn #{block}" do
+          concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
+          concat "Show more"
+          concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
+        end
+      end
+    end
+  end
+
+  def collapse_accordion_panel(block, data_parent, label, value, is_collapsed)
+    if is_collapsed == true
+      icon = "glyphicon-triangle-bottom"
+    else
+      icon = "glyphicon-triangle-top"
+    end
+    content_tag :a, :data => {:toggle => "collapse", :parent => %(##{data_parent})}, :href => %(##{block}) do
+      content_tag :div, :class => "row" do
+        concat content_tag(:div, label, class: "col-xs-6 showcase-label")
+        concat content_tag(:div, value, class: "col-xs-5 showcase-value")
+        concat content_tag(:span, "", class: "col-xs-1 glyphicon #{icon} #{block}")
+      end
+    end
+  end
+
+
+
+
+
 end

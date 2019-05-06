@@ -19,6 +19,7 @@ gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
+gem 'bootstrap-sass', '~> 3.4'
 
 gem 'riiif', '~> 1.1'
 

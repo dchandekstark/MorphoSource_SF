@@ -12,7 +12,7 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
       expect(described_class.terms).to include(:bibliographic_citation, :catalog_number, :collection_code, :latitude,
                                                :longitude, :numeric_time, :original_location, :periodic_time,
                                                :vouchered, :idigbio_recordset_id, :idigbio_uuid, :is_type_specimen,
-                                               :occurrence_id, :sex)
+                                               :occurrence_id, :sex, :canonical_taxonomy)
 
       expect(described_class.terms).to_not include(:keyword, :license, :rights_statement, :subject, :title, :language,
                                                    :source, :resource_type)
@@ -23,12 +23,12 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
     end
 
     it 'has expected single valued metadata terms' do
-      expect(described_class.single_valued_fields).to match_array([ :bibliographic_citation, :catalog_number,
+      expect(described_class.single_valued_fields).to match_array([ :catalog_number,
                                                                     :collection_code, :date_created, :description,
                                                                     :latitude, :longitude, :numeric_time,
                                                                     :original_location, :publisher, :vouchered,
                                                                     :idigbio_recordset_id, :idigbio_uuid,
-                                                                    :is_type_specimen, :occurrence_id, :sex ])
+                                                                    :is_type_specimen, :occurrence_id, :sex, :canonical_taxonomy ])
     end
 
   end
@@ -44,7 +44,7 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
     it 'has the expected primary metadata terms' do
       expect(subject.primary_terms).to match_array(required_fields + [ :bibliographic_citation, :based_near,
                                                                        :catalog_number, :collection_code, :date_created,
-                                                                       :identifier, :related_url ])
+                                                                       :identifier, :related_url, :canonical_taxonomy ])
     end
 
   end

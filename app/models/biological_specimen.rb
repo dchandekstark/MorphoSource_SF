@@ -1,6 +1,7 @@
 class BiologicalSpecimen < Morphosource::Works::Base
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
+  after_save :add_id_to_title
 
   self.indexer = BiologicalSpecimenIndexer
   # Change this to restrict which works can be added as a child.
@@ -15,4 +16,42 @@ class BiologicalSpecimen < Morphosource::Works::Base
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata
+
+  def taxonomies
+    member_of.select{|work| work.class == Taxonomy}
+  end
+
+  def canonical_taxonomy_object
+    return nil unless canonical_taxonomy.present?
+    Taxonomy.find(canonical_taxonomy.first)
+  end
+
+  def canonical_taxonomy_title
+    return nil unless canonical_taxonomy.first.present?
+    canonical_taxonomy_object.title.first
+  end
+
+  # all taxonomies except the canonical taxonomy
+  def other_taxonomies
+    taxonomies.reject{|taxonomy| taxonomy.id == canonical_taxonomy.first}
+  end
+
+  # does not include the canonical taxonomy
+  def trusted_taxonomies
+    other_taxonomies.select{|taxonomy| taxonomy.trusted == ["Yes"]}
+  end
+
+  # does not include the canonical taxonomy
+  # any taxonomy that is not trusted
+  def user_taxonomies
+    other_taxonomies.reject{|taxonomy| taxonomy.trusted == ["Yes"]}
+  end
+
+  private
+    def add_id_to_title
+      unless self.title && self.id && self.title.first.to_s.start_with?("S#{self.id.to_s}: ")
+        self.title.set("S#{self.id.to_s}: #{self.title.first.to_s}")
+      end
+    end
+
 end

@@ -120,7 +120,7 @@ $(document).on('turbolinks:load', function(){
   form.addEventListener("submit", function() {
 
     // If media type = photogrammetry, submit scale bar fields. Otherwise, submit an empty scale bar.
-    if($('#media_media_type').val() == 'PhotogrammetryImageStack') {
+    if($('#media_media_type').val() == 'PhotogrammetryImageSeries') {
 
       var scaleBarCount = document.getElementsByClassName("media_scale_bar_target_type").length;
 
