@@ -42,6 +42,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :hyrax do
+    resources :works, only: [] do
+      member do
+        resource :custom_thumbnail, only: [:create, :destroy]
+      end
+    end
+  end
+
   # Permissions routes
   namespace :hyrax, path: :concern do
     resources :permissions, only: [] do

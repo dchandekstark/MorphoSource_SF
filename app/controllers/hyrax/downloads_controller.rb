@@ -11,6 +11,7 @@ class Hyrax::DownloadsController
       # For derivatives stored on the local file system
       send_local_content
     else
+      Rails.logger.info("DownloadsController file: #{file.inspect}")
       raise ActiveFedora::ObjectNotFoundError
     end
   end
