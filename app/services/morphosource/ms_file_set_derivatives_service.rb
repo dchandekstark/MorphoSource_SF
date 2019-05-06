@@ -2,6 +2,7 @@ module Morphosource
   # Responsible for creating and cleaning up the derivatives of a file_set with MS-specific methods
   class MsFileSetDerivativesService < Hyrax::FileSetDerivativesService
     def create_derivatives(filename)
+      byebug
       case mime_type
       when *file_set.class.pdf_mime_types             then create_pdf_derivatives(filename)
       when *file_set.class.office_document_mime_types then create_office_document_derivatives(filename)
@@ -34,6 +35,7 @@ module Morphosource
       end
 
       def create_archive_derivatives(filename)
+        byebug
         if file_set.member_of.first.media_type == 'CTImageSeries'
           Morphosource::Derivatives::CTImageSeriesDerivatives.create(filename,
                                                                      outputs: [{ label: :aleph,

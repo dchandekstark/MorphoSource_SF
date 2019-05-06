@@ -5,13 +5,13 @@ module Morphosource::Derivatives::Processors
   	end
 
 	class CTImageSeries < Hydra::Derivatives::Processors::Processor
-		attr_accessor :tmp_dir_path, :input_path, :jpeg_path, :out_path, :manifest_path
+		attr_accessor :tmp_dir_path, :input_path, :jpeg_path, :output_path, :manifest_path
     attr_accessor :x, :y, :z, :linear_scale_factor
     attr_accessor :x_spacing, :y_spacing, :z_spacing, :slice_thickness
 
 		class_attribute :timeout
 
-    def self.acceptable_image_formats
+    def acceptable_image_formats
       ['.dcm', '.tiff', '.tif', '.bmp']
     end
 
@@ -29,18 +29,21 @@ module Morphosource::Derivatives::Processors
 
 		def create_ct_image_series_derivative
 			@tmp_dir_path = Rails.root.join('tmp', SecureRandom.uuid)
+      Dir.mkdir tmp_dir_path unless File.exist? tmp_dir_path
 			@input_path = File.join(tmp_dir_path, 'input')
+      Dir.mkdir input_path unless File.exist? input_path
 			@jpeg_path = File.join(tmp_dir_path, 'jpeg')
+      Dir.mkdir jpeg_path unless File.exist? jpeg_path
 			@output_path = File.join(tmp_dir_path, 'output')
+      Dir.mkdir output_path unless File.exist? output_path
 
-      @x = nil
-      @y = nil
-      @z = nil
-
-      @x_spacing = directives.fetch(:x_spacing, 0).presence || 0
-      @y_spacing = directives.fetch(:y_spacing, 0).presence || 0
-      @z_spacing = directives.fetch(:z_spacing, 0).presence || 0
+      
+      @x_spacing = directives.fetch(:x_spacing, 1).presence || 1
+      @y_spacing = directives.fetch(:y_spacing, 1).presence || 1
+      @z_spacing = directives.fetch(:z_spacing, 0).presence
       @slice_thickness = directives.fetch(:slice_thickness, 0).presence || 0
+      @z_spacing = 1 if z_spacing == 0 && slice_thickness == 0
+      # todo: grab image resolutions from dicom if possible? (or should that be done via work characterization?)
 
 			# todo: locate images in zip
 
@@ -95,26 +98,28 @@ module Morphosource::Derivatives::Processors
       v.sort { |a, b| [] <=> [] }
     end
 
-    def import_image_archive(format='.dcm')
-      x, y, z = extract_file_and_metadata(format=format)
-      if x.uniq.len != 1 || y.uniq.len != 1 || z == 0
+    def import_image_archive
+      x, y, z = extract_file_and_metadata
+      if x.uniq.length != 1 || y.uniq.length != 1 || z == 0
+        byebug
         cleanup_tmp_files
         # error out, no images or different kinds of images
       else
         @x = x.first
         @y = y.first
         @z = z
-        @linear_scale_factor = linear_scale_factory
+        @linear_scale_factor = linear_scale_factor
       end
     end
 
+    # extracts zipped images and grabs x, y, z dimensions
     def extract_file_and_metadata(format='.dcm')
       x = []
       y = []
       z = 0
       Zip::File.open(source_path) do |zip_file|
         zip_file.each do |f|
-          next unless f.name == format
+          next unless acceptable_image_formats.include? File.extname(f.name).downcase
           x_dim, y_dim = image_dims(f.get_input_stream)
           x << x_dim if x_dim
           y << y_dim if y_dim
@@ -126,7 +131,7 @@ module Morphosource::Derivatives::Processors
     end
 
     def image_dims(io_stream)
-      img = Minimagick::Image.read(io_stream)
+      img = MiniMagick::Image.read(io_stream)
       if img.valid?
         return img.width, img.height
       end
@@ -137,18 +142,9 @@ module Morphosource::Derivatives::Processors
     end
 
 		def img_to_jpeg
-      imagej = Morphsource::Derivatives::ImageJ.new(imagej_macro)
-      imagej.call
+      fiji = Morphosource::Derivatives::Fiji.new(input_path, jpeg_path, linear_scale_factor)
+      fiji.call
 		end
-
-    def imagej_macro
-      erb_src = 'imagej_macro.txt.erb'
-      txt_dst = File.join(tmp_dir_path, File.basename(erb_src, '.erb'))
-      File.open(txt_dst, 'w') do |f|
-        f.write(ERB.new(File.read(erb_src)).result())
-      end
-      txt_dst
-    end
 
 		def jpeg_to_dcm
       new_x, new_y, new_z, new_slice_thickness = new_spacing
@@ -174,10 +170,10 @@ module Morphosource::Derivatives::Processors
     end
 
 		def gen_manifest
-      erb_src = 'manifest.json.erb'
+      erb_src = File.join(__dir__, 'manifest.json.erb')
       txt_dst = File.join(tmp_dir_path, File.basename(erb_src, '.erb'))
       File.open(txt_dst, 'w') do |f|
-        f.write(ERB.new(File.read(erb_src)).result())
+        f.write(ERB.new(File.read(erb_src)).result(binding))
       end
       txt_dst
 		end
@@ -192,6 +188,7 @@ module Morphosource::Derivatives::Processors
     end
 
     def write_files
+      byebug
       # write manifest file
       output_file_service.call(manifest_path, directives)
 
