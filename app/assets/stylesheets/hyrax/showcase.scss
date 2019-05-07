@@ -78,8 +78,8 @@ div.showcase {
       font-size: 17px;
     }
   }
-  h4 {
-    padding: 0 20px;
+  h4, .content-block-intro {
+    padding: 0 12px;
     font-size: 12px;
     font-weight: normal;
     @media (min-width: 414px) {
@@ -91,6 +91,9 @@ div.showcase {
     @media (min-width: 1200px) {
       font-size: 16px;
     }
+  }
+  .content-block-intro {
+    margin-bottom: 20px;
   }
   .panel-title {
     background-color: #efefef;
@@ -137,10 +140,10 @@ div.showcase {
       font-size: 2.4vw;
     }
     @media (min-width: 768px) {
-      font-size: 1.3vw;
+      font-size: 1.2vw;
     }
     @media (min-width: 1200px) {
-      font-size: 16px;
+      font-size: 14px;
     }
   }
 

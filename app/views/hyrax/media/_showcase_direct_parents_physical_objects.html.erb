@@ -5,5 +5,7 @@
 	<!-- <%= member_counter %> 
       # todo: later on we will need to handle more than 1 parent
 	-->
-	<%= link_to(@presenter.physical_object_title, @presenter.physical_object_link) %>
+	<% if @presenter.physical_object_link.present? %>
+		<%= link_to(@presenter.physical_object_title, @presenter.physical_object_link) %>
+	<% end %>
 </div>

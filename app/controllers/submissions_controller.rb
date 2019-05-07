@@ -30,7 +30,6 @@ class SubmissionsController < ApplicationController
       end
     else
       # clean start
-byebug      
       session[:submission] ||= {}
       @submission = Submission.new(session[:submission])
     end

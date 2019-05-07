@@ -29,15 +29,15 @@
 				<div class="content-block">
 					<% 
 					members = presenter.direct_parent_members
-					member =  members.first
+					parent_member =  members.first
 					%>
-					<% if member.present? %>
+					<% if parent_member.present? %>
 						<div class="row media-block">
 
 							 	<div class="thumbnail col-xs-4">
-							    <%= render_thumbnail_tag member %><br>
-							    <%= link_to(member.link_name, contextual_path(member, @presenter)) %><br>
-							    <%= member.file_format %><br>
+							    <%= render_thumbnail_tag parent_member %><br>
+							    <%= link_to(parent_member.link_name, contextual_path(parent_member, @presenter)) %><br>
+							    <%= parent_member.file_format %><br>
 							  </div>
 
 						</div>							
@@ -55,24 +55,30 @@
 				<div class="content-block-intro">
 					<%
 					this_media_member =  presenter.this_media_member
-					member =  this_media_member
 					%>
 					<%= presenter.raw_or_derived %> media 
-			    <%= link_to(member.link_name, contextual_path(member, @presenter)) %> 
-				 	(this media) was created by processing raw media ... in ... steps
+			    <%= link_to(this_media_member.link_name, contextual_path(this_media_member, @presenter)) %> 
+				 	(this media) was created by processing raw media 
+				 	<%= link_to(parent_member.link_name, contextual_path(parent_member, @presenter)) %>
+					<% if presenter.processing_activity_type.present?  %>
+				 		in <%= presenter.processing_activity_count %> steps
+				 	<% end %>
 				</div>
 				<div class="content-block">
-					<% presenter.processing_activity_type.map.with_index do |item, index| %>
-						<h4>Step <%= index+1 %>: </b><%= item %> </h4>
-						<div class="row indent">
-							<div class="col-xs-6 showcase-label">Software</div>
-							<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_software[index] %></div>
-						</div>
-						<div class="row indent">
-							<div class="col-xs-6 showcase-label">Description</div>
-							<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_description[index] %></div>
-						</div>
-					<% end%>
+					<% 
+					if presenter.processing_activity_type.present? 
+						presenter.processing_activity_type.map.with_index do |item, index| %>
+							<h4>Step <%= index+1 %>: </b><%= item %> </h4>
+							<div class="row indent">
+								<div class="col-xs-6 showcase-label">Software</div>
+								<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_software[index] %></div>
+							</div>
+							<div class="row indent">
+								<div class="col-xs-6 showcase-label">Description</div>
+								<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_description[index] %></div>
+							</div>
+						<% end %>
+					<% end %>
 				</div>
 			</div>
 
@@ -81,13 +87,13 @@
 					Media produced by this event on MophoSource
 				</div>
 				<div class="content-block">
-					<% if member.present? %>
+					<% if this_media_member.present? %>
 						<div class="row media-block">
 
 							 	<div class="thumbnail col-xs-4">
-							    <%= render_thumbnail_tag member %><br>
-							    <%= link_to(member.link_name, contextual_path(member, @presenter)) %><br>
-							    <%= member.file_format %><br>
+							    <%= render_thumbnail_tag this_media_member %><br>
+							    <%= link_to(this_media_member.link_name, contextual_path(this_media_member, @presenter)) %><br>
+							    <%= this_media_member.file_format %><br>
 							  </div>
 
 						</div>							

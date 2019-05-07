@@ -14,7 +14,7 @@ module Hyrax
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
-      :processing_activity_type, :processing_activity_software, :processing_activity_description,
+      :processing_activity_count, :processing_activity_type, :processing_activity_software, :processing_activity_description, 
       :raw_or_derived,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
@@ -125,8 +125,9 @@ module Hyrax
         elsif cultural_heritage_object.present?
           @physical_object_title = cultural_heritage_object.title.first
           @physical_object_id = cultural_heritage_object.id
-          @physical_object_link = "/concern/cultural_heritage_object/" + @physical_object_id
-          @idigbio_uuid = cultural_heritage_object.idigbio_uuid
+          @physical_object_link = "/concern/cultural_heritage_objects/" + @physical_object_id
+          # idigbio fields are not in CHO work type.  Remove below later if not needed
+          #@idigbio_uuid = cultural_heritage_object.idigbio_uuid
           @vouchered = cultural_heritage_object.vouchered
           @physical_object_type = "CulturalHeritageObject"
         end
@@ -159,6 +160,7 @@ module Hyrax
  
 
       # get processing event:  media < processing_event
+      # then get processing activities
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
       if processing_events.present?
         @processing_event_count = processing_events.count 
@@ -166,6 +168,11 @@ module Hyrax
           @processing_activity_type = processing_event.processing_activity_type 
           @processing_activity_software = processing_event.processing_activity_software
           @processing_activity_description = processing_event.processing_activity_description 
+        end
+        if @processing_activity_type.present?
+          @processing_activity_count = @processing_activity_type.length
+        else
+          @processing_activity_count = 0
         end
       else
         @processing_event_count = 0
