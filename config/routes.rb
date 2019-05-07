@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     get 'concern/cultural_heritage_objects/new', to: 'cultural_heritage_objects#new'
     get 'concern/biological_specimens/:id', to: 'biological_specimens#showcase'
     get 'concern/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
+
+    # redirect the default media view to showcase view, except for certain action (e.g. new)
+    # /concern/parent/1g05fb620/media/2v23vt362
   end
 
   require "resque_web"
