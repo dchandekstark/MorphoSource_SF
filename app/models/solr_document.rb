@@ -130,8 +130,12 @@ class SolrDocument
 
   def processing_activity
     Rails.logger.info("Processing Activity: #{processing_activity_type.inspect} #{processing_activity_software.inspect} #{processing_activity_description.inspect}")
-    processing_activity_type.map.with_index do |item, index|
-      "Activity Type: #{item}, Software: #{processing_activity_software[index]}, Activity Description: #{processing_activity_description[index]}"
+    if processing_activity_type.nil?
+      return ''
+    else
+      return processing_activity_type.map.with_index do |item, index|
+        "Activity Type: #{item}, Software: #{processing_activity_software[index]}, Activity Description: #{processing_activity_description[index]}"
+      end
     end
   end
 
