@@ -21,7 +21,7 @@ module Morphosource
     index.as :stored_searchable, :facetable
     end
 
-    property :series_type, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subtypeLiteral") do |index|
+    property :series_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/seriesType") do |index|
     index.as :stored_searchable, :facetable
     end
 
