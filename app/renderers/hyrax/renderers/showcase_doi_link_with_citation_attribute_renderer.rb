@@ -7,7 +7,7 @@ module Hyrax
         markup << %(<div class='row'>)
         markup << %(<div class='col-xs-6 showcase-label'>)
         if values.blank?
-          markup << %((Not entered))
+          markup << %(--)
         else
           Array(values).each do |value|
             markup << attribute_value_to_html(value.to_s)

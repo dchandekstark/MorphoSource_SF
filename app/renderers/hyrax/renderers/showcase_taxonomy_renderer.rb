@@ -73,7 +73,7 @@ module Hyrax
 
       def get_rank_value(taxonomy, attribute)
         value = taxonomy.send(attribute)
-        value.empty? ? "(Not entered)" : value.first
+        value.empty? ? "--" : value.first
       end
 
       RANKS = {

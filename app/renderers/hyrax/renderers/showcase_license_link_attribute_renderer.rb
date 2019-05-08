@@ -12,7 +12,7 @@ module Hyrax
         markup << %(<div class='col-xs-6 showcase-value'>)
         # todo: auto-populated citation text information on the right, e.g.: https://crosscite.org/docs.html
         if values.blank?
-          markup << %((Not entered))
+          markup << %(--)
         else
           Array(values).each do |value|
             markup << attribute_value_to_html(value.to_s) << %(<br/>)

@@ -61,7 +61,7 @@
 				 	(this media) was created by processing raw media 
 				 	<%= link_to(parent_member.link_name, contextual_path(parent_member, @presenter)) %>
 					<% if presenter.processing_activity_type.present?  %>
-				 		in <%= presenter.processing_activity_count %> steps
+						in <%= pluralize(presenter.processing_activity_count, 'step') %>
 				 	<% end %>
 				</div>
 				<div class="content-block">

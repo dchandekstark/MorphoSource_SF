@@ -165,7 +165,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             <div id=collapse-taxonomy-imxatwyl class='panel-collapse collapse collapse-accordion'>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Domain</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Kingdom</div>
@@ -177,7 +177,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Superclass</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Class</div>
@@ -185,11 +185,11 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Subclass</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Superorder</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Order</div>
@@ -197,11 +197,11 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Suborder</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Superfamily</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Family</div>
@@ -209,11 +209,11 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Subfamily</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Tribe</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Genus</div>
@@ -221,7 +221,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Subgenus</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Species</div>
@@ -229,7 +229,7 @@ RSpec.describe Hyrax::Renderers::ShowcaseTaxonomyRenderer do
             </div>
             <div class="row taxonomy-rank">
               <div class="col-xs-6 showcase-label">Subspecies</div>
-              <div class="col-xs-6 showcase-value">(Not entered)</div>
+              <div class="col-xs-6 showcase-value">--</div>
             </div>
           </div>
         </div>)
