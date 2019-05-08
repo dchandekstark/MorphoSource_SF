@@ -40,7 +40,7 @@ module Hyrax
 
       # todo: need to get the user name (and a link to user) from the email address
       @data_managed_by = solr_document.depositor
-      
+ 
       if media.fileset_visibility.include? 'restricted'
         @download_permission = 'restricted'
       else
