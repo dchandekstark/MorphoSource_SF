@@ -90,19 +90,32 @@ module Hyrax
       # get the top parent
       direct_parent_id = top_parent_media_id(media)
       #direct_parent_id_list = parent_media_ids(media, 1, []).flatten.uniq
-      direct_parent_id_list = [] << direct_parent_id
-      @direct_parent_members = member_presenters_for(direct_parent_id_list)
+      direct_parent_id_list = []
+      if direct_parent_id.present?
+        direct_parent_id_list << direct_parent_id
+      end
+
       this_media_list = [] << solr_document.id 
       @this_media_member = member_presenters_for(this_media_list).first 
-
 
       if direct_parent_id_list.length > 0
         # If a media has a parent work and is derived, then that media’s raw ancestor media work 
         # (whether parent, grandparent, etc) should be connected to an IE from which metadata should be derived.
+        @direct_parent_members = member_presenters_for(direct_parent_id_list)
         target_media = Media.where('id' => direct_parent_id).first
         @raw_or_derived = "Derived"
       else
+        # check if this is a Derived media with "absentee parent"
+        # In the case of an “absentee parent” work where media is derived but a parent media is not present, the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
+
+
+
+
+
+
+
         # If a media is raw and has no parent media work, then get data from current media via the IE.
+        @direct_parent_members = member_presenters_for(this_media_list)
         target_media = media
         @raw_or_derived = "Raw"
       end

@@ -121,13 +121,24 @@ module Morphosource
 
     # this method gets the top parent of a media
     # todo: will need to handle multiple parents later
+    def top_parent_media_id_recurse(media)
+      parent_medias = parent_medias(media)
+      if parent_medias.empty?
+        # no more parent (at the top level). return the id 
+        return media.id
+      else
+        return top_parent_media_id_recurse(parent_medias.first)
+      end
+    end
+
     def top_parent_media_id(media)
-        parent_medias = parent_medias(media)
-        if parent_medias.empty?
-          return media.id
-        else
-          return top_parent_media_id(parent_medias.first)
-        end
+      current_media_id = media.id
+      return_id = top_parent_media_id_recurse(media)
+      if return_id == current_media_id
+        return nil
+      else
+        return_id
+      end
     end
 
     # this method get siblings IDs from parents 1 level above
