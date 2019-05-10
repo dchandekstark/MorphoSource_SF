@@ -77,6 +77,24 @@ module Hyrax
         @face_count = @face_count.to_s(:delimited) 
       end
 
+      # get processing event:  media < processing_event
+      # then get processing activities
+      processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
+      if processing_events.present?
+        @processing_event_count = processing_events.count 
+        processing_events.each do |processing_event|
+          @processing_activity_type = processing_event.processing_activity_type 
+          @processing_activity_software = processing_event.processing_activity_software
+          @processing_activity_description = processing_event.processing_activity_description 
+        end
+        if @processing_activity_type.present?
+          @processing_activity_count = @processing_activity_type.length
+        else
+          @processing_activity_count = 0
+        end
+      else
+        @processing_event_count = 0
+      end
 
       # Get parent medias (all)    
       # add current media id, then add child media ids.  
@@ -104,21 +122,25 @@ module Hyrax
         @direct_parent_members = member_presenters_for(direct_parent_id_list)
         target_media = Media.where('id' => direct_parent_id).first
         @raw_or_derived = "Derived"
+        @direct_parent_members_raw_or_derived = "Raw"
       else
-        # check if this is a Derived media with "absentee parent"
-        # In the case of an “absentee parent” work where media is derived but a parent media is not present, the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
-
-
-
-
-
-
-
-        # If a media is raw and has no parent media work, then get data from current media via the IE.
-        @direct_parent_members = member_presenters_for(this_media_list)
-        target_media = media
-        @raw_or_derived = "Raw"
+        # check if this is a Derived media with "absentee parent" by checking if PE exists
+        if @processing_event_count > 0
+          # In the case of an “absentee parent” work where media is derived but a parent media is not present, the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
+          @direct_parent_members = member_presenters_for(this_media_list)
+          target_media = media
+          @raw_or_derived = "Derived"
+          @direct_parent_members_raw_or_derived = "Derived"
+        else
+          # If a media is raw and has no parent media work, then get data from current media via the IE.
+          @direct_parent_members = member_presenters_for(this_media_list)
+          target_media = media
+          @raw_or_derived = "Raw"
+          @direct_parent_members_raw_or_derived = "Raw"
+        end
       end
+      Rails.logger.info("(010) in MediaPresenter: #{@raw_or_derived.inspect} ")
+      Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
 
       # Get the physical object type from:
       # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
@@ -171,26 +193,6 @@ module Hyrax
         imaging_event_exist = false
       end # end if imaging_event present?
  
-
-      # get processing event:  media < processing_event
-      # then get processing activities
-      processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
-      if processing_events.present?
-        @processing_event_count = processing_events.count 
-        processing_events.each do |processing_event|
-          @processing_activity_type = processing_event.processing_activity_type 
-          @processing_activity_software = processing_event.processing_activity_software
-          @processing_activity_description = processing_event.processing_activity_description 
-        end
-        if @processing_activity_type.present?
-          @processing_activity_count = @processing_activity_type.length
-        else
-          @processing_activity_count = 0
-        end
-      else
-        @processing_event_count = 0
-      end
-
     end
 
     # this method is cloned from list_of_item_ids_to_display (for defaut view), 
