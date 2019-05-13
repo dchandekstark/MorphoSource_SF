@@ -1,3 +1,5 @@
+require 'hydra/works/services/zip_contents_characterization_service.rb'
+
 class CharacterizeJob < Hyrax::ApplicationJob
   queue_as Hyrax.config.ingest_queue_name
 
@@ -9,7 +11,6 @@ class CharacterizeJob < Hyrax::ApplicationJob
   def perform(file_set, file_id, filepath = nil)
     raise "#{file_set.class.characterization_proxy} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
-
     # Run FITS , then blender (if it is a mesh file type).  
     # For mesh files:
     # - we want blender to overwrite the mime type output from FITS
@@ -25,6 +26,9 @@ class CharacterizeJob < Hyrax::ApplicationJob
       }
       Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, blender_options)
       Rails.logger.debug "Ran Blender characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
+    elsif (ext =~ /\.(zip)$/)
+      Hydra::Works::ZipContentsCharacterizationService.run(file_set.characterization_proxy, filepath)
+      Rails.logger.debug "Ran zip contents characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
     end
     file_set.characterization_proxy.save!
     file_set.update_index

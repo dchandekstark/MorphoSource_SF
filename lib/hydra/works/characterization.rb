@@ -21,12 +21,10 @@ module Hydra::Works
     autoload :BlenderDocument, 'hydra/works/characterization/blender_document.rb'
 
     autoload_under 'schema' do
-      autoload :AudioSchema
-      autoload :BaseSchema
-      autoload :DocumentSchema
-      autoload :ImageSchema
       autoload :ImageExtSchema
-      autoload :VideoSchema
+      autoload :DicomSchema
+      autoload :MeshSchema
+      autoload :ZipContentsSchema
     end
   end
 end

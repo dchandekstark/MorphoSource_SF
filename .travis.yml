@@ -58,6 +58,21 @@ before_install:
   - gltf-pipeline --version
   # end gltf-pipeline setup --------
 
+  # begin Fiji setup --------
+  - cd $TRAVIS_BUILD_DIR/download
+  - curl https://downloads.imagej.net/fiji/latest/fiji-linux64.zip -o fiji-linux64.zip
+  - mkdir fiji
+  - unzip fiji-linux64.zip -d fiji
+  - export FIJI_PATH="$TRAVIS_BUILD_DIR/download/fiji"
+  - $FIJI_PATH/Fiji.app/ImageJ-linux64 --help # verify Fiji is working properly
+  # end Fiji setup --------
+
+  # begin dcmtk setup --------
+  - sudo apt-get install -y dcmtk
+  - img2dcm # verify dcmtk img2dcm is working properly
+  - dcmdjpeg # verify dcmtk dcmdjpeg is working property
+  # end dcmtk setup --------
+
   - cd $TRAVIS_BUILD_DIR
 before_script:
   - "cp .rspec.travis .rspec"

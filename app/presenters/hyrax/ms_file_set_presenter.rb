@@ -51,7 +51,11 @@ module Hyrax
         :color_format,
         :normals_format,
         :has_uv_space,
-        :vertex_color
+        :vertex_color,
+        # zip archive contents
+        :contents_mime_type,
+        :contents_file_name,
+        :contents_file_size
       ]
     end
 
@@ -109,6 +113,11 @@ module Hyrax
               :has_uv_space,
               :vertex_color,
               to: :solr_document
-  
+
+    # zip archive contents
+    delegate  :contents_mime_type,
+              :contents_file_name,
+              :contents_file_size,
+              to: :solr_document
   end
 end
