@@ -64,7 +64,7 @@ before_install:
   - mkdir fiji
   - unzip fiji-linux64.zip -d fiji
   - export FIJI_PATH="$TRAVIS_BUILD_DIR/download/fiji"
-  - $FIJI_PATH/Fiji.app/ImageJ-linux64 --help # verify Fiji is working properly
+  - # $FIJI_PATH/Fiji.app/ImageJ-linux64 --help # Could be good to verify Fiji working but causes Travis to error out even when working
   # end Fiji setup --------
 
   # begin dcmtk setup --------
