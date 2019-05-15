@@ -71,6 +71,15 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to_not be_able_to(:stage_media, Submission) }
       end
     end
+    describe 'stage_taxonomy' do
+      describe 'logged in' do
+        before { allow(user).to receive(:groups) { [ 'registered' ] } }
+        it { is_expected.to be_able_to(:stage_taxonomy, Submission) }
+      end
+      describe 'not logged in' do
+        it { is_expected.to_not be_able_to(:stage_taxonomy, Submission) }
+      end
+    end
   end
 
 end

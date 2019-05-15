@@ -12,6 +12,10 @@ module Morphosource
 				def mesh_mime_types
 					['application/ply', 'application/stl', 'text/prs.wavefront-obj', 'model/gltf+json', 'model/vrml', 'model/x3d+xml']
 				end
+
+				def archive_mime_types
+					['application/zip']
+				end
 			end
 		end
 	end

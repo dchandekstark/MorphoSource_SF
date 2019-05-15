@@ -141,6 +141,11 @@ module Hyrax
     def blender_path
       @blender_path ||= 'blender'
     end
+
+    attr_writer :fiji_path
+    def fiji_path
+      @fiji_path ||= 'blender'
+    end
     
     # Override characterization runner
     attr_accessor :characterization_runner

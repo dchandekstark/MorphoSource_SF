@@ -118,7 +118,9 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name('part', :stored_searchable)
     config.add_show_field solr_name('rights_holder', :stored_searchable)
     config.add_show_field solr_name('scale_bar', :stored_searchable)
+    config.add_show_field solr_name('series_type', :stored_searchable)
     config.add_show_field solr_name('side', :stored_searchable)
+    config.add_show_field solr_name('slice_thickness', :stored_searchable)
     config.add_show_field solr_name('unit', :stored_searchable)
     config.add_show_field solr_name('x_spacing', :stored_searchable)
     config.add_show_field solr_name('y_spacing', :stored_searchable)
@@ -147,6 +149,9 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name('cho_type', :stored_searchable)
     config.add_show_field solr_name('material', :stored_searchable)
     config.add_show_field solr_name('short_title', :stored_searchable)
+    
+    # Processing Events
+    config.add_show_field solr_name('processing_activity', :stored_searchable)
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

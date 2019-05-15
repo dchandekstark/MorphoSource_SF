@@ -25,8 +25,11 @@ module Hydra::Works
       autoload :BaseSchema
       autoload :DocumentSchema
       autoload :ImageSchema
-      autoload :ImageExtSchema
       autoload :VideoSchema
+      autoload :DicomSchema
+      autoload :ImageExtSchema
+      autoload :MeshSchema
+      autoload :ZipContentsSchema
     end
   end
 end

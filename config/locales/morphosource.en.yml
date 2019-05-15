@@ -27,11 +27,17 @@ en:
       format_labels:
         image: 'Image'
         video: 'Video'
-        ct_mri: 'CT/MRI Image Stack'
-        photogrammetry: 'Photogrammetry Image Stack'
+        ct_mri: 'CT/MRI Image Series'
+        photogrammetry: 'Photogrammetry Image Series'
         mesh: 'Mesh or Point Cloud'
         other: 'Other'
     upload:
       change_access_message_html: "<p>You have changed the access level on work <i>%{curation_concern}</i>, making it accessible to other users or groups to view or edit.</p><p>All attached files are now being updated with the same access level.</p>"
       change_access_yes_message: Yes please.
       change_access_no_message: No. I want to go back.
+    taxonomy:
+      labels:
+        canonical: "Institutional"
+        trusted_canonical: "Institutional / MorphoSource Inferred"
+        trusted: "MorphoSource Inferred"
+        user: "User Supplied"

@@ -83,8 +83,16 @@ class SolrDocument
     self[Solrizer.solr_name('scale_bar', :stored_searchable)]
   end
 
+  def series_type
+    self[Solrizer.solr_name('series_type', :stored_searchable)]
+  end
+
   def side
     self[Solrizer.solr_name('side', :stored_searchable)]
+  end
+
+  def slice_thickness
+      self[Solrizer.solr_name('slice_thickness', :stored_searchable)]
   end
 
   def unit
@@ -118,6 +126,29 @@ class SolrDocument
 
   def current_location
     self[Solrizer.solr_name('current_location', :stored_searchable)]
+  end
+
+  def processing_activity
+    Rails.logger.info("Processing Activity: #{processing_activity_type.inspect} #{processing_activity_software.inspect} #{processing_activity_description.inspect}")
+    if processing_activity_type.nil?
+      return ''
+    else
+      return processing_activity_type.map.with_index do |item, index|
+        "Activity Type: #{item}, Software: #{processing_activity_software[index]}, Activity Description: #{processing_activity_description[index]}"
+      end
+    end
+  end
+
+  def processing_activity_type
+    self[Solrizer.solr_name('processing_activity_type', :stored_searchable)]
+  end
+
+  def processing_activity_software
+    self[Solrizer.solr_name('processing_activity_software', :stored_searchable)]
+  end
+
+  def processing_activity_description
+    self[Solrizer.solr_name('processing_activity_description', :stored_searchable)]
   end
 
   def geographic_coordinates
@@ -181,6 +212,10 @@ class SolrDocument
 
   def sex
     self[Solrizer.solr_name('sex', :stored_searchable)]
+  end
+
+  def canonical_taxonomy
+    self[Solrizer.solr_name('canonical_taxonomy', :stored_searchable)]
   end
 
   # CHOs only
@@ -357,19 +392,14 @@ class SolrDocument
     self[Solrizer.solr_name('facility', :stored_searchable)]
   end
 
-  # Processing Event
+  # Processing Event & Image Capture Event
   def software
     self[Solrizer.solr_name('software', :stored_searchable)]
   end
 
-
   # Image Capture Event
   def ie_modality
       self[Solrizer.solr_name('ie_modality', :stored_searchable)]
-  end
-
-  def software
-      self[Solrizer.solr_name('software', :stored_searchable)]
   end
 
   def exposure_time
@@ -527,6 +557,20 @@ class SolrDocument
 
   def centroid_z
     self[Solrizer.solr_name('centroid_z', :stored_searchable)]
+  end
+
+  # Zip archive contents file characterization fields
+
+  def contents_mime_type
+    self[Solrizer.solr_name('contents_mime_type', :stored_searchable)]
+  end
+
+  def contents_file_name
+    self[Solrizer.solr_name('contents_file_name', :stored_searchable)]
+  end
+
+  def contents_file_size
+    self[Solrizer.solr_name('contents_file_size', :stored_searchable)]
   end
 
   # Taxonomy fields
