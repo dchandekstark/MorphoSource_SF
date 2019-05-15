@@ -6,7 +6,7 @@
          # instead display the text “Request Download” and should lead to the request download UI flow (TBA) 
          # for now, the presenter checks for the fileset_visibility to determine the ability
       if presenter.download_permission == 'open' %> 
-        <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-default', role: 'button' %>
+        <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-default', role: 'button', download: true, target: '_blank' %>
       <% else %>
         <%= link_to 'Request download', 'TBD' , class: 'btn btn-default', role: 'button' %>      
       <% end %>

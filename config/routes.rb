@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get 'concern/parent/:parent_id/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
     # redirect the default media view to showcase view, except for certain action (e.g. new)
     get 'concern/media/new', to: 'media#new'
+    get 'concern/media/zip', to: 'media#zip'
     get 'concern/media/:id', to: 'media#showcase'
     get 'concern/parent/:parent_id/media/:id', to: 'media#showcase'
     # setup temp routes for the default views (for debugging)

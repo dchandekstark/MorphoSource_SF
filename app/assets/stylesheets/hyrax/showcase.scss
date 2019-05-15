@@ -1,5 +1,16 @@
 $font-color: #333;
 
+/* set box sizing for the circles and line in between */
+html {
+  box-sizing: border-box !important;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit !important;
+}
+
+
 div.showcase {
 
   max-width: 1200px;
@@ -146,13 +157,8 @@ div.showcase {
     }
   }
 
-  
-
-  
-
-
   .row {
-    padding:4px 24px;
+    padding:4px 10px;
   }
 
   .row.collapse-button {
@@ -189,8 +195,79 @@ div.showcase {
   }
 
 
-  .content-block-lg.row {
-    margin: 5px 0 30px 50px;    
+  .image-acq-detail {
+    .indicators {
+      position: relative;
+      float: left;
+      width: 48px;
+      height: 100%;
+      text-align: center;
+      .glyphicon {
+        font-size: 30px;
+        top: 6px;
+        z-index: 3;
+      }
+    }
+    @media (max-width: 460px) { /* hide the column around this breakpoint since the layout is not working well */
+      .indicators {display: none !important}
+    }
+    /* this is breaking the collapse functionality. remove later if not needed
+    .row.table{
+      display: table; 
+    } */
+    /* set the columns to same height */
+    .table-cell {
+        float: none;
+        display: table-cell;
+        vertical-align: top;
+    }
+  }
+
+  .line-in-middle {
+      background: linear-gradient(to right, 
+                                  transparent 0%, 
+                                  transparent calc(50% - 0.81px), 
+                                  #ccc calc(50% - 0.8px), 
+                                  #ccc calc(50% + 0.8px), 
+                                  transparent calc(50% + 0.81px), 
+                                  transparent 100%); 
+  }
+
+  .circle {
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    float:right;
+    margin-right:18px;
+    margin-top:8px;
+    position:relative;
+    z-index:2;
+  }
+  .circle.first:before,
+  .circle.last:before {
+    content:" ";
+    position:absolute;
+    width:4px;
+    left:50%;
+    margin:2px 0 2px -2px;
+    background:#fff;
+    bottom:100%;
+    height:50px;
+    z-index:3;
+    background:#fff;
+  }
+  .circle.last:before{
+    bottom:auto;
+    top:100%; 
+  }
+  .circle.last {
+      position: absolute;
+      bottom: 0;
+      margin-right:0;
+      right:17px;
   }
 
   .showcase-label, .showcase-value,
@@ -227,8 +304,14 @@ div.showcase {
   .content-block-lg {
     border: 2px solid #efefef; 
   }
+  .content-block-lg.row {
+    padding-right: 0;
+  }
+  .panel-collapse.row {
+    padding: 4px 0 4px 8px;    
+  }
 
-  .showcase-link {
+  .showcase-link, .showcase-value {
     word-break: break-all;
   }
 
