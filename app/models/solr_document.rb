@@ -559,6 +559,20 @@ class SolrDocument
     self[Solrizer.solr_name('centroid_z', :stored_searchable)]
   end
 
+  # Zip archive contents file characterization fields
+
+  def contents_mime_type
+    self[Solrizer.solr_name('contents_mime_type', :stored_searchable)]
+  end
+
+  def contents_file_name
+    self[Solrizer.solr_name('contents_file_name', :stored_searchable)]
+  end
+
+  def contents_file_size
+    self[Solrizer.solr_name('contents_file_size', :stored_searchable)]
+  end
+
   # Taxonomy fields
 
   def taxonomy_domain

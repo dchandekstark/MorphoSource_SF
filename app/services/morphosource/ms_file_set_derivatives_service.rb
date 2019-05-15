@@ -9,6 +9,7 @@ module Morphosource
       when *file_set.class.video_mime_types           then create_video_derivatives(filename)
       when *file_set.class.image_mime_types           then create_image_derivatives(filename)
       when *file_set.class.mesh_mime_types            then create_mesh_derivatives(filename)
+      when *file_set.class.archive_mime_types         then create_archive_derivatives(filename)
       end
     end
 
@@ -20,15 +21,25 @@ module Morphosource
           file_set.class.audio_mime_types +
           file_set.class.video_mime_types +
           file_set.class.image_mime_types +
-          file_set.class.mesh_mime_types
+          file_set.class.mesh_mime_types + 
+          file_set.class.archive_mime_types
       end
 
       def create_mesh_derivatives(filename)
         Morphosource::Derivatives::MeshDerivatives.create(filename,
-                                                    outputs: [{ label: :glb,
-                                                                format: 'glb',
-                                                                unit: file_set.member_of.first.unit.first,
-                                                                url: derivative_url('glb')}])
+                                                          outputs: [{ label: :glb,
+                                                                      format: 'glb',
+                                                                      unit: file_set.member_of.first.unit.first,
+                                                                      url: derivative_url('glb')}])
+      end
+
+      def create_archive_derivatives(filename)
+        if file_set.member_of.first.media_type.first == 'CTImageSeries'
+          Morphosource::Derivatives::CTImageSeriesDerivatives.create(filename,
+                                                                     outputs: [{ label: :aleph,
+                                                                                 file_set_id: file_set.id,
+                                                                                 url: derivative_url('aleph')}])          
+        end
       end
   end
 end

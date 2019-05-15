@@ -63,5 +63,12 @@ class FileSet < ActiveFedora::Base
     :vertex_color,
     to: :characterization_proxy
   )
-  
+
+  # for zip archive contents
+  delegate(
+    :contents_mime_type,
+    :contents_file_name,
+    :contents_file_size,
+    to: :characterization_proxy
+  )
 end
