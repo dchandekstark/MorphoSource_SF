@@ -223,16 +223,29 @@ div.showcase {
     }
   }
 
-  .line-in-middle {
-      background: linear-gradient(to right, 
-                                  transparent 0%, 
-                                  transparent calc(50% - 0.81px), 
-                                  #ccc calc(50% - 0.8px), 
-                                  #ccc calc(50% + 0.8px), 
-                                  transparent calc(50% + 0.81px), 
-                                  transparent 100%); 
+  .line {
+    position:relative;
+    width:80%;
+    margin:auto;
+    overflow:hidden;
   }
-
+  .line:after {
+    content:" ";
+    width:2px;
+    position:absolute;
+    z-index:1;
+    top:0;
+    bottom:0;
+    left:50%;
+    background: linear-gradient(
+      to bottom,
+      #fff,
+      #fff 20%,
+      #ddd 20%,
+      #ddd
+    );
+    background-size: 100% 10px;
+  }
   .circle {
     width:13px;
     height:13px;
@@ -241,7 +254,7 @@ div.showcase {
     border: 2px solid #ccc;
     border-radius: 50%;
     float:right;
-    margin-right:18px;
+    margin-right:17px;
     margin-top:8px;
     position:relative;
     z-index:2;
