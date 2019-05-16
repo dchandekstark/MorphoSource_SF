@@ -6,6 +6,8 @@ module Morphosource
 
   include Morphosource::Configurable
 
+  VERSION = '2.0a'.freeze
+
   module Works
     extend ActiveSupport::Autoload
 
