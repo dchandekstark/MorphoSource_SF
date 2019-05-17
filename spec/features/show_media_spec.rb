@@ -56,7 +56,7 @@ RSpec.feature 'Display a Media Work' do
   end
 
   scenario "Show a public Work" do
-    visit("/concern/media/#{work.id}")
+    visit("/concern/media/show/#{work.id}") # default show page has been moved to a different path: .../show/...
 
     expect(page).to have_content work.date_modified.first
     expect(page).to have_content work.publisher.first

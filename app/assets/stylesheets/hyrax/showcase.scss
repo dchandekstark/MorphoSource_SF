@@ -366,6 +366,10 @@ div.showcase {
     small.badge-wrapper div {
       font-size: 1.4vw;
       line-height: 2vw;
+      color: #4A4A4A;
+      a, a:link, a:visited {
+        color: #20527E;
+      }
     }
     .show-actions {
       padding: 0.6vw 0;

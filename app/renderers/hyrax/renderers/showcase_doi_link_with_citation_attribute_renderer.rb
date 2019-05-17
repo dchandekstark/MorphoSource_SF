@@ -17,7 +17,7 @@ module Hyrax
         attributes = microdata_object_attributes(field).merge(class: "attribute attribute-#{field}")
         markup << %(<div class='col-xs-6 showcase-value'>)
         # todo: auto-populated citation text information on the right, e.g.: https://crosscite.org/docs.html
-        markup << %(citation text goes here. Lorem ipsum, dolor, sit amet, sapien etiam, nunc amet dolor)
+        markup << %(Not yet implemented)
         markup << %(</div>)
         markup << %(</div>)
         markup.html_safe

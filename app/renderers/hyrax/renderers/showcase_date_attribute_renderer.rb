@@ -13,7 +13,7 @@ module Hyrax
             Date.parse(value).to_formatted_s(:long)
           rescue StandardError => e
             if e.message == 'invalid date'
-              value + ' (Invalid date)'
+              value # just return the string as it is
             else
               # if landed here. check e.message for the exception message
               '(Error)'
