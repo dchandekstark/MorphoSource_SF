@@ -891,6 +891,7 @@ DEPENDENCIES
   rsolr (>= 1.0)
   rspec-its
   rspec-rails
+  rubyzip
   sass-rails (~> 5.0)
   selenium-webdriver
   shoulda-callback-matchers (~> 1.1.1)

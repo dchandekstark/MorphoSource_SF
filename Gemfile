@@ -38,6 +38,8 @@ gem 'resque-web', require: 'resque_web'
 
 gem 'puma', '~> 3.7'
 
+gem 'rubyzip'
+
 gem 'zipline', '~> 1.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
