@@ -1,7 +1,7 @@
 $(document).on('ready', function(){
 
   if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
-    cookie_expired_days = 90;
+    cookie_expired_days = 7;
     // Begin Raw media flow
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
@@ -65,6 +65,7 @@ $(document).on('ready', function(){
     });
 
     saveClick = function(id, fromStart) {
+      // add the element id to the save_clicks list
       var saved_clicks = '';
       if (!fromStart && getCookie('saved_clicks')) {
         var saved_clicks = getCookie('saved_clicks') + ',';
@@ -85,6 +86,7 @@ $(document).on('ready', function(){
         // go to physical object
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
         saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
+        setCookie('will_create', 'processing_event', cookie_expired_days);
       }
       clearForms();
     });

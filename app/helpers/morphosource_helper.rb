@@ -73,11 +73,10 @@ module MorphosourceHelper
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Taxonomy&id=NA&q='
   end
 
-
   def collapse_expand_panel(block, state:"COLLAPSE", expand_button_text:"Show more", collapse_button_text:"Show less")
     content_tag :div, :class => "row collapse-button" do
       content_tag :div, :class => "panel-title" do
-        content_tag :a, :data => {:toggle => "collapse"}, :href => %(##{block}), :class => "btn #{block}" do
+        content_tag :a, :data => {:toggle => "collapse"}, :href => %(##{block}), :class => "btn #{block}", :aria => {:label => "collapse/expand"} do
           concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
           concat "Show more"
           concat content_tag(:span, "", class: "glyphicon glyphicon-triangle-bottom")
@@ -92,7 +91,7 @@ module MorphosourceHelper
     else
       icon = "glyphicon-triangle-top"
     end
-    content_tag :a, :data => {:toggle => "collapse", :parent => %(##{data_parent})}, :href => %(##{block}) do
+    content_tag :a, :data => {:toggle => "collapse", :parent => %(##{data_parent})}, :href => %(##{block}), :aria => {:label => "collapse/expand"} do
       content_tag :div, :class => "row" do
         concat content_tag(:div, label, class: "col-xs-6 showcase-label")
         concat content_tag(:div, value, class: "col-xs-5 showcase-value")
@@ -100,9 +99,5 @@ module MorphosourceHelper
       end
     end
   end
-
-
-
-
 
 end

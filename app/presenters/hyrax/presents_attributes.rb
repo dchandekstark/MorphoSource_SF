@@ -49,6 +49,7 @@ module Hyrax
     def supplied_record_badge_class
       SuppliedRecordBadge
     end
+
     # End Customization for MS 2.0: badges for physical object showcase page
 
     def display_microdata?

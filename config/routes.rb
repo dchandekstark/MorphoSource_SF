@@ -4,9 +4,24 @@ Rails.application.routes.draw do
   scope module: :hyrax do
     get 'biological_specimens/:id', to: 'biological_specimens#showcase'
     get 'cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
-    # redirect the default BSO/CHO view to showcase view
+    get 'media/:id', to: 'media#showcase'
+    # redirect the default BSO/CHO view to showcase view, except for certain action (e.g. new)
+    get 'concern/biological_specimens/new', to: 'biological_specimens#new'
+    get 'concern/cultural_heritage_objects/new', to: 'cultural_heritage_objects#new'
     get 'concern/biological_specimens/:id', to: 'biological_specimens#showcase'
     get 'concern/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
+    get 'concern/parent/:parent_id/biological_specimens/:id', to: 'biological_specimens#showcase'
+    get 'concern/parent/:parent_id/cultural_heritage_objects/:id', to: 'cultural_heritage_objects#showcase'
+    # redirect the default media view to showcase view, except for certain action (e.g. new)
+    get 'concern/media/new', to: 'media#new'
+    get 'concern/media/zip', to: 'media#zip'
+    get 'concern/media/:id', to: 'media#showcase'
+    get 'concern/parent/:parent_id/media/:id', to: 'media#showcase'
+    # setup temp routes for the default views (for debugging)
+    # remove them later if no longer needed
+    get 'concern/media/show/:id', to: 'media#show'
+    get 'concern/biological_specimens/show/:id', to: 'biological_specimens#show'
+    get 'concern/cultural_heritage_objects/show/:id', to: 'cultural_heritage_objects#show'
   end
 
   require "resque_web"
