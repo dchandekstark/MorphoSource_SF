@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/JuliaWinchester/iiif_manifest.git
-  revision: edb9f53d5c11ab2e7c2f714f1e7db3e1dafd76de
+  remote: https://github.com/MorphoSource/iiif_manifest.git
+  revision: 6cfbe8b21eaf6f9f2a32c021b28864a6e8fde46b
+  branch: morphosource
   specs:
     iiif_manifest (0.5.0)
       activesupport (>= 4)
