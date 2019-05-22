@@ -23,8 +23,8 @@ gem 'bootstrap-sass', '~> 3.4'
 
 gem 'riiif', '~> 1.1'
 
-# pul_uv_rails fork upgraded for universal viewer v3 beta
-gem 'pul_uv_rails', :git => 'https://github.com/JuliaWinchester/pul_uv_rails.git'
+# pul_uv_rails fork upgraded for universal viewer aleph
+gem 'pul_uv_rails', :git => 'https://github.com/MorphoSource/pul_uv_rails.git', :branch => 'aleph'
 
 # pull iiif_manifest fork that can handle 3D manifests
 gem 'iiif_manifest', :git => 'https://github.com/JuliaWinchester/iiif_manifest.git'
