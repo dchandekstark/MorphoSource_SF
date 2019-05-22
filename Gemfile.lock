@@ -6,8 +6,9 @@ GIT
       activesupport (>= 4)
 
 GIT
-  remote: https://github.com/JuliaWinchester/pul_uv_rails.git
-  revision: 97cc1ea7758332d8f657ceac3b62205f13f9e151
+  remote: https://github.com/MorphoSource/pul_uv_rails.git
+  revision: ac87be0843c4433cda97efe5047ceea2f73b8ef2
+  branch: aleph
   specs:
     pul_uv_rails (2.9)
 
