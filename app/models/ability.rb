@@ -26,6 +26,7 @@ class Ability
       can [ :zip ], Media
       can [ :showcase ], BiologicalSpecimen
       can [ :showcase ], CulturalHeritageObject
+      can [ :showcase ], Media
     end
 
   end
