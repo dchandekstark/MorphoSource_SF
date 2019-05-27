@@ -119,6 +119,7 @@ module Ms1to2
         if 'Device'.constantize.exists?(device_id)
           'Device'.constantize.find(device_id).modality&.first
         else
+          puts(ms2_output_data.public_send('device'))
           ms2_output_data.public_send('device')[device_id][:modality]&.first
         end
       end

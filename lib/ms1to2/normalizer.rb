@@ -11,6 +11,7 @@ module Ms1to2
 
     def call
       models.each do |m|
+        puts(m)
         factory = "Ms1to2::Factories::#{m}Factory".constantize
         factory.new(ms1_input_data, ms2_output_data).run
       end
@@ -18,7 +19,7 @@ module Ms1to2
     end
 
     def models
-      [:Collection, :Institution, :Device, :BiologicalSpecimen, :Media]
+      [:Collection, :Institution, :Device, :Taxonomy, :BiologicalSpecimen, :Media]
     end
   end
 end

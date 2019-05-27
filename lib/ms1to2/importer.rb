@@ -4,7 +4,7 @@ module Ms1to2
 
     def initialize(input_path)
       @input_path = input_path
-      ::Hyrax.config.whitelisted_ingest_dirs = input_path
+      # ::Hyrax.config.whitelisted_ingest_dirs = input_path
     end
 
     def call
@@ -150,7 +150,7 @@ module Ms1to2
     end
 
     def models
-      [:Collection, :Institution, :Device, :BiologicalSpecimen, :Media]
+      [:Collection, :Institution, :Device, :Taxonomy, :BiologicalSpecimen, :Media]
     end
   end
 end

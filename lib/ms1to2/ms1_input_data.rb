@@ -2,7 +2,7 @@ module Ms1to2
   class Ms1InputData
     def self.standard_tables
       ['ca_users', 'ms_facilities', 'ms_institutions', 'ms_media_files', 
-       'ms_media', 'ms_projects', 'ms_scanners', 'ms_specimens']
+       'ms_media', 'ms_projects', 'ms_scanners', 'ms_specimens', 'ms_taxonomies']
     end
 
     attr_reader *standard_tables, :ms_media_combined, :input_path
@@ -39,6 +39,8 @@ module Ms1to2
         'facility_id'.to_sym
       when 'ms_media'
         'media_id'.to_sym
+      when 'ms_taxonomies'
+        'alt_id'.to_sym
       else
         (tname.split('_',2)[1].chomp('s')+'_id').to_sym
       end
