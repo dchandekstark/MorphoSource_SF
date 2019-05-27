@@ -2,7 +2,7 @@ module Ms1to2
   class Ms2OutputData
     def self.standard_tables
       ['media', 'imaging_event', 'processing_event', 'biological_specimen', 
-       'device', 'institution', 'collection', 'f_to_i']
+       'taxonomy', 'device', 'institution', 'collection', 'f_to_i']
     end
 
     attr_accessor *standard_tables, :output_path

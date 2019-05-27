@@ -11,9 +11,13 @@ module Ms1to2
       def derive_special_fields(v)
         {
           :depositor => derive_depositor(v[:user_id]),
-          :parent_id => hyraxify('I' + v[:institution_id].first),
+          :parent_id => derive_bs_parents(v),
           :collection_id => derive_collection_id(v[:project_id])
         }
+      end
+
+      def derive_bs_parents(v)
+        [hyraxify("I"+v[:institution_id].first), hyraxify("T"+v[:alt_id].first)]
       end
     end
   end

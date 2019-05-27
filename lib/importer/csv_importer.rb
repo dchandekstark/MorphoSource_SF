@@ -29,6 +29,7 @@ module Importer
         if attrs[:id]&.first && model.constantize.exists?(attrs[:id]&.first)
           next
         end
+        puts("\n\n\n\n\nIMPORTING OBJECT WITH ID " + attrs[:id]&.first.to_s + "\n\n\n\n\n")
         import_batch_object(attrs)
         count += 1
       end
