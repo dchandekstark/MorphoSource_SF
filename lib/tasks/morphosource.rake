@@ -1,4 +1,6 @@
 require 'morphosource'
+require 'ms1to2'
+require 'importer'
 
 namespace :morphosource do
 
@@ -34,4 +36,8 @@ namespace :morphosource do
     end
   end
 
+  desc 'Mass ingest data'
+  task :mass_ingest => :environment do
+    Ms1to2::Importer.new(File.expand_path("tmp/ingest/")).call 
+  end
 end
