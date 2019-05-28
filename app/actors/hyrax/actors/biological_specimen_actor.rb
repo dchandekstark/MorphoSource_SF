@@ -20,15 +20,18 @@ module Hyrax
         cnum = attrs['catalog_number']&.first.presence || ''
         taxn = taxonomy_title(env).presence || ''
 
+        id = attrs['id'].presence || env.curation_concern.id.presence || ''
+        id_prefix = id.presence ? id.to_s+': ' : ''
+
         case
         when inst.presence || coll.presence || cnum.presence || taxn.presence
-          collection_catalog_generated_title(inst, coll, cnum, taxn)
+          id_prefix+collection_catalog_generated_title(inst, coll, cnum, taxn)
         when attrs['identifier'].present?
-          identifier_generated_title(attrs['identifier'])
+          id_prefix+identifier_generated_title(attrs['identifier'])
         when env.curation_concern.depositor.present?
-          fallback_generated_title(attrs['vouchered'], ::User.find_by_user_key(env.curation_concern.depositor))
+          id_prefix+fallback_generated_title(attrs['vouchered'], ::User.find_by_user_key(env.curation_concern.depositor))
         else
-          fallback_generated_title(attrs['vouchered'], env.current_ability.current_user)
+          id_prefix+fallback_generated_title(attrs['vouchered'], env.current_ability.current_user)
         end
       end
 

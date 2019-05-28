@@ -48,7 +48,7 @@ class BiologicalSpecimen < Morphosource::Works::Base
   end
 
   private
-    def add_id_to_title
+    def add_id_to_title # this is non-functional!!
       unless self.title && self.id && self.title.first.to_s.start_with?("S#{self.id.to_s}: ")
         self.title.set("S#{self.id.to_s}: #{self.title.first.to_s}")
       end

@@ -30,7 +30,7 @@ RSpec.describe Hyrax::MediaForm do
       expect(described_class.single_valued_fields).to match_array([ :media_type, :cite_as, :legacy_media_file_id,
                                                                     :legacy_media_group_id, :uuid, :ark, :doi,
                                                                     :available, :x_spacing, :y_spacing, :z_spacing,
-                                                                    :series_type, :slice_thickness, :unit,
+                                                                    :series_type, :short_description, :slice_thickness, :unit,
                                                                     :identifier, :related_url ])
     end
 

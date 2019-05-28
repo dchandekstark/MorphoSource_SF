@@ -9,7 +9,8 @@ module Ms1to2
           :doi => :doi,
           :media_type => :media_type,
           :file_path => :file,
-          :created_on => :date_uploaded
+          :created_on => :date_uploaded,
+          :title => :short_description,
         }
       end
 
