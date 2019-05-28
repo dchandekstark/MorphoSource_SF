@@ -20,8 +20,16 @@
 					<h3>Image Acquisition</h3>
 
 					<div class="col-sm-6">
+						<% if @presenter.is_absentee_parent == true %>
 
-						<%= render partial: "showcase_direct_parents_physical_objects", collection: @presenter.direct_parent_members, as: :member %>
+						
+
+
+						RENDER SOMETHING ELSE HERE
+
+						<% else %>
+							<%= render partial: "showcase_direct_parents_physical_objects", collection: @presenter.direct_parent_members, as: :member %>
+						<% end %>
 						<div class="content-block">
 							<!--div id="collapse-block-image-acquisition-attributes" class="panel-collapse collapse collapse-block" -->
 							<%= presenter.attribute_to_html(:modality, label: 'Modality', render_as: :showcase_default, include_empty: true, html_dl: false) %>

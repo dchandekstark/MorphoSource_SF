@@ -15,7 +15,7 @@ module Hyrax
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
       :processing_activity_count, :processing_activity_type, :processing_activity_software, :processing_activity_description, 
-      :raw_or_derived,
+      :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
       :file_size, :point_count, :face_count
@@ -80,9 +80,11 @@ module Hyrax
       # get processing event:  media < processing_event
       # then get processing activities
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
+      processing_event_ids = []
       if processing_events.present?
         @processing_event_count = processing_events.count 
         processing_events.each do |processing_event|
+          processing_event_ids << processing_event.id
           @processing_activity_type = processing_event.processing_activity_type 
           @processing_activity_software = processing_event.processing_activity_software
           @processing_activity_description = processing_event.processing_activity_description 
@@ -113,6 +115,8 @@ module Hyrax
         direct_parent_id_list << direct_parent_id
       end
 
+      @is_absentee_parent = false 
+
       this_media_list = [] << solr_document.id 
       @this_media_member = member_presenters_for(this_media_list).first 
 
@@ -126,11 +130,21 @@ module Hyrax
       else
         # check if this is a Derived media with "absentee parent" by checking if PE exists
         if @processing_event_count > 0
-          # In the case of an “absentee parent” work where media is derived but a parent media is not present, the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
+          # In the case of an “absentee parent” work where media is derived but a parent media is not present, 
+          # the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
+          # PO > IE > PE > media 
+          # media < PE < IE < PO
+          @is_absentee_parent = true
+          
+
+
+
+
           @direct_parent_members = member_presenters_for(this_media_list)
           target_media = media
           @raw_or_derived = "Derived"
           @direct_parent_members_raw_or_derived = "Derived"
+byebug
         else
           # If a media is raw and has no parent media work, then get data from current media via the IE.
           @direct_parent_members = member_presenters_for(this_media_list)
@@ -143,8 +157,14 @@ module Hyrax
       Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
 
       # Get the physical object type from:
-      # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
-      imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
+      # Media < IE < PO  
+      # or
+      # media < PE < IE < PO (for media with absentee parent)
+      if @processing_event_count > 0
+        imaging_event = ImagingEvent.where('member_ids_ssim' => processing_event_ids.first).first
+      else
+        imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
+      end
       if imaging_event.present?
         imaging_event_exist = true
         biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => imaging_event.id).first

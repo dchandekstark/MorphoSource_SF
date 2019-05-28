@@ -82,11 +82,13 @@ $(document).on('ready', function(){
         deleteCookie('saved_clicks');
         deleteCookie('last_render');
         deleteCookie('saved_step');
+        deleteCookie('absentee_parent');
       } else {
         // go to physical object
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
         saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
         setCookie('will_create', 'processing_event', cookie_expired_days);
+        setCookie('absentee_parent', 'yes', cookie_expired_days);
       }
       clearForms();
     });
