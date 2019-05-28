@@ -9,7 +9,7 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
   describe 'class attributes' do
 
     it 'has expected metadata terms' do
-      expect(described_class.terms).to include(:bibliographic_citation, :catalog_number, :collection_code, :latitude,
+      expect(described_class.terms).to include(:bibliographic_citation, :catalog_number, :collection_code, :institution_code, :latitude,
                                                :longitude, :numeric_time, :original_location, :periodic_time,
                                                :vouchered, :idigbio_recordset_id, :idigbio_uuid, :is_type_specimen,
                                                :occurrence_id, :sex, :canonical_taxonomy)
@@ -24,7 +24,7 @@ RSpec.describe Hyrax::BiologicalSpecimenForm do
 
     it 'has expected single valued metadata terms' do
       expect(described_class.single_valued_fields).to match_array([ :catalog_number,
-                                                                    :collection_code, :date_created, :description,
+                                                                    :collection_code, :institution_code, :date_created, :description,
                                                                     :latitude, :longitude, :numeric_time,
                                                                     :original_location, :publisher, :vouchered,
                                                                     :idigbio_recordset_id, :idigbio_uuid,
