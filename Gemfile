@@ -27,7 +27,8 @@ gem 'riiif', '~> 1.1'
 gem 'pul_uv_rails', :git => 'https://github.com/MorphoSource/pul_uv_rails.git', :branch => 'aleph'
 
 # pull iiif_manifest fork that can handle 3D manifests
-gem 'iiif_manifest', :git => 'https://github.com/JuliaWinchester/iiif_manifest.git'
+gem 'iiif_manifest', :git => 'https://github.com/MorphoSource/iiif_manifest.git', :branch => 'morphosource'
+
 
 gem 'hyrax', '2.4.1'
 gem 'hydra-role-management'
