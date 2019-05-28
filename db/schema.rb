@@ -102,6 +102,11 @@ ActiveRecord::Schema.define(version: 20190520144653) do
     t.index ["user_id"], name: "index_curation_concerns_operations_on_user_id"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "featured_works", force: :cascade do |t|
     t.integer "order", default: 5
     t.string "work_id"
@@ -262,6 +267,26 @@ ActiveRecord::Schema.define(version: 20190520144653) do
     t.date "release_date"
     t.string "release_period"
     t.index ["source_id"], name: "index_permission_templates_on_source_id", unique: true
+  end
+
+  create_table "physical_objects", force: :cascade do |t|
+    t.text "description"
+    t.text "current_location"
+    t.text "original_location"
+    t.date "date_created"
+    t.string "identifier"
+    t.text "url"
+    t.text "bibliographic_citation"
+    t.string "publisher"
+    t.boolean "vouchered", default: false, null: false
+    t.string "institution"
+    t.string "numeric_time"
+    t.string "periodic_time"
+    t.string "catalog_number"
+    t.string "collection_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["institution"], name: "index_physical_objects_on_institution"
   end
 
   create_table "proxy_deposit_requests", force: :cascade do |t|
@@ -573,6 +598,7 @@ ActiveRecord::Schema.define(version: 20190520144653) do
     t.binary "zotero_token"
     t.string "zotero_userid"
     t.string "preferred_locale"
+    t.integer "media_cart_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
