@@ -15,9 +15,14 @@ module Hyrax
 
       def generated_title(env)
         attrs = env.attributes
+        inst = attrs['institution_code']&.first.presence || ''
+        coll = attrs['collection_code']&.first.presence || ''
+        cnum = attrs['catalog_number']&.first.presence || ''
+        taxn = taxonomy_title(env).presence || ''
+
         case
-        when attrs['institution_code'].present? || attrs['collection_code'].present? || attrs['catalog_number'].present?
-          collection_catalog_generated_title(attrs['institution_code'], attrs['collection_code'], attrs['catalog_number'])
+        when inst.presence || coll.presence || cnum.presence || taxn.presence
+          collection_catalog_generated_title(inst, coll, cnum, taxn)
         when attrs['identifier'].present?
           identifier_generated_title(attrs['identifier'])
         when env.curation_concern.depositor.present?
@@ -29,14 +34,29 @@ module Hyrax
 
       private
 
-      def collection_catalog_generated_title(institution_code, collection_code, catalog_number)
-        case
-        when institution_code.present? && collection_code.present? && catalog_number.present?
-          "#{institution_code.first}:#{collection_code.first}:#{catalog_number.first}"
-        when collection_code.present?
-          collection_code.first
-        when catalog_number.present?
-          catalog_number.first
+      def collection_catalog_generated_title(institution_code='', collection_code='', catalog_number='', taxonomy_terms='')
+        [institution_code, collection_code, catalog_number].keep_if { |x| x.presence } .join(':') + taxonomy_terms
+      end
+
+      def taxonomy_title(env)
+        taxonomy_id = check_canonical_taxonomy(env)
+        if !taxonomy_id.presence && env.attributes['work_parents_attributes']
+          # get first taxonomy parent
+          env.attributes['work_parents_attributes'].each do |i, v|
+            taxonomy_id = v['id'] if v['id'] && v['id'].first == 'T'
+          end
+        end
+        if taxonomy_id.presence
+          taxonomy = Taxonomy.find(taxonomy_id)
+          genus = taxonomy.taxonomy_genus&.first
+          species = taxonomy.taxonomy_species&.first
+          subspecies = taxonomy.taxonomy_subspecies&.first
+          return '' + 
+            (genus ? ' ' + genus.to_s : '') + 
+            (species ? ' ' + species.to_s : '') + 
+            (subspecies ? ' ' + subspecies.to_s : '')
+        else
+          return ''
         end
       end
 
@@ -52,7 +72,7 @@ module Hyrax
 
       def check_canonical_taxonomy(env)
         canonical_taxonomy = env.attributes["canonical_taxonomy"]
-        return '' if canonical_taxonomy.empty?
+        return '' if !canonical_taxonomy || canonical_taxonomy.empty?
         canonical_id = canonical_taxonomy.first
         dissociated_parents = get_dissociated_parents(env)
         dissociated_parents.include?(canonical_id) ? '' : canonical_id
