@@ -17,6 +17,10 @@ module Morphosource
     end
 
     # Optional select values
+    property :short_description, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/shortDescription") do |index|
+    index.as :stored_searchable, :facetable
+    end
+
     property :side, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/comments") do |index|
     index.as :stored_searchable, :facetable
     end

@@ -87,6 +87,10 @@ class SolrDocument
     self[Solrizer.solr_name('series_type', :stored_searchable)]
   end
 
+  def short_description
+    self[Solrizer.solr_name('short_description', :stored_searchable)]
+  end
+
   def side
     self[Solrizer.solr_name('side', :stored_searchable)]
   end

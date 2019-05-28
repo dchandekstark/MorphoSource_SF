@@ -119,6 +119,7 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name('rights_holder', :stored_searchable)
     config.add_show_field solr_name('scale_bar', :stored_searchable)
     config.add_show_field solr_name('series_type', :stored_searchable)
+    config.add_show_field solr_name('short_description', :stored_searchable)
     config.add_show_field solr_name('side', :stored_searchable)
     config.add_show_field solr_name('slice_thickness', :stored_searchable)
     config.add_show_field solr_name('unit', :stored_searchable)
