@@ -16,6 +16,7 @@ module Hyrax
         :bibliographic_citation,
         :catalog_number,
         :collection_code,
+        :institution_code,
         :latitude,
         :longitude,
         :numeric_time,
@@ -37,6 +38,7 @@ module Hyrax
     self.single_valued_fields = [
         :catalog_number,
         :collection_code,
+        :institution_code,
         :date_created,
         :description,
         :latitude,

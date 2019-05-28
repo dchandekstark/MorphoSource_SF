@@ -124,6 +124,10 @@ class SolrDocument
     self[Solrizer.solr_name('collection_code', :stored_searchable)]
   end
 
+  def institution_code
+    self[Solrizer.solr_name('institution_code', :stored_searchable)]
+  end
+
   def current_location
     self[Solrizer.solr_name('current_location', :stored_searchable)]
   end

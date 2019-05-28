@@ -16,8 +16,8 @@ module Hyrax
       def generated_title(env)
         attrs = env.attributes
         case
-        when attrs['collection_code'].present? || attrs['catalog_number'].present?
-          collection_catalog_generated_title(attrs['collection_code'], attrs['catalog_number'])
+        when attrs['institution_code'].present? || attrs['collection_code'].present? || attrs['catalog_number'].present?
+          collection_catalog_generated_title(attrs['institution_code'], attrs['collection_code'], attrs['catalog_number'])
         when attrs['identifier'].present?
           identifier_generated_title(attrs['identifier'])
         when env.curation_concern.depositor.present?
@@ -29,10 +29,10 @@ module Hyrax
 
       private
 
-      def collection_catalog_generated_title(collection_code, catalog_number)
+      def collection_catalog_generated_title(institution_code, collection_code, catalog_number)
         case
-        when collection_code.present? && catalog_number.present?
-          "#{collection_code.first}:#{catalog_number.first}"
+        when institution_code.present? && collection_code.present? && catalog_number.present?
+          "#{institution_code.first}:#{collection_code.first}:#{catalog_number.first}"
         when collection_code.present?
           collection_code.first
         when catalog_number.present?
