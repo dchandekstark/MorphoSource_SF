@@ -12,6 +12,36 @@ module Ms1to2
         puts(m)
         import_table(m)
       end
+      puts("\n\n\n\n\nASSOCIATING WORKS TO COLLECTIONS\n\n\n\n\n")
+      coll_models.each do |m|
+        puts(m)
+        associate_to_collections(m)
+      end
+    end
+
+    def associate_to_collections(m)
+      collection_ids = {}
+      CSVParser.new(File.join(input_path, csvfile(m))).each do |attrs|
+        if attrs[:id]&.first && attrs[:collection_id]&.first && m.to_s.constantize.exists?(attrs[:id].first)
+          collection_ids[attrs[:id].first] = attrs[:collection_id].first
+        end
+      end
+      add_works_to_collections(collection_ids)
+    end
+
+    def add_works_to_collections(coll_ids)
+      invert_collection_ids(coll_ids).each do |coll_id, work_ids|
+        c = Collection.find(coll_id)
+        c.reindex_extent = ::Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+        c.add_member_objects work_ids
+      end
+    end
+
+    def invert_collection_ids(coll_ids)
+      coll_ids.each_with_object({}) do |(key, value), out|
+        out[value] ||= []
+        out[value] << key
+      end
     end
 
     def import_table(m)
@@ -76,6 +106,7 @@ module Ms1to2
       ids_in_order.each do |id|
         if combined_table.key?(id) && !to_model(id).to_s.constantize.exists?(id)
           attrs = combined_table[id]
+          attrs.delete(:collection_id)
           attrs = attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
           csv_importer = ::Importer::CSVImporter.new('', input_path, { :model => to_model(id) })
           csv_importer.import_batch_object(attrs)
@@ -151,6 +182,10 @@ module Ms1to2
 
     def models
       [:Collection, :Institution, :Device, :Taxonomy, :BiologicalSpecimen, :Media]
+    end
+
+    def coll_models
+      [:BiologicalSpecimen, :Media]
     end
   end
 end

@@ -22,7 +22,7 @@ module Hyrax
         modality_abbrevs = modality.map { |m| modality_abbrev(m) }
 
         id = attrs['id'].presence || env.curation_concern.id.presence || ''
-        id_prefix = id.presence ? id.to_s+': ' : ''
+        id_prefix = id.presence ? id.to_s.split('x').first+': ' : ''
 
         id_prefix + parts.sort.join(', ').titleize + (media_type.presence ? ' [' + media_type.to_s + ']' : '') + (modality_abbrevs.presence ? ' [' + modality_abbrevs.join('/')+ ']' : '')
       end
