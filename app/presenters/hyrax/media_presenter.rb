@@ -130,21 +130,11 @@ module Hyrax
       else
         # check if this is a Derived media with "absentee parent" by checking if PE exists
         if @processing_event_count > 0
-          # In the case of an “absentee parent” work where media is derived but a parent media is not present, 
-          # the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
-          # PO > IE > PE > media 
-          # media < PE < IE < PO
           @is_absentee_parent = true
-          
-
-
-
-
           @direct_parent_members = member_presenters_for(this_media_list)
           target_media = media
           @raw_or_derived = "Derived"
           @direct_parent_members_raw_or_derived = "Derived"
-byebug
         else
           # If a media is raw and has no parent media work, then get data from current media via the IE.
           @direct_parent_members = member_presenters_for(this_media_list)
@@ -153,14 +143,14 @@ byebug
           @direct_parent_members_raw_or_derived = "Raw"
         end
       end
-      Rails.logger.info("(010) in MediaPresenter: #{@raw_or_derived.inspect} ")
-      Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
+      #Rails.logger.info("(010) in MediaPresenter: #{@raw_or_derived.inspect} ")
+      #Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
 
       # Get the physical object type from:
       # Media < IE < PO  
       # or
       # media < PE < IE < PO (for media with absentee parent)
-      if @processing_event_count > 0
+      if @is_absentee_parent == true
         imaging_event = ImagingEvent.where('member_ids_ssim' => processing_event_ids.first).first
       else
         imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
@@ -176,7 +166,7 @@ byebug
           @physical_object_link = "/concern/biological_specimens/" + @physical_object_id
           @idigbio_uuid = biological_specimen.idigbio_uuid
           @vouchered = biological_specimen.vouchered
-          @physical_object_type = "BiologicalSpecimen"
+          @physical_object_type = biological_specimen.human_readable_type
         elsif cultural_heritage_object.present?
           @physical_object_title = cultural_heritage_object.title.first
           @physical_object_id = cultural_heritage_object.id
@@ -184,7 +174,7 @@ byebug
           # idigbio fields are not in CHO work type.  Remove below later if not needed
           #@idigbio_uuid = cultural_heritage_object.idigbio_uuid
           @vouchered = cultural_heritage_object.vouchered
-          @physical_object_type = "CulturalHeritageObject"
+          @physical_object_type = cultural_heritage_object.human_readable_type
         end
 
         # get device from imaging event
