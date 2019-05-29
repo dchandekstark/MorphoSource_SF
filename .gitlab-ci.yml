@@ -17,8 +17,11 @@ build_job:
     - docker build --pull -f $MORPHOSOURCE_HOME/Dockerfile -t $APP_IMAGE .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $APP_IMAGE
+  only:
+    - docker
   tags:
     - build
+    - docker
 
 test_job:
   stage: test
@@ -33,8 +36,11 @@ test_job:
     - docker-compose up --exit-code-from app
   after_script:
     - docker-compose down
+  only:
+    - docker
   tags:
     - test
+    - docker
 
 deploy_dev:
   environment:
@@ -50,6 +56,8 @@ deploy_dev:
     - docker pull $APP_IMAGE
     - sudo systemctl restart docker-compose@morphosource.service
   only:
-    - dev
+    # - dev
+    - docker
   tags:
-    - development
+    # - development
+    - docker
