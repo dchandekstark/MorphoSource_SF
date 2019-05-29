@@ -13,7 +13,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
-gem 'figaro'
 gem 'redis'
 gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
@@ -33,8 +32,7 @@ gem 'iiif_manifest', :git => 'https://github.com/MorphoSource/iiif_manifest.git'
 gem 'hyrax', '2.4.1'
 gem 'hydra-role-management'
 
-gem 'resque'
-gem 'resque-pool'
+gem 'resque', '~> 2.0'
 gem 'resque-web', require: 'resque_web'
 
 gem 'puma', '~> 3.7'
@@ -73,6 +71,5 @@ group :development, :test do
 end
 
 group :production do
-  gem 'passenger'
   gem 'therubyracer', platforms: :ruby
 end

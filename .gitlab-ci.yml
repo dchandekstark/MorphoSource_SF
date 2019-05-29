@@ -1,21 +1,54 @@
-.test:
-  stage: test
+stages:
+  - build
+  - test
+  - deploy
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+variables:
+  APP_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+build_job:
+  stage: build
   before_script:
-    - $RAILS_DEPLOY_PATH/bin/before_test.sh
+    - docker info
   script:
-    - $RAILS_DEPLOY_PATH/bin/test.sh
+    - docker build --pull -f $MORPHOSOURCE_HOME/Dockerfile -t $APP_IMAGE .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $APP_IMAGE
+  tags:
+    - build
+
+test_job:
+  stage: test
+  variables:
+    COMPOSE_FILE: $MORPHOSOURCE_HOME/docker-compose.test.yml
+  before_script:
+    - docker info
+    - docker-compose version
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $APP_IMAGE
+    - docker-compose up --exit-code-from app
   after_script:
-    - $RAILS_DEPLOY_PATH/bin/after_test.sh
+    - docker-compose down
+  tags:
+    - test
 
 deploy_dev:
   environment:
     name: development
     url: https://morphosource-dev.lib.duke.edu/
   stage: deploy
+  before_script:
+    - docker info
+    - docker-compose version
+    - 'env | sort'
   script:
-    - $RAILS_DEPLOY_PATH/bin/deploy.sh $CI_PROJECT_DIR
-  after_script:
-    - $RAILS_DEPLOY_PATH/bin/after_deploy.sh
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $APP_IMAGE
+    - sudo systemctl restart docker-compose@morphosource.service
   only:
     - dev
   tags:
