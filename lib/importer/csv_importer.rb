@@ -1,3 +1,5 @@
+require 'date'
+
 module Importer
   # Import a csv file with one work per row. The first row of the csv should be a
   # header row.
@@ -29,7 +31,6 @@ module Importer
         if attrs[:id]&.first && model.constantize.exists?(attrs[:id]&.first)
           next
         end
-        puts("\n\n\n\n\nIMPORTING OBJECT WITH ID " + attrs[:id]&.first.to_s + "\n\n\n\n\n")
         import_batch_object(attrs)
         count += 1
       end
@@ -38,12 +39,9 @@ module Importer
 
     def import_batch_object(attributes)
       ark = attributes[:ark]&.first
+      puts("\n\n\n\n\nIMPORTING OBJECT WITH ID " + attributes[:id]&.first.to_s + " AT TIME " + DateTime.now.strftime("%d/%m/%Y %H:%M:%S") + "\n\n\n\n\n")
+      attributes.delete(:collection_id)
       BatchObjectImportJob.perform_now(model, attributes, files_directory)
-      # if ark.present? && parser.parent_arks.include?(ark)
-      #   BatchObjectImportJob.perform_now(model, attributes, files_directory)
-      # else
-      #   BatchObjectImportJob.perform_later(model, attributes, files_directory)
-      # end
     end
 
     private
