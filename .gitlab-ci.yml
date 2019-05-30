@@ -20,7 +20,7 @@ build_job:
   only:
     - docker
   tags:
-    - build
+    # - build
     - docker
 
 test_job:
@@ -39,7 +39,7 @@ test_job:
   only:
     - docker
   tags:
-    - test
+    # - test
     - docker
 
 deploy_dev:
