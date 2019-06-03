@@ -10,7 +10,7 @@ module Hyrax
     attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, 
       :physical_object_title, :physical_object_link, :physical_object_id, 
       :device_and_facility, :device_facility, :device_link, :device, 
-      :other_details, :imaging_event_creator, :imaging_event_date_created, 
+      :other_details, :imaging_event_creator, :imaging_event_date_created, :imaging_event_modality, 
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
@@ -18,7 +18,38 @@ module Hyrax
       :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
-      :file_size, :point_count, :face_count
+      :file_size, :mime_type, :this_media_type,
+      # mesh specific
+      :point_count, 
+      :face_count, 
+      :color_format,
+      :normals_format,
+      :has_uv_space,
+      :vertex_color,
+      :bounding_box_dimensions,
+      :centroid_location,
+      # XRAY modality fields
+      :exposure_time,
+      :flux_normalization,
+      :geometric_calibration,
+      :shading_correction,
+      :filter,
+      :frame_averaging,
+      :projections,
+      :voltage,
+      :power,
+      :amperage,
+      :surrounding_material,
+      :xray_tube_type,
+      :target_type,
+      :detector_type,
+      :detector_configuration,
+      :source_object_distance,
+      :source_detector_distance,
+      :target_material,
+      :rotation_number,
+      :phase_contrast,
+      :optical_magnification
 
     def universal_viewer?
       representative_id.present? &&
@@ -51,16 +82,45 @@ module Hyrax
       @doi = media.doi
 
       # get file characterization metadata, and add up the values (face count, point count, file size, etc)
+      @this_media_type = media.media_type.first
+      @mime_type = []
       @file_size = 0
       @point_count = 0
       @face_count = 0
+      @color_format = []
+      @normals_format = []
+      @has_uv_space = []
+      @vertex_color = []
+      @bounding_box_dimensions = []
+      @centroid_location = []
+      temp = ""
       file_set_list = media.file_set_ids
       file_set_list.each do |id|
         file_set = ::FileSet.find(id)
-        @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
-        @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
-        @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
+        @mime_type << file_set.mime_type
+        if @this_media_type == "Mesh"
+          @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
+          @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
+          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
+          
+          @color_format << file_set.color_format.first.to_s
+          @normals_format << file_set.normals_format.first.to_s
+          @has_uv_space << file_set.has_uv_space.first.to_s
+          @vertex_color << file_set.vertex_color.first.to_s
+          if (file_set.bounding_box_x.present? and file_set.bounding_box_y.present? and file_set.bounding_box_z.present?)
+            temp = file_set.bounding_box_x.first.to_s + ', ' + file_set.bounding_box_y.first.to_s + ', ' + file_set.bounding_box_z.first.to_s
+            @bounding_box_dimensions << temp
+          end
+          if (file_set.centroid_x.present? and file_set.centroid_y.present? and file_set.centroid_z.present?)
+            temp = file_set.centroid_x.first.to_s + ', ' + file_set.centroid_y.first.to_s + ', ' + file_set.centroid_z.first.to_s
+            @centroid_location << temp
+          end
+    byebug
+        elsif @this_media_type == "Image"
+
+        end
       end
+      @mime_type = @mime_type.uniq.join(", ")
       if @file_size == 0
         @file_size = ""
       else
@@ -188,17 +248,42 @@ module Hyrax
         end
 
         # get imaging event details
-        @lens = ""
-        @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
-        @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
-        @other_details = []
-        @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
-        @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
-        @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
-        @other_details = @other_details.join(' / ')
+        @imaging_event_modality = imaging_event.ie_modality.first
+        if @imaging_event_modality == "Photogrammetry"
+          @lens = ""
+          @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
+          @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
+          @other_details = []
+          @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
+          @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
+          @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
+          @other_details = @other_details.join(' / ')
+        elsif @imaging_event_modality.upcase.include? "XRAY"
+          @exposure_time = imaging_event.exposure_time.first
+          @flux_normalization = imaging_event.flux_normalization.first
+          @geometric_calibration = imaging_event.geometric_calibration.first
+          @shading_correction = imaging_event.shading_correction.first
+          @filter = imaging_event.filter.first
+          @frame_averaging = imaging_event.frame_averaging.first
+          @projections = imaging_event.projections.first
+          @voltage = imaging_event.voltage.first
+          @power = imaging_event.power.first
+          @amperage = imaging_event.amperage.first
+          @surrounding_material = imaging_event.surrounding_material.first
+          @xray_tube_type = imaging_event.xray_tube_type.first
+          @target_type = imaging_event.target_type.first
+          @detector_type = imaging_event.detector_type.first
+          @detector_configuration = imaging_event.detector_configuration.first
+          @source_object_distance = imaging_event.source_object_distance.first
+          @source_detector_distance = imaging_event.source_detector_distance.first
+          @target_material = imaging_event.target_material.first
+          @rotation_number = imaging_event.rotation_number.first
+          @phase_contrast = imaging_event.phase_contrast.first
+          @optical_magnification = imaging_event.optical_magnification.first
+
+        end
         @imaging_event_creator = imaging_event.creator
         @imaging_event_date_created = imaging_event.date_created
-
       else
         imaging_event_exist = false
       end # end if imaging_event present?
