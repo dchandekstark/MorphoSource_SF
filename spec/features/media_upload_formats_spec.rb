@@ -4,7 +4,7 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'update Media file formats', js: true do
+RSpec.feature 'update Media file formats', js: true, skip: "https://duldev.atlassian.net/browse/MR-520" do
   context 'a logged in user' do
     let(:user_attributes) do
       { email: 'test@example.com' }
