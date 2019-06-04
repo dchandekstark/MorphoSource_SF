@@ -54,7 +54,6 @@ module Hyrax
       :image_width,
       :image_height,
       :color_space,
-      :color_depth,
       :compression
 
     def universal_viewer?
@@ -100,6 +99,10 @@ module Hyrax
       @vertex_color = []
       @bounding_box_dimensions = []
       @centroid_location = []
+      @color_space = []
+      @image_width = []
+      @image_height = []
+      @compression = []
       temp = ""
       file_set_list = media.file_set_ids
       file_set_list.each do |id|
@@ -121,25 +124,11 @@ module Hyrax
             temp = file_set.centroid_x.first.to_s + ', ' + file_set.centroid_y.first.to_s + ', ' + file_set.centroid_z.first.to_s
             @centroid_location << temp
           end
-        elsif @this_media_type == "Image"
-          @color_space = []
-          @image_width = []
-          @image_height = []
-          @compression = []
-
-          if @this_media_modality.include? "ComputedTomography"
-            @image_width << file_set.width.first.to_s if file_set.width.present?
-            @image_height << file_set.height.first.to_s if file_set.height.present?
-            @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
-            @compression << file_set.compression.first.to_s if file_set.compression.present?
-          end
-
-
-#number_of_images_in_set
-
-#color_depth
-
-
+        elsif @this_media_type == "CTImageSeries"
+          @image_width << file_set.width.first.to_s if file_set.width.present?
+          @image_height << file_set.height.first.to_s if file_set.height.present?
+          @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
+          @compression << file_set.compression.first.to_s if file_set.compression.present?
         end
       end
       @mime_type = @mime_type.uniq.join(", ")

@@ -8,18 +8,20 @@
 <%= presenter.attribute_to_html(:date_uploaded, render_as: :showcase_date, include_empty: true, html_dl: false) %>
 <%= presenter.attribute_to_html(:creator, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 
-<div id="collapse-block-file-object-attributes" class="panel-collapse collapse collapse-block">
 <% if presenter.this_media_type == 'Mesh' %>
-	<%= presenter.attribute_to_html(:point_count, label: "Points", render_as: :showcase_default, include_empty: true, html_dl: false) %>
-	<%= presenter.attribute_to_html(:face_count, label: "Polygons", render_as: :showcase_default, include_empty: true, html_dl: false) %>
-  <%= presenter.attribute_to_html(:color_format, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-  <%= presenter.attribute_to_html(:normals_format, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-  <%= presenter.attribute_to_html(:has_uv_space, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-  <%= presenter.attribute_to_html(:vertex_color, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-	<%= presenter.attribute_to_html(:bounding_box_dimensions, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-  <%= presenter.attribute_to_html(:centroid_location, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-<% elsif presenter.this_media_type == 'Image' %>
-	<% if presenter.this_media_modality.include? "ComputedTomography" %>
+	<div id="collapse-block-file-object-attributes" class="panel-collapse collapse collapse-block">
+		<%= presenter.attribute_to_html(:point_count, label: "Points", render_as: :showcase_default, include_empty: true, html_dl: false) %>
+		<%= presenter.attribute_to_html(:face_count, label: "Polygons", render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:color_format, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:normals_format, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:has_uv_space, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:vertex_color, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+		<%= presenter.attribute_to_html(:bounding_box_dimensions, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:centroid_location, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	</div>
+	<%= collapse_expand_panel("collapse-block-file-object-attributes") %>
+<% elsif presenter.this_media_type == 'CTImageSeries' %>
+	<div id="collapse-block-file-object-attributes" class="panel-collapse collapse collapse-block">
 	  <%= presenter.attribute_to_html(:series_type, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 	  <%= presenter.attribute_to_html(:x_spacing, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 	  <%= presenter.attribute_to_html(:y_spacing, render_as: :showcase_default, include_empty: true, html_dl: false) %>
@@ -31,12 +33,12 @@
 	  <%= presenter.attribute_to_html(:number_of_images_in_set, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 	  <%= presenter.attribute_to_html(:color_space, render_as: :showcase_default, include_empty: true, html_dl: false) %>
 	  <%= presenter.attribute_to_html(:compression, render_as: :showcase_default, include_empty: true, html_dl: false) %>
-	
-
-	
-	<% end %>
-
+	</div>
+	<%= collapse_expand_panel("collapse-block-file-object-attributes") %>
+<% elsif presenter.this_media_type == "PhotogrammetryImageSeries" %>
+	<div id="collapse-block-file-object-attributes" class="panel-collapse collapse collapse-block">
+	  <%= presenter.attribute_to_html(:number_of_images_in_set, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	  <%= presenter.attribute_to_html(:scale_bar, render_as: :showcase_default, include_empty: true, html_dl: false) %>
+	</div>
+	<%= collapse_expand_panel("collapse-block-file-object-attributes") %>
 <% end %>
-</div>
-
-<%= collapse_expand_panel("collapse-block-file-object-attributes") %>
