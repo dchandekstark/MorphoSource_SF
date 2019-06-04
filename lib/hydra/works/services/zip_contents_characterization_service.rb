@@ -11,13 +11,12 @@ module Hydra::Works
 
     def characterize
       @content, @file_name = source_to_content
-      set_blender_options if mesh_file_types.include? File.extname(file_name).downcase 
+      set_blender_options if mesh_file_types.include? File.extname(file_name).downcase
       extracted_md = extract_metadata(content)
       terms = parse_metadata(extracted_md)
       store_metadata(terms)
       transfer_metadata_to_object
       transfer_special_fields_to_object
-      byebug
     end
 
     # Gets representative zip file as content.
@@ -46,7 +45,7 @@ module Hydra::Works
       ['.glb', '.gltf', '.obj', '.ply', '.stl', '.wrl', '.x3d']
     end
 
-    def set_blender_options 
+    def set_blender_options
       parser_class = Hydra::Works::Characterization::BlenderDocument
       tools = :blender
     end
@@ -65,7 +64,7 @@ module Hydra::Works
 
     def transfer_metadata_to_object
       zip_contents_properties.each { |p| object.send("#{p.to_s}=", sub_object.send(p)) }
-      # todo add special fields like representative mime type, filename, location, etc. 
+      # todo add special fields like representative mime type, filename, location, etc.
     end
 
     def zip_contents_properties
@@ -74,8 +73,8 @@ module Hydra::Works
 
     def zip_contents_schemas
       [
-        Hydra::Works::Characterization::DicomSchema, 
-        Hydra::Works::Characterization::MeshSchema, 
+        Hydra::Works::Characterization::DicomSchema,
+        Hydra::Works::Characterization::MeshSchema,
         Hydra::Works::Characterization::ImageExtSchema,
         Hydra::Works::Characterization::AudioSchema,
         Hydra::Works::Characterization::DocumentSchema,
