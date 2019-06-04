@@ -8,8 +8,8 @@ module Morphosource
         self.class.mesh_mime_types.include? mime_type
       end
 
-      def archive?
-        self.class.archive_mime_types.include? mime_type
+      def volume?
+        self.class.volume_mime_types.include? mime_type
       end
 
       module ClassMethods
@@ -18,6 +18,10 @@ module Morphosource
         end
 
         def archive_mime_types
+          ['application/zip']
+        end
+
+        def volume_mime_types
           ['application/zip']
         end
       end
