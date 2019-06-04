@@ -18,7 +18,7 @@ module Hyrax
       :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
-      :file_size, :mime_type, :this_media_type,
+      :file_size, :mime_type, :this_media_type, :this_media_modality,
       # mesh specific
       :point_count, 
       :face_count, 
@@ -49,7 +49,13 @@ module Hyrax
       :target_material,
       :rotation_number,
       :phase_contrast,
-      :optical_magnification
+      :optical_magnification,
+      # CT imagestack fields
+      :image_width,
+      :image_height,
+      :color_space,
+      :color_depth,
+      :compression
 
     def universal_viewer?
       representative_id.present? &&
@@ -83,6 +89,7 @@ module Hyrax
 
       # get file characterization metadata, and add up the values (face count, point count, file size, etc)
       @this_media_type = media.media_type.first
+      @this_media_modality = media.modality.first
       @mime_type = []
       @file_size = 0
       @point_count = 0
@@ -98,15 +105,14 @@ module Hyrax
       file_set_list.each do |id|
         file_set = ::FileSet.find(id)
         @mime_type << file_set.mime_type
+        @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
         if @this_media_type == "Mesh"
-          @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
           @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
-          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
-          
-          @color_format << file_set.color_format.first.to_s
-          @normals_format << file_set.normals_format.first.to_s
-          @has_uv_space << file_set.has_uv_space.first.to_s
-          @vertex_color << file_set.vertex_color.first.to_s
+          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?  
+          @color_format << file_set.color_format.first.to_s if file_set.color_format.present?
+          @normals_format << file_set.normals_format.first.to_s if file_set.normals_format.present?
+          @has_uv_space << file_set.has_uv_space.first.to_s if file_set.has_uv_space.present?
+          @vertex_color << file_set.vertex_color.first.to_s if file_set.vertex_color.present?
           if (file_set.bounding_box_x.present? and file_set.bounding_box_y.present? and file_set.bounding_box_z.present?)
             temp = file_set.bounding_box_x.first.to_s + ', ' + file_set.bounding_box_y.first.to_s + ', ' + file_set.bounding_box_z.first.to_s
             @bounding_box_dimensions << temp
@@ -115,8 +121,24 @@ module Hyrax
             temp = file_set.centroid_x.first.to_s + ', ' + file_set.centroid_y.first.to_s + ', ' + file_set.centroid_z.first.to_s
             @centroid_location << temp
           end
-    byebug
         elsif @this_media_type == "Image"
+          @color_space = []
+          @image_width = []
+          @image_height = []
+          @compression = []
+
+          if @this_media_modality.include? "ComputedTomography"
+            @image_width << file_set.width.first.to_s if file_set.width.present?
+            @image_height << file_set.height.first.to_s if file_set.height.present?
+            @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
+            @compression << file_set.compression.first.to_s if file_set.compression.present?
+          end
+
+
+#number_of_images_in_set
+
+#color_depth
+
 
         end
       end
