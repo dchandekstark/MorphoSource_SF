@@ -50,8 +50,8 @@ namespace :morphosource do
       if !User.find_by_user_key(email)
         u = User.new(attributes={email: email, password: 'testpass'})
         u.save!
-        admin.users << User.find_by_user_key(email)
       end
+      admin.users << User.find_by_user_key(email)
     end
 
     admin.save
