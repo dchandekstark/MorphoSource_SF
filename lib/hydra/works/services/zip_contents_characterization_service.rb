@@ -17,7 +17,6 @@ module Hydra::Works
       store_metadata(terms)
       transfer_metadata_to_object
       transfer_special_fields_to_object
-      byebug
     end
 
     # Gets representative zip file as content.

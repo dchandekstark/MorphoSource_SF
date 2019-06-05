@@ -88,11 +88,12 @@ module Ms1to2
     end
 
     def import_standard(m)
+      del_col_ids = ( m == :BiologicalSpecimen ) ? true : false
       csv_importer = ::Importer::CSVImporter.new(
         File.join(input_path, csvfile(m)),
         '', 
         { :depositor => 'julia.m.winchester@gmail.com', :model => m.to_s } )
-      csv_importer.import_all
+      csv_importer.import_all(del_col_ids)
     end
 
     # Special case media methods
@@ -185,7 +186,7 @@ module Ms1to2
     end
 
     def coll_models
-      [:BiologicalSpecimen, :Media]
+      [:BiologicalSpecimen]
     end
   end
 end
