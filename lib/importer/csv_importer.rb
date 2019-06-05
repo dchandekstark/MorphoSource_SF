@@ -23,7 +23,7 @@ module Importer
     end
 
     # @return [Integer] count of objects created
-    def import_all
+    def import_all(delete_collection_ids=false)
       load_checksums if checksum_file
       count = 0
       parser.each do |attributes|
@@ -31,16 +31,16 @@ module Importer
         if attrs[:id]&.first && model.constantize.exists?(attrs[:id]&.first)
           next
         end
-        import_batch_object(attrs)
+        import_batch_object(attrs, delete_collection_ids)
         count += 1
       end
       count
     end
 
-    def import_batch_object(attributes)
+    def import_batch_object(attributes, delete_collection_ids=false)
       ark = attributes[:ark]&.first
       puts("\n\n\n\n\nIMPORTING OBJECT WITH ID " + attributes[:id]&.first.to_s + " AT TIME " + DateTime.now.strftime("%d/%m/%Y %H:%M:%S") + "\n\n\n\n\n")
-      attributes.delete(:collection_id)
+      attributes.delete(:collection_id) if delete_collection_ids
       BatchObjectImportJob.perform_now(model, attributes, files_directory)
     end
 

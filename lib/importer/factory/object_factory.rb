@@ -151,8 +151,9 @@ module Importer
 
       def remote_files
         files.map do |file_name|
-          f = File.join(files_directory, file_name)
-          { url: "file:#{f}", file_name: File.basename(f) }
+          #f = File.join(files_directory, file_name) # for local files
+          # { url: "file:#{f}", file_name: File.basename(f) } # for local files
+          { url: "#{file_name}", file_name: File.basename(file_name) } # for URLs
         end
       end
 
