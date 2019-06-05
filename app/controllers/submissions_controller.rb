@@ -312,8 +312,14 @@ class SubmissionsController < ApplicationController
 
   def create_processing_event(params)
     parent_attributes = {}
+    idx = 0
+    if cookies[:absentee_parent].present?
+      # when creating a media with absentee parent
+      # the relationship should be PO > IE > PE > media 
+      parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
+      idx += 1
+    end
     if @submission.parent_media_list.present?
-      idx = 0
       @submission.parent_media_list.split(',').each do |this_id|
         if this_id != ''
           parent_attributes.merge!({ idx.to_s => { "id" => this_id.to_s, "_destroy" => "false" } })
@@ -338,7 +344,12 @@ class SubmissionsController < ApplicationController
   def create_media(params, uploaded_files)
     parent_attributes = {}
     if @submission.imaging_event_id.present?
-      parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
+      if cookies[:absentee_parent].present?
+        # when creating a media with absentee parent
+        # do not add IE as parent, since the relationship should be PO > IE > PE > media 
+      else
+        parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
+      end
     end
     if @submission.processing_event_id.present?
       parent_attributes.merge!({ '1' => { "id" => @submission.processing_event_id, "_destroy" => "false" } })
@@ -369,6 +380,7 @@ class SubmissionsController < ApplicationController
     cookies.delete :last_render
     cookies.delete :saved_clicks
     cookies.delete :will_create
+    cookies.delete :absentee_parent
   end
 
   def create_work(model, form_params)

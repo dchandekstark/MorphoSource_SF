@@ -70,21 +70,37 @@ module Morphosource
     # to get a list of media images for PO showpage
     def list_of_item_ids_to_display_for_showpage
       # get the media from
-      # BiologicalSpecimen/CulturalHeritageObject > ImagingEvent > Media 
-      child_ids = solr_document.member_ids  # todo: do we need to handle more than one imaging event per physical object?
-      imaging_event = ImagingEvent.where('id' => child_ids).first
+      # PO > IE > media 
+      # or
+      # PO > IE > PE > media (media with absentee parent) 
+      child_ids = solr_document.member_ids  
+      imaging_events = ImagingEvent.where('id' => child_ids)
       media_ids = []
+      if imaging_events.present?
+        imaging_events.each do |imaging_event|
+          child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work per imaging event?
 
-      if imaging_event.present?
-        child_ids = imaging_event.member_ids  # todo: do we need to handle more than one media work per imaging event?
-        media = Media.where('id' => child_ids).first
-        if media.present?
-          # add current media id, then add child media ids.  
-          # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
-          # so there is no need to traverse the tree
-          media_ids << media.id
-          media_ids << child_media_ids(media, 5, media_ids)
-        end
+          # check for absentee parent
+          # PO > IE > PE > media (media with absentee parent) 
+          processing_events = ProcessingEvent.where('id' => child_ids)
+          if processing_events.present?
+            # todo: do we need to handle more than one PE here?
+            processing_event_child_ids = processing_events.first.member_ids
+            medias = Media.where('id' => processing_event_child_ids.first)
+          else
+            medias = Media.where('id' => child_ids)
+          end
+          
+          # todo: do we need to handle more than one media here?
+          media = medias.first
+          if media.present?
+            # add current media id, then add child media ids.  
+            # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
+            # so there is no need to traverse the tree
+            media_ids << media.id
+            media_ids << child_media_ids(media, 5, media_ids)
+          end
+        end # looping IE
       end
       media_ids.flatten.uniq 
     end

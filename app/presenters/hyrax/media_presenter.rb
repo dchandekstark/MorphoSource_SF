@@ -10,15 +10,51 @@ module Hyrax
     attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, 
       :physical_object_title, :physical_object_link, :physical_object_id, 
       :device_and_facility, :device_facility, :device_link, :device, 
-      :other_details, :imaging_event_creator, :imaging_event_date_created, 
+      :other_details, :imaging_event_creator, :imaging_event_date_created, :imaging_event_modality, 
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
       :processing_activity_count, :processing_activity_type, :processing_activity_software, :processing_activity_description, 
-      :raw_or_derived,
+      :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
-      :file_size, :point_count, :face_count
+      :file_size, :mime_type, :this_media_type, :this_media_modality,
+      # mesh specific
+      :point_count, 
+      :face_count, 
+      :color_format,
+      :normals_format,
+      :has_uv_space,
+      :vertex_color,
+      :bounding_box_dimensions,
+      :centroid_location,
+      # XRAY modality fields
+      :exposure_time,
+      :flux_normalization,
+      :geometric_calibration,
+      :shading_correction,
+      :filter,
+      :frame_averaging,
+      :projections,
+      :voltage,
+      :power,
+      :amperage,
+      :surrounding_material,
+      :xray_tube_type,
+      :target_type,
+      :detector_type,
+      :detector_configuration,
+      :source_object_distance,
+      :source_detector_distance,
+      :target_material,
+      :rotation_number,
+      :phase_contrast,
+      :optical_magnification,
+      # CT imagestack fields
+      :image_width,
+      :image_height,
+      :color_space,
+      :compression
 
     def universal_viewer?
       representative_id.present? &&
@@ -51,16 +87,51 @@ module Hyrax
       @doi = media.doi
 
       # get file characterization metadata, and add up the values (face count, point count, file size, etc)
+      @this_media_type = media.media_type.first
+      @this_media_modality = media.modality.first
+      @mime_type = []
       @file_size = 0
       @point_count = 0
       @face_count = 0
+      @color_format = []
+      @normals_format = []
+      @has_uv_space = []
+      @vertex_color = []
+      @bounding_box_dimensions = []
+      @centroid_location = []
+      @color_space = []
+      @image_width = []
+      @image_height = []
+      @compression = []
+      temp = ""
       file_set_list = media.file_set_ids
       file_set_list.each do |id|
         file_set = ::FileSet.find(id)
+        @mime_type << file_set.mime_type
         @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
-        @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
-        @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
+        if @this_media_type == "Mesh"
+          @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
+          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?  
+          @color_format << file_set.color_format.first.to_s if file_set.color_format.present?
+          @normals_format << file_set.normals_format.first.to_s if file_set.normals_format.present?
+          @has_uv_space << file_set.has_uv_space.first.to_s if file_set.has_uv_space.present?
+          @vertex_color << file_set.vertex_color.first.to_s if file_set.vertex_color.present?
+          if (file_set.bounding_box_x.present? and file_set.bounding_box_y.present? and file_set.bounding_box_z.present?)
+            temp = file_set.bounding_box_x.first.to_s + ', ' + file_set.bounding_box_y.first.to_s + ', ' + file_set.bounding_box_z.first.to_s
+            @bounding_box_dimensions << temp
+          end
+          if (file_set.centroid_x.present? and file_set.centroid_y.present? and file_set.centroid_z.present?)
+            temp = file_set.centroid_x.first.to_s + ', ' + file_set.centroid_y.first.to_s + ', ' + file_set.centroid_z.first.to_s
+            @centroid_location << temp
+          end
+        elsif @this_media_type == "CTImageSeries"
+          @image_width << file_set.width.first.to_s if file_set.width.present?
+          @image_height << file_set.height.first.to_s if file_set.height.present?
+          @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
+          @compression << file_set.compression.first.to_s if file_set.compression.present?
+        end
       end
+      @mime_type = @mime_type.uniq.join(", ")
       if @file_size == 0
         @file_size = ""
       else
@@ -80,9 +151,11 @@ module Hyrax
       # get processing event:  media < processing_event
       # then get processing activities
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
+      processing_event_ids = []
       if processing_events.present?
         @processing_event_count = processing_events.count 
         processing_events.each do |processing_event|
+          processing_event_ids << processing_event.id
           @processing_activity_type = processing_event.processing_activity_type 
           @processing_activity_software = processing_event.processing_activity_software
           @processing_activity_description = processing_event.processing_activity_description 
@@ -113,6 +186,8 @@ module Hyrax
         direct_parent_id_list << direct_parent_id
       end
 
+      @is_absentee_parent = false 
+
       this_media_list = [] << solr_document.id 
       @this_media_member = member_presenters_for(this_media_list).first 
 
@@ -126,7 +201,7 @@ module Hyrax
       else
         # check if this is a Derived media with "absentee parent" by checking if PE exists
         if @processing_event_count > 0
-          # In the case of an “absentee parent” work where media is derived but a parent media is not present, the media should be connect to an IE followed by a PE, and the metadata should come from the IE.
+          @is_absentee_parent = true
           @direct_parent_members = member_presenters_for(this_media_list)
           target_media = media
           @raw_or_derived = "Derived"
@@ -139,12 +214,18 @@ module Hyrax
           @direct_parent_members_raw_or_derived = "Raw"
         end
       end
-      Rails.logger.info("(010) in MediaPresenter: #{@raw_or_derived.inspect} ")
-      Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
+      #Rails.logger.info("(010) in MediaPresenter: #{@raw_or_derived.inspect} ")
+      #Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
 
       # Get the physical object type from:
-      # Media < ImagingEvent < BiologicalSpecimen (or CulturalHeritageObject)
-      imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
+      # Media < IE < PO  
+      # or
+      # media < PE < IE < PO (for media with absentee parent)
+      if @is_absentee_parent == true
+        imaging_event = ImagingEvent.where('member_ids_ssim' => processing_event_ids.first).first
+      else
+        imaging_event = ImagingEvent.where('member_ids_ssim' => target_media.id).first
+      end
       if imaging_event.present?
         imaging_event_exist = true
         biological_specimen = BiologicalSpecimen.where('member_ids_ssim' => imaging_event.id).first
@@ -156,7 +237,7 @@ module Hyrax
           @physical_object_link = "/concern/biological_specimens/" + @physical_object_id
           @idigbio_uuid = biological_specimen.idigbio_uuid
           @vouchered = biological_specimen.vouchered
-          @physical_object_type = "BiologicalSpecimen"
+          @physical_object_type = biological_specimen.human_readable_type
         elsif cultural_heritage_object.present?
           @physical_object_title = cultural_heritage_object.title.first
           @physical_object_id = cultural_heritage_object.id
@@ -164,7 +245,7 @@ module Hyrax
           # idigbio fields are not in CHO work type.  Remove below later if not needed
           #@idigbio_uuid = cultural_heritage_object.idigbio_uuid
           @vouchered = cultural_heritage_object.vouchered
-          @physical_object_type = "CulturalHeritageObject"
+          @physical_object_type = cultural_heritage_object.human_readable_type
         end
 
         # get device from imaging event
@@ -178,17 +259,42 @@ module Hyrax
         end
 
         # get imaging event details
-        @lens = ""
-        @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
-        @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
-        @other_details = []
-        @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
-        @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
-        @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
-        @other_details = @other_details.join(' / ')
+        @imaging_event_modality = imaging_event.ie_modality.first
+        if @imaging_event_modality == "Photogrammetry"
+          @lens = ""
+          @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
+          @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
+          @other_details = []
+          @other_details << imaging_event.focal_length_type.first + " focal length" if imaging_event.focal_length_type.present?
+          @other_details << imaging_event.light_source.first + " light" if imaging_event.light_source.present?
+          @other_details << imaging_event.background_removal.first if imaging_event.background_removal.present?
+          @other_details = @other_details.join(' / ')
+        elsif @imaging_event_modality.upcase.include? "XRAY"
+          @exposure_time = imaging_event.exposure_time.first
+          @flux_normalization = imaging_event.flux_normalization.first
+          @geometric_calibration = imaging_event.geometric_calibration.first
+          @shading_correction = imaging_event.shading_correction.first
+          @filter = imaging_event.filter.first
+          @frame_averaging = imaging_event.frame_averaging.first
+          @projections = imaging_event.projections.first
+          @voltage = imaging_event.voltage.first
+          @power = imaging_event.power.first
+          @amperage = imaging_event.amperage.first
+          @surrounding_material = imaging_event.surrounding_material.first
+          @xray_tube_type = imaging_event.xray_tube_type.first
+          @target_type = imaging_event.target_type.first
+          @detector_type = imaging_event.detector_type.first
+          @detector_configuration = imaging_event.detector_configuration.first
+          @source_object_distance = imaging_event.source_object_distance.first
+          @source_detector_distance = imaging_event.source_detector_distance.first
+          @target_material = imaging_event.target_material.first
+          @rotation_number = imaging_event.rotation_number.first
+          @phase_contrast = imaging_event.phase_contrast.first
+          @optical_magnification = imaging_event.optical_magnification.first
+
+        end
         @imaging_event_creator = imaging_event.creator
         @imaging_event_date_created = imaging_event.date_created
-
       else
         imaging_event_exist = false
       end # end if imaging_event present?
