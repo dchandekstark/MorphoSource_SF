@@ -43,7 +43,7 @@ namespace :morphosource do
 
   desc 'Set up MS dev team user accounts'
   task :create_users => :environment do
-    emails = ['julia.m.winchester@gmail.com', 'jocelyn.triplett@duke.edu', 'simon.choy@duke.edu']
+    emails = ['julia.m.winchester@gmail.com', 'jocelyn.triplett@duke.edu', 'simon.choy@duke.edu', 'douglasmb@gmail.com']
     admin = Role.where("name = 'admin'")[0] || Role.create(name: 'admin')
 
     emails.each do |email|
