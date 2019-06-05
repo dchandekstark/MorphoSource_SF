@@ -40,4 +40,20 @@ namespace :morphosource do
   task :mass_ingest => :environment do
     Ms1to2::Importer.new(File.expand_path("tmp/ingest/")).call 
   end
+
+  desc 'Set up MS dev team user accounts'
+  task :create_users => :environment do
+    emails = ['julia.m.winchester@gmail.com', 'jocelyn.triplett@duke.edu', 'simon.choy@duke.edu']
+    admin = Role.where("name = 'admin'")[0] || Role.create(name: 'admin')
+
+    emails.each do |email|
+      if !User.find_by_user_key(email)
+        u = User.new(attributes={email: email, password: 'testpass'})
+        u.save!
+        admin.users << User.find_by_user_key(email)
+      end
+    end
+
+    admin.save
+  end
 end
