@@ -205,7 +205,7 @@ module Morphosource::Derivatives::Processors
     def dicom_series
       id = directives[:file_set_id]
       file_n = Dir[File.join(output_path, '**', '*')].count { |file| File.file?(file) }
-      ((1..file_n).to_a.map { |i| "'/downloads/#{id}?file=dcm#{i}'"}).join(',')
+      ((1..file_n).to_a.map { |i| "\"downloads/#{id}?file=dcm#{i}\""}).join(',')
       # (Dir.entries(output_path).map { |f| '"'+f+'"' unless File.directory?(f) }).join(',')
     end
 

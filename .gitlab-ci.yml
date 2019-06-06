@@ -33,6 +33,7 @@ build_job:
 
 test_job:
   stage: test
+  allow_failure: true
   variables:
     RAILS_ENV: test
     DATABASE_URL: $TEST_DATABASE_URL
@@ -69,7 +70,7 @@ deploy_dev:
   tags:
     - development
 
-.deploy_demo:
+deploy_demo:
   stage: deploy
   environment:
     name: demo
