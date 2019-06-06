@@ -69,7 +69,7 @@ deploy_dev:
   tags:
     - development
 
-.deploy_demo:
+deploy_demo:
   stage: deploy
   environment:
     name: demo
