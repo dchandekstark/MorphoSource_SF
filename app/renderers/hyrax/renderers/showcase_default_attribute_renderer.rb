@@ -2,6 +2,11 @@
 module Hyrax
   module Renderers
     class ShowcaseDefaultAttributeRenderer < AttributeRenderer
+
+      def is_number_with_decimal? string
+        true if Float(string).to_f % 1 != 0 rescue false
+      end
+
       def render
         markup = ''
         return markup if values.blank? && !options[:include_empty]
@@ -21,6 +26,9 @@ module Hyrax
           end
         else
           Array(values).each do |value|
+            if is_number_with_decimal?(value)
+              value = value.to_f.round(3)
+            end
             markup << attribute_value_to_html(value.to_s)
           end
         end

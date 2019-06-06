@@ -32,6 +32,13 @@ module Hyrax
                       <div class='col-xs-6 showcase-value'>#{value}</div>
                     </div>"
         end
+        user = contributing_user(taxonomy)
+        if user.present?
+          markup << "<div class='row taxonomy-rank'>
+                      <div class='col-xs-6 showcase-label'>Contributing User</div>
+                      <div class='col-xs-6 showcase-value'>#{user}</div>
+                    </div>"        
+        end
         markup
       end
 
@@ -42,8 +49,7 @@ module Hyrax
       end
 
       def construct_title(taxonomy)
-        user = contributing_user(taxonomy)
-        user.concat(taxonomy.short_title)
+        taxonomy.short_title
       end
 
       def contributing_user(taxonomy)
