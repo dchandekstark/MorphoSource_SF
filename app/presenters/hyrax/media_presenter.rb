@@ -59,9 +59,9 @@ module Hyrax
     def universal_viewer?
       representative_id.present? &&
         representative_presenter.present? &&
-        (representative_presenter.image? || representative_presenter.mesh?) &&
+        ( representative_presenter.image? || representative_presenter.mesh? || representative_presenter.volume? ) &&
         Hyrax.config.iiif_image_server? &&
-        (members_include_viewable_image? || members_include_viewable_mesh?)
+        ( members_include_viewable_image? || members_include_viewable_mesh? || members_include_viewable_volume? )
     end
 
     def get_showcase_data
@@ -388,6 +388,10 @@ module Hyrax
 
       def members_include_viewable_mesh?
         file_set_presenters.any? { |presenter| presenter.mesh? && current_ability.can?(:read, presenter.id) }
+      end
+
+      def members_include_viewable_volume?
+        file_set_presenters.any? { |presenter| presenter.volume? && current_ability.can?(:read, presenter.id) }
       end
 
   end
