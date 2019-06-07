@@ -4,6 +4,7 @@ require 'active_support/core_ext/numeric/conversions'
 module Hyrax
   class MediaPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
+    include MorphosourceHelper
 
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
 
@@ -54,6 +55,7 @@ module Hyrax
       :image_width,
       :image_height,
       :color_space,
+      :color_depth,
       :compression
 
     def universal_viewer?
@@ -62,6 +64,14 @@ module Hyrax
         ( representative_presenter.image? || representative_presenter.mesh? || representative_presenter.volume? ) &&
         Hyrax.config.iiif_image_server? &&
         ( members_include_viewable_image? || members_include_viewable_mesh? || members_include_viewable_volume? )
+    end
+
+    def round_it(string_value)
+      if is_number_with_decimal?(string_value) 
+        string_value.to_f.round(3).to_s
+      else
+        string_value
+      end
     end
 
     def get_showcase_data
@@ -103,7 +113,9 @@ module Hyrax
       @image_width = []
       @image_height = []
       @compression = []
+      @color_depth = []
       temp = ""
+      contents_mime_type = ""
       file_set_list = media.file_set_ids
       file_set_list.each do |id|
         file_set = ::FileSet.find(id)
@@ -117,11 +129,11 @@ module Hyrax
           @has_uv_space << file_set.has_uv_space.first.to_s if file_set.has_uv_space.present?
           @vertex_color << file_set.vertex_color.first.to_s if file_set.vertex_color.present?
           if (file_set.bounding_box_x.present? and file_set.bounding_box_y.present? and file_set.bounding_box_z.present?)
-            temp = file_set.bounding_box_x.first.to_s + ', ' + file_set.bounding_box_y.first.to_s + ', ' + file_set.bounding_box_z.first.to_s
+            temp = round_it(file_set.bounding_box_x.first) + ', ' + round_it(file_set.bounding_box_y.first) + ', ' + round_it(file_set.bounding_box_z.first)
             @bounding_box_dimensions << temp
           end
           if (file_set.centroid_x.present? and file_set.centroid_y.present? and file_set.centroid_z.present?)
-            temp = file_set.centroid_x.first.to_s + ', ' + file_set.centroid_y.first.to_s + ', ' + file_set.centroid_z.first.to_s
+            temp = round_it(file_set.centroid_x.first) + ', ' + round_it(file_set.centroid_y.first) + ', ' + round_it(file_set.centroid_z.first)
             @centroid_location << temp
           end
         elsif @this_media_type == "CTImageSeries"
@@ -129,8 +141,18 @@ module Hyrax
           @image_height << file_set.height.first.to_s if file_set.height.present?
           @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
           @compression << file_set.compression.first.to_s if file_set.compression.present?
+          # color_depth value comes from different attributes, depending on the file type
+          # for multiple values e.g. '8 8 8' , concat them with '/'
+          contents_mime_type = file_set.contents_mime_type.first.downcase
+          if contents_mime_type.in? ['application/dcm', 'application/dicom']
+            @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
+          elsif contents_mime_type.in? ['image/jpeg', 'image/jpg', 'image/tiff', 'image/tif']
+            temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
+            @color_depth << temp.gsub(/\s/, '/') 
+          end
         end
-      end
+        
+      end # file_set_list loop
       @mime_type = @mime_type.uniq.join(", ")
       if @file_size == 0
         @file_size = ""
@@ -260,7 +282,8 @@ module Hyrax
 
         # get imaging event details
         @imaging_event_modality = imaging_event.ie_modality.first
-        if @imaging_event_modality == "Photogrammetry"
+        if @imaging_event_modality == "Photogrammetry" or 
+            @imaging_event_modality == "Photography"
           @lens = ""
           @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
           @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?

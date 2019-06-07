@@ -2,6 +2,8 @@
 module Hyrax
   module Renderers
     class ShowcaseDefaultAttributeRenderer < AttributeRenderer
+      include MorphosourceHelper
+      
       def render
         markup = ''
         return markup if values.blank? && !options[:include_empty]
@@ -21,6 +23,9 @@ module Hyrax
           end
         else
           Array(values).each do |value|
+            if is_number_with_decimal?(value)
+              value = value.to_f.round(3)
+            end
             markup << attribute_value_to_html(value.to_s)
           end
         end

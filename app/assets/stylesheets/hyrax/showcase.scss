@@ -165,12 +165,13 @@ div.showcase {
     padding:4px 15px;
   }
 
-  #taxonomy-accordion-group > div {
-    color: black;
-  }
-
-  .collapse-accordion {
-    background-color: #efefef;
+  #taxonomy-accordion-group { 
+    div {
+      color: #000;
+    }
+    .collapse-accordion {
+      background-color: #fafafa;
+    }
   }
 
   .row.taxonomy-rank .showcase-label {
@@ -335,7 +336,7 @@ div.showcase {
   div.preview {
     margin-top: 20px;
     background-color: #efefef;
-    border: 1px solid #efefef;
+    border: 1px solid transparent;
   }
 
   .preview-image {
@@ -389,6 +390,16 @@ div.showcase {
       .dropdown-menu {
         right: 0;
         left: auto;
+      }
+    }
+    div.preview {
+      margin-top: 0;
+      background-color: transparent;
+      border: 1px solid transparent;
+    
+      .viewer-wrapper {
+        margin-top: 10px;
+        background-color: transparent;
       }
     }
   }
