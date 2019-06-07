@@ -2,11 +2,8 @@
 module Hyrax
   module Renderers
     class ShowcaseDefaultAttributeRenderer < AttributeRenderer
-
-      def is_number_with_decimal? string
-        true if Float(string).to_f % 1 != 0 rescue false
-      end
-
+      include MorphosourceHelper
+      
       def render
         markup = ''
         return markup if values.blank? && !options[:include_empty]

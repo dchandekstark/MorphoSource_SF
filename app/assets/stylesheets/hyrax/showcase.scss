@@ -336,7 +336,7 @@ div.showcase {
   div.preview {
     margin-top: 20px;
     background-color: #efefef;
-    border: 1px solid #efefef;
+    border: 1px solid transparent;
   }
 
   .preview-image {
@@ -390,6 +390,16 @@ div.showcase {
       .dropdown-menu {
         right: 0;
         left: auto;
+      }
+    }
+    div.preview {
+      margin-top: 0;
+      background-color: transparent;
+      border: 1px solid transparent;
+    
+      .viewer-wrapper {
+        margin-top: 10px;
+        background-color: transparent;
       }
     }
   }

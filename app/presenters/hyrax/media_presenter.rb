@@ -4,6 +4,7 @@ require 'active_support/core_ext/numeric/conversions'
 module Hyrax
   class MediaPresenter < Hyrax::WorkShowPresenter
     include Morphosource::PresenterMethods
+    include MorphosourceHelper
 
     delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
 
@@ -63,10 +64,6 @@ module Hyrax
         (representative_presenter.image? || representative_presenter.mesh?) &&
         Hyrax.config.iiif_image_server? &&
         (members_include_viewable_image? || members_include_viewable_mesh?)
-    end
-
-    def is_number_with_decimal? string
-      true if Float(string).to_f % 1 != 0 rescue false
     end
 
     def round_it(string_value)

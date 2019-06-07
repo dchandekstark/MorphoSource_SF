@@ -32,7 +32,7 @@ module Hyrax
                       <div class='col-xs-6 showcase-value'>#{value}</div>
                     </div>"
         end
-        user = contributing_user(taxonomy)
+        user = contributing_user_link(taxonomy, false)
         if user.present?
           markup << "<div class='row taxonomy-rank'>
                       <div class='col-xs-6 showcase-label'>Contributing User</div>
