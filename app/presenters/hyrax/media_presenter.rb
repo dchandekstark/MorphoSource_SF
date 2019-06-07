@@ -285,7 +285,8 @@ module Hyrax
 
         # get imaging event details
         @imaging_event_modality = imaging_event.ie_modality.first
-        if @imaging_event_modality == "Photogrammetry"
+        if @imaging_event_modality == "Photogrammetry" or 
+            @imaging_event_modality == "Photography"
           @lens = ""
           @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
           @lens << " " + imaging_event.lens_model.first if imaging_event.lens_model.present?
