@@ -143,12 +143,14 @@ module Hyrax
           @compression << file_set.compression.first.to_s if file_set.compression.present?
           # color_depth value comes from different attributes, depending on the file type
           # for multiple values e.g. '8 8 8' , concat them with '/'
-          contents_mime_type = file_set.contents_mime_type.first.downcase
-          if contents_mime_type.in? ['application/dcm', 'application/dicom']
-            @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
-          elsif contents_mime_type.in? ['image/jpeg', 'image/jpg', 'image/tiff', 'image/tif']
-            temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
-            @color_depth << temp.gsub(/\s/, '/') 
+          if file_set.contents_mime_type.first.present?
+            contents_mime_type = file_set.contents_mime_type.first.downcase
+            if contents_mime_type.in? ['application/dcm', 'application/dicom']
+              @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
+            elsif contents_mime_type.in? ['image/jpeg', 'image/jpg', 'image/tiff', 'image/tif']
+              temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
+              @color_depth << temp.gsub(/\s/, '/') 
+            end
           end
         end
         
