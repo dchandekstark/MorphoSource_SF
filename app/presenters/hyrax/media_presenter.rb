@@ -119,7 +119,14 @@ module Hyrax
       file_set_list = media.file_set_ids
       file_set_list.each do |id|
         file_set = ::FileSet.find(id)
-        @mime_type << file_set.mime_type
+        # since mime type can me a zip, first try to get the actual content mime type if exists
+        # if content mime type does not exist, use the mime type
+        if file_set.contents_mime_type.first.present?
+          contents_mime_type = file_set.contents_mime_type.first
+        else
+          contents_mime_type = file_set.mime_type
+        end
+        @mime_type << contents_mime_type
         @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
         if @this_media_type == "Mesh"
           @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
@@ -136,25 +143,24 @@ module Hyrax
             temp = round_it(file_set.centroid_x.first) + ', ' + round_it(file_set.centroid_y.first) + ', ' + round_it(file_set.centroid_z.first)
             @centroid_location << temp
           end
-        elsif @this_media_type == "CTImageSeries"
+        elsif @this_media_type.match(/image/i)
           @image_width << file_set.width.first.to_s if file_set.width.present?
           @image_height << file_set.height.first.to_s if file_set.height.present?
           @color_space << file_set.color_space.first.to_s if file_set.color_space.present?
           @compression << file_set.compression.first.to_s if file_set.compression.present?
           # color_depth value comes from different attributes, depending on the file type
           # for multiple values e.g. '8 8 8' , concat them with '/'
-          if file_set.contents_mime_type.first.present?
-            contents_mime_type = file_set.contents_mime_type.first.downcase
-            if contents_mime_type.in? ['application/dcm', 'application/dicom']
-              @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
-            elsif contents_mime_type.in? ['image/jpeg', 'image/jpg', 'image/tiff', 'image/tif']
-              temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
-              @color_depth << temp.gsub(/\s/, '/') 
-            end
+          if contents_mime_type.match(/(dcm|dicom)/i)
+            @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
+          else #if contents_mime_type.match(/(jp?eg|ti?ff)/)
+            temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
+            @color_depth << temp.gsub(/\s/, '/') 
           end
+
         end
         
       end # file_set_list loop
+      
       @mime_type = @mime_type.uniq.join(", ")
       if @file_size == 0
         @file_size = ""
