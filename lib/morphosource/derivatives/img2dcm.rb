@@ -41,12 +41,16 @@ module Morphosource::Derivatives
     # end
 
       def internal_call
-        Dir.foreach(source_path) do |f|
-          next if File.extname(f).downcase != '.jpg'
-            @file_path = File.join(source_path, f)
-            @file_out_path = File.join(out_path, File.basename(f, '.jpg')+'.dcm')
-            process_file
+        files = (Dir.entries(source_path).select {|f| acceptable_file? f }).sort
+        files.each do |f|
+          @file_path = File.join(source_path, f)
+          @file_out_path = File.join(out_path, File.basename(f, '.jpg')+'.dcm')
+          process_file
         end
+      end
+
+      def acceptable_file?(f)
+        File.file?(File.join(source_path, f)) && File.extname(f).downcase == '.jpg'
       end
 
       def process_file
@@ -69,7 +73,7 @@ module Morphosource::Derivatives
           ( x && y ? "-k 'PixelSpacing=" + x.to_s + "\\" + y.to_s + "' " : "" ) +
           ( z ? "-k 'SpacingBetweenSlices=" + z.to_s + "' " : "") + 
           ( thickness ? "-k 'SliceThickness=" + thickness.to_s + "' " : "") + 
-          "#{file_path} #{file_out_path}"
+          "-sef #{File.join(Rails.root, 'lib/assets/template.dcm')} #{file_path} #{file_out_path}"
       end
   end
 end
