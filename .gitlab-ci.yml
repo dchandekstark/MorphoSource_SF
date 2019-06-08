@@ -14,9 +14,8 @@ build_job:
     - gem install bundler -N
     - bundle version
   script:
-    # Post-migration: set RAILS_DEPLOY_PATH=/opt/morphosource
-    - cp /opt/morphosource/etc/database.yml config/
-    - cp /opt/morphosource/etc/analytics.yml config/
+    - cp $RAILS_DEPLOY_PATH/etc/database.yml config/
+    - cp $RAILS_DEPLOY_PATH/etc/analytics.yml config/
     - bundle install --path=vendor/bundle --without=development --binstubs=bin --no-cache
     - bundle binstubs bundler --force
     - bundle exec rake assets:precompile
@@ -36,8 +35,8 @@ test_job:
   allow_failure: true
   variables:
     RAILS_ENV: test
-    DATABASE_URL: $TEST_DATABASE_URL
   before_script:
+    - source $RAILS_DEPLOY_PATH/etc/export-test.env
     - ruby -v
     - bundle version
     - node -v
