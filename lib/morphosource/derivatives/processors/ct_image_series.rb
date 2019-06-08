@@ -222,9 +222,6 @@ module Morphosource::Derivatives::Processors
       # write manifest file
       output_file_service.call(manifest_path, directives)
 
-      # write dcm images dir
-      FileUtils.mkdir_p dcm_derivative_path unless File.exist? dcm_derivative_path
-
       # write dcm images
       files = (Dir.entries(output_path).select {|f| File.file? File.join(output_path, f) }).sort
       files.each_with_index { |f, i| write_dcm_file(File.join(output_path, f), (i+1).to_s+'.dcm') }
