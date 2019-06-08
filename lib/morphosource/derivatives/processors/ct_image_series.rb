@@ -202,11 +202,15 @@ module Morphosource::Derivatives::Processors
       txt_dst
 		end
 
+    def gen_dcm_path(id)
+      id.to_s.chars.each_slice(2).map(&:join).join('/')
+    end
+
     def dicom_series
       id = directives[:file_set_id]
       file_n = Dir[File.join(output_path, '**', '*')].count { |file| File.file?(file) }
-      ((1..file_n).to_a.map { |i| "\"downloads/#{id}?file=dcm#{i}\""}).join(',')
-      # (Dir.entries(output_path).map { |f| '"'+f+'"' unless File.directory?(f) }).join(',')
+      ((1..file_n).to_a.map { |i| "\"derivatives/#{gen_dcm_path(id)}/#{i}.dcm\""}).join(',')
+      #((1..file_n).to_a.map { |i| "\"downloads/#{id}?file=dcm#{i}\""}).join(',')
     end
 
     def base_derivative_path
