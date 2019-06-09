@@ -1,13 +1,8 @@
-require 'open3'
-require 'logger'
-
 module Morphosource::Derivatives
   class FijiError < RuntimeError
   end
 
-  class Fiji
-    include Open3
-
+  class Fiji < DerivativeTool
     class_attribute :tool_path
 
     attr_reader :input_path, :output_path, :linear_scale_factor, :tool_path, :tmp_dir_path, :macro_path
@@ -35,10 +30,6 @@ module Morphosource::Derivatives
       @tool_path || Morphosource::Derivatives.fiji_path
     end
 
-    def logger
-      @logger ||= activefedora_logger || Logger.new(STDERR)
-    end
-
     protected
       def imagej_macro
         erb_src = File.join(__dir__, 'imagej_macro.txt.erb')
@@ -51,22 +42,6 @@ module Morphosource::Derivatives
 
       def cleanup_tmp_files
         FileUtils.remove_dir tmp_dir_path
-      end
-
-      def internal_call
-        stdin, stdout, stderr, wait_thr = popen3(command)
-        begin
-          out = stdout.read
-          err = stderr.read
-          puts(err)
-          exit_status = wait_thr.value
-          raise "Unable to execute command \"#{command}\"\n#{err}" unless exit_status.success?
-          out
-        ensure
-          stdin.close
-          stdout.close
-          stderr.close
-        end
       end
 
       def command
