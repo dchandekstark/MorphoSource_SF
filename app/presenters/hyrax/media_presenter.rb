@@ -6,7 +6,7 @@ module Hyrax
     include Morphosource::PresenterMethods
     include MorphosourceHelper
 
-    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
+    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
 
     attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, 
       :physical_object_title, :physical_object_link, :physical_object_id, 
