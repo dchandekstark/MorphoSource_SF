@@ -8,7 +8,7 @@ module Ms1to2
           :ark => :ark,
           :doi => :doi,
           :media_type => :media_type,
-          :file_url => :file,
+          :file_path => :file,
           :created_on => :date_uploaded,
           :title => :short_description,
         }
