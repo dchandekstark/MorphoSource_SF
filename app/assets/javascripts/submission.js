@@ -2,7 +2,30 @@ $(document).on('ready', function(){
 
   if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
     cookie_expired_days = 7;
-    // Begin Raw media flow
+
+    $('#submission_choose_raw_or_derived_media_continue').click(function(event){
+      event.preventDefault();
+      if ($('#cb2').is(':checked')) {
+        // If Ch2 is checked (regardless of whether Ch1 is checked), users are directed to visit the child media page to add that media. If multiple media exist, see MorphoSource admins.
+        alert($(this).attr('id'));
+
+      } else if ($('#cb1').is(':checked')) {
+        // If Ch1 is checked without Ch2, go to "Derived" flow
+        $('input#submission_raw_or_derived_media').val('Derived');
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
+        saveClick('#cb1,#submission_choose_raw_or_derived_media_continue', true);
+
+      } else {
+        // If nothing checked, go to "Raw" flow
+        $('input#submission_raw_or_derived_media').val('Raw');
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_choose_raw_or_derived_media_continue', true);
+      }
+    });
+
+    /*
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
       var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
@@ -16,8 +39,9 @@ $(document).on('ready', function(){
         saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
       }
       $('#start_over').show();
-    });
+    }); */
 
+    // Begin Raw media flow
     $('#submission_choose_biospec_or_cho_continue').click(function(event){
       event.preventDefault();
       var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();

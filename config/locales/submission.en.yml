@@ -2,7 +2,7 @@ en:
   morphosource:
     submission:
       page_title: 'Submit Media // MorphoSource'
-      page_header: 'Submission page header here'
+      page_header: 'Submit Media'
       continue: 'Continue'
       biospec_search: 'Search for a Biological Specimen already in MorphoSource or iDigBio, or create a new Biological Specimen'
       device_select: 'Select the device used to capture this media, or create new device'
