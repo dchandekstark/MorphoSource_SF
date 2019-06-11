@@ -17,7 +17,11 @@ module Ms1to2
       end
 
       def derive_bs_parents(v)
-        [hyraxify("I"+v[:institution_id].first), hyraxify("T"+v[:alt_id].first)]
+        if v[:alt_id].presence
+          [hyraxify("I"+v[:institution_id].first), hyraxify("T"+v[:alt_id].first)]
+        else
+          [hyraxify("I"+v[:institution_id].first)]
+        end
       end
     end
   end

@@ -38,7 +38,13 @@ module Morphosource
           Morphosource::Derivatives::CTImageSeriesDerivatives.create(filename,
                                                                      outputs: [{ label: :aleph,
                                                                                  file_set_id: file_set.id,
-                                                                                 url: derivative_url('aleph')}])          
+                                                                                 url: derivative_url('aleph')}])
+        elsif file_set.member_of.first.media_type.first == 'Mesh'
+           Morphosource::Derivatives::MeshDerivatives.create(filename,
+                                                             outputs: [{ label: :glb,
+                                                                         format: 'glb',
+                                                                         unit: file_set.member_of.first.unit.first,
+                                                                         url: derivative_url('glb')}])
         end
       end
   end
