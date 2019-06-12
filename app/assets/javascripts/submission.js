@@ -5,17 +5,16 @@ $(document).on('ready', function(){
 
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
-      if ($('#cb2').is(':checked')) {
-        // If Ch2 is checked (regardless of whether Ch1 is checked), users are directed to visit the child media page to add that media. If multiple media exist, see MorphoSource admins.
-        alert($(this).attr('id'));
-
-      } else if ($('#cb1').is(':checked')) {
-        // If Ch1 is checked without Ch2, go to "Derived" flow
+      if ($('#cb_child_media_in_ms').is(':checked')) {
+        // users are directed to visit the child media page to add that media. 
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('div#submission_child_media_in_ms').addClass('show').removeClass('hide');
+        //saveClick('#cb1,#submission_choose_raw_or_derived_media_continue', true);
+      } else if ($('#cb_derived').is(':checked')) {
         $('input#submission_raw_or_derived_media').val('Derived');
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-        saveClick('#cb1,#submission_choose_raw_or_derived_media_continue', true);
-
+        saveClick('#cb_derived,#submission_choose_raw_or_derived_media_continue', true);
       } else {
         // If nothing checked, go to "Raw" flow
         $('input#submission_raw_or_derived_media').val('Raw');
@@ -24,22 +23,6 @@ $(document).on('ready', function(){
         saveClick('#submission_choose_raw_or_derived_media_continue', true);
       }
     });
-
-    /*
-    $('#submission_choose_raw_or_derived_media_continue').click(function(event){
-      event.preventDefault();
-      var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
-      if (selected == 'Raw') {
-        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
-        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
-      } else if (selected == 'Derived') {
-        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-        $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-        saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
-      }
-      $('#start_over').show();
-    }); */
 
     // Begin Raw media flow
     $('#submission_choose_biospec_or_cho_continue').click(function(event){

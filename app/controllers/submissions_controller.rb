@@ -1,8 +1,16 @@
 class SubmissionsController < ApplicationController
+  # Adds Hyrax behaviors to the controller.
+  include Hyrax::WorksControllerBehavior
 
   load_and_authorize_resource
 
   before_action :instantiate_work_forms
+
+  # override the layout from WorksControllerBehavior
+  def decide_layout
+    layout = 'submission'
+    File.join(theme, layout)
+  end
 
   def new
     # todo: remove the below few lines later, since the clear_session_submission_settings has been moved to clean start block.

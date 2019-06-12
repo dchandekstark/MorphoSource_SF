@@ -13,6 +13,8 @@
     <% # Derived media flow %>
     <%= render(partial: 'parents_in_ms', locals: { f: f }) %>
     <%= render(partial: 'parents_not_in_ms', locals: { f: f }) %>
+    <% # Child media in MS %>
+    <%= render(partial: 'child_media_in_ms', locals: { f: f }) %>
   <% end %>
 </div>
 
