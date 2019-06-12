@@ -5,7 +5,7 @@ module Morphosource
       include Hydra::Works::MimeTypes
 
       def mesh?
-        self.class.mesh_mime_types.include? mime_type
+        self.class.mesh_mime_types.include?(mime_type) || self.class.archive_mime_types.include?(mime_type)
       end
 
       def volume?
