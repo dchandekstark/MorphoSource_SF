@@ -37,8 +37,8 @@ namespace :morphosource do
   end
 
   desc 'Mass ingest data'
-  task :mass_ingest => :environment do
-    Ms1to2::Importer.new(File.expand_path("tmp/ingest/")).call 
+  task :mass_ingest => :environment do  
+    MassIngestJob.perform_later({csv_path: File.expand_path("tmp/ingest/"), ingest_path: '/nas/morphosource_ms1/'})
   end
 
   desc 'Set up MS dev team user accounts'
