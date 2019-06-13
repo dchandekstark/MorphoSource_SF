@@ -46,32 +46,36 @@ module Morphosource::Derivatives::Processors
         @z_spacing = 1 if z_spacing == 0 && slice_thickness == 0
         # todo: grab image resolutions from dicom if possible? (or should that be done via work characterization?)
 
-    		# todo: locate images in zip
-        locate_images
-        if !img_coll
-          return
-        end 
-        
-    		# unzip zip archive to input_dir
-    		import_image_archive
+        begin
+      		# todo: locate images in zip
+          locate_images
+          if !img_coll
+            return
+          end 
+          
+      		# unzip zip archive to input_dir
+      		import_image_archive
 
-        uncompress_dcm if ext == '.dcm'
+          uncompress_dcm if ext == '.dcm'
 
-    		# todo: have a step to convert whatever to tiff pre-imagej
+      		# todo: have a step to convert whatever to tiff pre-imagej
 
-    		# use imagej to convert input_dir whatever to jpeg_dir jpegs
-    		img_to_jpeg
+      		# use imagej to convert input_dir whatever to jpeg_dir jpegs
+      		img_to_jpeg
 
-    		# use img2dcm to convert jpeg_dir jpegs to output_dir dcms
-    		jpeg_to_dcm
+      		# use img2dcm to convert jpeg_dir jpegs to output_dir dcms
+      		jpeg_to_dcm
 
-    		# generate manifest json
-    		@manifest_path = gen_manifest
+      		# generate manifest json
+      		@manifest_path = gen_manifest
 
-    		# place files
-    		write_files
-
-    		cleanup_tmp_files
+      		# place files
+      		write_files
+        rescue StandardError => e
+          raise e
+        ensure
+    		  cleanup_tmp_files
+        end
     	end
 
 #a=[{ 'foo'=>0,'bar'=>1 },

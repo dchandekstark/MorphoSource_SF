@@ -41,11 +41,16 @@ module Morphosource::Derivatives::Processors
       @glb_path = File.join(tmp_dir_path, glb_name)
       @draco_glb_path = File.join(tmp_dir_path, draco_glb_name)
 
-      extract_mesh_archive if File.extname(source_path).downcase == '.zip'
-      create_tmp_nondraco_glb
-      create_tmp_draco_glb
-      write_draco_glb
-      cleanup_tmp_files
+      begin
+        extract_mesh_archive if File.extname(source_path).downcase == '.zip'
+        create_tmp_nondraco_glb
+        create_tmp_draco_glb
+        write_draco_glb
+      rescue StandardError => e
+        raise e
+      ensure
+        cleanup_tmp_files
+      end
     end
 
     def extract_mesh_archive
