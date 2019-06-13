@@ -11,7 +11,7 @@ module Hydra::Works
 
     def characterize
       @content, @file_name = source_to_content
-      raise "Error characterizing #{source}: no representative file found" if file_name is nil
+      raise "Error characterizing #{source}: no representative file found" if file_name == nil
       set_blender_options if mesh_file_types.include? File.extname(file_name).downcase
       extracted_md = extract_metadata(content)
       terms = parse_metadata(extracted_md)
