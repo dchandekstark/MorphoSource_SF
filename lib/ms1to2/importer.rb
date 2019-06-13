@@ -1,9 +1,11 @@
 module Ms1to2
   class Importer
-    attr_accessor :input_path, :media, :ie, :pe
+    attr_accessor :input_path, :media, :ie, :pe, :update, :update_only_if_no_file
 
-    def initialize(input_path)
+    def initialize(input_path, update=false, update_only_if_no_file=true)
       @input_path = input_path
+      @update = update
+      @update_only_if_no_file = update_only_if_no_file
       # ::Hyrax.config.whitelisted_ingest_dirs = input_path
     end
 
@@ -105,12 +107,22 @@ module Ms1to2
       combined_table = {}.merge(media).merge(ie).merge(pe)
 
       ids_in_order.each do |id|
-        if combined_table.key?(id) && !to_model(id).to_s.constantize.exists?(id)
+        if combined_table.key?(id)
+          # prepare
           attrs = combined_table[id]
           attrs.delete(:collection_id)
           attrs = attrs.merge({ :depositor => 'julia.m.winchester@gmail.com' })
           csv_importer = ::Importer::CSVImporter.new('', input_path, { :model => to_model(id) })
-          csv_importer.import_batch_object(attrs)
+
+          if !to_model(id).to_s.constantize.exists?(id)
+            # create
+            csv_importer.import_batch_object(attrs)
+          elsif ( update && 
+            update_models.include?(to_model(id)) && 
+            ( !update_only_if_no_file || !has_original_file?(id, to_model(id)) ) )
+            # update
+            csv_importer.update_batch_object(attrs)
+          end 
         end
       end
     end
@@ -181,12 +193,24 @@ module Ms1to2
       m.to_s.underscore+'.csv'
     end
 
+    def has_original_file?(id, model)
+      work = to_model(id).to_s.constantize.find(id)
+      return true if ( work.file_sets&.first && 
+        work.file_sets&.first.respond_to?(:original_file) && 
+        work.file_sets&.first.original_file.presence ) 
+      false
+    end
+
     def models
       [:Collection, :Institution, :Device, :Taxonomy, :BiologicalSpecimen, :Media]
     end
 
     def coll_models
       [:BiologicalSpecimen]
+    end
+
+    def update_models
+      [:Media]
     end
   end
 end

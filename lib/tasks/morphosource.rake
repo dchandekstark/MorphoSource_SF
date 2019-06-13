@@ -43,7 +43,7 @@ namespace :morphosource do
 
   desc 'Mass ingest data not in a job context'
   task :mass_ingest_no_job => :environment do  
-    Ms1to2::Importer.new(File.expand_path("tmp/ingest/")).call
+    Ms1to2::Importer.new(File.expand_path("tmp/ingest/"), true, true).call
   end
 
   desc 'Set up MS dev team user accounts'

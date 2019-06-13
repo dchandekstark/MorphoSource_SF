@@ -6,11 +6,12 @@ module Importer
       extend ActiveModel::Callbacks
       define_model_callbacks :save, :create
       class_attribute :klass
-      attr_reader :attributes, :collection_ids, :files_directory, :object, :files, :parent_arks, :visibility
+      attr_reader :attributes, :collection_ids, :files_directory, :object, :files, :parent_arks, :visibility, :do_update
 
-      def initialize(attributes, files_dir = nil)
+      def initialize(attributes, files_dir = nil, do_update = false)
         @attributes = attributes
         @files_directory = files_dir
+        @do_update = do_update
         @collection_ids = @attributes.delete(:collection_id)
         @files = @attributes.delete(:file)
         @parent_arks = @attributes.delete(:parent_ark)
@@ -18,8 +19,13 @@ module Importer
       end
 
       def run
-        arg_hash = { name: 'CREATE', klass: klass }
-        ActiveSupport::Notifications.instrument('import.importer', arg_hash) { create }
+        if do_update
+          arg_hash = { name: 'UPDATE', klass: klass }
+          ActiveSupport::Notifications.instrument('import.importer', arg_hash) { update }
+        else
+          arg_hash = { name: 'CREATE', klass: klass }
+          ActiveSupport::Notifications.instrument('import.importer', arg_hash) { create }
+        end
         yield(object) if block_given?
         object
       end
@@ -32,6 +38,14 @@ module Importer
             work_actor.create(environment(attrs))
           end
         end
+        log_created(object)
+      end
+
+      def update
+        attrs = create_attributes
+        @object = klass.find(attrs[:id])
+        attrs.delete(:id)       
+        work_actor.update(environment(attrs))
         log_created(object)
       end
 
