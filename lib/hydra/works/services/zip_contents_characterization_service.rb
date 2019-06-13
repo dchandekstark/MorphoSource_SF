@@ -11,6 +11,7 @@ module Hydra::Works
 
     def characterize
       @content, @file_name = source_to_content
+      raise "Error characterizing #{source}: no representative file found" if file_name == nil
       set_blender_options if mesh_file_types.include? File.extname(file_name).downcase
       extracted_md = extract_metadata(content)
       terms = parse_metadata(extracted_md)
@@ -29,6 +30,7 @@ module Hydra::Works
             rep_f = f
           end
         end
+        rep_f = zip_file.first if !rep_f.presence
         return rep_f.get_input_stream, rep_f.name if rep_f
       end
     end
@@ -38,7 +40,7 @@ module Hydra::Works
     end
 
     def file_type_priorities
-      ['.dcm', '.dicom', '.glb', '.gltf', '.obj', '.ply', '.stl', '.wrl', '.x3d']
+      ['.dcm', '.dicom', '.glb', '.gltf', '.obj', '.ply', '.stl', '.wrl', '.x3d', '.tiff', '.tif', '.bmp', '.png', '.jpeg', '.jpg']
     end
 
     def mesh_file_types

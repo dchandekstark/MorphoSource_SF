@@ -13,7 +13,7 @@ module Morphosource::Derivatives::Processors
 		class_attribute :timeout
 
     def acceptable_image_formats
-      ['.dcm', '.tiff', '.tif', '.bmp']
+      ['.dcm', '.dicom', '.tiff', '.tif', '.bmp', '.png', '.jpeg', '.jpg']
     end
 
 		def process
