@@ -80,16 +80,21 @@ $(document).on('ready', function(){
       setCookie('saved_clicks', saved_clicks + id, cookie_expired_days);
     }
 
+    clearCookies = function() {
+      deleteCookie('saved_clicks');
+      deleteCookie('last_render');
+      deleteCookie('saved_step');
+      deleteCookie('absentee_parent');
+      deleteCookie('modality_to_set');
+    }
+
     $('#btn_parent_media_how_to_proceed_continue').click(function(event){
       event.preventDefault();
       $('div#submission_parents_not_in_ms').addClass('hide').removeClass('show');
       if ( $('input[name="submission[parent_media_how_to_proceed]"]:checked').val() == 'now' ) {
         // start over
         $('div#submission_choose_raw_or_derived_media').addClass('show').removeClass('hide');
-        deleteCookie('saved_clicks');
-        deleteCookie('last_render');
-        deleteCookie('saved_step');
-        deleteCookie('absentee_parent');
+        clearCookies();
       } else {
         // go to physical object
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
@@ -106,7 +111,8 @@ $(document).on('ready', function(){
       if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
         // set a cookie to clear all session variables when loading the initial page
         setCookie('ms_submission_start_over', 'yes', cookie_expired_days);
-        location.href = "/submissions/new";
+        clearCookies();
+        location.href = "/submissions";
       }
     });
 
@@ -231,6 +237,37 @@ $(document).on('ready', function(){
         $('#start_over').hide();
       }
     }
+
+    // set modality if needed
+    if ($('select[name*="modality"]').length) { 
+      //console.log('modality dropdown found');
+
+      if (getCookie('modality_to_set')) {
+        var modality_to_set = $.makeArray(getCookie('modality_to_set'));
+
+        $.each(modality_to_set, function(i, modality) {
+          //console.log('setting modality to: ', modality);
+          var modality_select = 'select[name*="modality"]:eq(' + i +')';
+          $(modality_select + ' option[value="' + modality + '"]').attr('selected','selected');
+        });
+
+        $('input[name=commit]').click(function(event){
+          // ok to submit the form as long as there is at least one modality is selected with the same value
+          var modality_matched = false;
+          $('select[name*="modality"]').each(function() {
+            if ($(this).val() == modality_to_set) {
+              modality_matched = true;
+            }
+          });
+          if (modality_matched) {
+            return true;
+          } else {
+            alert("Modality was previously set to " + modality_to_set + ".  Please select a modality with the same value.");              
+            return false;
+          }
+        });
+      }
+    }    
 
   } // end if the page is submission flow page
 });

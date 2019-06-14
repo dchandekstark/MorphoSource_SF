@@ -88,6 +88,9 @@ class SubmissionsController < ApplicationController
       render_and_save 'biospec_create'
     elsif params['device_select'].present?
       session[:submission][:device_id] = submission_params[:device_id]
+      # get and store the modality, to be used for imaging event and media
+      device = Device.where('id' => submission_params[:device_id]).first
+      cookies.permanent[:modality_to_set] = device.modality.to_a
       @submission.saved_step = "device_select"
       store_submission
       render_and_save 'image_capture'
@@ -389,6 +392,7 @@ class SubmissionsController < ApplicationController
     cookies.delete :saved_clicks
     cookies.delete :will_create
     cookies.delete :absentee_parent
+    cookies.delete :modality_to_set
   end
 
   def create_work(model, form_params)

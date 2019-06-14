@@ -24,7 +24,8 @@ class Submission
                 :taxonomy_id,
                 :taxonomy_search,
                 :is_start_over,
-                :saved_step
+                :saved_step,
+                :modality
 
 
   MEDIA_DERIVED = 'Derived'

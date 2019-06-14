@@ -98,8 +98,10 @@ Rails.application.routes.draw do
     end
   end
 
-  # for now, redirect to submission flow initial page when using browser reload or back button
+  # Redirect to submission flow initial page when using browser reload or back button
   get '/submissions', to: redirect('/submissions/new')
+  get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
+  get '/submissions/stage_processing_event', to: redirect('/submissions/new')
 
   scope module: :morphosource do
     scope module: :my do
