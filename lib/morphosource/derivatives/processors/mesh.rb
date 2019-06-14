@@ -4,7 +4,7 @@ require 'zip'
 
 module Morphosource::Derivatives::Processors
   class TimeoutError < Hydra::Derivatives::TimeoutError
-    end
+  end
 
   class Mesh < Hydra::Derivatives::Processors::Processor
     attr_accessor :glb_name
@@ -13,6 +13,7 @@ module Morphosource::Derivatives::Processors
     attr_accessor :tmp_dir_path
     attr_accessor :glb_path
     attr_accessor :draco_glb_path
+    attr_accessor :derivatives_tmp_path
 
     class_attribute :timeout
 
@@ -36,7 +37,7 @@ module Morphosource::Derivatives::Processors
       @glb_name = File.basename(source_path, '.*') + '.glb'
       @draco_glb_name = File.basename(source_path, '.*') + '-draco.glb'
       @unit = directives.fetch(:unit, 'm').to_s.downcase.presence || 'm'
-      @tmp_dir_path = Rails.root.join('tmp', SecureRandom.uuid)
+      @tmp_dir_path = Rails.root.join(derivatives_tmp_path, SecureRandom.uuid)
       Dir.mkdir tmp_dir_path unless File.exist? tmp_dir_path
       @glb_path = File.join(tmp_dir_path, glb_name)
       @draco_glb_path = File.join(tmp_dir_path, draco_glb_name)
@@ -51,6 +52,10 @@ module Morphosource::Derivatives::Processors
       ensure
         cleanup_tmp_files
       end
+    end
+
+    def derivatives_tmp_path
+      @derivatives_tmp_path = Hyrax.config.derivatives_tmp_path
     end
 
     def extract_mesh_archive

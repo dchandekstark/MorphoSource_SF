@@ -108,6 +108,9 @@ Hyrax.config do |config|
   config.blender_path = ENV.fetch("BLENDER_PATH", "blender")
   config.fiji_path = ENV.fetch("FIJI_PATH", "fiji")
 
+  # Path to where derivative generation tmp files should be placed (temporary method)
+  config.derivatives_tmp_path = Rails.env.production? ? '/nas/morphosource_demo/tmp/' : ENV.fetch("DERIVATIVES_TMP_PATH", Rails.root.join("tmp"))
+
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
 
