@@ -101,13 +101,15 @@ class SubmissionsController < ApplicationController
       render_and_save 'institution'
     elsif params['parent_media_select'].present?
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
+      # get and store the modality, to be used for imaging event and media
+      modality_to_set = []
+      submission_params[:parent_media_list].split(',').each do |id|
+        media = Media.where('id' => id).first
+        modality_to_set += media.modality.to_a
+      end
+      cookies.permanent[:modality_to_set] = modality_to_set.join(',')
       store_submission
       render_and_save 'processing_event'
-    # This button below is handled by js.  Remove later
-    #    elsif params['parent_media_how_to_proceed_continue'].present? 
-    #      session[:submission][:parent_media_how_to_proceed] = submission_params[:parent_media_how_to_proceed]
-    #      store_submission
-    #      render_and_save 'new'
     elsif params['cho_search'].present?
       session[:submission][:cho_search_collection_code] = submission_params[:cho_search_collection_code]
       # todo: add the other 3 search fields here

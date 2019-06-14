@@ -1,4 +1,4 @@
-$(document).on('ready', function(){
+$( document ).on('turbolinks:load', function() {
 
   if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
     cookie_expired_days = 7;
@@ -145,6 +145,14 @@ $(document).on('ready', function(){
       $("input.parent_title").val('');
     });
 
+    $('input#submission_parent_media_search').on('keypress',function(e) {
+      if (e.which == 13) {
+        // pressing enter key on this field should add a parent instead of submitting the form
+        event.preventDefault();
+        $('#btn_add_parent').trigger('click');
+      }
+    });
+
     $('#btn_add_taxonomy').click(function(event){
       event.preventDefault();
       var currentParentList = $('input[id="submission_taxonomy_id"]').val();
@@ -238,16 +246,20 @@ $(document).on('ready', function(){
       }
     }
 
+
     // set modality if needed
     if ($('select[name*="modality"]').length) { 
       //console.log('modality dropdown found');
 
       if (getCookie('modality_to_set')) {
-        var modality_to_set = $.makeArray(getCookie('modality_to_set'));
+        var modality_to_set = getCookie('modality_to_set').split(',');
 
         $.each(modality_to_set, function(i, modality) {
-          //console.log('setting modality to: ', modality);
           var modality_select = 'select[name*="modality"]:eq(' + i +')';
+          // if more than 1 modality, add the modality dropdown before selecting
+          if (i > 0) {
+            $('.media_modality button.add').trigger('click');
+          }
           $(modality_select + ' option[value="' + modality + '"]').attr('selected','selected');
         });
 
@@ -255,14 +267,14 @@ $(document).on('ready', function(){
           // ok to submit the form as long as there is at least one modality is selected with the same value
           var modality_matched = false;
           $('select[name*="modality"]').each(function() {
-            if ($(this).val() == modality_to_set) {
+            if ($.inArray($(this).val(), modality_to_set) != -1) {
               modality_matched = true;
             }
           });
           if (modality_matched) {
             return true;
           } else {
-            alert("Modality was previously set to " + modality_to_set + ".  Please select a modality with the same value.");              
+            alert("Modality " + modality_to_set + " was set in a previous step.  Please select the same modality, or start over.");              
             return false;
           }
         });

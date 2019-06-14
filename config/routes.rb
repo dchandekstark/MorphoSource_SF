@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   get '/submissions', to: redirect('/submissions/new')
   get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
   get '/submissions/stage_processing_event', to: redirect('/submissions/new')
+  get '/submissions/stage_media', to: redirect('/submissions/new')
 
   scope module: :morphosource do
     scope module: :my do
