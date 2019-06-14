@@ -9,6 +9,7 @@ module Morphosource::Derivatives::Processors
 		attr_accessor :tmp_dir_path, :img_coll, :ext, :input_path, :jpeg_path, :output_path, :manifest_path
     attr_accessor :x, :y, :z, :linear_scale_factor
     attr_accessor :x_spacing, :y_spacing, :z_spacing, :slice_thickness
+    attr_accessor :derivatives_tmp_path
 
 		class_attribute :timeout
 
@@ -29,7 +30,7 @@ module Morphosource::Derivatives::Processors
 		protected
 
     	def create_ct_image_series_derivative
-    		@tmp_dir_path = Rails.root.join('tmp', SecureRandom.uuid)
+    		@tmp_dir_path = Rails.root.join(derivatives_tmp_path, SecureRandom.uuid)
         Dir.mkdir tmp_dir_path unless File.exist? tmp_dir_path
     		@input_path = File.join(tmp_dir_path, 'input')
         Dir.mkdir input_path unless File.exist? input_path
@@ -78,13 +79,9 @@ module Morphosource::Derivatives::Processors
         end
     	end
 
-#a=[{ 'foo'=>0,'bar'=>1 },
-# { 'foo'=>0,'bar'=>2 },
-#  ... ]
-
-# a.sort { |a, b| [a['foo'], a['bar']] <=> [b['foo'], b['bar']] }
-
-    # {}[loc] = { loc: XXX, ext: XXX, files: [] }
+    def derivatives_tmp_path
+      @derivatives_tmp_path = Hyrax.config.derivatives_tmp_path
+    end
 
     def locate_images
       # get all image files and locations in zip
