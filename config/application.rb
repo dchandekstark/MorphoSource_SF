@@ -22,7 +22,7 @@ module MorphoSourceSf
       end
     end
 
-    middleware.use ::ActionDispatch::Static, "#{Rails.root}/tmp", index: 'index', headers: config.public_file_server.headers
+    middleware.use ::ActionDispatch::Static, File.join(Hyrax.config.derivatives_path, '..'), index: 'index', headers: config.public_file_server.headers
 
   end
 end
