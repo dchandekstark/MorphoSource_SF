@@ -38,7 +38,7 @@ namespace :morphosource do
 
   desc 'Mass ingest data'
   task :mass_ingest => :environment do  
-    MassIngestJob.perform_later({csv_path: File.expand_path("tmp/ingest/")})
+    MassIngestJob.perform_later({csv_path: File.expand_path("tmp/ingest/"), update: true, update_only_if_no_file: true})
   end
 
   desc 'Mass ingest data not in a job context'

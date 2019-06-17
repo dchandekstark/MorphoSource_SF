@@ -26,7 +26,7 @@ module Hydra::Works
       rep_f = nil
       Zip::File.open(source) do |zip_file|
         zip_file.each do |f|
-          if ( !rep_f && f_priority(f) ) || ( f_priority(f) && f_priority(f) > f_priority(rep_f) )
+          if ( !rep_f && f_priority(f) ) || ( f_priority(f) && f_priority(f) < f_priority(rep_f) )
             rep_f = f
           end
         end
