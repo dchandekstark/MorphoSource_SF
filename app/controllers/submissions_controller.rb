@@ -165,6 +165,9 @@ class SubmissionsController < ApplicationController
     store_submission
     device_model_params = Hyrax::DeviceForm.model_attributes(params[:device])
     session[:submission_device_create_params] = device_model_params
+    # store the modality, to be used for imaging event and media
+    modality_to_set = []
+    cookies.permanent[:modality_to_set] = device_model_params["modality"].join(',')
     render_and_save 'image_capture'
   end
 
