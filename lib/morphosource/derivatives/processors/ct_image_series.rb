@@ -122,8 +122,7 @@ module Morphosource::Derivatives::Processors
     def import_image_archive
       x, y, z = extract_file_and_metadata
       if x.uniq.length != 1 || y.uniq.length != 1 || z == 0
-        cleanup_tmp_files
-        # error out, no images or different kinds of images
+        raise "No images or different types of images located in image series archive"
       else
         @x = x.first
         @y = y.first
