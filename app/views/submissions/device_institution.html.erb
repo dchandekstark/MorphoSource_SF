@@ -1,0 +1,16 @@
+<% provide :page_title, t('morphosource.submission.page_title') %>
+<% provide :page_header do %>
+  <h1><%= t('morphosource.submission.page_header') %></h1>
+<% end %>
+
+													<h1>device institution</h1>
+
+<div class="submission_flow" id="select_institution">
+  <%= simple_form_for @submission do |f| %>
+    <%= render(partial: 'device_institution_select', locals: { f: f }) %>
+  <% end %>
+</div>
+
+<%= render(partial: 'institution_create') %>
+
+<%= render(partial: 'footer') %>

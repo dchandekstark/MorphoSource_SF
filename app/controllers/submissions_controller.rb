@@ -67,18 +67,24 @@ class SubmissionsController < ApplicationController
       store_submission
       render_and_save 'institution'
     elsif params['institution_select'].present? || params['no_institution'].present?
-      if params['institution_select'].present?
-        session[:submission][:institution_id] = submission_params[:institution_id]
-      end
       if @submission.saved_step == "biospec_will_create"
+        if params['institution_select'].present?
+          session[:submission][:institution_id] = submission_params[:institution_id]
+        end
         @submission.saved_step = "biospec_institution_select"
         render_and_save 'taxonomy'
-      elsif @submission.saved_step == "device_will_create"
-        @submission.saved_step = "device_institution_select"
-        render_and_save 'device_create'
       elsif @submission.saved_step == "cho_will_create"
+        if params['institution_select'].present?
+          session[:submission][:institution_id] = submission_params[:institution_id]
+        end
         @submission.saved_step = "cho_institution_select"
         render_and_save 'cho_create'
+      elsif @submission.saved_step == "device_will_create"
+        if params['institution_select'].present?
+          session[:submission][:device_institution_id] = submission_params[:institution_id]
+        end
+        @submission.saved_step = "device_institution_select"
+        render_and_save 'device_create'
       else
         # should not end up here
       end
@@ -98,7 +104,7 @@ class SubmissionsController < ApplicationController
       # possibly need to store other flow data here
       @submission.saved_step = "device_will_create"
       store_submission
-      render_and_save 'institution'
+      render_and_save 'device_institution'
     elsif params['parent_media_select'].present?
       session[:submission][:parent_media_list] = submission_params[:parent_media_list]
       # get and store the modality, to be used for imaging event and media
@@ -306,6 +312,13 @@ class SubmissionsController < ApplicationController
   end
 
   def create_device(params)
+    parent_attributes = {}
+    if @submission.device_institution_id.present?
+      parent_attributes.merge!({ '0' => { "id" => @submission.device_institution_id, "_destroy" => "false" } })
+    end
+    unless parent_attributes.empty?
+      params.merge!('work_parents_attributes' => parent_attributes)
+    end
     create_work(Device, params)
   end
 
@@ -389,6 +402,7 @@ class SubmissionsController < ApplicationController
     session[:submission_imaging_event_create_params] = nil
     session[:submission_processing_event_create_params] = nil
     session[:submission_institution_create_params] = nil
+    session[:submission_device_institution_create_params] = nil
     session[:submission_media_create_params] = nil
     session[:submission_taxonomy_create_params] = nil
     cookies.delete :ms_submission_start_over
@@ -451,6 +465,7 @@ class SubmissionsController < ApplicationController
                               biospec_or_cho: @submission.biospec_or_cho,
                               device_id: @submission.device_id,
                               institution_id: @submission.institution_id,
+                              device_institution_id: @submission.device_institution_id,
                               raw_or_derived_media: @submission.raw_or_derived_media,
                               parent_media_how_to_proceed: @submission.parent_media_how_to_proceed,
                               parent_media_list: @submission.parent_media_list,
@@ -478,6 +493,7 @@ class SubmissionsController < ApplicationController
                                           :device_id,
                                           :imaging_event_id,
                                           :institution_id,
+                                          :device_institution_id,
                                           :media_id,
                                           :processing_event_id,
                                           :raw_or_derived_media,

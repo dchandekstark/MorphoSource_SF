@@ -10,6 +10,7 @@ class Submission
                 :device_id,
                 :imaging_event_id,
                 :institution_id,
+                :device_institution_id,
                 :media_id,
                 :processing_event_id,
                 :raw_or_derived_media,
