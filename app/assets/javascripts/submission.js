@@ -53,6 +53,13 @@ $( document ).on('turbolinks:load', function() {
       $('div#submission_create_institution').addClass('show').removeClass('hide');
     });
 
+    $('a#submission_show_create_device_institution').click(function(event){
+      event.preventDefault();
+      $('div#submission_device_institution_select').addClass('hide').removeClass('show');
+      $('div#submission_choose_create_device_institution').addClass('hide').removeClass('show');;
+      $('div#submission_create_device_institution').addClass('show').removeClass('hide');
+    });
+
     $('a#submission_show_create_taxonomy').click(function(event){
       event.preventDefault();
       $('div#submission_taxonomy_select').addClass('hide').removeClass('show');

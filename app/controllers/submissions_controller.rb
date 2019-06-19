@@ -203,15 +203,22 @@ class SubmissionsController < ApplicationController
     store_submission
     institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
     session[:submission_institution_create_params] = institution_model_params
-    if @submission.saved_step == "device_will_create"
-      render_and_save 'device_create'
-    elsif @submission.saved_step == "biospec_will_create"
+    if @submission.saved_step == "biospec_will_create"
       render_and_save 'taxonomy'
     elsif @submission.saved_step == "cho_will_create"
       render_and_save 'cho_create'
     else
       #should not be here
     end
+  end
+
+  def stage_device_institution
+    reinstantiate_submission
+    @submission.device_institution_id = 'new'
+    store_submission
+    device_institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
+    session[:submission_device_institution_create_params] = device_institution_model_params
+    render_and_save 'device_create'
   end
 
   def stage_media
@@ -252,6 +259,7 @@ class SubmissionsController < ApplicationController
     @cho_create_params = session[:submission_cho_create_params]
     @imaging_event_create_params = session[:submission_imaging_event_create_params]
     @institution_create_params = session[:submission_institution_create_params]
+    @device_institution_create_params = session[:submission_device_institution_create_params]
     @device_create_params = session[:submission_device_create_params]
     @media_create_params = session[:submission_media_create_params]
     @processing_event_create_params = session[:submission_processing_event_create_params]
@@ -259,6 +267,9 @@ class SubmissionsController < ApplicationController
     media_uploaded_files = session[:submission_media_uploaded_files]
     if @institution_create_params.present?
       @submission.institution_id = create_institution(@institution_create_params)
+    end
+    if @device_institution_create_params.present?
+      @submission.device_institution_id = create_institution(@device_institution_create_params)
     end
     if @taxonomy_create_params.present?
       @submission.taxonomy_id = create_taxonomy(@taxonomy_create_params)
@@ -314,7 +325,13 @@ class SubmissionsController < ApplicationController
   def create_device(params)
     parent_attributes = {}
     if @submission.device_institution_id.present?
-      parent_attributes.merge!({ '0' => { "id" => @submission.device_institution_id, "_destroy" => "false" } })
+      if @submission.device_institution_id == 'new_institution_id_to_be_created'
+        # user has selected the new institution which is waiting to be created
+        # at this point this new institution has been created.  set the id to the new institution id
+        parent_attributes.merge!({ '0' => { "id" => @submission.institution_id, "_destroy" => "false" } })
+      else
+        parent_attributes.merge!({ '0' => { "id" => @submission.device_institution_id, "_destroy" => "false" } })
+      end
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)

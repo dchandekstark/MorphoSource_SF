@@ -78,6 +78,15 @@
       </dl>
     <% end %>
   <% end %>
+  <h4>Device Institution Create Params</h4>
+  <% if @device_institution_create_params.present? %>
+    <% @device_institution_create_params.each do |k,v| %>
+      <dl class="row">
+        <dt class="col-sm-3"><%= k %></dt>
+        <dd class="col-sm-9"><%= v %></dd>
+      </dl>
+    <% end %>
+  <% end %>
   <h4>Taxonomy Create Params</h4>
   <% if @taxonomy_create_params.present? %>
     <% @taxonomy_create_params.each do |k,v| %>

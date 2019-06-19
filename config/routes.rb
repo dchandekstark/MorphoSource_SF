@@ -91,6 +91,7 @@ Rails.application.routes.draw do
       post 'stage_device'
       post 'stage_imaging_event'
       post 'stage_institution'
+      post 'stage_device_institution'
       post 'stage_media'
       post 'stage_processing_event'
       post 'stage_cho'
@@ -104,6 +105,7 @@ Rails.application.routes.draw do
   get '/submissions/stage_device', to: redirect('/submissions/new')
   get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
   get '/submissions/stage_institution', to: redirect('/submissions/new')
+  get '/submissions/stage_device_institution', to: redirect('/submissions/new')
   get '/submissions/stage_media', to: redirect('/submissions/new')
   get '/submissions/stage_processing_event', to: redirect('/submissions/new')
   get '/submissions/stage_cho', to: redirect('/submissions/new')
