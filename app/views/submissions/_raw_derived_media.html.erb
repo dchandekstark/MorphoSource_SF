@@ -1,15 +1,15 @@
 <div id="submission_choose_raw_or_derived_media">
   <%= f.input :raw_or_derived_media, as: :hidden %>
-	<p>We need to gather some initial information about your media. Please select all that apply.</p>
+	<p><%= t('morphosource.submission.initial_information') %></p>
 
 	<div class="checkbox_group">
 		<div>
 			<input id="cb_derived" name="cb_derived" type="checkbox">
-			<label>My media is derived from some parent media file(s). Select this even if you do not plan to upload the parent media file(s). We consider CT reconstructions to be derived from parent CT projection media, even though in most cases we suggest users do not upload projections.</label>
+		  <label><%= t('simple_form.labels.submission.cb_derived') %></label>
 		</div>
 		<div>
 		  <input id="cb_child_media_in_ms" name="cb_child_media_in_ms" type="checkbox">
-		  <label>There is/are media already on MorphoSource that are derived from my media file.</label>
+		  <label><%= t('simple_form.labels.submission.cb_child_media_in_ms') %></label>
 		</div>
 	</div>
 

@@ -14,9 +14,10 @@ RSpec.describe 'submissions/_raw_derived_media', type: :view do
     render inline: form_template
     Capybara::Node::Simple.new(rendered)
   end
-  it 'displays the raw/derived media question' do
-    expect(page).to have_content(I18n.t('simple_form.labels.submission.raw_or_derived_media'))
-    expect(page).to have_unchecked_field(Submission::MEDIA_RAW)
-    expect(page).to have_unchecked_field(Submission::MEDIA_DERIVED)
+  it 'displays the initial information question' do
+    expect(page).to have_content(I18n.t('simple_form.labels.submission.cb_derived'))
+    expect(page).to have_content(I18n.t('simple_form.labels.submission.cb_child_media_in_ms'))
+    expect(page).to have_unchecked_field('cb_derived')
+    expect(page).to have_unchecked_field('cb_child_media_in_ms')
   end
 end

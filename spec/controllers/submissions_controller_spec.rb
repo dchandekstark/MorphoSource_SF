@@ -54,16 +54,16 @@ RSpec.describe SubmissionsController, type: :controller do
       end
     end
 
-    describe 'institution_select when creating new device' do
+    describe 'device_institution_select when creating new device' do
       let(:saved_step) {'device_will_create'}
       let(:institution_id) { 'abc123' }
-      let(:form_params) { { submission: { institution_id: institution_id }, institution_select: 'foo' } }
+      let(:form_params) { { submission: { device_institution_id: institution_id }, institution_select: 'foo' } }
       before do
         @request.session['submission'] = {saved_step: saved_step}
       end
-      it 'sets the institution id in the session' do
+      it 'sets the device institution id in the session' do
         post :create, params: form_params
-        expect(@request.session[:submission]).to include({ institution_id: institution_id })
+        expect(@request.session[:submission]).to include({ device_institution_id: institution_id })
       end
       it 'renders the device create view' do
         post :create, params: form_params
@@ -89,15 +89,30 @@ RSpec.describe SubmissionsController, type: :controller do
     end
 
     describe 'device_select' do
-      let(:device_id) { 'abc123' }
-      let(:form_params) { { submission: { device_id: device_id }, device_select: 'foo' } }
       before do
+        Device.create({
+            id: 'abc123',
+            title: ['XTekCT 100'],
+            creator: ['Nikon'],
+            modality: ['MedicalXRayComputedTomography'],
+            facility: ['Duke SMIF'],
+            description: ['A sample description']
+        })
         @request.session['submission'] = {}
       end
+      let(:device_id) { 'abc123' }
+      let(:form_params) { { submission: { device_id: device_id }, device_select: 'XTekCT 100' } }
+
       it 'sets the device id in the session' do
         post :create, params: form_params
         expect(@request.session[:submission]).to include({ device_id: device_id })
       end
+
+      it 'sets modality_to_set in cookie' do
+        post :create, params: form_params
+        expect(response.cookies["modality_to_set"]).to eq('MedicalXRayComputedTomography')
+      end
+
       it 'renders the device view' do
         post :create, params: form_params
         expect(response).to render_template(:image_capture)
@@ -131,13 +146,17 @@ RSpec.describe SubmissionsController, type: :controller do
 
   describe '#stage_device' do
     let(:form_attributes) do
-      { 'title' => 'Device', 'creator' => [ 'Panasonic' ] }
+      { 'title' => 'Device', 'creator' => [ 'Panasonic' ], 'modality' => [ 'Photography' ] }
     end
     let(:form_params) { { device: form_attributes } }
     let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
     it 'stores the model attributes in the session' do
       post :stage_device, params: form_params
       expect(@request.session[:submission_device_create_params]).to include(model_attributes)
+    end
+    it 'sets modality_to_set in cookie' do
+      post :stage_device, params: form_params
+      expect(response.cookies["modality_to_set"]).to eq('Photography')
     end
     it 'renders the image_capture view' do
       post :stage_device, params: form_params
@@ -181,7 +200,7 @@ RSpec.describe SubmissionsController, type: :controller do
     end
   end
 
-  describe '#stage_institution when creating new device' do
+  describe '#stage_device_institution when creating new device' do
     let(:saved_step) {'device_will_create'}
     before do
       @request.session['submission'] = {saved_step: saved_step}
@@ -192,11 +211,11 @@ RSpec.describe SubmissionsController, type: :controller do
     let(:form_params) { { institution: form_attributes } }
     let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
     it 'stores the model attributes in the session' do
-      post :stage_institution, params: form_params
-      expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
+      post :stage_device_institution, params: form_params
+      expect(@request.session[:submission_device_institution_create_params]).to include(model_attributes)
     end
     it 'renders the device create view' do
-      post :stage_institution, params: form_params
+      post :stage_device_institution, params: form_params
       expect(response).to render_template(:device_create)
     end
   end
