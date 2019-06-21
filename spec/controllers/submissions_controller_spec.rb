@@ -119,6 +119,30 @@ RSpec.describe SubmissionsController, type: :controller do
       end
     end
 
+    describe 'parent_media_select' do
+      before do
+        Media.create({
+            id: 'abc123',
+            title: ['media 1'],
+            modality: ['MedicalXRayComputedTomography']
+        })
+        @request.session['submission'] = {}
+      end
+      let(:media_id) { 'abc123' }
+      let(:form_params) { { submission: { parent_media_list: 'abc123' }, parent_media_select: 'media 1' } }
+
+      it 'sets modality_to_set in cookie' do
+        post :create, params: form_params
+        expect(response.cookies["modality_to_set"]).to eq('MedicalXRayComputedTomography')
+      end
+
+      it 'renders the processing event' do
+        post :create, params: form_params
+        expect(response).to render_template(:processing_event)
+      end
+    end
+
+
     describe 'default' do
       let(:form_params) { { submission: {} } }
       it 'finishes the submission' do

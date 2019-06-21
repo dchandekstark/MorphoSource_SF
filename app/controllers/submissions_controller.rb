@@ -328,10 +328,9 @@ class SubmissionsController < ApplicationController
       if @submission.device_institution_id == 'new_institution_id_to_be_created'
         # user has selected the new institution which is waiting to be created
         # at this point this new institution has been created.  set the id to the new institution id
-        parent_attributes.merge!({ '0' => { "id" => @submission.institution_id, "_destroy" => "false" } })
-      else
-        parent_attributes.merge!({ '0' => { "id" => @submission.device_institution_id, "_destroy" => "false" } })
+        @submission.device_institution_id = @submission.institution_id
       end
+      parent_attributes.merge!({ '0' => { "id" => @submission.device_institution_id, "_destroy" => "false" } })
     end
     unless parent_attributes.empty?
       params.merge!('work_parents_attributes' => parent_attributes)
