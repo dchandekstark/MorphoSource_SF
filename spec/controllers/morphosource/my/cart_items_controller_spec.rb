@@ -75,7 +75,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
   describe "#create" do
 
     context 'item is not in cart' do
-      let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work22.id, :work_type => "Media"} }
+      let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work22.id, :work_type => "Media", :fileset_accessibility => 'open'} }
 
       it "creates a new CartItem" do
         expect{

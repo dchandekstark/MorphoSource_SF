@@ -1,20 +1,10 @@
 <% if f.object.embargo_release_date %>
   <%= render 'form_permission_under_embargo', f: f %>
-    <% if f.object.model_name.name == 'Media' %>
-      <%= render 'hyrax/base/file_set_visibility', f: f %>
-    <% end %>
 <% elsif f.object.lease_expiration_date %>
   <%= render 'form_permission_under_lease', f: f %>
-    <% if f.object.model_name.name == 'Media' %>
-      <%= render 'hyrax/base/file_set_visibility', f: f %>
-    <% end %>
 <% else %>
     <fieldset>
-      <% if f.object.model_name.name == 'Media' %>
-        <legend class="legend-save-work">Work Visibility</legend>
-      <% else %>
-        <legend class="legend-save-work">Visibility</legend>
-      <% end %>
+      <legend class="legend-save-work">Visibility</legend>
       <ul class="visibility">
         <li class="radio">
           <label>
@@ -78,7 +68,4 @@
       </ul>
     </fieldset>
     <br />
-    <% if f.object.model_name.name == 'Media' %>
-     <%= render 'hyrax/base/file_set_visibility', f: f %>
-   <% end %>
 <% end %>

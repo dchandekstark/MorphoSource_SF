@@ -26,5 +26,5 @@
 //= require morphosource/ms_app
 //= require morphosource/ms_editor
 //= require morphosource/media/upload_formats
-//= require morphosource/media/file_set_visibility
+//= require morphosource/media/select_publication_status
 //= require morphosource/ms_save_work_control

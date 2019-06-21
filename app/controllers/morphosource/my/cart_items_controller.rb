@@ -101,6 +101,10 @@ module Morphosource
 
       private
 
+        def file_restricted?(accessibility)
+          params[:file_accessibility] == "restricted_download"
+        end
+
         def works_in_cart
           current_user.work_ids_in_cart
         end
