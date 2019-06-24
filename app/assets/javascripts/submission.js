@@ -1,23 +1,30 @@
-$(document).on('ready', function(){
+$( document ).on('turbolinks:load', function() {
 
   if ($('div[class="submission_flow"]').length) { // check if the page is submission flow page
     cookie_expired_days = 7;
-    // Begin Raw media flow
+
     $('#submission_choose_raw_or_derived_media_continue').click(function(event){
       event.preventDefault();
-      var selected = $('input[name="submission[raw_or_derived_media]"]:checked').val();
-      if (selected == 'Raw') {
+      if ($('#cb_child_media_in_ms').is(':checked')) {
+        // users are directed to visit the child media page to add that media. 
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
-        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
-        saveClick('#submission_raw_or_derived_media_raw,#submission_choose_raw_or_derived_media_continue', true);
-      } else if (selected == 'Derived') {
+        $('div#submission_child_media_in_ms').addClass('show').removeClass('hide');
+        //saveClick('#cb1,#submission_choose_raw_or_derived_media_continue', true);
+      } else if ($('#cb_derived').is(':checked')) {
+        $('input#submission_raw_or_derived_media').val('Derived');
         $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
         $('div#submission_parents_in_ms').addClass('show').removeClass('hide');
-        saveClick('#submission_raw_or_derived_media_derived,#submission_choose_raw_or_derived_media_continue', true);
+        saveClick('#cb_derived,#submission_choose_raw_or_derived_media_continue', true);
+      } else {
+        // If nothing checked, go to "Raw" flow
+        $('input#submission_raw_or_derived_media').val('Raw');
+        $('div#submission_choose_raw_or_derived_media').addClass('hide').removeClass('show');
+        $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
+        saveClick('#submission_choose_raw_or_derived_media_continue', true);
       }
-      $('#start_over').show();
     });
 
+    // Begin Raw media flow
     $('#submission_choose_biospec_or_cho_continue').click(function(event){
       event.preventDefault();
       var selected = $('input[name="submission[biospec_or_cho]"]:checked').val();
@@ -44,6 +51,13 @@ $(document).on('ready', function(){
       $('div#submission_institution_select').addClass('hide').removeClass('show');
       $('div#submission_choose_create_institution').addClass('hide').removeClass('show');;
       $('div#submission_create_institution').addClass('show').removeClass('hide');
+    });
+
+    $('a#submission_show_create_device_institution').click(function(event){
+      event.preventDefault();
+      $('div#submission_device_institution_select').addClass('hide').removeClass('show');
+      $('div#submission_choose_create_device_institution').addClass('hide').removeClass('show');;
+      $('div#submission_create_device_institution').addClass('show').removeClass('hide');
     });
 
     $('a#submission_show_create_taxonomy').click(function(event){
@@ -73,16 +87,21 @@ $(document).on('ready', function(){
       setCookie('saved_clicks', saved_clicks + id, cookie_expired_days);
     }
 
+    clearCookies = function() {
+      deleteCookie('saved_clicks');
+      deleteCookie('last_render');
+      deleteCookie('saved_step');
+      deleteCookie('absentee_parent');
+      deleteCookie('modality_to_set');
+    }
+
     $('#btn_parent_media_how_to_proceed_continue').click(function(event){
       event.preventDefault();
       $('div#submission_parents_not_in_ms').addClass('hide').removeClass('show');
       if ( $('input[name="submission[parent_media_how_to_proceed]"]:checked').val() == 'now' ) {
         // start over
         $('div#submission_choose_raw_or_derived_media').addClass('show').removeClass('hide');
-        deleteCookie('saved_clicks');
-        deleteCookie('last_render');
-        deleteCookie('saved_step');
-        deleteCookie('absentee_parent');
+        clearCookies();
       } else {
         // go to physical object
         $('#submission_choose_biospec_or_cho').addClass('show').removeClass('hide');
@@ -99,7 +118,8 @@ $(document).on('ready', function(){
       if (confirm('Click OK to start over, or CONFIRM to stay on the page')) {
         // set a cookie to clear all session variables when loading the initial page
         setCookie('ms_submission_start_over', 'yes', cookie_expired_days);
-        location.href = "/submissions/new";
+        clearCookies();
+        location.href = "/submissions";
       }
     });
 
@@ -130,6 +150,14 @@ $(document).on('ready', function(){
       $('input[id="submission_parent_media_search"]').val('');
       $("input.parent_id").val('');
       $("input.parent_title").val('');
+    });
+
+    $('input#submission_parent_media_search').on('keypress',function(e) {
+      if (e.which == 13) {
+        // pressing enter key on this field should add a parent instead of submitting the form
+        event.preventDefault();
+        $('#btn_add_parent').trigger('click');
+      }
     });
 
     $('#btn_add_taxonomy').click(function(event){
@@ -224,6 +252,41 @@ $(document).on('ready', function(){
         $('#start_over').hide();
       }
     }
+
+
+    // set modality if needed
+    if ($('select[name*="modality"]').length) { 
+      //console.log('modality dropdown found');
+
+      if (getCookie('modality_to_set')) {
+        var modality_to_set = getCookie('modality_to_set').split(',');
+
+        $.each(modality_to_set, function(i, modality) {
+          var modality_select = 'select[name*="modality"]:eq(' + i +')';
+          // if more than 1 modality, add the modality dropdown before selecting
+          if (i > 0) {
+            $('.media_modality button.add').trigger('click');
+          }
+          $(modality_select + ' option[value="' + modality + '"]').attr('selected','selected');
+        });
+
+        $('input[name=commit]').click(function(event){
+          // ok to submit the form as long as there is at least one modality is selected with the same value
+          var modality_matched = false;
+          $('select[name*="modality"]').each(function() {
+            if ($.inArray($(this).val(), modality_to_set) != -1) {
+              modality_matched = true;
+            }
+          });
+          if (modality_matched) {
+            return true;
+          } else {
+            alert("Modality " + modality_to_set + " was set in a previous step.  Please select the same modality, or start over.");              
+            return false;
+          }
+        });
+      }
+    }    
 
   } // end if the page is submission flow page
 });

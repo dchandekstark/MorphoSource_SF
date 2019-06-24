@@ -10,6 +10,7 @@ class Submission
                 :device_id,
                 :imaging_event_id,
                 :institution_id,
+                :device_institution_id,
                 :media_id,
                 :processing_event_id,
                 :raw_or_derived_media,
@@ -24,7 +25,8 @@ class Submission
                 :taxonomy_id,
                 :taxonomy_search,
                 :is_start_over,
-                :saved_step
+                :saved_step,
+                :modality
 
 
   MEDIA_DERIVED = 'Derived'

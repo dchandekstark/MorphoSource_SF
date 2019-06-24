@@ -2,8 +2,9 @@ en:
   morphosource:
     submission:
       page_title: 'Submit Media // MorphoSource'
-      page_header: 'Submission page header here'
+      page_header: 'Submit Media'
       continue: 'Continue'
+      initial_information: 'We need to gather some initial information about your media. Please select all that apply.'
       biospec_search: 'Search for a Biological Specimen already in MorphoSource or iDigBio, or create a new Biological Specimen'
       device_select: 'Select the device used to capture this media, or create new device'
       image_capture_details: 'Enter image capture details'
@@ -19,6 +20,8 @@ en:
   simple_form:
     labels:
       submission:
+        cb_derived: 'My media is derived from some parent media file(s). Select this even if you do not plan to upload the parent media file(s). We consider CT reconstructions to be derived from parent CT projection media, even though in most cases we suggest users do not upload projections.'
+        cb_child_media_in_ms: 'There is/are media already on MorphoSource that are derived from my media file.'
         biospec_id: 'Biological Specimens in MorphoSource'
         biospec_or_cho: 'Is the physical object represented by the media a biological specimen or a cultural heritage object?'
         biospec_search_catalog_number: 'Catalog Number'
@@ -28,7 +31,7 @@ en:
         biospec_search_ms_specimen_id: 'MS Specimen ID'
         biospec_search_occurrence_id: 'Occurrence ID'
         biospec_search_species: 'Species'
-        raw_or_derived_media: 'Is this media raw or derived?'
+        #raw_or_derived_media: 'Is this media raw or derived?'
         cho_id: 'Cultural Heritage Object in MorphoSource'
         cho_search_catalog_number: 'Catalog Number'
         cho_search_collection_code: 'Collection Code'
