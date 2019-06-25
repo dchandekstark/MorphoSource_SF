@@ -1,45 +1,3 @@
-// Javascript view functions for show/edit forms
-
-function show_fields(field_array) {
-	$(field_array.join(',')).removeClass('hide');
-}
-
-function hide_fields(field_array, clear = true) {
-	$(field_array.join(',')).addClass('hide');
-	if (clear) {
-		$(field_array.join(',')).children('input, select').val('');
-	}
-}
-
-function adjust_form_media_type() {
-	if ($('#media_media_type').val() == 'CTImageSeries') {
-		show_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit']);
-		hide_fields(['.media_map_type', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
-	} else if ($('#media_media_type').val() == 'PhotogrammetryImageSeries') {
-		show_fields(['#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
-		hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit', '.media_map_type']);
-	} else if ($('#media_media_type').val() == 'Mesh') {
-		show_fields(['.media_unit', '.media_map_type']);
-		hide_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
-	} else {
-		hide_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit', '.media_map_type', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
-	}
-}
-
-// Puts concatenated values into rightsHolder on submit.
-function buildTargetField(inputValue, targetGroupUl) {
-  var li = document.createElement('li');
-
-  var input = document.createElement('input');
-  input.className = 'string multi_value optional media_rights_holder form-control multi-text-field';
-  input.setAttribute("id", "media_rights_holder");
-  input.setAttribute("name", "media[rights_holder][]");
-  input.value = inputValue;
-
-  li.appendChild(input);
-  targetGroupUl.appendChild(li);
-}
-
 $(document).on('turbolinks:load', function() {
   if ($('form[id*="media"]').length) { // if media form page
 	hide_fields(['.media_number_of_images_in_set','.media_scale_bar']);
@@ -144,9 +102,38 @@ $(document).on('turbolinks:load', function() {
       }
     });
 
+    function adjust_form_media_type() {
+      if ($('#media_media_type').val() == 'CTImageSeries') {
+        show_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit']);
+        hide_fields(['.media_map_type', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
+      } else if ($('#media_media_type').val() == 'PhotogrammetryImageSeries') {
+        show_fields(['#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
+        hide_fields(['.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit', '.media_map_type']);
+      } else if ($('#media_media_type').val() == 'Mesh') {
+        show_fields(['.media_unit', '.media_map_type']);
+        hide_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
+      } else {
+        hide_fields(['.media_series_type', '.media_x_spacing', '.media_y_spacing', '.media_z_spacing', '.media_slice_thickness', '.media_unit', '.media_map_type', '#media_scale_bar_wrapper', '#media_scale_bar_target_type', '#media_scale_bar_distance', '#media_scale_bar_units']);
+      }
+    }
+
+    // Puts concatenated values into rightsHolder on submit.
+    function buildTargetField(inputValue, targetGroupUl) {
+      var li = document.createElement('li');
+      var input = document.createElement('input');
+      input.className = 'string multi_value optional media_rights_holder form-control multi-text-field';
+      input.setAttribute("id", "media_rights_holder");
+      input.setAttribute("name", "media[rights_holder][]");
+      input.value = inputValue;
+
+      li.appendChild(input);
+      targetGroupUl.appendChild(li);
+    }
+
+    $(document).on('change', '#media_media_type', function() {
+      adjust_form_media_type();
+    });
+
   } // end if media form page
 })
 
-$(document).on('change', '#media_media_type', function() {
-	adjust_form_media_type();
-});

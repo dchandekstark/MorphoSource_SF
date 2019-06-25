@@ -1,34 +1,5 @@
-// Javascript view functions for show/edit forms
-
-function show_fields(field_array) {
-	$(field_array.join(',')).removeClass('hide');
-}
-
-function hide_fields(field_array, clear = true) {
-	$(field_array.join(',')).addClass('hide');
-	if (clear) {
-		$(field_array.join(',')).children('input, select').val('');
-	}
-}
-
-
-
-// Puts concatenated values into processingActivityHolder on submit.
-function buildTargetField(inputValue, targetGroupUl) {
-  var li = document.createElement('li');
-
-  var input = document.createElement('input');
-  input.className = 'string multi_value optional processing_event_processing_activity form-control multi-text-field';
-  input.setAttribute("id", "processing_event_processing_activity");
-  input.setAttribute("name", "processing_event[processing_activity][]");
-  input.value = inputValue;
-
-  li.appendChild(input);
-  targetGroupUl.appendChild(li);
-}
-
 $(document).on('turbolinks:load', function() {
-  if ($('form[id*="processing_event"]').length) { // if media form page
+  if ($('form[id*="processing_event"]').length) { // if PE form page
   	//hide_fields(['.processing_event_processing_activity']);
     
     // concatenate rights holder name, type to rights holder
@@ -38,6 +9,15 @@ $(document).on('turbolinks:load', function() {
     var targetGroup = document.querySelector('div.processing_event_processing_activity');
     var targetGroupUl = targetGroup.querySelector("ul");
     var concatFields = targetGroup.querySelectorAll("input");
+    console.log(Array.from(concatFields));
+
+
+
+    // need to sort concatFields
+
+
+
+    
     var concatFieldCount = (targetGroup.querySelectorAll("input").length) - 1;
 
     // Two part processingActivity entry
@@ -48,47 +28,59 @@ $(document).on('turbolinks:load', function() {
     // When editing a record, this populates the rightsHolder fields with previously saved metadata.
     for (i = 0; i < concatFieldCount; i++) {
       var concatFieldValue = concatFields[i].value;
-      //console.log('concatFieldValue: '+concatFieldValue);
+      console.log('concatFieldValue: '+concatFieldValue);
 
-      var type = concatFieldValue.match(/Type: (.*?), Software: /)[1];
-      var software = concatFieldValue.match(/Software: (.*)/)[1];
+      var step = concatFieldValue.match(/^([0-9]+), Type: /)[1];
+      var type = concatFieldValue.match(/, Type: (.*), Software: /)[1];
+      var software = concatFieldValue.match(/, Software: (.*), Description: /)[1];
+      var description = concatFieldValue.match(/, Description: (.*)/)[1];
 
       // Fill in values for first line
       if (i == 0) {
-        var typeSelectOject = $('select[name="media[rights_holder_type][]"]')[0];
+        var typeSelectOject = $('select[name="processing_event[processing_activity_type][]"]')[0];
         for (var x = 0; x < typeSelectOject.length; x++){
           if (typeSelectOject.options[x].value == type)
             typeSelectOject.selectedIndex = x;
         }
-        $('input[name="media[rights_holder_name][]"]')[0].value = name;
+        $('input[name="processing_event[processing_activity_software][]"]')[0].value = software;
+        $('input[name="processing_event[processing_activity_description][]"]')[0].value = description;
       } else {
-        // Assemble new name, type 
+        // Assemble new triple fields
         var li = document.createElement('li');
         li.className = 'field-wrapper input-group input-append';
         li.setAttribute('style', "display:flex; flex-direction:row; justify-content:space-evenly;");
 
-        var nameInput = document.createElement('input');
-        nameInput.className = "string multi_value optional form-control media_rights_holder_name form-control multi-text-field";
-        nameInput.setAttribute("id", "media_rights_holder_name");
-        nameInput.setAttribute("name", "media[rights_holder_name][]");
-        nameInput.setAttribute("style", "margin:5px; width:50%; border-radius:5px;");
-        nameInput.value = name;
-        li.appendChild(nameInput);
-
         $('<select />', {
-          id : "media_rights_holder_type_"+i,
-          name : 'media[rights_holder_type][]',
+          id : "processing_event_processing_activity_type_"+i,
+          name : 'processing_event[processing_activity_type][]',
           class : "form-control select optional form-control",
-          style : "margin:5px; width:50%; border-radius:5px;",
+          style : "margin:5px; width:33%; border-radius:5px;",
           append : [
             $('<option />', {value : "", text : ""}),
-            $('<option />', {value : "Copyright and License", text : "Copyright and License"}),
-            $('<option />', {value : "Copyright", text : "Copyright"}),
-            $('<option />', {value : "License", text : "License"})
+            $('<option />', {value : "type 1", text : "type 1"}),
+            $('<option />', {value : "type 2", text : "type 2"}),
+            $('<option />', {value : "type 3", text : "type 3"})
           ]
         }).appendTo(li);
         // select the existing option
         $(li).find('select').val(type);
+
+        var softwareInput = document.createElement('input');
+        softwareInput.className = "string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field";
+        softwareInput.setAttribute("id", "processing_event_processing_activity_software");
+        softwareInput.setAttribute("name", "processing_event[processing_activity_software][]");
+        softwareInput.setAttribute("style", "margin:5px; width:33%; border-radius:5px;");
+        softwareInput.value = software;
+        li.appendChild(softwareInput);
+
+        var descriptionInput = document.createElement('input');
+        descriptionInput.className = "string multi_value optional form-control processing_event_processing_activity_description form-control multi-text-field";
+        descriptionInput.setAttribute("id", "processing_event_processing_activity_description");
+        descriptionInput.setAttribute("name", "processing_event[processing_activity_description][]");
+        descriptionInput.setAttribute("style", "margin:5px; width:33%; border-radius:5px;");
+        descriptionInput.value = description;
+        li.appendChild(descriptionInput);
+
 
         var span = document.createElement('span');
         span.className = "input-group-btn field-controls";
@@ -96,7 +88,7 @@ $(document).on('turbolinks:load', function() {
                             <span class="glyphicon glyphicon-remove"></span>
                             <span class="controls-remove-text">Remove</span>
                             <span class="sr-only"> previous
-                              <span class="controls-field-name-text"> RIGHTS HOLDER</span>
+                              <span class="controls-field-name-text"> processing_event</span>
                             </span>
                           </button>`
 
@@ -109,7 +101,7 @@ $(document).on('turbolinks:load', function() {
 
     // Clear default rightsHolder fields when done.
     targetGroupUl.innerHTML = '';
-    $(targetGroup).hide(); // hide the field label and add button
+//    $(targetGroup).hide(); // hide the field label and add button
 
     // On submit, the three fields are concatenated and inserted into hidden default processing activity field.
     form.addEventListener("submit", function() {
@@ -122,15 +114,33 @@ $(document).on('turbolinks:load', function() {
 
         // As long as at least one input is filled out, proceed with creating a processingActivity string. Otherwise, create an empty string.
         if ((processingActivityType != '') || (processingActivitySoftware != '')) {
-          var processingActivity = "Type: " + processingActivityType + ", Software: " + processingActivitySoftware + ", Description: " + processingActivityDescription;
+          var stepNumber = i + 1;
+          var processingActivity = stepNumber + ", Type: " + processingActivityType + ", Software: " + processingActivitySoftware + ", Description: " + processingActivityDescription;
         } else {
           var processingActivity = '';
         }
-        alert('processingActivity: '+processingActivity);
         buildTargetField(processingActivity, targetGroupUl);
+        //alert('processingActivity: '+processingActivity);
+        // clear the individual fields to avoid confusion
+        $('select[name="processing_event[processing_activity_type][]"]')[i].value = '';
+        $('input[name="processing_event[processing_activity_software][]"]')[i].value = '';
+        $('input[name="processing_event[processing_activity_description][]"]')[i].value = '';
       }
     });
 
-  } // end if media form page
+    // Puts concatenated values into processingActivityHolder on submit.
+    function buildTargetField(inputValue, targetGroupUl) {
+      var li = document.createElement('li');
+      var input = document.createElement('input');
+      input.className = 'string multi_value optional processing_event_processing_activity form-control multi-text-field';
+      input.setAttribute("id", "processing_event_processing_activity");
+      input.setAttribute("name", "processing_event[processing_activity][]");
+      input.value = inputValue;
+
+      li.appendChild(input);
+      targetGroupUl.appendChild(li);
+    }
+
+  } // end if PE form page
 })
 

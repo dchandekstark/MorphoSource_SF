@@ -15,7 +15,7 @@ module Hyrax
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
-      :processing_activity_count, :processing_activity_type, :processing_activity_software, :processing_activity_description, 
+      :processing_activity_count, :processing_activity,
       :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
@@ -186,12 +186,12 @@ module Hyrax
         @processing_event_count = processing_events.count 
         processing_events.each do |processing_event|
           processing_event_ids << processing_event.id
-          @processing_activity_type = processing_event.processing_activity_type 
-          @processing_activity_software = processing_event.processing_activity_software
-          @processing_activity_description = processing_event.processing_activity_description 
+          @processing_activity = processing_event.processing_activity 
+#          @processing_activity_software = processing_event.processing_activity_software
+ #         @processing_activity_description = processing_event.processing_activity_description 
         end
-        if @processing_activity_type.present?
-          @processing_activity_count = @processing_activity_type.length
+        if @processing_activity.present?
+          @processing_activity_count = @processing_activity.length
         else
           @processing_activity_count = 0
         end

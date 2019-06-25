@@ -6,16 +6,18 @@
 
   <ul class="listing" aria-live="polite" style=" border:solid 1px lightgray; border-radius: 5px;">
     <div id="processing_activity_labels" style="display:flex; flex-direction:row; justify-content:space-evenly; margin-top:.5em;">
-      <div style="width:33%;margin-left:8px"><label for="processing_event_processing_activity_type">Type</label></div>
+      <div style="width:10%;margin-left:8px"><label for="processing_event_processing_activity_step">Step</label></div>
+      <div style="width:23%;margin-left:8px"><label for="processing_event_processing_activity_type">Type</label></div>
       <div style="width:33%;margin-left:8px"><label for="processing_event_processing_activity_software">Software</label></div>
       <div style="width:33%;margin-left:8px"><label for="processing_event_processing_activity_type">Description</label></div>
     </div>
     <li class="field-wrapper input-group input-append" style="display:flex; flex-direction:row; justify-content:space-evenly;">
-      <select class="form-control select optional form-control" name="processing_event[processing_activity_type][]" id="processing_event_processing_activity_type" style="margin:5px; width:33%;">
+      <input class="string multi_value optional form-control processing_event_processing_activity_step form-control multi-text-field" name="processing_event[processing_activity_step][]" value="" id="processing_event_processing_activity_step" type="text" style="margin:5px; width:10%; border-radius:5px;">
+      <select class="form-control select optional form-control" name="processing_event[processing_activity_type][]" id="processing_event_processing_activity_type" style="margin:5px; width:23%;">
         <option value=""></option>
-        <option value="Copyright and License">Copyright and License</option>
-        <option value="Copyright">Copyright</option>
-        <option value="License">License</option>
+        <option value="type 1">type 1</option>
+        <option value="type 2">type 2</option>
+        <option value="type 3">type 3</option>
       </select>
       <input class="string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field" name="processing_event[processing_activity_software][]" value="" id="processing_event_processing_activity_software" type="text" style="margin:5px; width:33%; border-radius:5px;">
       <input class="string multi_value optional form-control processing_event_processing_activity_description form-control multi-text-field" name="processing_event[processing_activity_description][]" value="" id="processing_event_processing_activity_description" type="text" style="margin:5px; width:33%; border-radius:5px;">
