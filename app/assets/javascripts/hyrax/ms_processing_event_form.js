@@ -9,7 +9,6 @@ $(document).on('turbolinks:load', function() {
     var targetGroup = document.querySelector('div.processing_event_processing_activity');
     var targetGroupUl = targetGroup.querySelector("ul");
     var concatFields = targetGroup.querySelectorAll("input");
-    console.log(Array.from(concatFields));
 
 
 
@@ -17,7 +16,7 @@ $(document).on('turbolinks:load', function() {
 
 
 
-    
+
     var concatFieldCount = (targetGroup.querySelectorAll("input").length) - 1;
 
     // Two part processingActivity entry
@@ -25,17 +24,23 @@ $(document).on('turbolinks:load', function() {
     var targetWrapperUl = targetWrapper.querySelector('ul');
     var targetWrapperLi = targetWrapper.querySelector('li');
 
-    // When editing a record, this populates the rightsHolder fields with previously saved metadata.
+    // remove the first set of fields if in editing (not adding) mode
+    if (concatFieldCount > 0) {
+      $(targetWrapperUl).children("li").remove();
+    }
+
+    // When editing a record, this populates the individual fields with previously saved metadata.
     for (i = 0; i < concatFieldCount; i++) {
       var concatFieldValue = concatFields[i].value;
-      console.log('concatFieldValue: '+concatFieldValue);
+      //console.log('concatFieldValue: '+concatFieldValue);
 
-      var step = concatFieldValue.match(/^([0-9]+), Type: /)[1];
+      var step = concatFieldValue.match(/^Step: ([0-9]+), Type: /)[1];
       var type = concatFieldValue.match(/, Type: (.*), Software: /)[1];
       var software = concatFieldValue.match(/, Software: (.*), Description: /)[1];
       var description = concatFieldValue.match(/, Description: (.*)/)[1];
 
       // Fill in values for first line
+/*
       if (i == 0) {
         var typeSelectOject = $('select[name="processing_event[processing_activity_type][]"]')[0];
         for (var x = 0; x < typeSelectOject.length; x++){
@@ -45,10 +50,21 @@ $(document).on('turbolinks:load', function() {
         $('input[name="processing_event[processing_activity_software][]"]')[0].value = software;
         $('input[name="processing_event[processing_activity_description][]"]')[0].value = description;
       } else {
+*/
+
         // Assemble new triple fields
         var li = document.createElement('li');
-        li.className = 'field-wrapper input-group input-append';
+        li.className =  'field-wrapper input-group input-append';
         li.setAttribute('style', "display:flex; flex-direction:row; justify-content:space-evenly;");
+        li.setAttribute('data-step', step);
+
+        var stepInput = document.createElement('input');
+        stepInput.className = "string multi_value optional form-control processing_event_processing_activity_step form-control multi-text-field";
+        stepInput.setAttribute("id", "processing_event_processing_activity_step");
+        stepInput.setAttribute("name", "processing_event[processing_activity_step][]");
+        stepInput.setAttribute("style", "margin:5px; width:10%; border-radius:5px;");
+        stepInput.value = step;
+        li.appendChild(stepInput);
 
         $('<select />', {
           id : "processing_event_processing_activity_type_"+i,
@@ -69,7 +85,7 @@ $(document).on('turbolinks:load', function() {
         softwareInput.className = "string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field";
         softwareInput.setAttribute("id", "processing_event_processing_activity_software");
         softwareInput.setAttribute("name", "processing_event[processing_activity_software][]");
-        softwareInput.setAttribute("style", "margin:5px; width:33%; border-radius:5px;");
+        softwareInput.setAttribute("style", "margin:5px; width:23%; border-radius:5px;");
         softwareInput.value = software;
         li.appendChild(softwareInput);
 
@@ -93,11 +109,22 @@ $(document).on('turbolinks:load', function() {
                           </button>`
 
         li.appendChild(span);
-
         targetWrapperUl.appendChild(li);
 
-      }
+//      }
     }
+    console.log(targetWrapperUl);
+
+
+    $(targetWrapperUl).children("li").detach().sort(function(a, b) {
+      console.log($(a).data('step'));
+      //return $(a).data('step').localeCompare($(b).data('step'));
+      return +$(a).data('step') - +$(b).data('step');
+    }).appendTo(targetWrapperUl);
+    console.log(targetWrapperUl);
+
+
+
 
     // Clear default rightsHolder fields when done.
     targetGroupUl.innerHTML = '';
@@ -108,14 +135,14 @@ $(document).on('turbolinks:load', function() {
       var processingActivityCount = $('select[name="processing_event[processing_activity_type][]"]').length;
       for (i = 0; i < processingActivityCount; i++) {
 
+        var processingActivityStep = $('input[name="processing_event[processing_activity_step][]"]')[i].value || '';
         var processingActivityType = $('select[name="processing_event[processing_activity_type][]"]')[i].value || '';
         var processingActivitySoftware = $('input[name="processing_event[processing_activity_software][]"]')[i].value || '';
         var processingActivityDescription = $('input[name="processing_event[processing_activity_description][]"]')[i].value || '';
 
         // As long as at least one input is filled out, proceed with creating a processingActivity string. Otherwise, create an empty string.
         if ((processingActivityType != '') || (processingActivitySoftware != '')) {
-          var stepNumber = i + 1;
-          var processingActivity = stepNumber + ", Type: " + processingActivityType + ", Software: " + processingActivitySoftware + ", Description: " + processingActivityDescription;
+          var processingActivity = "Step: " + processingActivityStep + ", Type: " + processingActivityType + ", Software: " + processingActivitySoftware + ", Description: " + processingActivityDescription;
         } else {
           var processingActivity = '';
         }
