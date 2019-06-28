@@ -15,7 +15,7 @@ module Hyrax
       :parent_media_id_list, :child_media_id_list, 
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
-      :processing_activity_count, :processing_activity,
+      :processing_activity_count, :processing_activity_items,
       :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,
       :direct_parent_members_raw_or_derived,
@@ -182,16 +182,19 @@ module Hyrax
       # then get processing activities
       processing_events = ProcessingEvent.where('member_ids_ssim' => solr_document.id)
       processing_event_ids = []
+      @processing_activity_items = []
       if processing_events.present?
         @processing_event_count = processing_events.count 
         processing_events.each do |processing_event|
           processing_event_ids << processing_event.id
-          @processing_activity = processing_event.processing_activity 
-#          @processing_activity_software = processing_event.processing_activity_software
- #         @processing_activity_description = processing_event.processing_activity_description 
+          processing_event.processing_activity.each do |processing_activity|
+            @processing_activity_items << Hash[processing_activity.split(/\s*,\s*/).map {|el| el.split ': '}]
+          end
         end
-        if @processing_activity.present?
-          @processing_activity_count = @processing_activity.length
+        # sort the activity items by the key Step
+        @processing_activity_items.sort_by! { |hsh| hsh["Step"] }
+        if @processing_activity_items.present?
+          @processing_activity_count = processing_activity_items.length
         else
           @processing_activity_count = 0
         end

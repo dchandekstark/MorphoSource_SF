@@ -9,14 +9,6 @@ $(document).on('turbolinks:load', function() {
     var targetGroup = document.querySelector('div.processing_event_processing_activity');
     var targetGroupUl = targetGroup.querySelector("ul");
     var concatFields = targetGroup.querySelectorAll("input");
-
-
-
-    // need to sort concatFields
-
-
-
-
     var concatFieldCount = (targetGroup.querySelectorAll("input").length) - 1;
 
     // Two part processingActivity entry
@@ -66,6 +58,8 @@ $(document).on('turbolinks:load', function() {
         stepInput.value = step;
         li.appendChild(stepInput);
 
+        appendProcessingActivityTypeSelect(li);
+        /*
         $('<select />', {
           id : "processing_event_processing_activity_type_"+i,
           name : 'processing_event[processing_activity_type][]',
@@ -78,8 +72,10 @@ $(document).on('turbolinks:load', function() {
             $('<option />', {value : "type 3", text : "type 3"})
           ]
         }).appendTo(li);
+        */
         // select the existing option
         $(li).find('select').val(type);
+
 
         var softwareInput = document.createElement('input');
         softwareInput.className = "string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field";
@@ -122,9 +118,6 @@ $(document).on('turbolinks:load', function() {
       return +$(a).data('step') - +$(b).data('step');
     }).appendTo(targetWrapperUl);
     console.log(targetWrapperUl);
-
-
-
 
     // Clear default rightsHolder fields when done.
     targetGroupUl.innerHTML = '';
