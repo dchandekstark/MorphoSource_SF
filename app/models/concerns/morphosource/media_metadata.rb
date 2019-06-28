@@ -79,8 +79,17 @@ module Morphosource
     index.as :stored_searchable
     end
 
+    # -- Management of File Visibility/Download/View --
+
     # Stores user-selected default setting for file set visibility
-    property :fileset_visibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetVisibility")
+    property :fileset_visibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetVisibility") do |index|
+    index.as :stored_searchable
+    end
+
+    # Stores user-selected setting for restricting download/viewing behavior
+    property :fileset_accessibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetAccessibility") do |index|
+    index.as :stored_searchable
+    end
 
     # -- Media type-specific metadata --
 

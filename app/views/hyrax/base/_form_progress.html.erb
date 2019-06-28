@@ -23,7 +23,11 @@
     </div>
 
     <div class="set-access-controls list-group-item">
-      <%= render 'form_visibility_component', f: f %>
+      <% if f.object.model_name.name == 'Media' %>
+        <%= render 'ms_form_visibility_component', f: f %>
+      <% else %>
+        <%= render 'form_visibility_component', f: f %>
+      <% end %>
     </div>
     <% if Flipflop.proxy_deposit? && current_user.can_make_deposits_for.any? %>
       <div class="list-group-item">

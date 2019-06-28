@@ -142,11 +142,50 @@ module Hyrax
       end
 
       def set_fileset_visibility
-        if params["media"]["fileset_visibility"] == "restricted"
-          curation_concern.fileset_visibility = ["restricted"]
-        else
-          curation_concern.fileset_visibility = [""]
+        selected_visibility = params["media"]["visibility"]
+        public = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        private = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        embargo = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
+        lease = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE
+
+        case selected_visibility
+        when public
+          map_fileset_accessibility("","open")
+        when "restricted_download"
+          map_work_visibility(public)
+          map_fileset_accessibility("","restricted_download")
+        when "preview"
+          map_work_visibility(public)
+          map_fileset_accessibility("","preview_only")
+        when "hidden"
+          map_work_visibility(public)
+          map_fileset_accessibility("restricted","hidden")
+        when private
+          map_fileset_accessibility("","private")
+        when embargo
+          map_fileset_accessibility("","")
+        when lease
+          map_fileset_accessibility("","")
         end
+        update_fileset_accessibility
+      end
+
+      def update_fileset_accessibility
+        curation_concern.file_sets.each do |file|
+          file.accessibility = curation_concern.fileset_accessibility
+          file.save!
+        end
+      end
+
+      # Sets work's fileset_visibility and fileset_accessibility values depending on publication status
+      def map_fileset_accessibility(visibility,accessibility)
+        curation_concern.fileset_visibility = [visibility]
+        curation_concern.fileset_accessibility = [accessibility]
+      end
+
+      # Maps work visibility to Hyrax value for non-Hyrax publication status
+      def map_work_visibility(visibility)
+        params["media"]["visibility"] = visibility
       end
 
       def after_update_response

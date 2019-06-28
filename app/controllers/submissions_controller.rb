@@ -360,7 +360,7 @@ class SubmissionsController < ApplicationController
     idx = 0
     if cookies[:absentee_parent].present?
       # when creating a media with absentee parent
-      # the relationship should be PO > IE > PE > media 
+      # the relationship should be PO > IE > PE > media
       parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
       idx += 1
     end
@@ -391,7 +391,7 @@ class SubmissionsController < ApplicationController
     if @submission.imaging_event_id.present?
       if cookies[:absentee_parent].present?
         # when creating a media with absentee parent
-        # do not add IE as parent, since the relationship should be PO > IE > PE > media 
+        # do not add IE as parent, since the relationship should be PO > IE > PE > media
       else
         parent_attributes.merge!({ '0' => { "id" => @submission.imaging_event_id, "_destroy" => "false" } })
       end
@@ -436,9 +436,54 @@ class SubmissionsController < ApplicationController
     unless model == Media
       attributes_for_actor.merge!({ visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC })
     end
+    if model == Media
+      set_visibilities(attributes_for_actor)
+    end
     env = Hyrax::Actors::Environment.new(curation_concern, current_ability, attributes_for_actor)
     Hyrax::CurationConcern.actor.create(env)
     curation_concern.id
+  end
+
+  def set_visibilities(attributes_for_actor)
+    selected = attributes_for_actor["visibility"]
+    public = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    private = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    embargo = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
+    lease = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE
+
+    visibilities = {
+      public =>
+        { "work_visibility" => public,
+          "file_visibility" => "",
+          "file_accessibility" => "open"},
+      "restricted_download" =>
+        { "work_visibility" => public,
+          "file_visibility" => "",
+          "file_accessibility" => "restricted_download"},
+      "preview" =>
+        { "work_visibility" => public,
+          "file_visibility" => "",
+          "file_accessibility" => "preview_only"},
+      "hidden" =>
+        { "work_visibility" => public,
+          "file_visibility" => "restricted",
+          "file_accessibility" => "hidden"},
+      private =>
+        { "work_visibility" => private,
+          "file_visibility" => "",
+          "file_accessibility" => "private"},
+      embargo =>
+        { "work_visibility" => embargo,
+          "file_visibility" => "",
+          "file_accessibility" => ""},
+      lease =>
+        { "work_visibility" => lease,
+          "file_visibility" => "",
+          "file_accessibility" => ""} }
+
+    attributes_for_actor["visibility"] = visibilities[selected]["work_visibility"]
+    attributes_for_actor["fileset_visibility"] = [visibilities[selected]["file_visibility"]]
+    attributes_for_actor["fileset_accessibility"] = [visibilities[selected]["file_accessibility"]]
   end
 
   def instantiate_work_forms
