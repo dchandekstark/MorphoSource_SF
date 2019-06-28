@@ -1,7 +1,8 @@
 require 'capybara/rspec'
 require 'selenium/webdriver'
 
-Selenium::WebDriver::Firefox::Binary.path = "/opt/firefox/firefox" || Selenium::WebDriver::Firefox::Binary.path
+Selenium::WebDriver::Firefox::Binary.path ||= `sh -c 'command -v firefox'`.chomp
+Selenium::WebDriver::Firefox::Binary.path ||= "/opt/firefox/firefox"
 
 Capybara.register_driver :firefox_headless do |app|
   options = ::Selenium::WebDriver::Firefox::Options.new
