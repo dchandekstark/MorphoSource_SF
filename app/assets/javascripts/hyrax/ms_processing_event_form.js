@@ -31,83 +31,49 @@ $(document).on('turbolinks:load', function() {
       var software = concatFieldValue.match(/, Software: (.*), Description: /)[1];
       var description = concatFieldValue.match(/, Description: (.*)/)[1];
 
-      // Fill in values for first line
-/*
-      if (i == 0) {
-        var typeSelectOject = $('select[name="processing_event[processing_activity_type][]"]')[0];
-        for (var x = 0; x < typeSelectOject.length; x++){
-          if (typeSelectOject.options[x].value == type)
-            typeSelectOject.selectedIndex = x;
-        }
-        $('input[name="processing_event[processing_activity_software][]"]')[0].value = software;
-        $('input[name="processing_event[processing_activity_description][]"]')[0].value = description;
-      } else {
-*/
+      // Assemble new triple fields
+      var li = document.createElement('li');
+      li.className =  'field-wrapper input-group input-append';
+      li.setAttribute('style', "display:flex; flex-direction:row; justify-content:space-evenly;");
+      li.setAttribute('data-step', step);
 
-        // Assemble new triple fields
-        var li = document.createElement('li');
-        li.className =  'field-wrapper input-group input-append';
-        li.setAttribute('style', "display:flex; flex-direction:row; justify-content:space-evenly;");
-        li.setAttribute('data-step', step);
+      appendProcessingActivityStepSelect(li);
+      // select the existing option
+      $(li).find('select.processing_event_processing_activity_step').val(step);
 
-        var stepInput = document.createElement('input');
-        stepInput.className = "string multi_value optional form-control processing_event_processing_activity_step form-control multi-text-field";
-        stepInput.setAttribute("id", "processing_event_processing_activity_step");
-        stepInput.setAttribute("name", "processing_event[processing_activity_step][]");
-        stepInput.setAttribute("style", "margin:5px; width:10%; border-radius:5px;");
-        stepInput.value = step;
-        li.appendChild(stepInput);
+      appendProcessingActivityTypeSelect(li);
+      // select the existing option
+      $(li).find('select.processing_event_processing_activity_type').val(type);
 
-        appendProcessingActivityTypeSelect(li);
-        /*
-        $('<select />', {
-          id : "processing_event_processing_activity_type_"+i,
-          name : 'processing_event[processing_activity_type][]',
-          class : "form-control select optional form-control",
-          style : "margin:5px; width:33%; border-radius:5px;",
-          append : [
-            $('<option />', {value : "", text : ""}),
-            $('<option />', {value : "type 1", text : "type 1"}),
-            $('<option />', {value : "type 2", text : "type 2"}),
-            $('<option />', {value : "type 3", text : "type 3"})
-          ]
-        }).appendTo(li);
-        */
-        // select the existing option
-        $(li).find('select').val(type);
+      var softwareInput = document.createElement('input');
+      softwareInput.className = "string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field";
+      softwareInput.setAttribute("id", "processing_event_processing_activity_software");
+      softwareInput.setAttribute("name", "processing_event[processing_activity_software][]");
+      softwareInput.setAttribute("style", "margin:5px; width:23%; border-radius:5px;");
+      softwareInput.value = software;
+      li.appendChild(softwareInput);
 
+      var descriptionInput = document.createElement('input');
+      descriptionInput.className = "string multi_value optional form-control processing_event_processing_activity_description form-control multi-text-field";
+      descriptionInput.setAttribute("id", "processing_event_processing_activity_description");
+      descriptionInput.setAttribute("name", "processing_event[processing_activity_description][]");
+      descriptionInput.setAttribute("style", "margin:5px; width:33%; border-radius:5px;");
+      descriptionInput.value = description;
+      li.appendChild(descriptionInput);
 
-        var softwareInput = document.createElement('input');
-        softwareInput.className = "string multi_value optional form-control processing_event_processing_activity_software form-control multi-text-field";
-        softwareInput.setAttribute("id", "processing_event_processing_activity_software");
-        softwareInput.setAttribute("name", "processing_event[processing_activity_software][]");
-        softwareInput.setAttribute("style", "margin:5px; width:23%; border-radius:5px;");
-        softwareInput.value = software;
-        li.appendChild(softwareInput);
+      var span = document.createElement('span');
+      span.className = "input-group-btn field-controls";
+      span.innerHTML = `<button type="button" class="btn btn-link remove">
+                          <span class="glyphicon glyphicon-remove"></span>
+                          <span class="controls-remove-text">Remove</span>
+                          <span class="sr-only"> previous
+                            <span class="controls-field-name-text"> processing_event</span>
+                          </span>
+                        </button>`
 
-        var descriptionInput = document.createElement('input');
-        descriptionInput.className = "string multi_value optional form-control processing_event_processing_activity_description form-control multi-text-field";
-        descriptionInput.setAttribute("id", "processing_event_processing_activity_description");
-        descriptionInput.setAttribute("name", "processing_event[processing_activity_description][]");
-        descriptionInput.setAttribute("style", "margin:5px; width:33%; border-radius:5px;");
-        descriptionInput.value = description;
-        li.appendChild(descriptionInput);
+      li.appendChild(span);
+      targetWrapperUl.appendChild(li);
 
-
-        var span = document.createElement('span');
-        span.className = "input-group-btn field-controls";
-        span.innerHTML = `<button type="button" class="btn btn-link remove">
-                            <span class="glyphicon glyphicon-remove"></span>
-                            <span class="controls-remove-text">Remove</span>
-                            <span class="sr-only"> previous
-                              <span class="controls-field-name-text"> processing_event</span>
-                            </span>
-                          </button>`
-
-        li.appendChild(span);
-        targetWrapperUl.appendChild(li);
-
-//      }
     }
     //console.log(targetWrapperUl);
 
@@ -119,19 +85,22 @@ $(document).on('turbolinks:load', function() {
     }).appendTo(targetWrapperUl);
     //console.log(targetWrapperUl);
 
-    // Clear default rightsHolder fields when done.
+    // Clear default fields when done.
     targetGroupUl.innerHTML = '';
     $(targetGroup).hide(); // hide the field label and add button
 
     // On submit, the three fields are concatenated and inserted into hidden default processing activity field.
     form.addEventListener("submit", function() {
       var processingActivityCount = $('select[name="processing_event[processing_activity_type][]"]').length;
+      var steps = [];
       for (i = 0; i < processingActivityCount; i++) {
 
-        var processingActivityStep = $('input[name="processing_event[processing_activity_step][]"]')[i].value || '';
+        var processingActivityStep = $('select[name="processing_event[processing_activity_step][]"]')[i].value || '';
         var processingActivityType = $('select[name="processing_event[processing_activity_type][]"]')[i].value || '';
         var processingActivitySoftware = $('input[name="processing_event[processing_activity_software][]"]')[i].value || '';
         var processingActivityDescription = $('input[name="processing_event[processing_activity_description][]"]')[i].value || '';
+        processingActivityStep = parseInt(processingActivityStep);
+        steps.push(processingActivityStep);
 
         // As long as at least one input is filled out, proceed with creating a processingActivity string. Otherwise, create an empty string.
         if ((processingActivityType != '') || (processingActivitySoftware != '')) {
@@ -146,6 +115,15 @@ $(document).on('turbolinks:load', function() {
         $('input[name="processing_event[processing_activity_software][]"]')[i].value = '';
         $('input[name="processing_event[processing_activity_description][]"]')[i].value = '';
       }
+      // validate the step values
+      if (!stepsValid(steps.sort())) {
+        alert('Please enter the correct steps.');
+        event.preventDefault();
+      } else {
+
+        event.preventDefault();
+      }
+
     });
 
     // Puts concatenated values into processingActivityHolder on submit.
@@ -160,6 +138,47 @@ $(document).on('turbolinks:load', function() {
       li.appendChild(input);
       targetGroupUl.appendChild(li);
     }
+
+    function stepsValid(steps) {
+      var expectedSteps = [];
+      for (var i = 1; i <= steps.length; i++) {
+         expectedSteps.push(i);
+      }
+      console.log(steps);
+      console.log(expectedSteps);
+      return (steps.equals(expectedSteps));
+    }
+
+    // define an array compare function
+    // Warn if overriding existing method
+    if(Array.prototype.equals)
+        console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+    // attach the .equals method to Array's prototype to call it on any array
+    Array.prototype.equals = function (array) {
+        // if the other array is a falsy value, return
+        if (!array)
+            return false;
+
+        // compare lengths - can save a lot of time 
+        if (this.length != array.length)
+            return false;
+
+        for (var i = 0, l=this.length; i < l; i++) {
+            // Check if we have nested arrays
+            if (this[i] instanceof Array && array[i] instanceof Array) {
+                // recurse into the nested arrays
+                if (!this[i].equals(array[i]))
+                    return false;       
+            }           
+            else if (this[i] != array[i]) { 
+                // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                return false;   
+            }           
+        }       
+        return true;
+    }
+    // Hide method from for-in loops
+    Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
   } // end if PE form page
 })

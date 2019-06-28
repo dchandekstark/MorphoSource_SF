@@ -14,9 +14,12 @@
       <div style="width:33%;margin-left:8px"><label for="processing_event_processing_activity_type">Description</label></div>
     </div>
     <li class="field-wrapper input-group input-append" style="display:flex; flex-direction:row; justify-content:space-evenly;">
-      <input class="string multi_value optional form-control processing_event_processing_activity_step form-control multi-text-field" name="processing_event[processing_activity_step][]" value="" id="processing_event_processing_activity_step" type="text" style="margin:5px; width:10%; border-radius:5px;">
+      <!--input class="string multi_value optional form-control processing_event_processing_activity_step form-control multi-text-field" name="processing_event[processing_activity_step][]" value="" id="processing_event_processing_activity_step" type="text" style="margin:5px; width:10%; border-radius:5px;"-->
+
+      <%= select_tag( "processing_event[processing_activity_step][]", options_for_select(1..20), {:class => 'string multi_value optional form-control processing_event_processing_activity_step multi-text-field', :id => 'processing_event_processing_activity_step', :style => 'margin:5px; width:10%; border-radius:5px;'} ) %>
 
       <select class="form-control select optional form-control" name="processing_event[processing_activity_type][]" id="processing_event_processing_activity_type" style="margin:5px; width:23%;">
+        <option value=""></option>
         <% processing_activity_types_service.select_all_options.each do |processing_activity_type_option| %>
           <option value="<%= processing_activity_type_option[0] %>" ><%= processing_activity_type_option[1] %></option>
         <% end %>
@@ -29,11 +32,26 @@
 </div>
 
 <script>
+var appendProcessingActivityStepSelect = function(appendToElement) {
+  $('<select />', {
+    id : "processing_event_processing_activity_step_"+i,
+    name : 'processing_event[processing_activity_step][]',
+    class : "form-control select optional form-control processing_event_processing_activity_step",
+    style : "margin:5px; width:10%; border-radius:5px;",
+    append : [
+      $('<option />', {value : "", text : ""}),
+      <% (1..20).each do |processing_activity_step_option| %>
+        $('<option />', {value : "<%= processing_activity_step_option %>", text : "<%= processing_activity_step_option %>"}),
+      <% end %>
+      $('<option />', {value : "", text : ""})
+    ]
+  }).appendTo(appendToElement);
+}
 var appendProcessingActivityTypeSelect = function(appendToElement) {
   $('<select />', {
     id : "processing_event_processing_activity_type_"+i,
     name : 'processing_event[processing_activity_type][]',
-    class : "form-control select optional form-control",
+    class : "form-control select optional form-control processing_event_processing_activity_type",
     style : "margin:5px; width:33%; border-radius:5px;",
     append : [
       $('<option />', {value : "", text : ""}),
