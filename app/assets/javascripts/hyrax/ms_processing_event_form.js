@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
   if ($('form[id*="processing_event"]').length) { // if PE form page
-  	//hide_fields(['.processing_event_processing_activity']);
+  	hide_fields(['.processing_event_processing_activity']);
     
     // concatenate rights holder name, type to rights holder
     var form = $('form[id*="processing_event"]')[0];
@@ -109,19 +109,19 @@ $(document).on('turbolinks:load', function() {
 
 //      }
     }
-    console.log(targetWrapperUl);
+    //console.log(targetWrapperUl);
 
-
+    // sort the list items by 'step'
     $(targetWrapperUl).children("li").detach().sort(function(a, b) {
-      console.log($(a).data('step'));
+      //console.log($(a).data('step'));
       //return $(a).data('step').localeCompare($(b).data('step'));
       return +$(a).data('step') - +$(b).data('step');
     }).appendTo(targetWrapperUl);
-    console.log(targetWrapperUl);
+    //console.log(targetWrapperUl);
 
     // Clear default rightsHolder fields when done.
     targetGroupUl.innerHTML = '';
-//    $(targetGroup).hide(); // hide the field label and add button
+    $(targetGroup).hide(); // hide the field label and add button
 
     // On submit, the three fields are concatenated and inserted into hidden default processing activity field.
     form.addEventListener("submit", function() {
