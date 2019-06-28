@@ -122,5 +122,44 @@ RSpec.describe Media do
         end
       end
     end
+
+    describe '#restricted?' do
+      context 'fileset_accessibility is open' do
+        before do
+          subject.fileset_accessibility = ["open"]
+        end
+        it { expect(subject.restricted?).to be(false) }
+      end
+      context 'fileset_accessibility is restricted_download' do
+        before do
+          subject.fileset_accessibility = ["restricted_download"]
+        end
+        it { expect(subject.restricted?).to be(true) }
+      end
+      context 'fileset_accessibility is preview_only' do
+        before do
+          subject.fileset_accessibility = ["preview_only"]
+        end
+        it { expect(subject.restricted?).to be(false) }
+      end
+      context 'fileset_accessibility is hidden' do
+        before do
+          subject.fileset_accessibility = ["hidden"]
+        end
+        it { expect(subject.restricted?).to be(false) }
+      end
+      context 'fileset_accessibility is private' do
+        before do
+          subject.fileset_accessibility = ["private"]
+        end
+        it { expect(subject.restricted?).to be(false) }
+      end
+      context 'fileset_accessibility is empty' do
+        before do
+          subject.fileset_accessibility = [""]
+        end
+        it { expect(subject.restricted?).to be(false) }
+      end
+    end
   end
 end

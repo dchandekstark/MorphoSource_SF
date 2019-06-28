@@ -113,12 +113,31 @@ Rails.application.routes.draw do
 
   scope module: :morphosource do
     scope module: :my do
-      get 'dashboard/my/downloads', action: :previous_downloads, controller: :cart_items, as: 'my_downloads'
-      get 'dashboard/my/cart', action: :media_cart, controller: :cart_items, as: 'my_cart'
+
+      # cart items
       post 'add_to_cart', action: :create, controller: :cart_items
-      post 'batch_create_items', action: :batch_create, controller: :cart_items
-      delete '/cart_items', action: :batch_destroy, controller: :cart_items, as: 'batch_destroy_items'
-      get 'download_items', action: :download, controller: :cart_items, as: 'download_items'
+
+      # media cart
+      get 'dashboard/my/cart', action: :index, controller: :media_carts, as: 'my_cart'
+      get 'download_items', action: :download, controller: :media_carts, as: 'download_items'
+      delete 'remove_from_cart', action: :destroy, controller: :media_carts, as: 'remove_items'
+
+      # downloads
+      get 'dashboard/my/downloads', action: :index, controller: :downloads, as: 'my_downloads'
+      post 'batch_create_items', action: :batch_create, controller: :downloads
+
+      # requests
+      get 'dashboard/my/requests', action: :index, controller: :requests, as: 'my_requests'
+      # post 'batch_request', action: :request_item, controller: :requests
+      put 'request_item', action: :request_item, controller: :requests, as: 'request_item'
+      get 'request_again', action: :request_again, controller: :requests, as: 'request_again'
+      put 'cancel_request', action: :cancel_request,
+      controller: :requests, as: 'cancel_request'
+
+      # request manager
+      get 'dashboard/my/request_manager', action: :index, controller: :request_managers, as: 'request_manager'
+      put 'approve_download', action: :approve_download, controller: :request_managers, as: 'approve_download'
+      put 'deny_download', action: :deny_download, controller: :request_managers, as: 'deny_download'
     end
   end
 end

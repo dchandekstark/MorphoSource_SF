@@ -1,0 +1,42 @@
+<tr id="document_<%= document.id %>">
+
+  <td>
+    <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
+    <%= render 'morphosource/batch_select/add_button', item: item %>&nbsp;
+  </td>
+
+  <td>
+    <div class='media'>
+      <%= link_to [main_app, document], class: 'media-left', 'aria-hidden' => true do %>
+        <%= render_thumbnail_tag document, { class: 'hidden-xs file_listing_thumbnail' }, { suppress_link: true } %>
+      <% end %>
+
+      <div class='media-body'>
+        <div class='media-heading'>
+          <%= link_to [main_app, document], id: "src_copy_link#{document.id}", class: 'document-title' do %>
+            <span class="sr-only">
+              <%= t("hyrax.dashboard.my.sr.show_label") %>
+            </span>
+            <%= document.title_or_label %>
+          <% end %>
+          <br/>
+        </div>
+      </div>
+    </div>
+  </td>
+  <td><%= item_status_label(item) %></td>
+  <td><%= item.requester_email %></td>
+  <td><%= item.requester_affiliation %></td>
+  <td><%= item.date_requested.strftime("%Y-%m-%d") %></td>
+  <td><%= item.date_approved&.strftime("%Y-%m-%d") %></td>
+  <td><%= item.date_denied&.strftime("%Y-%m-%d") %></td>
+  <td><%= item.date_canceled&.strftime("%Y-%m-%d") %></td>
+  <td><%= item.date_expired&.strftime("%Y-%m-%d") %></td>
+  <td><%= link_to "Approve Download", main_app.approve_download_path(:item_id => item.id), class: 'btn btn-success', :method => :put %></td>
+  <td><%= link_to "Deny Download", main_app.deny_download_path(:item_id => item.id), class: 'btn btn-danger', :method => :put %></td>
+</tr>
+
+
+
+
+</tr>

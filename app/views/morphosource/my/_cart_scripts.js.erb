@@ -1,0 +1,91 @@
+function hideButtons() {
+  let downloadable = $(".downloadable_items").length;
+  let restricted = $(".restricted_items").length;
+
+  let select_downloadable = $('#unrestricted_documents > table > thead > tr > th.check-all');
+  let select_restricted = $('#documents > table > thead > tr > th.check-all');
+
+  if (downloadable < 1) {
+    $('#download-all').hide();
+    $('#delete-selected').hide();
+    $('#download-selected').hide();
+    select_downloadable.hide();
+  }
+  if (restricted < 1) {
+    $('#request-selected').hide();
+    $('#delete-selected-restricted').hide();
+    select_restricted.hide();
+  }
+  if (restricted < 1 && downloadable < 1) {
+    $('#clear-cart').hide();
+  }
+}
+
+function togglePageButtons() {
+  let items = $(".batch_document_selector").length;
+  let downloadable = $(".downloadable_items").length;
+
+  if ( downloadable > 0 ) {
+    $('#download-all').prop('disabled', false);
+    $('#clear-cart').prop('disabled', false);
+  } else if ( items > 0 ) {
+    $('#download-all').prop('disabled', true);
+    $('#clear-cart').prop('disabled', false);
+  } else {
+    $('#download-all').prop('disabled', true);
+    $('#clear-cart').prop('disabled', true);
+  }
+}
+
+function toggleDownloadableButtons() {
+  let downloadable = $(".downloadable_items:checked").length;
+
+  if ( downloadable > 0 ) {
+    $('#delete-selected').prop('disabled', false);
+    $('#download-selected').prop('disabled', false);
+  } else {
+    $('#delete-selected').prop('disabled', true);
+    $('#download-selected').prop('disabled', true);
+  }
+}
+
+function toggleRestrictedButtons() {
+  let restricted = $(".restricted_items:checked").length;
+
+  if ( restricted > 0 ) {
+    $('#request-selected').prop('disabled', false);
+    $('#delete-selected-restricted').prop('disabled', false);
+  } else {
+    $('#request-selected').prop('disabled', true);
+    $('#delete-selected-restricted').prop('disabled', true);
+  }
+}
+
+
+Blacklight.onLoad(function() {
+  togglePageButtons();
+  toggleRestrictedButtons();
+  toggleDownloadableButtons();
+  hideButtons();
+  // toggle button on or off based on boxes being clicked
+  $(".restricted_items").bind('click', function(e) {
+    toggleRestrictedButtons();
+  });
+  $(".downloadable_items").bind('click', function(e) {
+    toggleDownloadableButtons();
+  });
+  $('#check_all_unrestricted').bind('click', function(e) {
+    toggleDownloadableButtons();
+  });
+  $('#check_all_restricted').bind('click', function(e) {
+    toggleRestrictedButtons();
+  });
+});
+
+$(document).on('turbolinks:load', function(){
+  togglePageButtons();
+  // re-enable the download all button after being clicked
+  $('#download-all').bind('click', function(e) {
+     setTimeout(function(){ togglePageButtons(); }, 500);
+  });
+});
