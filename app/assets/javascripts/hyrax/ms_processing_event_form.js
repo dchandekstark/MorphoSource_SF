@@ -119,10 +119,7 @@ $(document).on('turbolinks:load', function() {
       if (!stepsValid(steps.sort())) {
         alert('Please enter the correct steps.');
         event.preventDefault();
-      } else {
-
-        event.preventDefault();
-      }
+      } 
 
     });
 
@@ -144,8 +141,6 @@ $(document).on('turbolinks:load', function() {
       for (var i = 1; i <= steps.length; i++) {
          expectedSteps.push(i);
       }
-      console.log(steps);
-      console.log(expectedSteps);
       return (steps.equals(expectedSteps));
     }
 
