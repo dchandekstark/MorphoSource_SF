@@ -5,17 +5,17 @@
       <% # todo: The download button should (if the work is under restricted download)
          # instead display the text “Request Download” and should lead to the request download UI flow (TBA)
          # for now, the presenter checks for the fileset_visibility to determine the ability
-      if presenter.fileset_accessibility == 'open' %>
+      if presenter.download_permission == 'open' %>
         <%= link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [presenter.id]) , class: 'btn btn-default', role: 'button', download: true, target: '_blank' %>
-      <% elsif presenter.fileset_accessibility.first == 'restricted_download' %>
+      <% else %>
         <%= link_to 'Request download', 'TBD' , class: 'btn btn-default', role: 'button' %>
       <% end %>
 
       <% if signed_in? %>
         <% if @presenter.works_in_cart.include? params[:id] %>
           <%= link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-default' %>
-        <% elsif (@presenter.fileset_accessibility.first == 'open' || @presenter.fileset_accessibility.first == 'restricted_download') %>
-          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name, :file_accessibility => @presenter.fileset_accessibility.first), class: 'btn btn-default', :method => :post %>
+        <% else %>
+          <%= link_to "Add to Cart", main_app.add_to_cart_path(:work_id => @presenter.id, :media_cart_id => current_user.media_cart.id, :work_type => @presenter.model_name.name), class: 'btn btn-default', :method => :post %>
         <% end %>
       <% end %>
 
