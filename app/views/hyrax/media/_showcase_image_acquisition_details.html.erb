@@ -102,22 +102,22 @@
 								<% else %>
 								 	<%= link_to(parent_member.link_name, contextual_path(parent_member, @presenter)) %>
 							 	<% end %>
-								<% if presenter.processing_activity_type.present?  %>
+								<% if presenter.processing_activity_items.present?  %>
 									in <%= pluralize(presenter.processing_activity_count, 'step') %>
 							 	<% end %>
 							</div>
 							<div class="content-block">
-								<% if presenter.processing_activity_type.present? %>
+								<% if presenter.processing_activity_items.present? %>
 									<!--div id="collapse-block-image-acquisition-processing-activities" class="panel-collapse collapse collapse-block" -->		
-									<% presenter.processing_activity_type.map.with_index do |item, index| %>
-										<h4>Step <%= index+1 %>: </b><%= item %> </h4>
+									<% presenter.processing_activity_items.map do |item| %>
+										<h4>Step <%= item["Step"] %>: </b><%= item["Type"] %> </h4>
 										<div class="row indent">
 											<div class="col-xs-6 showcase-label">Software</div>
-											<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_software[index] %></div>
+											<div class="col-xs-6 showcase-value"><%= item["Software"] %></div>
 										</div>
 										<div class="row indent">
 											<div class="col-xs-6 showcase-label">Description</div>
-											<div class="col-xs-6 showcase-value"><%= presenter.processing_activity_description[index] %></div>
+											<div class="col-xs-6 showcase-value"><%= item["Description"] %></div>
 										</div>
 									<% end %>
 									<!--/div -->
