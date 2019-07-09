@@ -6,13 +6,13 @@ module Hyrax
     include Morphosource::PresenterMethods
     include MorphosourceHelper
 
-    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, to: :solr_document
+    delegate :agreement_uri, :cite_as, :funding, :map_type, :media_type, :modality, :orientation, :part, :rights_holder, :scale_bar, :series_type, :short_description, :description, :side, :unit, :x_spacing, :y_spacing, :z_spacing, :slice_thickness, :identifier, :related_url, :point_count, :fileset_visibility, :fileset_accessibility, to: :solr_document
 
-    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered, 
-      :physical_object_title, :physical_object_link, :physical_object_id, 
-      :device_and_facility, :device_facility, :device_link, :device, 
-      :other_details, :imaging_event_creator, :imaging_event_date_created, :imaging_event_modality, 
-      :parent_media_id_list, :child_media_id_list, 
+    attr_accessor :physical_object_type, :idigbio_uuid, :vouchered,
+      :physical_object_title, :physical_object_link, :physical_object_id,
+      :device_and_facility, :device_facility, :device_link, :device,
+      :other_details, :imaging_event_creator, :imaging_event_date_created, :imaging_event_modality,
+      :parent_media_id_list, :child_media_id_list,
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
       :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
       :processing_activity_count, :processing_activity_items,
@@ -21,8 +21,8 @@ module Hyrax
       :direct_parent_members_raw_or_derived,
       :file_size, :mime_type, :this_media_type, :this_media_modality,
       # mesh specific
-      :point_count, 
-      :face_count, 
+      :point_count,
+      :face_count,
       :color_format,
       :normals_format,
       :has_uv_space,
@@ -67,7 +67,7 @@ module Hyrax
     end
 
     def round_it(string_value)
-      if is_number_with_decimal?(string_value) 
+      if is_number_with_decimal?(string_value)
         string_value.to_f.round(3).to_s
       else
         string_value
@@ -86,7 +86,7 @@ module Hyrax
 
       # todo: need to get the user name (and a link to user) from the email address
       @data_managed_by = solr_document.depositor
- 
+
       if media.fileset_visibility.include? 'restricted'
         @download_permission = 'restricted'
       else
@@ -129,8 +129,8 @@ module Hyrax
         @mime_type << contents_mime_type
         @file_size += file_set.file_size.first.to_i if file_set.file_size.present?
         if @this_media_type == "Mesh"
-          @point_count += file_set.point_count.first.to_i if file_set.point_count.present? 
-          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?  
+          @point_count += file_set.point_count.first.to_i if file_set.point_count.present?
+          @face_count += file_set.face_count.first.to_i  if file_set.face_count.present?
           @color_format << file_set.color_format.first.to_s if file_set.color_format.present?
           @normals_format << file_set.normals_format.first.to_s if file_set.normals_format.present?
           @has_uv_space << file_set.has_uv_space.first.to_s if file_set.has_uv_space.present?
@@ -154,13 +154,13 @@ module Hyrax
             @color_depth << file_set.bits_allocated.first.to_s if file_set.bits_allocated.present?
           else #if contents_mime_type.match(/(jp?eg|ti?ff)/)
             temp = file_set.bits_per_sample.first.to_s if file_set.bits_per_sample.present?
-            @color_depth << temp.gsub(/\s/, '/') 
+            @color_depth << temp.gsub(/\s/, '/')
           end
 
         end
-        
+
       end # file_set_list loop
-      
+
       @mime_type = @mime_type.uniq.join(", ")
       if @file_size == 0
         @file_size = ""
@@ -170,12 +170,12 @@ module Hyrax
       if @point_count == 0
         @point_count = ""
       else
-        @point_count = @point_count.to_s(:delimited) 
+        @point_count = @point_count.to_s(:delimited)
       end
       if @face_count == 0
         @face_count = ""
       else
-        @face_count = @face_count.to_s(:delimited) 
+        @face_count = @face_count.to_s(:delimited)
       end
 
       # get processing event:  media < processing_event
@@ -184,7 +184,7 @@ module Hyrax
       processing_event_ids = []
       @processing_activity_items = []
       if processing_events.present?
-        @processing_event_count = processing_events.count 
+        @processing_event_count = processing_events.count
         processing_events.each do |processing_event|
           processing_event_ids << processing_event.id
           processing_event.processing_activity.each do |processing_activity|
@@ -202,8 +202,8 @@ module Hyrax
         @processing_event_count = 0
       end
 
-      # Get parent medias (all)    
-      # add current media id, then add child media ids.  
+      # Get parent medias (all)
+      # add current media id, then add child media ids.
       # currently add up to 5 levels in the tree.  Later we should store the child medias in the work
       # so there is no need to traverse the tree
       @parent_media_id_list = parent_media_ids(media, 5, []).flatten.uniq
@@ -219,13 +219,13 @@ module Hyrax
         direct_parent_id_list << direct_parent_id
       end
 
-      @is_absentee_parent = false 
+      @is_absentee_parent = false
 
-      this_media_list = [] << solr_document.id 
-      @this_media_member = member_presenters_for(this_media_list).first 
+      this_media_list = [] << solr_document.id
+      @this_media_member = member_presenters_for(this_media_list).first
 
       if direct_parent_id_list.length > 0
-        # If a media has a parent work and is derived, then that media’s raw ancestor media work 
+        # If a media has a parent work and is derived, then that media’s raw ancestor media work
         # (whether parent, grandparent, etc) should be connected to an IE from which metadata should be derived.
         @direct_parent_members = member_presenters_for(direct_parent_id_list)
         target_media = Media.where('id' => direct_parent_id).first
@@ -251,7 +251,7 @@ module Hyrax
       #Rails.logger.info("(010) in MediaPresenter: #{@direct_parent_members_raw_or_derived.inspect} ")
 
       # Get the physical object type from:
-      # Media < IE < PO  
+      # Media < IE < PO
       # or
       # media < PE < IE < PO (for media with absentee parent)
       if @is_absentee_parent == true
@@ -293,7 +293,7 @@ module Hyrax
 
         # get imaging event details
         @imaging_event_modality = imaging_event.ie_modality.first
-        if @imaging_event_modality == "Photogrammetry" or 
+        if @imaging_event_modality == "Photogrammetry" or
             @imaging_event_modality == "Photography"
           @lens = ""
           @lens << imaging_event.lens_make.first if imaging_event.lens_make.present?
@@ -332,10 +332,10 @@ module Hyrax
       else
         imaging_event_exist = false
       end # end if imaging_event present?
- 
+
     end
 
-    # this method is cloned from list_of_item_ids_to_display (for defaut view), 
+    # this method is cloned from list_of_item_ids_to_display (for defaut view),
     # and override the method in presenter_methods
     # to get a list of media images for MEDIA showpage
     def list_of_item_ids_to_display_for_showpage
