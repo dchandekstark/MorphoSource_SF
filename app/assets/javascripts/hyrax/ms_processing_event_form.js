@@ -91,9 +91,10 @@ $(document).on('turbolinks:load', function() {
 
     // On submit, the three fields are concatenated and inserted into hidden default processing activity field.
     form.addEventListener("submit", function() {
+
       var processingActivityCount = $('select[name="processing_event[processing_activity_type][]"]').length;
       var steps = [];
-      for (i = 0; i < processingActivityCount; i++) {
+      for (var i = 0; i < processingActivityCount; i++) {
 
         var processingActivityStep = $('select[name="processing_event[processing_activity_step][]"]')[i].value || '';
         var processingActivityType = $('select[name="processing_event[processing_activity_type][]"]')[i].value || '';
@@ -117,7 +118,7 @@ $(document).on('turbolinks:load', function() {
       }
       // validate the step values
       if (!stepsValid(steps.sort())) {
-        alert('Please enter the correct steps.');
+        alert('Please select the steps in sequence.');
         event.preventDefault();
       } 
 
@@ -136,45 +137,64 @@ $(document).on('turbolinks:load', function() {
       targetGroupUl.appendChild(li);
     }
 
-    function stepsValid(steps) {
-      var expectedSteps = [];
-      for (var i = 1; i <= steps.length; i++) {
-         expectedSteps.push(i);
-      }
-      return (steps.equals(expectedSteps));
-    }
-
-    // define an array compare function
-    // Warn if overriding existing method
-    if(Array.prototype.equals)
-        console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
-    // attach the .equals method to Array's prototype to call it on any array
-    Array.prototype.equals = function (array) {
-        // if the other array is a falsy value, return
-        if (!array)
-            return false;
-
-        // compare lengths - can save a lot of time 
-        if (this.length != array.length)
-            return false;
-
-        for (var i = 0, l=this.length; i < l; i++) {
-            // Check if we have nested arrays
-            if (this[i] instanceof Array && array[i] instanceof Array) {
-                // recurse into the nested arrays
-                if (!this[i].equals(array[i]))
-                    return false;       
-            }           
-            else if (this[i] != array[i]) { 
-                // Warning - two different object instances will never be equal: {x:20} != {x:20}
-                return false;   
-            }           
-        }       
-        return true;
-    }
-    // Hide method from for-in loops
-    Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
   } // end if PE form page
 })
 
+
+var processingActivityStepChanged = function() {
+  var processingActivityCount = $('select[name="processing_event[processing_activity_type][]"]').length;
+  var steps = [];
+  for (var i = 0; i < processingActivityCount; i++) {
+    var processingActivityStep = $('select[name="processing_event[processing_activity_step][]"]')[i].value || '';
+    processingActivityStep = parseInt(processingActivityStep);
+    steps.push(processingActivityStep);
+  }
+  // validate the step values
+  if (!stepsValid(steps.sort())) {
+    alert('Please select the steps in sequence.');
+    $('input[type="submit"], button[type="submit"]').attr("disabled", true);
+  } else {
+    $('input[type="submit"], button[type="submit"]').attr("disabled", false);    
+  }
+
+};
+
+function stepsValid(steps) {
+  var expectedSteps = [];
+  for (var i = 1; i <= steps.length; i++) {
+     expectedSteps.push(i);
+  }
+  return (steps.equals(expectedSteps));
+}
+
+// define an array compare function
+// Warn if overriding existing method
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
