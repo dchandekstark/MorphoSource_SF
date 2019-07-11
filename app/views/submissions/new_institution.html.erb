@@ -1,0 +1,27 @@
+
+
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+				<div id="submission_create_institution">
+				  <%= simple_form_for @institution_form, url: stage_institution_submissions_url do |f| %>
+				    <div class="form-group">
+				      <%= render partial: 'work_creation_metadata', locals: {f: f} %>
+				      <div>
+				        <%= f.submit 'Create New Institution', class: "btn btn-primary" %>
+				      </div>
+				    </div>
+				  <% end %>
+				</div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>

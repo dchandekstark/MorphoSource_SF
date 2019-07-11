@@ -96,9 +96,10 @@ Rails.application.routes.draw do
       post 'stage_processing_event'
       post 'stage_cho'
       post 'stage_taxonomy'
+      get 'new_institution'
     end
   end
-
+  
   # Redirect to submission flow initial page when using browser reload or back button
   get '/submissions', to: redirect('/submissions/new')
   get '/submissions/stage_biological_specimen', to: redirect('/submissions/new')
@@ -110,6 +111,7 @@ Rails.application.routes.draw do
   get '/submissions/stage_processing_event', to: redirect('/submissions/new')
   get '/submissions/stage_cho', to: redirect('/submissions/new')
   get '/submissions/stage_taxonomy', to: redirect('/submissions/new')
+
 
   scope module: :morphosource do
     scope module: :my do
