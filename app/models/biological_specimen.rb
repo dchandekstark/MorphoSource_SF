@@ -1,4 +1,6 @@
 class BiologicalSpecimen < Morphosource::Works::Base
+  attr_accessor :institution_id
+
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
   after_save :add_id_to_title
@@ -45,6 +47,10 @@ class BiologicalSpecimen < Morphosource::Works::Base
   # any taxonomy that is not trusted
   def user_taxonomies
     other_taxonomies.reject{|taxonomy| taxonomy.trusted == ["Yes"]}
+  end
+
+  def institutions
+    member_of.select{|work| work.class == Institution}
   end
 
   private

@@ -69,6 +69,10 @@ module MorphosourceHelper
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
   end
 
+  def find_institution_autocomplete_url
+    Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Institution&id=NA&q='
+  end
+
   def find_taxonomy_autocomplete_url
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Taxonomy&id=NA&q='
   end

@@ -10,8 +10,7 @@ class SubmissionsController < ApplicationController
   def decide_layout
     layout = case action_name
              when 'new_institution'
-               '1_column'
-               # 'modal'
+               'modal'
              else
                'submission'
              end
@@ -303,11 +302,6 @@ class SubmissionsController < ApplicationController
     #redirect_to '/concern/media/' + @submission.media_id
   end
 
-  def new_institution
-    @submission = Submission.new(session[:submission])
-    render 'new_institution'
-  end
-
   def create_biological_specimen(params)
     parent_attributes = {}
     if @submission.institution_id.present?
@@ -418,6 +412,23 @@ class SubmissionsController < ApplicationController
     end
     create_work(Media, @media_create_params)
   end
+
+  def new_institution
+    @submission = Submission.new(session[:submission])
+    render 'new_institution'
+  end
+
+  def new_institution_submit
+    #reinstantiate_submission
+    #@submission.institution_id = 'new'
+    #store_submission
+    institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
+    create_institution(institution_model_params)
+
+    # close modal or reload the parent page?
+
+  end
+
 
   private
 

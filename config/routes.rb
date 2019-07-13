@@ -97,6 +97,7 @@ Rails.application.routes.draw do
       post 'stage_cho'
       post 'stage_taxonomy'
       get 'new_institution'
+      post 'new_institution_submit'
     end
   end
   
