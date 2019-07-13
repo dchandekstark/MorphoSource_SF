@@ -59,6 +59,7 @@ module Hyrax
     def primary_terms
       required_fields + [
           :bibliographic_citation,
+          :institution_code,
           :based_near,
           :catalog_number,
           :collection_code,
