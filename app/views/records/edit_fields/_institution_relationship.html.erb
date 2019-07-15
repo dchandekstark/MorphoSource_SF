@@ -1,0 +1,19 @@
+
+<%= render 'form_parent_work_relationships_institution', f: f %>
+
+<div id="institution-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+	$('#institution-modal').on('click', '#new-institution-submit', function(){
+//		alert($('#new_institution').length);
+		$('#new_institution').submit();
+		$('#institution-modal').modal('hide');
+		
+	});
+</script>

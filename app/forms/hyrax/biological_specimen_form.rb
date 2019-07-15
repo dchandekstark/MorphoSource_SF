@@ -16,6 +16,7 @@ module Hyrax
         :bibliographic_citation,
         :catalog_number,
         :collection_code,
+        :institution_relationship,
         :institution_code,
         :latitude,
         :longitude,
@@ -38,6 +39,7 @@ module Hyrax
     self.single_valued_fields = [
         :catalog_number,
         :collection_code,
+        :institution_relationship,
         :institution_code,
         :date_created,
         :description,
@@ -59,6 +61,7 @@ module Hyrax
     def primary_terms
       required_fields + [
           :bibliographic_citation,
+          :institution_relationship,
           :institution_code,
           :based_near,
           :catalog_number,

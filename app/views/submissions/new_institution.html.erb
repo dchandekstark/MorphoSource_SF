@@ -1,8 +1,5 @@
 <div class="modal-header">
   <h5 class="modal-title">New institution</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
 </div>
 <div class="modal-body">
 
@@ -11,7 +8,8 @@
 	    <div class="form-group">
 	      <%= render partial: 'work_creation_metadata', locals: {f: f} %>
 	      <div>
-	        <%= f.submit 'Create New Institution', class: "btn btn-primary" %>
+	        <% #= f.submit 'Create New Institution', class: "btn btn-primary" %>
+				  <button id="new-institution-submit" type="button" class="btn btn-primary">Create new institution</button>
 	      </div>
 	    </div>
 	  <% end %>
@@ -21,3 +19,5 @@
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 </div>
+
+

@@ -1,5 +1,4 @@
 class BiologicalSpecimen < Morphosource::Works::Base
-  attr_accessor :institution_id
 
   include ::Hyrax::WorkBehavior
   validates_with Morphosource::ParentChildValidator
