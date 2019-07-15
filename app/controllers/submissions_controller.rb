@@ -427,6 +427,8 @@ class SubmissionsController < ApplicationController
 
     # close modal or reload the parent page?
 
+
+
   end
 
 
