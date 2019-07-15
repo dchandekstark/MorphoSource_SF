@@ -1,5 +1,15 @@
 module MorphosourceHelper
 
+  def current_controller
+    current_uri = request.env['PATH_INFO']
+    path = Rails.application.routes.recognize_path(current_uri)
+    controller = path[:controller]
+  end
+
+  def current_controller?(names)
+    names.include?(current_controller)
+  end
+
   def device_selector
     sortable_title_field = Solrizer.solr_name('title', :stored_sortable)
     hits = devices

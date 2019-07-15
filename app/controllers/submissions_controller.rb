@@ -419,16 +419,10 @@ class SubmissionsController < ApplicationController
   end
 
   def new_institution_submit
-    #reinstantiate_submission
-    #@submission.institution_id = 'new'
-    #store_submission
     institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
     create_institution(institution_model_params)
-
-    # close modal or reload the parent page?
-
-
-
+    # this method is expected to be called from a form in modal.  The modal should be closed by js, so 
+    # no need to render anything here
   end
 
 
