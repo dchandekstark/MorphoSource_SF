@@ -1,7 +1,7 @@
 
 <div class="form-group" data-behavior="parent-relationships" data-param-key="<%= f.object.model_name.param_key %>" data-members="<%= f.object.member_of_works_json %>">
   <div class="form-inline">
-    <%= f.label "Institution" %>
+    <div><label><%= f.label "Institution" %></label></div>
     <%= f.input_field :find_parent_work,
                       prompt: :translate,
                       autocomplete: 'off',

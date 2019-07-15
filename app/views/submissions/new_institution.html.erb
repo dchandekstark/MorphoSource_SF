@@ -8,8 +8,7 @@
 	    <div class="form-group">
 	      <%= render partial: 'work_creation_metadata', locals: {f: f} %>
 	      <div>
-	        <% #= f.submit 'Create New Institution', class: "btn btn-primary" %>
-				  <button id="new-institution-submit" type="button" class="btn btn-primary">Create new institution</button>
+	        <%= f.submit 'Create New Institution', class: "btn btn-primary" %>
 	      </div>
 	    </div>
 	  <% end %>

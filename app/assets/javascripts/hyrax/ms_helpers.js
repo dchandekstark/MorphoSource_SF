@@ -11,3 +11,11 @@ function hide_fields(field_array, clear = true) {
     $(field_array.join(',')).children('input, select').val('');
   }
 }
+
+// close a modal overlay before submitting the form
+function registerModalSubmit(this_modal, this_form) {
+  $(this_modal).on("submit", this_form, function() {
+		$(this_modal).modal('hide');
+		return true;
+  });
+}
