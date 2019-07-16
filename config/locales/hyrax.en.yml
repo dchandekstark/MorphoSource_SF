@@ -81,7 +81,7 @@ en:
         actions:
           remove: Remove
         attach_new_work: Deposit new institution as parent of this work
-        caption: Curent institution
+        caption: Current institution
         confirm:
           cancel: Cancel
           remove: Remove
@@ -93,7 +93,7 @@ en:
         actions:
           remove: Remove
         attach_new_work: Deposit new taxonomy as parent of this work
-        caption: Curent taxonomies
+        caption: Current taxonomies
         confirm:
           cancel: Cancel
           remove: Remove
