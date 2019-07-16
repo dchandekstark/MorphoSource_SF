@@ -1,12 +1,17 @@
-<% if @curation_concern.present? %>
-  <% @taxonomies =  Hash[@curation_concern.taxonomies.map{|t| [t.title.first, t.id]}] %>
-<% else %>
-  <% @taxonomies = [] %>
-<% end%>
+<% unless current_controller?('submissions') # no need to display this in submissions flow %>
 
-<%= f.input :canonical_taxonomy, as: :select,
-    label: 'Canonical Taxonomy',
-    collection: @taxonomies,
-    include_blank: true,
-    input_html: { class: 'form-control' }
-%>
+	<%= render 'form_parent_work_relationships_taxonomy', f: f %>
+
+	<div id="taxonomy-modal" class="modal fade">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <!-- Content will be loaded here -->
+	        </div>
+	    </div>
+	</div>
+
+	<script type="text/javascript">
+		registerModalSubmit('#taxonomy-modal', '#new_taxonomy');
+	</script>
+
+<% end %>

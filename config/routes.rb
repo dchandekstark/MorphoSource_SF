@@ -96,8 +96,11 @@ Rails.application.routes.draw do
       post 'stage_processing_event'
       post 'stage_cho'
       post 'stage_taxonomy'
+      # for new work modal
       get 'new_institution'
       post 'new_institution_submit'
+      get 'new_taxonomy'
+      post 'new_taxonomy_submit'
     end
   end
   

@@ -11,6 +11,8 @@ class SubmissionsController < ApplicationController
     layout = case action_name
              when 'new_institution'
                'modal'
+             when 'new_taxonomy'
+               'modal'
              else
                'submission'
              end
@@ -425,6 +427,17 @@ class SubmissionsController < ApplicationController
     # no need to render anything here
   end
 
+  def new_taxonomy
+    @submission = Submission.new(session[:submission])
+    render 'new_taxonomy'
+  end
+
+  def new_taxonomy_submit
+    taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
+    create_taxonomy(taxonomy_model_params)
+    # this method is expected to be called from a form in modal.  The modal should be closed by js, so 
+    # no need to render anything here
+  end
 
   private
 
