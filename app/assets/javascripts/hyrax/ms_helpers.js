@@ -19,10 +19,6 @@ function setupEmbeddedForm(work_name) {
 	var this_form = "form#" + work_name;
 	var this_path = "/submissions/" + work_name;
 
-
-//								var this_path = "tryloadsomethingelse";
-
-
   $(document).on("click", this_btn, function() {			
 		$(this_div).load(this_path);
 		$(this_div).show();
@@ -36,6 +32,3 @@ function setupEmbeddedForm(work_name) {
 		$(this_div).hide();
   });
 }
-
-		setupEmbeddedForm('new_taxonomy');
-		setupEmbeddedForm('new_institution');

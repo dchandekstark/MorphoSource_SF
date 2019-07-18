@@ -27,14 +27,16 @@ module Morphosource
     # @return [NilClass]
     def find_parent_work; end
 
-    def member_of_works_json
+    def member_of_works_json(work_type=nil)
       parent_works = model.in_works
-
       # If a work is deposited as a child of another work, it will have a parent_id
       if @controller.params[:parent_id]
         parent_works << ::ActiveFedora::Base.find(@controller.params[:parent_id])
       end
-
+      # filter by work type      
+      if work_type.present?
+        parent_works = parent_works.select{ |item| item.class.to_s == work_type } 
+      end
       parent_works.map do |parent|
         {
           id: parent.id,
