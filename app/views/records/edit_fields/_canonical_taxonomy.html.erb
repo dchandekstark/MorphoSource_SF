@@ -2,16 +2,11 @@
 
 	<%= render 'form_parent_work_relationships_taxonomy', f: f %>
 
-	<div id="taxonomy-modal" class="modal fade">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <!-- Content will be loaded here -->
-	        </div>
-	    </div>
+  <div class="form-group">
+  	<a class="btn btn-sm btn-primary" id="btn_new_taxonomy">Create new taxonomy</a>
+	  <div id="embedded_div_new_taxonomy" style="display: none">
+	  	<!-- new institution form will be loaded here -->
+	  </div>
 	</div>
-
-	<script type="text/javascript">
-		registerModalSubmit('#taxonomy-modal', '#new_taxonomy');
-	</script>
 
 <% end %>

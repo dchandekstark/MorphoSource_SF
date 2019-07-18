@@ -10,9 +10,9 @@ class SubmissionsController < ApplicationController
   def decide_layout
     layout = case action_name
              when 'new_institution'
-               'modal'
+               'embedded_page'
              when 'new_taxonomy'
-               'modal'
+               'embedded_page'
              else
                'submission'
              end

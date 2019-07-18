@@ -12,10 +12,30 @@ function hide_fields(field_array, clear = true) {
   }
 }
 
-// close a modal overlay before submitting the form
-function registerModalSubmit(this_modal, this_form) {
-  $(this_modal).on("submit", this_form, function() {
-		$(this_modal).modal('hide');
+// setup embedded work form, when to load the form, submit and close handling
+function setupEmbeddedForm(work_name) {
+	var this_btn = "#btn_" + work_name;
+	var this_div = "#embedded_div_" + work_name;
+	var this_form = "form#" + work_name;
+	var this_path = "/submissions/" + work_name;
+
+
+//								var this_path = "tryloadsomethingelse";
+
+
+  $(document).on("click", this_btn, function() {			
+		$(this_div).load(this_path);
+		$(this_div).show();
+	});
+
+  $(this_div).on("submit", this_form, function() {
+		$(this_div).hide();
 		return true;
   });
+  $(this_div).on("click", "button.cancel", function() {
+		$(this_div).hide();
+  });
 }
+
+		setupEmbeddedForm('new_taxonomy');
+		setupEmbeddedForm('new_institution');

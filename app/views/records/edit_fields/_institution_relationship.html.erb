@@ -2,16 +2,11 @@
 
 	<%= render 'form_parent_work_relationships_institution', f: f %>
 
-	<div id="institution-modal" class="modal fade">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <!-- Content will be loaded here -->
-	        </div>
-	    </div>
+  <div class="form-group">
+	  <a class="btn btn-sm btn-primary" id="btn_new_institution">Create new institution</a>
+	  <div id="embedded_div_new_institution" style="display: none">
+	  	<!-- new institution form will be loaded here -->
+	  </div>
 	</div>
-
-	<script type="text/javascript">
-		registerModalSubmit('#institution-modal', '#new_institution');
-	</script>
 
 <% end %>
