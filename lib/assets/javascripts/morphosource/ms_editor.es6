@@ -1,5 +1,6 @@
 import Editor from 'hyrax/editor'
-import RelationshipsControl from 'hyrax/relationships/control'
+//import RelationshipsControl from 'hyrax/relationships/control'
+import RelationshipsControl from './ms_control'
 import MorphosourceSaveWorkControl from './ms_save_work_control'
 
 export default class MorphosourceEditor extends Editor {
@@ -32,14 +33,16 @@ export default class MorphosourceEditor extends Editor {
                                  works_parents_institutions.data('members'),
                                  works_parents_institutions.data('paramKey'),
                                  'work_parents_attributes',
-                                 'tmpl-parent-work-institutions').init())
+                                 'tmpl-parent-work-institutions',
+                                 0).init())
      let works_parents_taxonomies = this.element.find('[data-behavior="parent-relationships-taxonomies"]')
     works_parents_taxonomies.each((_idx, element) =>
         new RelationshipsControl(element,
                                  works_parents_taxonomies.data('members'),
                                  works_parents_taxonomies.data('paramKey'),
                                  'work_parents_attributes',
-                                 'tmpl-parent-work-taxonomies').init())
+                                 'tmpl-parent-work-taxonomies',
+                                 10).init())
   }
 
   saveWorkControl(){
