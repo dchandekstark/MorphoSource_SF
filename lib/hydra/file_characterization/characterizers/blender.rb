@@ -19,4 +19,3 @@ module Hydra::FileCharacterization::Characterizers
       end
   end
 end
-end
