@@ -1,6 +1,7 @@
 # Based on https://github.com/duke-libraries/rdr/blob/develop/.travis.yml
 
 language: ruby
+cache: bundler
 rvm:
   - 2.4.2
 services:
