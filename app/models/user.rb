@@ -82,7 +82,7 @@ class User < ApplicationRecord
 
   # items requested from user (items where user is data owner)
   def requested_items
-    CartItem.where(approver: self.email).where.not(date_requested: nil)
+    CartItem.where.not(date_requested: nil).or(CartItem.where.not(date_cleared: nil))
   end
 
   def requested_item_ids
@@ -91,7 +91,7 @@ class User < ApplicationRecord
 
   def requested_items_work_ids
     requested_items.map{ |item| item.work_id }
-  end  
+  end
 
   def downloaded_items
     cart_items.select{ |i| i.date_downloaded.present? }

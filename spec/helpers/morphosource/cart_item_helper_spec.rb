@@ -44,11 +44,29 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
         item.date_denied = Date.today
       end
 
-      it 'creates a "Denied" label' do
-        expect(item_status_label(item)).to eq(label_content)
+      context 'the item is in the media cart' do
+        before do
+          item.in_cart = true
+        end
+        it 'creates a "Denied" label' do
+          expect(item_status_label(item)).to eq(label_content)
+        end
+        it 'creates a "Remove from Cart" button' do
+          expect(item_action_button(item)).to eq(button_content)
+        end
       end
-      it 'creates a "Remove from Cart" button' do
-        expect(item_action_button(item)).to eq(button_content)
+
+      context 'the item is not in the media cart' do
+        let(:span) { content_tag(:span) }
+        before do
+          item.in_cart = false
+        end
+        it 'creates a "Denied" label' do
+          expect(item_status_label(item)).to eq(label_content)
+        end
+        it 'creates an empty span tag' do
+          expect(item_action_button(item)).to eq(span)
+        end
       end
     end
 

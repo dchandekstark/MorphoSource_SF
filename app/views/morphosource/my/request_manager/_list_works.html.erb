@@ -32,7 +32,9 @@
   <td><%= item.date_denied&.strftime("%Y-%m-%d") %></td>
   <td><%= item.date_canceled&.strftime("%Y-%m-%d") %></td>
   <td><%= item.date_expired&.strftime("%Y-%m-%d") %></td>
+  <td><%= item.date_cleared&.strftime("%Y-%m-%d") %></td>
   <td><%= link_to "Approve Download", main_app.approve_download_path(:item_id => item.id), class: 'btn btn-success', :method => :put %></td>
+  <td><%= link_to "Clear Request", main_app.clear_request_path(:item_id => item.id), class: 'btn btn-info', :method => :put %></td>
   <td><%= link_to "Deny Download", main_app.deny_download_path(:item_id => item.id), class: 'btn btn-danger', :method => :put %></td>
 </tr>
 
