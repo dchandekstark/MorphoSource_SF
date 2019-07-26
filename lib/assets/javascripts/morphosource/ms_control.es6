@@ -72,6 +72,7 @@ export default class RelationshipsControl {
   addRow() {
     this.hideWarningMessage()
     let data = this.searchData()
+    //console.log('select2 data : ',data)
     this.registry.addResource(new Resource(data.id, data.text))
 
     // finally, empty the "add" row input value
@@ -79,11 +80,19 @@ export default class RelationshipsControl {
   }
 
   searchData() {
-    return this.input.select2('data')
+    // if new work has been created, use data from new work instead
+    var new_data = this.element.data("new-work-created")
+    //console.log('new_data : ', new_data)
+    if ($.isEmptyObject(new_data)) {
+      return this.input.select2('data')
+    } else {
+      return new_data
+    }
   }
 
   clearSearch() {
     this.input.select2("val", '');
+    this.element.data("new-work-created", '');
   }
 
   /**
