@@ -13,7 +13,7 @@ function hide_fields(field_array, clear = true) {
 }
 
 // setup embedded work form, when to load the form, submit and close handling
-function setupEmbeddedForm(work_name) {
+function setupEmbeddedWorkForm(work_name) {
 	var this_btn = "#btn_" + work_name;
 	var this_div = "#embedded_div_" + work_name;
 	var this_form = "form#" + work_name;
@@ -42,27 +42,30 @@ function setupEmbeddedForm(work_name) {
 		// replace with ajax form post to trigger other actions
 		$.post($(this_form).attr('action'),
 	  $(this_form).serialize(), function(data, status){
-	    // to-do: will need to setup proper response from the server side to get return status, work ID, etc. 
-	    //alert("Data: " + data + "\nStatus: " + status);
-
-	    console.log('work created by now...');
-
-	  	var this_input = $('div[data-behavior="parent-relationships-institutions"]').find('input[name="biological_specimen[find_parent_work]"]');
-			this_input.val('x346d4165');
-
-			var this_element = $('[data-behavior="parent-relationships-institutions"]');
-
+	    console.log('new work created ', data);
+			var relationship_element = $(this_div).data("relationship-control");
+	  	var relationship_input = $(relationship_element).find('input[name*="[find_parent_work]"]');
+			$(relationship_input).val(data.work.id);
 			var new_data = {
-				id: "x346d4165", 
-				text: "Duke 724"
+				id: data.work.id, 
+				text: data.work.title
 			};
-	    this_element.data('new-work-created', new_data);
-			var this_add_btn = $(this_div).data("add-button");
-			$(this_add_btn).trigger("click");
+	    $(relationship_element).data('new-work-created', new_data);
+			var relationship_add_btn = $(this_div).data("add-button");
+			$(relationship_add_btn).trigger("click");
+
+			// perform any work specifc function
+			switch(work_name) {
+				case 'new_institution':
+					$('#biological_specimen_institution_code').val(data.work.institution_code);
+					break;
+				default:
+			}
+			$(this_div).hide();
 	  });
 	  
-//	  console.log(this.input.select2('data'))	
-		$(this_div).hide();
+		$(this_div).addClass('ui-loading');
+		//$(this_div).hide();
    	$(this_div).html('');
 		return false;
   });
