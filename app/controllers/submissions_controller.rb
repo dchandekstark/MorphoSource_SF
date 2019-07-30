@@ -424,17 +424,25 @@ class SubmissionsController < ApplicationController
     # this method is expected to be called from a form in modal, or an ajax post
     institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
     new_institution_id = create_institution(institution_model_params)
-    new_institution = Institution.where('id' => new_institution_id).first
-    response_object = { 
-      :work => {
+    if new_institution_id.present?
+      status = 'OK'
+      message = 'New institution created'
+      new_institution = Institution.where('id' => new_institution_id).first
+      new_work = {
         :id => new_institution_id,
         :title => new_institution.title.first,
-        :institution_code => new_institution.institution_code
-      },
-      :status => "ok", 
-      :message => "Success!"
+        :institution_code => new_institution.institution_code.first
+      }
+    else
+      status = 'FAIL'
+      message = 'There is a problem creating the institution.'
+      new_work = {}
+    end
+    response_object = { 
+      :work => new_work,
+      :status => status,
+      :message => message
     }
-    # to-do: need to check for error and return any failure status
     render :json => response_object 
   end
 
@@ -444,10 +452,28 @@ class SubmissionsController < ApplicationController
   end
 
   def new_taxonomy_submit
+    # this method is expected to be called from a form in modal, or an ajax post
     taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
-    create_taxonomy(taxonomy_model_params)
-    # this method is expected to be called from a form in modal.  The modal should be closed by js, so 
-    # no need to render anything here
+    new_taxonomy_id = create_taxonomy(taxonomy_model_params)
+    if new_taxonomy_id.present?
+      status = 'OK'
+      message = 'New Taxonomy created'
+      new_taxonomy = Taxonomy.where('id' => new_taxonomy_id).first
+      new_work = {
+        :id => new_taxonomy_id,
+        :title => new_taxonomy.title.first
+      }
+    else
+      status = 'FAIL'
+      message = 'There is a problem creating the taxonomy.'
+      new_work = {}
+    end
+    response_object = { 
+      :work => new_work,
+      :status => status,
+      :message => message
+    }
+    render :json => response_object 
   end
 
   private

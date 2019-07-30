@@ -42,7 +42,7 @@ function setupEmbeddedWorkForm(work_name) {
 		// replace with ajax form post to trigger other actions
 		$.post($(this_form).attr('action'),
 	  $(this_form).serialize(), function(data, status){
-	    console.log('new work created ', data);
+	    console.log(data.message, data);
 			var relationship_element = $(this_div).data("relationship-control");
 	  	var relationship_input = $(relationship_element).find('input[name*="[find_parent_work]"]');
 			$(relationship_input).val(data.work.id);
