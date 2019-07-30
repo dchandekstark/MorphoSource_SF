@@ -19,7 +19,7 @@ export default class RelationshipsControl {
    *                      will prevent Hyrax to overwrite a property (e.g. work_parents_attributes) which is used
    *                      in more than one form element 
    */
-  constructor(element, members, paramKey, property, templateId, indexStart = 0 ) {
+  constructor(element, members, paramKey, property, templateId, indexStart = 0) {
     this.element = $(element)
     this.members = this.element.data('members')
     this.registry = new Registry(this.element.find('tbody'), paramKey, property, templateId, indexStart)
@@ -38,6 +38,12 @@ export default class RelationshipsControl {
     if (this.input.val() === "") {
       this.errors = ['ID cannot be empty.']
     }
+    /* to-do: check to see if possible to restrict only 1 item added for non-repeatable fields
+    console.log(this.element.find('[data-behavior="remove-relationship"]').length);
+    if (this.repeatable && this.members.length == 1) {
+      this.errors = ['Only one item is allowed.']
+    } 
+    */
   }
 
   displayMembers() {

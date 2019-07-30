@@ -1,5 +1,5 @@
 
-<div class="form-group" data-behavior="parent-relationships-taxonomies" data-param-key="<%= f.object.model_name.param_key %>" data-members="<%= f.object.member_of_works_json('Taxonomy') %>">
+<div id="parent-relationships-taxonomies" class="form-group" data-behavior="parent-relationships-taxonomies" data-param-key="<%= f.object.model_name.param_key %>" data-members="<%= f.object.member_of_works_json('Taxonomy') %>" data-new-work-created="">
   <div class="form-inline">
     <div><label><%= f.label "Taxonomies" %></label></div>
     <%= f.input_field :find_parent_work,
@@ -9,7 +9,7 @@
                         autocomplete: 'work',
                         'autocomplete-url' => find_taxonomy_autocomplete_url()
                       } %>
-    <a class="btn btn-sm btn-primary" data-behavior="add-relationship">Add taxonomy</a>
+    <a class="btn btn-sm btn-primary" id="btn-add-taxonomy" data-behavior="add-relationship">Add taxonomy</a>
   </div>
 
   <div class="message has-warning hidden"></div>

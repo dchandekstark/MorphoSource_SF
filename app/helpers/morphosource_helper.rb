@@ -2,6 +2,7 @@ module MorphosourceHelper
 
   def current_controller
     current_uri = request.env['PATH_INFO']
+    # to-do: might need to catch exception here for route not found
     path = Rails.application.routes.recognize_path(current_uri)
     controller = path[:controller]
   end
