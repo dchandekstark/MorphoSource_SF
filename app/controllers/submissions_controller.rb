@@ -422,8 +422,13 @@ class SubmissionsController < ApplicationController
 
   def new_institution_submit
     # this method is expected to be called from a form in modal, or an ajax post
-    institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
-    new_institution_id = create_institution(institution_model_params)
+    begin
+      institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
+      new_institution_id = create_institution(institution_model_params)
+    rescue
+      new_institution_id = nil    
+    end
+
     if new_institution_id.present?
       status = 'OK'
       message = 'New institution created'
@@ -453,8 +458,13 @@ class SubmissionsController < ApplicationController
 
   def new_taxonomy_submit
     # this method is expected to be called from a form in modal, or an ajax post
-    taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
-    new_taxonomy_id = create_taxonomy(taxonomy_model_params)
+    begin
+      taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
+      new_taxonomy_id = create_taxonomy(taxonomy_model_params)
+    rescue
+      new_taxonomy_id = nil    
+    end
+
     if new_taxonomy_id.present?
       status = 'OK'
       message = 'New Taxonomy created'

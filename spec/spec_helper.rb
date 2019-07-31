@@ -1,5 +1,6 @@
 require 'capybara/rspec'
 require 'selenium/webdriver'
+require "rspec/json_expectations"
 
 unless Selenium::WebDriver::Firefox::Binary
   if `sh -c 'command -v firefox'`.chomp.empty?
