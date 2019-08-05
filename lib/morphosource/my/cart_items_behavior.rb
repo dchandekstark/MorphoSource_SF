@@ -103,9 +103,10 @@ module Morphosource
       end
 
       def mark_as(action,items,value=nil)
+        value = attribute_value(value)
         attribute = get_attribute(action)
-        value = Time.now if value == nil
-        items.each do |item|
+         items.each do |item|
+          item.date_cleared = nil if item.date_cleared
           item.send(attribute, value)
           item.save
         end
@@ -114,6 +115,30 @@ module Morphosource
       def get_attribute(action)
         return 'in_cart=' if action == 'in_cart'
         'date_'.concat(action).concat('=')
+      end
+
+      def attribute_value(value)
+        case value
+        when nil
+          Time.now
+        when 'nil'
+          nil
+        else
+          value
+        end
+      end
+
+      def re_request(items)
+        mark_as('in_cart',items,false)
+        create_new_items(items)
+      end
+
+      def requested(items)
+        items.select{|item| item.date_requested }
+      end
+
+      def unrequested(items)
+        items.select{|item| !item.date_requested }
       end
 
       def get_items_by_id(ids)
@@ -129,11 +154,12 @@ module Morphosource
         items.map{|item| item.work_id}
       end
 
-      def create_new_items(old_items)
+      def create_new_items(old_items,requested='requested')
+        value = requested == 'requested' ? Time.now : nil
         works = get_media_by_items(old_items)
         works.each do |work|
           unless work_already_in_cart?(work.id)
-            item = CartItem.new({media_cart_id: current_user.media_cart.id, work_id: work.id, in_cart: true, approver: work.depositor, date_requested: Time.now, restricted: work.restricted?})
+            item = CartItem.new({media_cart_id: current_user.media_cart.id, work_id: work.id, in_cart: true, approver: work.depositor, date_requested: value, restricted: work.restricted?})
             item.save
           end
         end

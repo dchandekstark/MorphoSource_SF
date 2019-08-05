@@ -26,7 +26,11 @@ module Morphosource::CartItemHelper
     when 'Canceled'
       make_button(item,"Request Download",:request_item_path,"btn btn-info",:put,'')
     when 'Denied'
-      make_button(item,"Remove from Cart",:remove_items_path,"btn btn-danger",:delete,'')
+      if item.in_cart
+        make_button(item,"Remove from Cart",:remove_items_path,"btn btn-danger",:delete,'')
+      else
+        content_tag(:span)
+      end
     when 'Expired'
       make_button(item,"Request Again",:request_again_path,"btn btn-primary",:get,'')
     when 'Requested'

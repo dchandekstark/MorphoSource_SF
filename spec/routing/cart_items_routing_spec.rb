@@ -72,6 +72,11 @@ RSpec.describe 'cart items routing', type: :routing do
     expect(:put => 'approve_download').to route_to(route)
   end
 
+  it 'has a route to clear a download request' do
+    route = { controller: 'morphosource/my/request_managers', action: 'clear_request' }
+    expect(:put => 'clear_request').to route_to(route)
+  end
+
   it 'has a route to deny a download request' do
     route = { controller: 'morphosource/my/request_managers', action: 'deny_download' }
     expect(:put => 'deny_download').to route_to(route)

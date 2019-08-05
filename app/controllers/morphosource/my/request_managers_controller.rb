@@ -18,8 +18,16 @@ module Morphosource
         redirect_to main_app.request_manager_path
       end
 
+      def clear_request
+        item = get_items_by_id(params[:item_id])
+        mark_as('requested',item,'nil')
+        mark_as('cleared',item)        
+        flash[:notice] = "Request cleared for #{count_text(item.count)}"
+        redirect_to main_app.request_manager_path
+      end
+
       def deny_download
-        item = [CartItem.find(params[:item_id])]
+        item = get_items_by_id(params[:item_id])
         mark_as('denied',item)
         flash[:notice] = "Download Denied"
         redirect_to main_app.request_manager_path

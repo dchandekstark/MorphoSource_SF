@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
 
   let(:media_cart)    { MediaCart.where(user_id: user.id)[0] }
   let(:work)          { Media.create(id: "aaa", title: ["Test Media Work"], depositor: "test@test.com", fileset_accessibility: ['open'])}
-  let(:cartItem1)     { CartItem.create(id: 1, media_cart_id: media_cart.id, work_id: "aaa", in_cart: true, restricted: true) }
+  let(:cartItem1)     { CartItem.create(id: 1, media_cart_id: media_cart.id, work_id: "aaa", in_cart: true, restricted: true, date_cleared: Time.current) }
   let(:cartItem2)     { CartItem.create(id: 2, media_cart_id: media_cart.id, work_id: "bbb", in_cart: true, restricted: false) }
   let(:cartItem3)     { CartItem.create(id: 3, media_cart_id: media_cart.id, work_id: "ccc", in_cart: true, restricted: true, date_requested: Date.yesterday) }
   let(:cartItem4)     { CartItem.create(id: 4, media_cart_id: media_cart.id, work_id: "ddd", in_cart: false, date_downloaded: Time.current) }
@@ -67,15 +67,15 @@ RSpec.describe User, type: :model do
 
   # where user is data owner/manager
   describe '#requested_items' do
-    it { expect(data_owner.requested_items).to match_array([cartItem3,cartItem5])}
+    it { expect(data_owner.requested_items).to match_array([cartItem1,cartItem3,cartItem5])}
   end
 
   describe '#requested_item_ids' do
-    it { expect(data_owner.requested_item_ids).to match_array([cartItem3.id,cartItem5.id])}
+    it { expect(data_owner.requested_item_ids).to match_array([cartItem1.id,cartItem3.id,cartItem5.id])}
   end
 
   describe '#requested_items_work_ids' do
-    it { expect(data_owner.requested_items_work_ids).to match_array([cartItem3.work_id,cartItem5.work_id])}
+    it { expect(data_owner.requested_items_work_ids).to match_array([cartItem1.work_id,cartItem3.work_id,cartItem5.work_id])}
   end
 
   describe '#downloaded_items' do

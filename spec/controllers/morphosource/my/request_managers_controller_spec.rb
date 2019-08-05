@@ -67,6 +67,25 @@ RSpec.describe Morphosource::My::RequestManagersController, :type => :controller
     end
   end
 
+  describe 'PUT #clear_request' do
+    before do
+      put :clear_request, params: { item_id: cartItem1.id }
+      cartItem1.reload
+    end
+    it "clears the item's date requested" do
+      expect(cartItem1.date_requested).to be(nil)
+    end
+    it 'marks the date cleared as today' do
+      expect(cartItem1.date_cleared.to_date).to eq(Date.today)
+    end
+    it 'creates a flash message' do
+      expect(response.flash[:notice]).to eq("Request cleared for 1 Item")
+    end
+    it 'redirects to the request manager page' do
+      expect(response).to redirect_to(request_manager_path)
+    end
+  end
+
   describe "PUT #deny_download" do
     before do
       put :deny_download, params: { item_id: cartItem1.id }

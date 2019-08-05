@@ -128,7 +128,6 @@ Rails.application.routes.draw do
 
       # requests
       get 'dashboard/my/requests', action: :index, controller: :requests, as: 'my_requests'
-      # post 'batch_request', action: :request_item, controller: :requests
       put 'request_item', action: :request_item, controller: :requests, as: 'request_item'
       get 'request_again', action: :request_again, controller: :requests, as: 'request_again'
       put 'cancel_request', action: :cancel_request,
@@ -137,6 +136,7 @@ Rails.application.routes.draw do
       # request manager
       get 'dashboard/my/request_manager', action: :index, controller: :request_managers, as: 'request_manager'
       put 'approve_download', action: :approve_download, controller: :request_managers, as: 'approve_download'
+      put 'clear_request', action: :clear_request, controller: :request_managers, as: 'clear_request'
       put 'deny_download', action: :deny_download, controller: :request_managers, as: 'deny_download'
     end
   end
