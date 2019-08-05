@@ -29,6 +29,8 @@ class CartItem < ApplicationRecord
       "Expired"
     elsif self.date_approved.present?
       "Approved"
+    elsif self.date_cleared.present?
+      "Cleared"
     elsif self.date_requested.present?
       "Requested"
     elsif self.restricted?
@@ -55,8 +57,12 @@ class CartItem < ApplicationRecord
     self.date_expired < Time.now
   end
 
+  def approved?
+    self.request_status == 'Approved'
+  end
+
   # for now, approver = depositor
-   def set_approver
+  def set_approver
     self.approver = work.depositor
   end
 end

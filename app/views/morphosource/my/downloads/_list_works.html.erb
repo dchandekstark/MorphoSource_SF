@@ -31,10 +31,12 @@
   <td>
     <% if document.fileset_accessibility&.first == "restricted_download" %>
       <span class="label label-danger">Restricted</span>
+    <% elsif document.fileset_accessibility&.first == "open" %>
+      <span class="label label-success">Open</span>
     <% end %>
   </td>
 
-  <td class="date"><%= item.date_downloaded.strftime("%Y-%m-%d") %></td>
+  <td class="date"><%= date(item,'downloaded') %></td>
 
 
 </tr>

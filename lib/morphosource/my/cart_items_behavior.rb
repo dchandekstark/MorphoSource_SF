@@ -18,7 +18,7 @@ module Morphosource
         'cart' => {
           item_ids: :item_ids_in_cart,
           order: 'created_at DESC',
-          work_ids: :works_in_cart,
+          work_ids: :work_ids_in_cart,
         },
         'downloads' => {
           item_ids: :downloaded_items,
@@ -31,9 +31,14 @@ module Morphosource
           work_ids: :my_requests_work_ids
         },
         'request_manager' => {
-          item_ids: :requested_item_ids,
+          item_ids: :newly_requested_item_ids,
           order: 'date_requested DESC',
-          work_ids: :requested_items_work_ids
+          work_ids: :newly_requested_items_work_ids
+        },
+        'previous_requests' => {
+          item_ids: :previously_requested_item_ids,
+          order: 'date_requested DESC',
+          work_ids: :previously_requested_items_work_ids
         }
       }
 
@@ -64,12 +69,12 @@ module Morphosource
         count.to_s.concat(count == 1 ? " Item" : " Items")
       end
 
-      def duplicates_text(duplicates)
-        if duplicates.count > 0
-          "; #{count_text(duplicates.count)}: #{duplicates.join(', ')} Already in Your Cart."
-        else
-          ''
-        end
+      def item_count_text
+        count_text(@items.count)
+      end
+
+      def id_params
+        params[:item_id] || params[:batch_document_ids]
       end
 
       def after_create_response(curation_concern)
@@ -91,23 +96,16 @@ module Morphosource
         work_ids.each_with_object([]){|id, docs| docs << SolrDocument.find(id)}
       end
 
-      # Get duplicates if a user tries to send them to the media cart
-      def get_duplicate_works(works, uniq_works)
-        works = works.dup
-        uniq_works.each {|id| works.slice!(works.index(id)) if works.include?(id) }
-        works
+      def work_already_in_cart?(id)
+        work_ids_in_cart.include? id
       end
 
-      def work_already_in_cart?(work)
-        works_in_cart.include? work
-      end
-
-      def mark_as(action,items,value=nil)
-        value = attribute_value(value)
+      def mark_as(action,items=@items,date: nil)
+        date = attribute_value(date)
         attribute = get_attribute(action)
          items.each do |item|
           item.date_cleared = nil if item.date_cleared
-          item.send(attribute, value)
+          item.send(attribute, date)
           item.save
         end
       end
@@ -117,19 +115,19 @@ module Morphosource
         'date_'.concat(action).concat('=')
       end
 
-      def attribute_value(value)
-        case value
+      def attribute_value(date)
+        case date
         when nil
           Time.now
         when 'nil'
           nil
         else
-          value
+          date
         end
       end
 
       def re_request(items)
-        mark_as('in_cart',items,false)
+        mark_as('in_cart',items,date: false)
         create_new_items(items)
       end
 
@@ -141,82 +139,62 @@ module Morphosource
         items.select{|item| !item.date_requested }
       end
 
-      def get_items_by_id(ids)
-        CartItem.where(id: ids)
+      def get_items_by_id(ids=id_params)
+        @items = CartItem.where(id: ids)
       end
 
       def get_media_by_items(items)
-        work_ids = get_work_ids_by_items(items)
-        Media.where(id: work_ids)
+        get_work_ids_by_items(items)
+        Media.where(id: @work_ids)
       end
 
-      def get_work_ids_by_items(items)
-        items.map{|item| item.work_id}
+      def get_work_ids_by_items(items=@items)
+        @work_ids = items.map{|item| item.work_id}
       end
 
       def create_new_items(old_items,requested='requested')
         value = requested == 'requested' ? Time.now : nil
         works = get_media_by_items(old_items)
+        @count = 0
+        @duplicates_in_cart = []
         works.each do |work|
           unless work_already_in_cart?(work.id)
             item = CartItem.new({media_cart_id: current_user.media_cart.id, work_id: work.id, in_cart: true, approver: work.depositor, date_requested: value, restricted: work.restricted?})
             item.save
+            @count += 1
+          else
+            @duplicates_in_cart << work.title[0]
           end
         end
-      end
-
-      def downloaded_work_ids
-        current_user.downloaded_work_ids
+        return @count, @duplicates_in_cart
       end
 
       def uniq_downloaded_work_ids
         downloaded_work_ids.uniq
       end
 
-      def downloaded_items
-        current_user.downloaded_item_ids
-      end
-
-      def items_in_cart
-        current_user.items_in_cart
-      end
-
-      def item_ids_in_cart
-        current_user.item_ids_in_cart
-      end
-
-      def my_requests_ids
-        current_user.my_requests_ids
-      end
-
-      def my_requests_work_ids
-        current_user.my_requests_work_ids
-      end
-
-      def requested_items
-        current_user.requested_items
-      end
-
-      def requested_item_ids
-        current_user.requested_item_ids
-      end
-
-      def requested_items_work_ids
-        current_user.requested_items_work_ids
+      def unrestricted_items
+        items_in_cart.select{ |item| item.downloadable? }
       end
 
       def restricted_items
         items_in_cart.select{ |item| !item.downloadable? }
       end
 
-      def unrestricted_items
-        items_in_cart.select{ |item| item.downloadable? }
+      def user_is_depositor?(work)
+        current_user.email == work.depositor
       end
 
-      def works_in_cart
-        current_user.work_ids_in_cart
+      def user_is_approver?(item)
+        current_user.email == item.approver
       end
 
+      def unrestrict(item)
+        item.restricted = false
+        item.save
+      end
+
+      delegate :downloaded_work_ids, :downloaded_items, :items_in_cart, :item_ids_in_cart, :my_requests_ids, :my_requests_work_ids, :requested_items, :previously_requested_items, :newly_requested_items, :requested_item_ids, :previously_requested_item_ids, :newly_requested_item_ids, :requested_items_work_ids, :previously_requested_items_work_ids, :newly_requested_items_work_ids, :work_ids_in_cart, to: :current_user
     end
   end
 end

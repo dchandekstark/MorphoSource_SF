@@ -11,7 +11,7 @@ RSpec.shared_context 'cart items', :shared_context => :metadata do
   let(:work6)         { Media.create(id: "fff", title: ["Test Work Title"], depositor: "test@test.com", fileset_accessibility: ['']) }
   let(:work7)         { Media.create(id: "ggg", title: ["Test Work Title"], depositor: "test@test.com", fileset_accessibility: ['restricted_download']) }
 
-  let(:cartItem1)     { CartItem.create( media_cart_id: media_cart.id, work_id: work1.id, in_cart: true, date_requested: Date.yesterday, date_downloaded: Date.yesterday, restricted: true) }
+  let(:cartItem1)     { CartItem.create( media_cart_id: media_cart.id, work_id: work1.id, in_cart: true, date_requested: Date.yesterday, date_downloaded: Date.yesterday, restricted: true, date_approved: Date.yesterday, date_expired: Date.tomorrow) }
   let(:cartItem2)     { CartItem.create( media_cart_id: media_cart.id, work_id: work2.id, in_cart: true, date_downloaded: Date.yesterday, restricted: false) }
   let(:cartItem3)     { CartItem.create( media_cart_id: media_cart.id, work_id: work3.id, in_cart: true, date_downloaded: nil, restricted: true) }
   let(:cartItem4)     { CartItem.create( media_cart_id: media_cart.id, work_id: work4.id, in_cart: false, date_downloaded: Date.yesterday, restricted: false) }

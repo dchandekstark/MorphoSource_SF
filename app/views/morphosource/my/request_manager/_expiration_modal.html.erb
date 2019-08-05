@@ -1,0 +1,21 @@
+<div class="modal fade" id="editExpiration" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Edit Request</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag main_app.edit_expiration_path, method: :put, :class => "form-horizontal" do %>
+              <%= label_tag 'expiration date', 'New Expiration Date', :class => 'control-label' %>
+              <%= date_field :expiration_date, params[:date], :class => "form-control" %>
+              <%= hidden_field :item_id, params[:id] %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+           <%= submit_tag "Submit", name: nil, class: "btn btn-success" %>
+        <% end %>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

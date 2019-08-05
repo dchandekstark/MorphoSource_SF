@@ -135,14 +135,16 @@ Rails.application.routes.draw do
       get 'dashboard/my/requests', action: :index, controller: :requests, as: 'my_requests'
       put 'request_item', action: :request_item, controller: :requests, as: 'request_item'
       get 'request_again', action: :request_again, controller: :requests, as: 'request_again'
-      put 'cancel_request', action: :cancel_request,
-      controller: :requests, as: 'cancel_request'
+      put 'cancel_request', action: :cancel_request, controller: :requests, as: 'cancel_request'
+      put 'move_to_cart', action: :move_to_cart, controller: :requests
 
       # request manager
       get 'dashboard/my/request_manager', action: :index, controller: :request_managers, as: 'request_manager'
+      get 'dashboard/my/previous_requests', action: :index, controller: :request_managers, as: 'previous_requests'
       put 'approve_download', action: :approve_download, controller: :request_managers, as: 'approve_download'
       put 'clear_request', action: :clear_request, controller: :request_managers, as: 'clear_request'
       put 'deny_download', action: :deny_download, controller: :request_managers, as: 'deny_download'
+      put 'edit_expiration', action: :edit_expiration, controller: :request_managers, as: 'edit_expiration'
     end
   end
 end

@@ -11,25 +11,43 @@ module Morphosource
 
       # Used when batch-copying previously downloaded items to cart
       def batch_create
-        ids = params[:batch_document_ids]
-        work_ids = ids.map{|id| CartItem.find(id).work_id}
-        duplicate_work_ids = get_duplicate_works(work_ids, work_ids.uniq)
-        count = ids.count - duplicate_work_ids.count
-        duplicates = duplicate_work_ids.each_with_object([]) do |id, duplicates|
-          duplicates << Media.find(id).title[0]
-        end
-        work_ids.uniq.each do |id|
-          if work_already_in_cart?(id)
-            duplicates << Media.find(id).title[0]
-            count -= 1
-          else
-            work = Media.find(id)
-            @item = CartItem.new({:media_cart_id => current_user.media_cart.id, :work_id => id, :restricted => work.restricted?, :approver => work.depositor})
-            @item.save!
-          end
-        end
-        flash[:notice] = "#{count_text(count)} Added to Cart#{duplicates_text(duplicates)}"
+        get_items_by_id
+        get_duplicate_requests
+        create_new_items(@items,nil)
+        flash[:notice] = duplicates_flash
         redirect_to main_app.my_cart_path
+      end
+
+      private
+
+      def get_duplicate_requests
+        @ids = get_work_ids_by_items.dup
+        duplicate_work_ids
+        @duplicate_requests = titles_by_id
+      end
+
+      def duplicate_work_ids
+        @ids.uniq.each do |id|
+          @ids.slice!(@ids.index(id)) if @ids.include?(id)
+        end
+      end
+
+      def titles_by_id
+        @ids.each_with_object([]) do |id,titles|
+          titles << Media.find(id).title[0]
+        end
+      end
+
+      def duplicates_flash
+        "#{count_text(@count)} Added to Cart#{duplicates_text(@duplicate_requests+@duplicates_in_cart)}"
+      end
+
+      def duplicates_text(duplicates)
+        if duplicates.count > 0
+          "; #{count_text(duplicates.count)}: #{duplicates.join(', ')} Already in Your Cart."
+        else
+          ''
+        end
       end
 
     end

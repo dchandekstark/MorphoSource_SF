@@ -1,9 +1,10 @@
 <tr id="document_<%= document.id %>">
-
-  <td>
-    <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
-    <%= render 'morphosource/batch_select/add_button', item: item %>&nbsp;
-  </td>
+  <% if @tab == 'new' %>
+    <td>
+      <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
+      <%= render 'morphosource/batch_select/add_button', item: item %>&nbsp;
+    </td>
+  <% end %>
 
   <td>
     <div class='media'>
@@ -24,21 +25,31 @@
       </div>
     </div>
   </td>
-  <td><%= item_status_label(item) %></td>
+  <% if @tab == 'previous' %>
+    <td><%= item_status_label(item) %></td>
+  <% end %>
   <td><%= item.requester_email %></td>
   <td><%= item.requester_affiliation %></td>
-  <td><%= item.date_requested.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_approved&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_denied&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_canceled&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_expired&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_cleared&.strftime("%Y-%m-%d") %></td>
-  <td><%= link_to "Approve Download", main_app.approve_download_path(:item_id => item.id), class: 'btn btn-success', :method => :put %></td>
-  <td><%= link_to "Clear Request", main_app.clear_request_path(:item_id => item.id), class: 'btn btn-info', :method => :put %></td>
-  <td><%= link_to "Deny Download", main_app.deny_download_path(:item_id => item.id), class: 'btn btn-danger', :method => :put %></td>
-</tr>
 
+  <% if @tab == 'new' %>
+    <td><%= date(item,'requested') %></td>
+    <td><button class='btn btn-success' data-toggle="modal" data-target="#approvalModal" data-item-id= <%= item.id %>>Approve Download</button></td>
+    <td><%= link_to "Clear Request", main_app.clear_request_path(:item_id => item.id), class: 'btn btn-info', :method => :put %></td>
+    <td><%= link_to "Deny Download", main_app.deny_download_path(:item_id => item.id), class: 'btn btn-danger', :method => :put %></td>
+  <% end %>
 
-
-
+  <% if @tab == 'previous' %>
+    <td><%= date(item,'requested') %></td>
+    <td><%= date(item,'approved') %></td>
+    <td><%= date(item,'denied') %></td>
+    <td><%= date(item,'canceled') %></td>
+    <td><%= date(item,'expired') %></td>
+    <td><%= date(item,'cleared') %></td>
+    <td><%= date(item,'downloaded') %></td>
+    <% if ( item.expired? || item.approved? ) %>
+      <td><button class='btn btn-primary' data-toggle="modal" data-target="#editExpiration" data-item-id= <%= item.id %>>Edit Expiration</button></td>
+    <% else %>
+      <td></td>
+    <% end %>
+  <% end %>
 </tr>
