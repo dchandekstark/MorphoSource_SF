@@ -2,7 +2,7 @@
 
   <td>
     <label for="batch_document_<%= document.id %>" class="sr-only"><%= t("hyrax.dashboard.my.sr.batch_checkbox") %></label>
-    <%= render 'morphosource/batch_select/add_button', item: item %>&nbsp;
+    <%= render 'morphosource/batch_select/cart_downloadable_add_button', item: item %>&nbsp;
   </td>
 
   <td>
@@ -19,32 +19,17 @@
               <%= t("hyrax.dashboard.my.sr.show_label") %>
             </span>
             <%= document.title_or_label %>
+            <% if item.restricted == true %>
+              <span class="label" style="background: teal;">Download Approved</span>
+            <% end %>
           <% end %>
-
           <br />
-          <%= render_collection_links(document) %>
-
         </div>
       </div>
     </div>
   </td>
-  <td><%= render_visibility_link document %></td>
-  <td>
-    <div style="display:flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
-      <% unless document.file_set_visibilities.nil? %>
-        <% document.file_set_visibilities.each do |visibility| %>
-          <%= render_visibility_link document %>
-          <div style="height: 3px;"></div>
-        <% end %>
-      <% end %>
-    </div>
-  </td>
-
-  <% if @cart %>
-    <!-- Date Cart Item was created -->
-    <td class="date"><%= item.created_at.strftime("%Y-%m-%d") %></td>
-  <% else %>
-    <!-- Date Cart Item was downloaded -->
-    <td class="date"><%= item.date_downloaded.strftime("%Y-%m-%d") %></td>
-  <% end %>
+  <td class="date"><%= item.created_at.strftime("%Y-%m-%d") %></td>
+  <td><%=item.date_approved&.strftime("%Y-%m-%d") %></td>
+  <td><%=item.date_expired&.strftime("%Y-%m-%d") %></td>
+  <td><%= link_to "Download Item", main_app.download_items_path(item_id: item.id), class: "btn btn-info", method: :get %></td>
 </tr>

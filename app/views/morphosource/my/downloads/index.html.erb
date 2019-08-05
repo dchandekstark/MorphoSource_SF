@@ -33,13 +33,13 @@
 
 <script>
 //<![CDATA[
-  <%= render partial: 'morphosource/my/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/download_scripts', formats: [:js] %>
 //]]>
 </script>
 
 <div class="panel-body">
   <h2 class="sr-only">Works listing</h2>
-  <%= render 'batch_actions' %>
-  <%= render 'morphosource/my/document_list' %>
-  <%= render 'results_pagination' %>
+  <%= render 'morphosource/my/downloads/batch_actions' %>
+  <%= render 'morphosource/my/downloads/document_list' %>
+  <%= render 'morphosource/my/downloads/results_pagination' %>
 </div>

@@ -7,6 +7,8 @@ en:
         downloads: 'Downloads'
         media_cart: 'Media Cart'
         previous_downloads: 'Previous Downloads'
+        requests: 'Requests'
+        manage_requests: 'Manage Requests'
     base:
       form_progress:
         required_format: 'File formats match selected media type'
