@@ -79,6 +79,22 @@ export default class RelationshipsControl {
     this.hideWarningMessage()
     let data = this.searchData()
     //console.log('select2 data : ',data)
+
+
+
+
+
+
+    // if the attribute is not repeatable, remove the rest of the items.   
+    console.log(this.registry.items.length)
+    this.registry.items.forEach((item, index) => {
+      item.removeResource();
+    })
+
+
+
+
+
     this.registry.addResource(new Resource(data.id, data.text))
 
     // finally, empty the "add" row input value

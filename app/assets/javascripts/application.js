@@ -30,3 +30,4 @@
 //= require morphosource/ms_save_work_control
 //= require morphosource/ms_control
 //= require morphosource/ms_registry
+//= require morphosource/ms_registry_entry

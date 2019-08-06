@@ -1,4 +1,5 @@
-import RegistryEntry from 'hyrax/relationships/registry_entry'
+//import RegistryEntry from 'hyrax/relationships/registry_entry'
+import MsRegistryEntry from './ms_registry_entry'
 export default class Registry {
   /**
    * Initialize the registry
@@ -52,7 +53,7 @@ export default class Registry {
   // Adds the resource to the first row of the tbody
   addResource(resource) {
       resource.index = this.nextIndex()
-      let entry = new RegistryEntry(resource, this, this.templateId)
+      let entry = new MsRegistryEntry(resource, this, this.templateId)
       this.items.push(entry)
       this.element.prepend(entry.view)
       this.showSaveNote()
