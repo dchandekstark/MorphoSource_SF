@@ -27,6 +27,7 @@ export default class RelationshipsControl {
     this.warning = this.element.find(".message.has-warning")
     this.addButton = this.element.find("[data-behavior='add-relationship']")
     this.errors = null
+    this.repeatable = this.element.data('repeatable') || 'yes'
   }
 
   init() {
@@ -38,12 +39,6 @@ export default class RelationshipsControl {
     if (this.input.val() === "") {
       this.errors = ['ID cannot be empty.']
     }
-    /* to-do: check to see if possible to restrict only 1 item added for non-repeatable fields
-    console.log(this.element.find('[data-behavior="remove-relationship"]').length);
-    if (this.repeatable && this.members.length == 1) {
-      this.errors = ['Only one item is allowed.']
-    } 
-    */
   }
 
   displayMembers() {
@@ -79,22 +74,13 @@ export default class RelationshipsControl {
     this.hideWarningMessage()
     let data = this.searchData()
     //console.log('select2 data : ',data)
-
-
-
-
-
-
-    // if the attribute is not repeatable, remove the rest of the items.   
-    console.log(this.registry.items.length)
-    this.registry.items.forEach((item, index) => {
-      item.removeResource();
-    })
-
-
-
-
-
+    if (this.repeatable == 'no') {
+      // if the attribute is not repeatable, remove the rest of the items before adding
+      console.log(this.registry.items.length)
+      this.registry.items.forEach((item, index) => {
+        item.removeResource();
+      })
+    }
     this.registry.addResource(new Resource(data.id, data.text))
 
     // finally, empty the "add" row input value
