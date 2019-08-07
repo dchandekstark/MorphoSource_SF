@@ -1,17 +1,31 @@
-import RegistryEntry from 'hyrax/relationships/registry_entry'
 import ConfirmRemoveDialog from 'hyrax/relationships/confirm_remove_dialog'
 
-export default class MsRegistryEntry extends RegistryEntry {
-
+export default class RegistryEntry {
+    /**
+     * Initialize the registry entry
+     * @param {Resource} resource the resource to display on the form
+     * @param {Registry} registry the registry that holds this registry entry.
+     * @param {String} template identifer of the new row template.
+     */
     constructor(resource, registry, template) {
-      super(resource, registry, template) 
+        this.resource = resource
+        this.registry = registry
+        this.view = this.createView(resource, template);
+        this.destroyed = false
+        //this.view.effect("highlight", {}, 3000);
     }
 
+    export() {
+      return { 'id': this.resource.id, '_destroy': this.destroyed }
+    }
+
+    // Add a row that has not been persisted
     createView(resource, templateId) {
         let row = $(tmpl(templateId, resource))
         let removeButton = row.find('[data-behavior="remove-relationship"]')
         removeButton.click((e) => {
           e.preventDefault()
+          // show the alert only if the confirm text is set
           if (typeof removeButton.data('confirmText') === 'undefined') {
             this.removeResource(e);
           } else {
@@ -27,7 +41,7 @@ export default class MsRegistryEntry extends RegistryEntry {
 
     // Hides the row and adds a _destroy=true field to the form
     removeResource(evt) {
-
+      // handle the case when event is not passed
       if (evt) {
         evt.preventDefault();
         let button = $(evt.target);        

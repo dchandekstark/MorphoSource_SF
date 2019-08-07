@@ -76,7 +76,6 @@ export default class RelationshipsControl {
     //console.log('select2 data : ',data)
     if (this.repeatable == 'no') {
       // if the attribute is not repeatable, remove the rest of the items before adding
-      console.log(this.registry.items.length)
       this.registry.items.forEach((item, index) => {
         item.removeResource();
       })
