@@ -87,3 +87,4 @@ before_script:
 script: "bundle exec rake ci"
 jdk:
   - oraclejdk8
+dist: trusty
