@@ -1,6 +1,7 @@
 # Based on https://github.com/duke-libraries/rdr/blob/develop/.travis.yml
 
 language: ruby
+cache: bundler
 rvm:
   - 2.4.2
 services:
@@ -47,8 +48,8 @@ before_install:
   - cp blender_derive_mesh.py blender/scripts/.
   - git clone https://github.com/KhronosGroup/glTF-Blender-IO.git
   - cp -r glTF-Blender-IO/addons/io_scene_gltf2 blender/2.79/scripts/addons/
-  - export BLENDER_PATH="$TRAVIS_BUILD_DIR/download/blender"
-  - $BLENDER_PATH/blender -v
+  - export PATH=$PATH:$TRAVIS_BUILD_DIR/download/blender
+  - blender -v
   # verify blender is configured properly
   #- $TRAVIS_BUILD_DIR/download/blender/blender --background --python $TRAVIS_BUILD_DIR/download/blender/scripts/blender_characterize_mesh.py  -- $TRAVIS_BUILD_DIR/spec/fixtures/bunny/bunny.x3d
   # end Blender setup --------
@@ -57,6 +58,21 @@ before_install:
   - npm install -g gltf-pipeline
   - gltf-pipeline --version
   # end gltf-pipeline setup --------
+
+  # begin Fiji setup --------
+  - cd $TRAVIS_BUILD_DIR/download
+  - curl https://downloads.imagej.net/fiji/latest/fiji-linux64.zip -o fiji-linux64.zip
+  - mkdir fiji
+  - unzip fiji-linux64.zip -d fiji
+  - export FIJI_PATH="$TRAVIS_BUILD_DIR/download/fiji"
+  - # $FIJI_PATH/Fiji.app/ImageJ-linux64 --help # Could be good to verify Fiji working but causes Travis to error out even when working
+  # end Fiji setup --------
+
+  # begin dcmtk setup --------
+  - sudo apt-get install -y dcmtk
+  - img2dcm # verify dcmtk img2dcm is working properly
+  - dcmdjpeg # verify dcmtk dcmdjpeg is working property
+  # end dcmtk setup --------
 
   - cd $TRAVIS_BUILD_DIR
 before_script:
@@ -71,3 +87,4 @@ before_script:
 script: "bundle exec rake ci"
 jdk:
   - oraclejdk8
+dist: trusty

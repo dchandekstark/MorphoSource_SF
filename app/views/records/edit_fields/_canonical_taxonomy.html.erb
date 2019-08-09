@@ -1,12 +1,12 @@
-<% if @curation_concern.present? %>
-  <% @taxonomies =  Hash[@curation_concern.taxonomies.map{|t| [t.title.first, t.id]}] %>
-<% else %>
-  <% @taxonomies = [] %>
-<% end%>
+<% unless current_controller?('submissions') # no need to display this in submissions flow %>
 
-<%= f.input :canonical_taxonomy, as: :select,
-    label: 'Canonical Taxonomy',
-    collection: @taxonomies,
-    include_blank: true,
-    input_html: { class: 'form-control' }
-%>
+	<%= render 'form_parent_work_relationships_taxonomy', f: f %>
+
+  <div class="form-group">
+  	<a class="btn btn-sm btn-primary" id="btn_new_taxonomy">Create new taxonomy</a>
+	  <div id="embedded_div_new_taxonomy" class="embedded_div ui-loading" data-relationship-control="#parent-relationships-taxonomies" data-add-button="#btn-add-taxonomy" style="display: none;">
+	  	<!-- new institution form will be loaded here -->
+	  </div>
+	</div>
+
+<% end %>

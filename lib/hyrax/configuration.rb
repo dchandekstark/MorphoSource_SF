@@ -51,7 +51,7 @@ module Hyrax
     # Path on the local file system where derivatives will be stored
     attr_writer :derivatives_path
     def derivatives_path
-      @derivatives_path ||= Rails.root.join('derivatives')
+      @derivatives_path ||= Rails.root.join('tmp', 'derivatives')
     end
 
     # Path on the local file system where originals will be staged before being ingested into Fedora.
@@ -141,7 +141,17 @@ module Hyrax
     def blender_path
       @blender_path ||= 'blender'
     end
+
+    attr_writer :fiji_path
+    def fiji_path
+      @fiji_path ||= 'blender'
+    end
     
+    attr_writer :derivatives_tmp_path
+    def derivatives_tmp_path
+      @derivatives_tmp_path ||= Rails.root.join("tmp")
+    end
+
     # Override characterization runner
     attr_accessor :characterization_runner
 

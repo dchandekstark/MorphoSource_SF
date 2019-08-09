@@ -54,16 +54,16 @@ RSpec.describe SubmissionsController, type: :controller do
       end
     end
 
-    describe 'institution_select when creating new device' do
+    describe 'device_institution_select when creating new device' do
       let(:saved_step) {'device_will_create'}
       let(:institution_id) { 'abc123' }
-      let(:form_params) { { submission: { institution_id: institution_id }, institution_select: 'foo' } }
+      let(:form_params) { { submission: { device_institution_id: institution_id }, institution_select: 'foo' } }
       before do
         @request.session['submission'] = {saved_step: saved_step}
       end
-      it 'sets the institution id in the session' do
+      it 'sets the device institution id in the session' do
         post :create, params: form_params
-        expect(@request.session[:submission]).to include({ institution_id: institution_id })
+        expect(@request.session[:submission]).to include({ device_institution_id: institution_id })
       end
       it 'renders the device create view' do
         post :create, params: form_params
@@ -89,20 +89,59 @@ RSpec.describe SubmissionsController, type: :controller do
     end
 
     describe 'device_select' do
-      let(:device_id) { 'abc123' }
-      let(:form_params) { { submission: { device_id: device_id }, device_select: 'foo' } }
       before do
+        Device.create({
+            id: 'abc123',
+            title: ['XTekCT 100'],
+            creator: ['Nikon'],
+            modality: ['MedicalXRayComputedTomography'],
+            facility: ['Duke SMIF'],
+            description: ['A sample description']
+        })
         @request.session['submission'] = {}
       end
+      let(:device_id) { 'abc123' }
+      let(:form_params) { { submission: { device_id: device_id }, device_select: 'XTekCT 100' } }
+
       it 'sets the device id in the session' do
         post :create, params: form_params
         expect(@request.session[:submission]).to include({ device_id: device_id })
       end
+
+      it 'sets modality_to_set in cookie' do
+        post :create, params: form_params
+        expect(response.cookies["modality_to_set"]).to eq('MedicalXRayComputedTomography')
+      end
+
       it 'renders the device view' do
         post :create, params: form_params
         expect(response).to render_template(:image_capture)
       end
     end
+
+    describe 'parent_media_select' do
+      before do
+        Media.create({
+            id: 'abc123',
+            title: ['media 1'],
+            modality: ['MedicalXRayComputedTomography']
+        })
+        @request.session['submission'] = {}
+      end
+      let(:media_id) { 'abc123' }
+      let(:form_params) { { submission: { parent_media_list: 'abc123' }, parent_media_select: 'media 1' } }
+
+      it 'sets modality_to_set in cookie' do
+        post :create, params: form_params
+        expect(response.cookies["modality_to_set"]).to eq('MedicalXRayComputedTomography')
+      end
+
+      it 'renders the processing event' do
+        post :create, params: form_params
+        expect(response).to render_template(:processing_event)
+      end
+    end
+
 
     describe 'default' do
       let(:form_params) { { submission: {} } }
@@ -131,13 +170,17 @@ RSpec.describe SubmissionsController, type: :controller do
 
   describe '#stage_device' do
     let(:form_attributes) do
-      { 'title' => 'Device', 'creator' => [ 'Panasonic' ] }
+      { 'title' => 'Device', 'creator' => [ 'Panasonic' ], 'modality' => [ 'Photography' ] }
     end
     let(:form_params) { { device: form_attributes } }
     let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
     it 'stores the model attributes in the session' do
       post :stage_device, params: form_params
       expect(@request.session[:submission_device_create_params]).to include(model_attributes)
+    end
+    it 'sets modality_to_set in cookie' do
+      post :stage_device, params: form_params
+      expect(response.cookies["modality_to_set"]).to eq('Photography')
     end
     it 'renders the image_capture view' do
       post :stage_device, params: form_params
@@ -181,7 +224,7 @@ RSpec.describe SubmissionsController, type: :controller do
     end
   end
 
-  describe '#stage_institution when creating new device' do
+  describe '#stage_device_institution when creating new device' do
     let(:saved_step) {'device_will_create'}
     before do
       @request.session['submission'] = {saved_step: saved_step}
@@ -192,11 +235,11 @@ RSpec.describe SubmissionsController, type: :controller do
     let(:form_params) { { institution: form_attributes } }
     let(:model_attributes) { form_attributes.transform_values { |value| Array(value) } }
     it 'stores the model attributes in the session' do
-      post :stage_institution, params: form_params
-      expect(@request.session[:submission_institution_create_params]).to include(model_attributes)
+      post :stage_device_institution, params: form_params
+      expect(@request.session[:submission_device_institution_create_params]).to include(model_attributes)
     end
     it 'renders the device create view' do
-      post :stage_institution, params: form_params
+      post :stage_device_institution, params: form_params
       expect(response).to render_template(:device_create)
     end
   end
@@ -268,6 +311,74 @@ RSpec.describe SubmissionsController, type: :controller do
     it 'renders the biospec create view' do
       post :stage_taxonomy, params: form_params
       expect(response).to render_template(:biospec_create)
+    end
+  end
+
+  describe '#new_institution_submit' do
+    describe 'successfully created a new institution' do
+      let(:form_attributes) do
+        { 'id' => 'abc', 'title' => 'Institution', 'institution_code' => 'inst' }
+      end
+      let(:form_params) { { institution: form_attributes } }
+      it 'return institution data in json response' do
+        post :new_institution_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'OK',
+          message: 'New institution created',
+          work: {
+            title: 'Institution',
+            institution_code: 'inst'
+          }
+        )
+      end
+    end
+
+    describe 'failed to create a new institution' do
+      let(:form_params) { { institution: {} } } # no form attribute will throw an exception
+      it 'return failure status in json response' do
+        post :new_institution_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'FAIL',
+          message: 'There is a problem creating the institution.',
+          work: {}
+        )
+      end
+    end
+  end
+
+  describe '#new_taxonomy_submit' do
+    describe 'successfully created a new taxonomy' do
+      let(:form_attributes) do
+        { 'taxonomy_domain' => '1', 'taxonomy_kingdom' => '1', 'taxonomy_phylum' => '1', 'taxonomy_superclass' => '1', 'taxonomy_class' => '1', 'taxonomy_subclass' => '1', 'taxonomy_superorder' => '1', 'taxonomy_order' => '1', 'taxonomy_suborder' => '1', 'taxonomy_superfamily' => '1', 'taxonomy_family' => '1', 'taxonomy_subfamily' => '1', 'taxonomy_tribe' => '1', 'taxonomy_genus' => '1', 'taxonomy_subgenus' => '1', 'taxonomy_species' => '1', 'taxonomy_subspecies' => '1'
+        }
+      end
+      let(:form_params) { { taxonomy: form_attributes } }
+      it 'return taxonomy data in json response' do
+        post :new_taxonomy_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'OK',
+          message: 'New Taxonomy created',
+          work: {
+            title: "1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1"
+          }
+        )
+      end
+    end
+
+    describe 'failed to create a new taxonomy' do
+      let(:form_params) { { taxonomy: {} } } # no form attribute will throw an exception
+      it 'return failure status in json response' do
+        post :new_taxonomy_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'FAIL',
+          message: 'There is a problem creating the taxonomy.',
+          work: {}
+        )
+      end
     end
   end
 

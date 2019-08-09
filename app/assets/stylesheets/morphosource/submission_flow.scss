@@ -1,4 +1,8 @@
 .submission_flow {
+
+  h1 {
+    font-size: 26px;
+  }
   div {
     margin-top: 2px;
     margin-bottom: 2px;
@@ -30,6 +34,14 @@
     max-width: 360px;
     height: 30px;
   }
+  .checkbox_group {
+    label{
+      width: 90%;
+      font-weight: normal;
+      display: inline-block; 
+      vertical-align: top;
+    }    
+  }
 }
 
 .submission_footer {
@@ -42,4 +54,10 @@
 
 .taxonomy-search {
   min-width: 85%;
+}
+
+.embedded_div.ui-loading {
+  background: image-url('loading.gif') center center no-repeat;
+  background-size: 30px;
+  min-height: 60px; 
 }

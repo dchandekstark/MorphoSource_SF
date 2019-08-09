@@ -55,6 +55,14 @@ class SolrDocument
     self[Solrizer.solr_name('funding', :stored_searchable)]
   end
 
+  def fileset_visibility
+    self[Solrizer.solr_name('fileset_visibility', :stored_searchable)]
+  end
+
+  def fileset_accessibility
+    self[Solrizer.solr_name('fileset_accessibility', :stored_searchable)]
+  end
+
   def map_type
     self[Solrizer.solr_name('map_type', :stored_searchable)]
   end
@@ -85,6 +93,10 @@ class SolrDocument
 
   def series_type
     self[Solrizer.solr_name('series_type', :stored_searchable)]
+  end
+
+  def short_description
+    self[Solrizer.solr_name('short_description', :stored_searchable)]
   end
 
   def side
@@ -124,15 +136,16 @@ class SolrDocument
     self[Solrizer.solr_name('collection_code', :stored_searchable)]
   end
 
+  def institution_code
+    self[Solrizer.solr_name('institution_code', :stored_searchable)]
+  end
+
   def current_location
     self[Solrizer.solr_name('current_location', :stored_searchable)]
   end
 
   def processing_activity
-    Rails.logger.info("Processing Activity: #{processing_activity_type.inspect} #{processing_activity_software.inspect} #{processing_activity_description.inspect}")
-    processing_activity_type.map.with_index do |item, index|
-      "Activity Type: #{item}, Software: #{processing_activity_software[index]}, Activity Description: #{processing_activity_description[index]}"
-    end
+    self[Solrizer.solr_name('processing_activity', :stored_searchable)]
   end
 
   def processing_activity_type
@@ -553,6 +566,20 @@ class SolrDocument
 
   def centroid_z
     self[Solrizer.solr_name('centroid_z', :stored_searchable)]
+  end
+
+  # Zip archive contents file characterization fields
+
+  def contents_mime_type
+    self[Solrizer.solr_name('contents_mime_type', :stored_searchable)]
+  end
+
+  def contents_file_name
+    self[Solrizer.solr_name('contents_file_name', :stored_searchable)]
+  end
+
+  def contents_file_size
+    self[Solrizer.solr_name('contents_file_size', :stored_searchable)]
   end
 
   # Taxonomy fields

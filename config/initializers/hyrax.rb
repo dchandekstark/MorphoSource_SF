@@ -53,11 +53,11 @@ Hyrax.config do |config|
   # config.max_days_between_fixity_checks = 7
 
   # Options to control the file uploader
-  # config.uploader = {
-  #   limitConcurrentUploads: 6,
-  #   maxNumberOfFiles: 100,
-  #   maxFileSize: 500.megabytes
-  # }
+  config.uploader = {
+    limitConcurrentUploads: 6,
+    maxNumberOfFiles: 10000,
+    maxFileSize: 50.gigabytes
+  }
 
   # Enable displaying usage statistics in the UI
   # Defaults to false
@@ -105,7 +105,27 @@ Hyrax.config do |config|
 
   # Path to the file characterization tool
   config.fits_path = ENV.fetch("FITS_PATH", "fits.sh")
-  config.blender_path = ENV.fetch("BLENDER_PATH", "blender")
+
+  # find blender in PATH variable.  If exists, set config.blender_path to it
+  # if blender is not in PATH, get the path from BLENDER_PATH variable
+  # note that tool_path (e.g. used in blender.rb) is by default set to config.blender_path, but can 
+  # be overridden by an argument
+  begin  
+    blender_in_path = ENV.fetch("PATH").split(':').select{|path| path.include?('blender')} 
+    if blender_in_path.present?
+      config.blender_path = blender_in_path.first
+    else
+      config.blender_path = ENV.fetch("BLENDER_PATH")
+    end
+  rescue  
+    puts 'Error: unable to get Blender path from PATH or BLENDER_PATH'  
+    exit
+  end  
+  
+  config.fiji_path = ENV.fetch("FIJI_PATH", "fiji")
+
+  # Path to where derivative generation tmp files should be placed (temporary method)
+  config.derivatives_tmp_path = Rails.env.production? ? '/nas/morphosource_demo/tmp/' : ENV.fetch("DERIVATIVES_TMP_PATH", Rails.root.join("tmp"))
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
@@ -190,7 +210,7 @@ Hyrax.config do |config|
   # config.audit_user_key = 'audituser@example.com'
   #
   # The banner image. Should be 5000px wide by 1000px tall
-  # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
+  config.banner_image = 'banner_image.png'
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
@@ -199,7 +219,7 @@ Hyrax.config do |config|
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  config.derivatives_path = Rails.root.join('derivatives')
+  config.derivatives_path = ENV.fetch("DERIVATIVES_PATH", Rails.root.join("tmp", "derivatives"))
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -290,7 +310,7 @@ Hyrax.config do |config|
   # ingest files from the file system that are not part of the BrowseEverything
   # mount point.
   #
-  # config.whitelisted_ingest_dirs = []
+  config.whitelisted_ingest_dirs = ENV.fetch('WHITELISTED_INGEST_DIRS', '').split(':').presence || ['/nas/morphosource_ms1/']
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"

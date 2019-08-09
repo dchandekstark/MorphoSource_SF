@@ -1,6 +1,6 @@
 <div class="pull-right">
 
-  <%= form_tag(main_app.batch_destroy_items_path, method: :delete, class: "button_to-inline") do -%>
+  <%= form_tag(main_app.remove_items_path, method: :delete, class: "button_to-inline") do -%>
     <%= submit_tag("Clear Cart", class: 'btn btn-danger', id: 'clear-cart') %>
   <% end %>
 

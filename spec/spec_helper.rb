@@ -1,7 +1,14 @@
 require 'capybara/rspec'
 require 'selenium/webdriver'
+require "rspec/json_expectations"
 
-Selenium::WebDriver::Firefox::Binary.path = "/opt/firefox/firefox" || Selenium::WebDriver::Firefox::Binary.path
+unless Selenium::WebDriver::Firefox::Binary
+  if `sh -c 'command -v firefox'`.chomp.empty?
+    Selenium::WebDriver::Firefox::Binary.path = "/opt/firefox/firefox"
+  else
+    Selenium::WebDriver::Firefox::Binary.path = `sh -c 'command -v firefox'`.chomp
+  end
+end
 
 Capybara.register_driver :firefox_headless do |app|
   options = ::Selenium::WebDriver::Firefox::Options.new

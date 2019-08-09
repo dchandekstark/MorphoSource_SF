@@ -42,6 +42,10 @@ class User < ApplicationRecord
     MediaCart.create( { user_id: self.id } )
   end
 
+  def cart_id
+    media_cart.id
+  end
+
   def items_in_cart
     cart_items.select{ |i| i.in_cart == true }
   end
@@ -52,6 +56,41 @@ class User < ApplicationRecord
 
   def work_ids_in_cart
     items_in_cart.map{ |i| i.work_id }
+  end
+
+  # restricted items user has added to cart
+  def restricted_items_in_cart
+    items_in_cart.select{ |item| item.restricted? }
+  end
+
+  def restricted_items_in_cart_ids
+    restricted_items_in_cart.map{ |item| item.id }
+  end
+
+  # all a user's current and past requests (items where user is requestor)
+  def my_requests
+    cart_items.select{ |item| item.date_requested.present? }
+  end
+
+  def my_requests_ids
+    my_requests.map{ |item| item.id }
+  end
+
+  def my_requests_work_ids
+    my_requests.map{ |item| item.work_id }
+  end
+
+  # items requested from user (items where user is data owner)
+  def requested_items
+    CartItem.where.not(date_requested: nil).or(CartItem.where.not(date_cleared: nil))
+  end
+
+  def requested_item_ids
+    requested_items.map{|item| item.id}
+  end
+
+  def requested_items_work_ids
+    requested_items.map{ |item| item.work_id }
   end
 
   def downloaded_items

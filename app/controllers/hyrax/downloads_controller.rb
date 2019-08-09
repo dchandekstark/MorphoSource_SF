@@ -24,4 +24,21 @@ class Hyrax::DownloadsController
       unauthorized_image = Rails.root.join("app", "assets", "images", "unauthorized.png")
       send_file unauthorized_image, status: :unauthorized
     end
+
+    def file
+      @file ||= load_file
+    end
+
+    def load_file
+      file_reference = params[:file]
+      return default_file unless file_reference
+      if file_reference.include? 'dcm'
+        file_reference.slice!('dcm')
+        file_path = Morphosource::DerivativePath.derivative_path_for_reference(params[asset_param_key], 'dcm', file_reference.to_i)
+      else
+        file_path = Morphosource::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
+      end
+
+      File.exist?(file_path) ? file_path : nil
+    end
 end

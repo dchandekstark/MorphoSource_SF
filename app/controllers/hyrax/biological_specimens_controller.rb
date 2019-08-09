@@ -11,6 +11,12 @@ module Hyrax
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::BiologicalSpecimenPresenter
 
+    before_action :instantiate_work_forms
+
+    def instantiate_work_forms
+      @institution_form = Hyrax::WorkFormService.build(Institution.new, current_ability, self)
+    end
+
     # override the layout from WorksControllerBehavior
     def decide_layout
       layout = case action_name

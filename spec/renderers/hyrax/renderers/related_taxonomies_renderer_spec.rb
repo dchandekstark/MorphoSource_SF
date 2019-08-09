@@ -33,34 +33,22 @@ RSpec.describe Hyrax::Renderers::RelatedTaxonomiesRenderer do
     end
 
     let(:content) do
-     %( <div class="row">
-          <div class="col-xs-6 showcase-label">Biological specimens</div>
-          <div class="col-xs-6 showcase-value">
-          <span></span> 
-          <span class="showcase-link">
-            <a href="/concern/biological_specimens/abc123?locale=en">test biological specimen</a>
-          </span>
-          <ul>
-            <span>Institutional </span>
-            <span class="showcase-link">
-              <a href="/concern/taxonomies/ghi789?locale=en">Superclass &gt; Class &gt; Subclass</a>
-            </span>
-          </ul>
-          <ul>
-            <span>MorphoSource Inferred </span>
-            <span class="showcase-link">
-              <a href="/concern/taxonomies/jkl123?locale=en">Superorder &gt; Order &gt; Suborder</a>
-            </span>
-          </ul>
-          <ul>
-            <span>User Supplied </span>
-            <a class="contributing-user" href="/users/example@email-dot-com">D. Duck: </a>
-            <span class="showcase-link">
-              <a href="/concern/taxonomies/mno456?locale=en">Superfamily &gt; Family &gt; Subfamily</a>
-            </span>
-          </ul>
-        </div>
-       </div>)
+     %(
+<div class="row">
+<div class="col-xs-6 showcase-label">Biological specimens</div>
+<div class="col-xs-6 showcase-value ">
+<span></span> <span class="showcase-link"><a href="/concern/biological_specimens/abc123?locale=en">test biological specimen</a></span><ul>
+<span>Institutional </span><span class="showcase-link"><a href="/concern/taxonomies/ghi789?locale=en">Superclass &gt; Class &gt; Subclass</a></span>
+</ul>
+<ul>
+<span>MorphoSource Inferred </span><span class="showcase-link"><a href="/concern/taxonomies/jkl123?locale=en">Superorder &gt; Order &gt; Suborder</a></span>
+</ul>
+<ul>
+<span>User Supplied </span><a class="contributing-user" href="/users/example@email-dot-com">D. Duck: </a><span class="showcase-link"><a href="/concern/taxonomies/mno456?locale=en">Superfamily &gt; Family &gt; Subfamily</a></span>
+</ul>
+</div>
+</div>
+     )
     end
 
     it { expect(subject).to be_equivalent_to(expected) }

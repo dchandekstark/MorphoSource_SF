@@ -17,11 +17,15 @@ module Morphosource
     end
 
     # Optional select values
+    property :short_description, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/shortDescription") do |index|
+    index.as :stored_searchable, :facetable
+    end
+
     property :side, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/comments") do |index|
     index.as :stored_searchable, :facetable
     end
 
-    property :series_type, predicate: ::RDF::URI.new("http://rs.tdwg.org/ac/terms/subtypeLiteral") do |index|
+    property :series_type, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/seriesType") do |index|
     index.as :stored_searchable, :facetable
     end
 
@@ -75,8 +79,17 @@ module Morphosource
     index.as :stored_searchable
     end
 
+    # -- Management of File Visibility/Download/View --
+
     # Stores user-selected default setting for file set visibility
-    property :fileset_visibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetVisibility")
+    property :fileset_visibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetVisibility") do |index|
+    index.as :stored_searchable
+    end
+
+    # Stores user-selected setting for restricting download/viewing behavior
+    property :fileset_accessibility, predicate: ::RDF::URI.new("https://www.morphosource.org/terms/filesetAccessibility") do |index|
+    index.as :stored_searchable
+    end
 
     # -- Media type-specific metadata --
 

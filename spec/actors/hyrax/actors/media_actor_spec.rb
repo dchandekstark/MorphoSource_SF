@@ -49,14 +49,14 @@ RSpec.describe Hyrax::Actors::MediaActor do
     let(:ability) { Ability.new(user) }
     let(:work) { Media.new }
     let(:modality_attr) { [ 'MagneticResonanceImaging', 'NeutrinoImaging' ] }
-    let(:modality_labels) { [ 'Magnetic Resonance Imaging (MRI)', 'Neutrino Imaging' ] }
+    let(:modality_labels) { [ 'MRI', 'Neutrino' ] }
     let(:part_attr) { [ 'leg', 'arm' ] }
     let(:env) { Hyrax::Actors::Environment.new(work, ability, attrs) }
     describe 'one modality' do
       describe 'no part' do
         let(:attrs) { { 'modality' => [ modality_attr.first ],
                         'part' => [] } }
-        let(:expected_title) { "[#{modality_labels.first}]" }
+        let(:expected_title) { "Element Unspecified [#{modality_labels.first}]" }
         specify { expect(subject.generated_title(env)).to eq(expected_title)}
       end
       describe 'one part' do
@@ -76,19 +76,19 @@ RSpec.describe Hyrax::Actors::MediaActor do
       describe 'no part' do
         let(:attrs) { { 'modality' => modality_attr,
                         'part' => [] } }
-        let(:expected_title) { "[#{modality_labels.sort.join(', ')}]" }
+        let(:expected_title) { "Element Unspecified [#{modality_labels.sort.join('/')}]" }
         specify { expect(subject.generated_title(env)).to eq(expected_title)}
       end
       describe 'one part' do
         let(:attrs) { { 'modality' => modality_attr,
                         'part' => [ part_attr.first ] } }
-        let(:expected_title) { "#{part_attr.first.titleize} [#{modality_labels.sort.join(', ')}]" }
+        let(:expected_title) { "#{part_attr.first.titleize} [#{modality_labels.sort.join('/')}]" }
         specify { expect(subject.generated_title(env)).to eq(expected_title)}
       end
       describe 'more than one part' do
         let(:attrs) { { 'modality' => modality_attr,
                         'part' => part_attr } }
-        let(:expected_title) { "#{part_attr.sort.join(', ').titleize} [#{modality_labels.sort.join(', ')}]"}
+        let(:expected_title) { "#{part_attr.sort.join(', ').titleize} [#{modality_labels.sort.join('/')}]"}
         specify { expect(subject.generated_title(env)).to eq(expected_title)}
       end
     end

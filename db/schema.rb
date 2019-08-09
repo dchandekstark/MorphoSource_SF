@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190306225507) do
+ActiveRecord::Schema.define(version: 20190724214348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,15 @@ ActiveRecord::Schema.define(version: 20190306225507) do
     t.datetime "updated_at", null: false
     t.datetime "date_downloaded"
     t.boolean "in_cart", default: true
+    t.boolean "restricted", default: true
+    t.string "approver", null: false
+    t.datetime "date_requested"
+    t.datetime "date_approved"
+    t.datetime "date_denied"
+    t.datetime "date_canceled"
+    t.datetime "date_expired"
+    t.text "note"
+    t.datetime "date_cleared"
     t.index ["media_cart_id"], name: "index_cart_items_on_media_cart_id"
     t.index ["work_id"], name: "index_cart_items_on_work_id"
   end
@@ -100,6 +109,11 @@ ActiveRecord::Schema.define(version: 20190306225507) do
     t.index ["parent_id"], name: "index_curation_concerns_operations_on_parent_id"
     t.index ["rgt"], name: "index_curation_concerns_operations_on_rgt"
     t.index ["user_id"], name: "index_curation_concerns_operations_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "featured_works", force: :cascade do |t|
@@ -264,6 +278,26 @@ ActiveRecord::Schema.define(version: 20190306225507) do
     t.index ["source_id"], name: "index_permission_templates_on_source_id", unique: true
   end
 
+  create_table "physical_objects", force: :cascade do |t|
+    t.text "description"
+    t.text "current_location"
+    t.text "original_location"
+    t.date "date_created"
+    t.string "identifier"
+    t.text "url"
+    t.text "bibliographic_citation"
+    t.string "publisher"
+    t.boolean "vouchered", default: false, null: false
+    t.string "institution"
+    t.string "numeric_time"
+    t.string "periodic_time"
+    t.string "catalog_number"
+    t.string "collection_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["institution"], name: "index_physical_objects_on_institution"
+  end
+
   create_table "proxy_deposit_requests", force: :cascade do |t|
     t.string "work_id", null: false
     t.integer "sending_user_id", null: false
@@ -324,6 +358,15 @@ ActiveRecord::Schema.define(version: 20190306225507) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_searches_on_user_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
   create_table "single_use_links", force: :cascade do |t|
@@ -564,6 +607,7 @@ ActiveRecord::Schema.define(version: 20190306225507) do
     t.binary "zotero_token"
     t.string "zotero_userid"
     t.string "preferred_locale"
+    t.integer "media_cart_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

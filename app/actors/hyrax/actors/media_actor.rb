@@ -10,20 +10,21 @@ module Hyrax
       end
 
       def update(env)
-        # Will not have a title attributes when updating leases, embargoes
-        if env.attributes['title'].present?
-          env.attributes['title'] = [ generated_title(env) ]
-        end
+        env.attributes['title'] = [ generated_title(env) ]
         super
       end
 
       def generated_title(env)
         attrs = env.attributes
-        if attrs['part'].present?
-          "#{generated_title_parts(attrs)} [#{generated_title_modalities(attrs)}]"
-        else
-          "[#{generated_title_modalities(attrs)}]"
-        end
+        parts = attrs['part'].presence || ['Element unspecified']
+        media_type = attrs['media_type']&.first.presence || ''
+        modality = attrs['modality'].presence || []
+        modality_abbrevs = modality.map { |m| modality_abbrev(m) }
+
+        id = attrs['id'].presence || env.curation_concern.id.presence || ''
+        id_prefix = id.presence ? id.to_s.split('x').first+': ' : ''
+
+        id_prefix + parts.sort.join(', ').titleize + (media_type.presence ? ' [' + media_type.to_s + ']' : '') + (modality_abbrevs.presence ? ' [' + modality_abbrevs.join('/')+ ']' : '')
       end
 
       private
@@ -34,6 +35,39 @@ module Hyrax
 
       def generated_title_parts(attrs)
         attrs['part'].sort.join(', ').titleize
+      end
+
+      def modality_abbrev(m)
+        case m
+        when 'MicroNanoXRayComputedTomography'
+          'μCT'
+        when 'MedicalXRayComputedTomography'
+          'CT'
+        when 'MagneticResonanceImaging'
+          'MRI'
+        when 'PositronEmissionTomography'
+          'PET'
+        when 'SynchrotronImaging'
+          'Synchro'
+        when 'NeutrinoImaging'
+          'Neutrino'
+        when 'Photogrammetry'
+          'Photogram'
+        when 'StructuredLight'
+          'StrLight'
+        when 'LaserScan'
+          'Laser'
+        when 'ConfocalImageStacking'
+          'Confocal'
+        when 'ReflectanceTransformationImaging'
+          'RTI'
+        when 'Photography'
+          'Photo'
+        when 'ScanningElectronMicroscopy'
+          'SEM'
+        else
+          'Etc' 
+        end
       end
 
       def modalities_service

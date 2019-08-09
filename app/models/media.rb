@@ -43,6 +43,10 @@ class Media < Morphosource::Works::Base
     all_visibilities & file_visibilities
   end
 
+  def restricted?
+    fileset_accessibility.first == "restricted_download"
+  end
+
   private
     def add_id_to_title
       unless self.title && self.id && self.title.first.to_s.start_with?("M#{self.id.to_s}: ")

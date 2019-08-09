@@ -23,11 +23,11 @@ gem 'bootstrap-sass', '~> 3.4'
 
 gem 'riiif', '~> 1.1'
 
-# pul_uv_rails fork upgraded for universal viewer v3 beta
-gem 'pul_uv_rails', :git => 'https://github.com/JuliaWinchester/pul_uv_rails.git'
+# pul_uv_rails fork upgraded for universal viewer aleph
+gem 'pul_uv_rails', :git => 'https://github.com/MorphoSource/pul_uv_rails.git', :branch => 'aleph'
 
 # pull iiif_manifest fork that can handle 3D manifests
-gem 'iiif_manifest', :git => 'https://github.com/JuliaWinchester/iiif_manifest.git'
+gem 'iiif_manifest', :git => 'https://github.com/MorphoSource/iiif_manifest.git', :branch => 'morphosource'
 
 gem 'hyrax', '2.4.1'
 gem 'hydra-role-management'
@@ -38,10 +38,14 @@ gem 'resque-web', require: 'resque_web'
 
 gem 'puma', '~> 3.7'
 
+gem 'rubyzip'
+
 gem 'zipline', '~> 1.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -65,6 +69,10 @@ group :development, :test do
   gem 'geckodriver-helper'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'shoulda-matchers', '~> 3.1'
+end
+
+group :test do
+  gem 'rspec-json_expectations'
 end
 
 group :production do

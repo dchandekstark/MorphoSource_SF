@@ -78,6 +78,9 @@ module Hyrax
           else
             file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
           end
+          # update fileset_accessibility
+          file_set.accessibility = work.fileset_accessibility
+          
           work.ordered_members << file_set
           work.representative = file_set if work.representative_id.blank?
           work.thumbnail = file_set if work.thumbnail_id.blank?
