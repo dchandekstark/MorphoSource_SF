@@ -71,6 +71,10 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1'
 end
 
+group :test do
+  gem 'rspec-json_expectations'
+end
+
 group :production do
   gem 'passenger'
   gem 'therubyracer', platforms: :ruby

@@ -96,20 +96,25 @@ Rails.application.routes.draw do
       post 'stage_processing_event'
       post 'stage_cho'
       post 'stage_taxonomy'
+      # for new work modal
+      get 'new_institution'
+      post 'new_institution_submit'
+      get 'new_taxonomy'
+      post 'new_taxonomy_submit'
     end
   end
-
-  # Redirect to submission flow initial page when using browser reload or back button
-  get '/submissions', to: redirect('/submissions/new')
-  get '/submissions/stage_biological_specimen', to: redirect('/submissions/new')
-  get '/submissions/stage_device', to: redirect('/submissions/new')
-  get '/submissions/stage_imaging_event', to: redirect('/submissions/new')
-  get '/submissions/stage_institution', to: redirect('/submissions/new')
-  get '/submissions/stage_device_institution', to: redirect('/submissions/new')
-  get '/submissions/stage_media', to: redirect('/submissions/new')
-  get '/submissions/stage_processing_event', to: redirect('/submissions/new')
-  get '/submissions/stage_cho', to: redirect('/submissions/new')
-  get '/submissions/stage_taxonomy', to: redirect('/submissions/new')
+  
+  # Route to flow initial page when using browser reload or back button
+  get '/submissions/stage_biological_specimen', to: 'submissions#new'
+  get '/submissions/stage_device', to: 'submissions#new'
+  get '/submissions/stage_imaging_event', to: 'submissions#new'
+  get '/submissions/stage_institution', to: 'submissions#new'
+  get '/submissions/stage_device_institution', to: 'submissions#new'
+  get '/submissions/stage_media', to: 'submissions#new'
+  get '/submissions/stage_processing_event', to: 'submissions#new'
+  get '/submissions/stage_cho', to: 'submissions#new'
+  get '/submissions/stage_taxonomy', to: 'submissions#new'
+  get '/submissions', to: 'submissions#new'
 
   scope module: :morphosource do
     scope module: :my do

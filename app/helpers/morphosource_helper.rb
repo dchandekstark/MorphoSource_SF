@@ -1,5 +1,16 @@
 module MorphosourceHelper
 
+  def current_controller
+    current_uri = request.env['PATH_INFO']
+    # to-do: might need to catch exception here for route not found
+    path = Rails.application.routes.recognize_path(current_uri)
+    controller = path[:controller]
+  end
+
+  def current_controller?(names)
+    names.include?(current_controller)
+  end
+
   def device_selector
     sortable_title_field = Solrizer.solr_name('title', :stored_sortable)
     hits = devices
@@ -67,6 +78,10 @@ module MorphosourceHelper
 
   def find_media_autocomplete_url
     Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Media&id=NA&q='
+  end
+
+  def find_institution_autocomplete_url
+    Rails.application.routes.url_helpers.qa_path + '/search/find_works?type[]=Institution&id=NA&q='
   end
 
   def find_taxonomy_autocomplete_url

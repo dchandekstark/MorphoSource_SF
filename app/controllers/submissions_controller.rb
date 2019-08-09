@@ -8,7 +8,14 @@ class SubmissionsController < ApplicationController
 
   # override the layout from WorksControllerBehavior
   def decide_layout
-    layout = 'submission'
+    layout = case action_name
+             when 'new_institution'
+               'embedded_page'
+             when 'new_taxonomy'
+               'embedded_page'
+             else
+               'submission'
+             end
     File.join(theme, layout)
   end
 
@@ -408,6 +415,77 @@ class SubmissionsController < ApplicationController
     create_work(Media, @media_create_params)
   end
 
+  def new_institution
+    @submission = Submission.new(session[:submission])
+    render 'new_institution'
+  end
+
+  def new_institution_submit
+    # this method is expected to be called from a form in modal, or an ajax post
+    begin
+      institution_model_params = Hyrax::InstitutionForm.model_attributes(params[:institution])
+      new_institution_id = create_institution(institution_model_params)
+    rescue
+      new_institution_id = nil    
+    end
+
+    if new_institution_id.present?
+      status = 'OK'
+      message = 'New institution created'
+      new_institution = Institution.where('id' => new_institution_id).first
+      new_work = {
+        :id => new_institution_id,
+        :title => new_institution.title.first,
+        :institution_code => new_institution.institution_code.first
+      }
+    else
+      status = 'FAIL'
+      message = 'There is a problem creating the institution.'
+      new_work = {}
+    end
+    response_object = { 
+      :work => new_work,
+      :status => status,
+      :message => message
+    }
+    render :json => response_object 
+  end
+
+  def new_taxonomy
+    @submission = Submission.new(session[:submission])
+    render 'new_taxonomy'
+  end
+
+  def new_taxonomy_submit
+    # this method is expected to be called from a form in modal, or an ajax post
+    begin
+      taxonomy_model_params = Hyrax::TaxonomyForm.model_attributes(params[:taxonomy])
+      new_taxonomy_id = create_taxonomy(taxonomy_model_params)
+    rescue
+      new_taxonomy_id = nil    
+    end
+
+    if new_taxonomy_id.present?
+      status = 'OK'
+      message = 'New Taxonomy created'
+      new_taxonomy = Taxonomy.where('id' => new_taxonomy_id).first
+      new_work = {
+        :id => new_taxonomy_id,
+        :title => new_taxonomy.title.first
+      }
+    else
+      status = 'FAIL'
+      message = 'There is a problem creating the taxonomy.'
+      new_work = {}
+    end
+    response_object = { 
+      :work => new_work,
+      :status => status,
+      :message => message
+    }
+    render :json => response_object 
+  end
+
   private
 
   def clear_session_submission_settings
@@ -565,4 +643,5 @@ class SubmissionsController < ApplicationController
                                           :taxonomy_id
       )
   end
+
 end

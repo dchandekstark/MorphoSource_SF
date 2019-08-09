@@ -77,6 +77,30 @@ en:
         header:
           actions: Action
           title: Work title
+      form_parent_work_relationships_institution:
+        actions:
+          remove: Remove
+        attach_new_work: Deposit new institution as parent of this work
+        caption: Current institution
+        confirm:
+          cancel: Cancel
+          remove: Remove
+          text: Removing this institution will not remove it from the repository, only its relationship to the biological specimen you are editing. Are you sure you want to remove this institution?
+        header:
+          actions: Action
+          title: Institution
+      form_parent_work_relationships_taxonomy:
+        actions:
+          remove: Remove
+        attach_new_work: Deposit new taxonomy as parent of this work
+        caption: Current taxonomies
+        confirm:
+          cancel: Cancel
+          remove: Remove
+          text: Removing this taxonomy will not remove it from the repository, only its relationship to the biological specimen you are editing. Are you sure you want to remove this taxonomy?
+        header:
+          actions: Action
+          title: Taxonomy
     works:
       form:
         find_parent_work: Parent Works
@@ -87,4 +111,4 @@ en:
         find_parent_work: Add to work
     placeholders:
       defaults:
-        find_parent_work: Search for a work...
+        find_parent_work: Search...

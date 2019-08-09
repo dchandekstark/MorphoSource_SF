@@ -43,16 +43,20 @@ module Morphosource
 
     # physical objects showcase page methods
     def parent_institution_title
-      title = Institution.where('member_ids_ssim' => solr_document.id).first.title.first
-      if title.nil?
+      institution = Institution.where('member_ids_ssim' => solr_document.id).first
+      if institution.present?
+        title = institution.title.first
+      else
         title = ''
       end
       title
     end
 
     def parent_institution_code
-      code = Institution.where('member_ids_ssim' => solr_document.id).first.institution_code.first
-      if code.nil?
+      institution = Institution.where('member_ids_ssim' => solr_document.id).first
+      if institution.present?
+        code = institution.institution_code.first
+      else
         code = ''
       end
       code

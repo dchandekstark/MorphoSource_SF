@@ -314,4 +314,72 @@ RSpec.describe SubmissionsController, type: :controller do
     end
   end
 
+  describe '#new_institution_submit' do
+    describe 'successfully created a new institution' do
+      let(:form_attributes) do
+        { 'id' => 'abc', 'title' => 'Institution', 'institution_code' => 'inst' }
+      end
+      let(:form_params) { { institution: form_attributes } }
+      it 'return institution data in json response' do
+        post :new_institution_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'OK',
+          message: 'New institution created',
+          work: {
+            title: 'Institution',
+            institution_code: 'inst'
+          }
+        )
+      end
+    end
+
+    describe 'failed to create a new institution' do
+      let(:form_params) { { institution: {} } } # no form attribute will throw an exception
+      it 'return failure status in json response' do
+        post :new_institution_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'FAIL',
+          message: 'There is a problem creating the institution.',
+          work: {}
+        )
+      end
+    end
+  end
+
+  describe '#new_taxonomy_submit' do
+    describe 'successfully created a new taxonomy' do
+      let(:form_attributes) do
+        { 'taxonomy_domain' => '1', 'taxonomy_kingdom' => '1', 'taxonomy_phylum' => '1', 'taxonomy_superclass' => '1', 'taxonomy_class' => '1', 'taxonomy_subclass' => '1', 'taxonomy_superorder' => '1', 'taxonomy_order' => '1', 'taxonomy_suborder' => '1', 'taxonomy_superfamily' => '1', 'taxonomy_family' => '1', 'taxonomy_subfamily' => '1', 'taxonomy_tribe' => '1', 'taxonomy_genus' => '1', 'taxonomy_subgenus' => '1', 'taxonomy_species' => '1', 'taxonomy_subspecies' => '1'
+        }
+      end
+      let(:form_params) { { taxonomy: form_attributes } }
+      it 'return taxonomy data in json response' do
+        post :new_taxonomy_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'OK',
+          message: 'New Taxonomy created',
+          work: {
+            title: "1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1 > 1"
+          }
+        )
+      end
+    end
+
+    describe 'failed to create a new taxonomy' do
+      let(:form_params) { { taxonomy: {} } } # no form attribute will throw an exception
+      it 'return failure status in json response' do
+        post :new_taxonomy_submit, params: form_params
+        
+        expect(JSON.parse(response.body)).to include_json(
+          status: 'FAIL',
+          message: 'There is a problem creating the taxonomy.',
+          work: {}
+        )
+      end
+    end
+  end
+
 end

@@ -16,6 +16,8 @@ module Hyrax
         :bibliographic_citation,
         :catalog_number,
         :collection_code,
+        :canonical_taxonomy,
+        :institution_relationship,
         :institution_code,
         :latitude,
         :longitude,
@@ -27,8 +29,7 @@ module Hyrax
         :idigbio_uuid,
         :is_type_specimen,
         :occurrence_id,
-        :sex,
-        :canonical_taxonomy
+        :sex
     ]
 
     self.terms -= [ :keyword, :license, :rights_statement, :subject, :title, :language, :source, :resource_type ]
@@ -38,6 +39,8 @@ module Hyrax
     self.single_valued_fields = [
         :catalog_number,
         :collection_code,
+        :canonical_taxonomy,
+        :institution_relationship,
         :institution_code,
         :date_created,
         :description,
@@ -51,21 +54,22 @@ module Hyrax
         :idigbio_uuid,
         :is_type_specimen,
         :occurrence_id,
-        :sex,
-        :canonical_taxonomy
+        :sex
     ]
 
     # These show above the fold
     def primary_terms
       required_fields + [
           :bibliographic_citation,
+          :canonical_taxonomy,
+          :institution_relationship,
+          :institution_code,
           :based_near,
           :catalog_number,
           :collection_code,
           :date_created,
           :identifier,
-          :related_url,
-          :canonical_taxonomy
+          :related_url
       ]
     end
 
