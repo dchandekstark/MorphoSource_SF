@@ -32,8 +32,13 @@ module MorphosourceHelper
   end
 
   def has_custom_thumbnail?(work)
-    Rails.logger.info('CustomThumbnails: has_custom_thumbnail?')
-    File.exist?(Hyrax::DerivativePath.derivative_path_for_reference(work.id,'original_thumbnail'))
+    Rails.logger.info("CustomThumbnails: has_custom_thumbnail? for #{work.id.to_s}")
+    file_set = Morphosource::Works::Base.find(work.id).file_sets.first.id
+    Rails.logger.info("CustomThumbnails: has_custom_thumbnail? file_set #{file_set.to_s}")
+    original_thumbnail_path = Hyrax::DerivativePath.derivative_path_for_reference(file_set,'original_thumbnail')
+    has_custom_thumbnail = File.exist?(original_thumbnail_path)
+    Rails.logger.info("CustomThumbnails: #{original_thumbnail_path} exists? #{has_custom_thumbnail.to_s}")
+    return has_custom_thumbnail
   end
 
   def find_works_autocomplete_url(curation_concern, relation)
