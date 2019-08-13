@@ -4,5 +4,5 @@
   <%= submit_tag 'Submit' %>
 <% end %>
 <% if has_custom_thumbnail?(curation_concern) %>
-  <%= button_to 'delete', main_app.hyrax_custom_thumbnail_path(curation_concern), method: :delete %>
+  <%= button_to 'Delete Custom Thumbnail', main_app.hyrax_custom_thumbnail_path(curation_concern), method: :delete %>
 <% end %>
