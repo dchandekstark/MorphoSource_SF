@@ -38,6 +38,37 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
         get :batch_create, params: {:batch_document_ids => [cartItem4.id, cartItem5.id, cartItem6.id]}
         expect(response.flash[:notice]).to eq("3 Items Added to Cart")
       end
+
+      it 'assigns the correct metadata to the new cart item' do
+        get :batch_create, params: {:batch_document_ids => [cartItem4.id]}
+        item = CartItem.last
+        expect(item.work_id).to eq(work4.id)
+        expect(item.media_cart_id).to eq(current_user.media_cart.id)
+        expect(item.in_cart).to be(true)
+        expect(item.restricted).to be(work4.restricted?)
+        expect(item.approver).to eq(work4.depositor)
+      end
+
+      context 'the user selects duplicate works' do
+        let(:cartItem10) {double("CartItem", id: 555555, work_id: cartItem4.work_id )}
+        let(:cartItem11) {double("CartItem", id: 666666, work_id: cartItem4.work_id )}
+
+        before do
+          allow(CartItem).to receive(:where).with(id: [cartItem4.id.to_s, cartItem10.id.to_s, cartItem11.id.to_s]).and_return([cartItem4,cartItem10,cartItem11])
+        end
+
+        it "creates one cart item for each unique work" do
+          expect{
+            process :batch_create, method: :get, params: {:batch_document_ids => [cartItem4.id,cartItem10.id,cartItem11.id]}
+          }.to change{CartItem.count}.by(1)
+        end
+
+        it 'has the correct flash message' do
+          get :batch_create, params: {:batch_document_ids => [cartItem4.id,cartItem10.id,cartItem11.id]}
+          expect(response.flash[:notice]).to eq("1 Item Added to Cart; 2 Items: Mddd: Test Media Work, Mddd: Test Media Work Already in Your Cart.")
+        end
+
+      end
     end
 
     context 'the selected works are already in the cart' do
@@ -49,7 +80,7 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
 
       it "displays a flash message with duplicates" do
         get :batch_create, params: {:batch_document_ids => [cartItem1.id, cartItem2.id, cartItem3.id]}
-        expect(response.flash[:notice]).to eq("0 Items Added to Cart; 3 Items: Maaa: Test Media Work, Mbbb: Test Media Work, Mccc: Test Media Work Already in Your Cart.")
+        expect(response.flash[:notice]).to eq("0 Items Added to Cart; 3 Items: Test Media Work, Test Media Work, Test Media Work Already in Your Cart.")
       end
     end
 

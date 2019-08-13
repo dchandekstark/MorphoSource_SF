@@ -1,11 +1,10 @@
-  <% provide :page_title, "Requests" %>
-
+<% provide :page_title, "Manage Requests" %>
 
 <nav class="breadcrumb" role="region" aria-label="Breadcrumb">
   <ol>
     <li><a href="/?locale=en">Home</a></li>
     <li><a href="/dashboard?locale=en">Dashboard</a></li>
-    <li class="active">Requests</li>
+    <li class="active">Manage Requests</li>
   </ol>
 </nav>
 
@@ -13,20 +12,29 @@
   <div class="col-xs-12 main-header">
     <h1>
       <span class="fa fa-tasks" aria-hidden="true"></span>
-      Requests ( <%= @item_count %> )
+      <% if @tab == 'new' %>
+        New Requests
+      <% else %>
+        Previous Requests
+      <% end %>
+      ( <%= @item_count %> )
     </h1>
   </div>
 </div>
 
 <script>
 //<![CDATA[
-  <%= render partial: 'morphosource/my/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/request_manager_scripts', formats: [:js] %>
 //]]>
 </script>
-
-<div class="panel-body">
-  <h2 class="sr-only">Works listing</h2>
-  <%= render 'morphosource/my/request_manager/batch_actions' %>
-  <%= render 'morphosource/my/request_manager/document_list' %>
-  <%= render 'morphosource/my/request_manager/results_pagination' %>
+<div class="panel panel-default tabs">
+  <%= render 'morphosource/my/request_manager/tabs' %>
+  <div class="panel-body">
+    <h2 class="sr-only">Works listing</h2>
+    <% if @tab == 'new' %>
+      <%= render 'morphosource/my/request_manager/batch_actions' %>
+    <% end %>
+    <%= render 'morphosource/my/request_manager/document_list' %>
+    <%= render 'morphosource/my/request_manager/results_pagination' %>
+  </div>
 </div>

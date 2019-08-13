@@ -11,7 +11,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
   describe "POST #create" do
 
     context 'item is not in cart' do
-      let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work6.id, :file_accessibility => "open", :work_type => "Media"} }
+      let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work6.id, :work_type => "Media" } }
 
       it "creates a new CartItem" do
         expect{
@@ -25,7 +25,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
         expect(item.media_cart_id).to eq(media_cart.id)
         expect(item.work_id).to eq(work6.id)
         expect(item.in_cart).to be(true)
-        expect(item.restricted).to be(false)
+        expect(item.restricted).to be(work6.restricted?)
         expect(item.approver).to eq(work6.depositor)
       end
 
@@ -41,13 +41,26 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
       context 'work is restricted' do
         before do
-          post_params[:file_accessibility] = "restricted_download"
+          allow(work6).to receive(:restricted?).and_return(true)
           post :create, params: post_params
         end
 
         it 'creates a restricted cart item' do
           item = CartItem.last
           expect(item.restricted).to be(true)
+        end
+      end
+
+      context 'work is restricted but user is media manager' do
+        before do
+          allow(work6).to receive(:restricted?).and_return(true)
+          allow(work6).to receive(:depositor).and_return(current_user.email)
+          post :create, params: post_params
+        end
+
+        it 'changes the item to unrestricted' do
+          item = CartItem.last
+          expect(item.restricted).to be(false)
         end
       end
     end

@@ -4,32 +4,34 @@ module Morphosource
 
       include Morphosource::My::CartItemsBehavior
 
+      before_action :get_items_by_id, except: [:index]
+
       def index
         get_items('my_requests')
         render 'morphosource/my/requests/index'
       end
 
       def request_item
-        items = get_items_by_id( params[:item_id] || params[:batch_document_ids] )
-        requested_items = requested(items)
-        unrequested_items = unrequested(items)
-        mark_as('requested',unrequested_items)
-        re_request(requested_items)
-        flash[:notice] = count_text(items.count).concat(' Requested')
+        re_request(requested(@items))
+        mark_as('requested',unrequested(@items))
+        flash[:notice] = item_count_text.concat(' Requested')
         redirect_back(fallback_location: my_requests_path)
       end
 
       def request_again
-        item_ids = ( params[:item_id] || params[:batch_document_ids] )
-        items = get_items_by_id(item_ids)
-        re_request(items)
+        re_request(@items)
         redirect_back(fallback_location: my_requests_path)
       end
 
       def cancel_request
-        item = get_items_by_id(params[:item_id])
-        mark_as('canceled',item)
+        mark_as('canceled')
         flash[:notice] = "Request Canceled"
+        redirect_back(fallback_location: my_requests_path)
+      end
+
+      def move_to_cart
+        mark_as('in_cart',date: true)
+        flash[:notice] = "Item Moved to Cart"
         redirect_back(fallback_location: my_requests_path)
       end
 

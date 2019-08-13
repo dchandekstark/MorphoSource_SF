@@ -27,10 +27,10 @@
   <td><%= item_status_label(item) %></td>
   <td><%= item.approver %></td>
   <td><%= item.approving_user.affiliation %></td>
-  <td><%= item.date_requested&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_approved&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_denied&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_canceled&.strftime("%Y-%m-%d") %></td>
-  <td><%= item.date_expired&.strftime("%Y-%m-%d") %></td>
+  <td><%= date(item,'requested') %></td>
+  <td><%= date(item,'approved') %></td>
+  <td><%= date(item,'denied') %></td>
+  <td><%= date(item,'canceled') %></td>
+  <td><%= date(item,'expired') %></td>
   <td><%= item_action_button(item) %></td>
 </tr>

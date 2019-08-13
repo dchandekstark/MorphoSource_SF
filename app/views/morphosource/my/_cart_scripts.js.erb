@@ -1,7 +1,6 @@
 function hideButtons() {
   let downloadable = $(".downloadable_items").length;
   let restricted = $(".restricted_items").length;
-
   let select_downloadable = $('#unrestricted_documents > table > thead > tr > th.check-all');
   let select_restricted = $('#documents > table > thead > tr > th.check-all');
 
@@ -39,7 +38,6 @@ function togglePageButtons() {
 
 function toggleDownloadableButtons() {
   let downloadable = $(".downloadable_items:checked").length;
-
   if ( downloadable > 0 ) {
     $('#delete-selected').prop('disabled', false);
     $('#download-selected').prop('disabled', false);
@@ -51,7 +49,6 @@ function toggleDownloadableButtons() {
 
 function toggleRestrictedButtons() {
   let restricted = $(".restricted_items:checked").length;
-
   if ( restricted > 0 ) {
     $('#request-selected').prop('disabled', false);
     $('#delete-selected-restricted').prop('disabled', false);
@@ -60,7 +57,6 @@ function toggleRestrictedButtons() {
     $('#delete-selected-restricted').prop('disabled', true);
   }
 }
-
 
 Blacklight.onLoad(function() {
   togglePageButtons();

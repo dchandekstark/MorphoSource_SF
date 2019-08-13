@@ -11,18 +11,25 @@ module Morphosource
 
       # Used by Add to Cart button on Work show page
       def create
-        unless work_already_in_cart?(params[:work_id])
-          @item = CartItem.new({:media_cart_id => params[:media_cart_id], :work_id => params[:work_id], :restricted => file_restricted?(params[:file_accessibility])})
-          if @item.save!
-            flash[:notice] = 'Item Added to Cart'
-          else
-            flash[:alert] = 'Item Add Unsuccessful'
+        work = @curation_concern
+        unless work_already_in_cart?(work.id)
+          item = create_item(params,work)
+          if item.restricted? && user_is_approver?(item)
+            unrestrict(item)
           end
+          flash[:notice] = 'Item Added to Cart'
         else
           flash[:alert] = 'Item Already in Cart'
         end
-        after_create_response(@curation_concern)
+        after_create_response(work)
       end
+
+      private
+
+        def create_item(params,work)
+          CartItem.create({:media_cart_id => params[:media_cart_id], :work_id => work.id, :restricted => work.restricted?})
+        end
+
     end
   end
 end

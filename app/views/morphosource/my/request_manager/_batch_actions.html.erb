@@ -1,6 +1,8 @@
 <div>
   <div>
-    <% session[:batch_edit_state] = "on" %>
-    <%= render 'morphosource/batch_edits/approve_selected' %>
+    <% if @tab == 'new' %>
+      <% session[:batch_edit_state] = "on" %>
+      <%= render 'morphosource/batch_edits/new_requests' %>
+    <% end %>
   </div>
 </div>

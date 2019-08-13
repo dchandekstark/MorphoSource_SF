@@ -80,17 +80,41 @@ class User < ApplicationRecord
     my_requests.map{ |item| item.work_id }
   end
 
-  # items requested from user (items where user is data owner)
+  # items requested from user (items where user is data manager)
   def requested_items
-    CartItem.where.not(date_requested: nil).or(CartItem.where.not(date_cleared: nil))
+    CartItem.where(approver: self.email).where.not(date_requested: nil).or(CartItem.where(approver: self.email).where.not(date_cleared: nil))
+  end
+
+   def previously_requested_items
+    requested_items.select{|item| (item.date_approved || item.date_denied || item.date_canceled || item.date_cleared)}
+  end
+
+   def newly_requested_items
+    requested_items - previously_requested_items
   end
 
   def requested_item_ids
     requested_items.map{|item| item.id}
   end
 
+  def previously_requested_item_ids
+    previously_requested_items.map{|item| item.id}
+  end
+
+  def newly_requested_item_ids
+    newly_requested_items.map{|item| item.id}
+  end
+
   def requested_items_work_ids
     requested_items.map{ |item| item.work_id }
+  end
+
+  def previously_requested_items_work_ids
+    previously_requested_items.map{ |item| item.work_id }
+  end
+
+  def newly_requested_items_work_ids
+    newly_requested_items.map{ |item| item.work_id }
   end
 
   def downloaded_items

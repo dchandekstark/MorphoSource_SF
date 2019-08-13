@@ -141,12 +141,6 @@ RSpec.describe Morphosource::My::RequestsController, :type => :controller  do
           expect(cartItem1.in_cart).to be(false)
         end
 
-        it 'creates a new cart item' do
-          expect{
-            process :request_again, method: :get, params: { item_id: cartItem1.id }
-          }.to change{CartItem.count}.by(1)
-        end
-
         it 'assigns the correct attribute values to the new cart item' do
           item = CartItem.last
           work = Media.find(cartItem1.work_id)
@@ -165,6 +159,14 @@ RSpec.describe Morphosource::My::RequestsController, :type => :controller  do
 
         it "reloads the page" do
           expect(response).to redirect_to("original_page")
+        end
+      end
+
+      context 'one item in group has already been requested' do
+        it 'creates a new cart item' do
+          expect{
+            process :request_item, method: :put, params: { batch_document_ids: [cartItem3.id,cartItem7.id,cartItem1.id] }
+          }.to change{CartItem.count}.by(1)
         end
       end
     end
@@ -255,24 +257,36 @@ RSpec.describe Morphosource::My::RequestsController, :type => :controller  do
   end
 
   describe "PUT #cancel_request" do
-
     before do
       request.env["HTTP_REFERER"] = "original_page"
       put :cancel_request, params: { item_id: cartItem1.id }
     end
-
     it "marks the cart item as canceled" do
       cartItem1.reload
       expect(cartItem1.date_canceled.to_date).to eq(Date.today)
     end
-
     it 'creates a new flash message' do
       expect(response.flash[:notice]).to eq("Request Canceled")
     end
-
     it "reloads the page" do
       expect(response).to redirect_to("original_page")
     end
+  end
 
+  describe "PUT #move_to_cart" do
+    before do
+      request.env["HTTP_REFERER"] = "original_page"
+      put :move_to_cart, params: { item_id: cartItem5.id }
+    end
+    it "marks the cart item as in_cart" do
+      cartItem5.reload
+      expect(cartItem5.in_cart).to be(true)
+    end
+    it 'creates a new flash message' do
+      expect(response.flash[:notice]).to eq("Item Moved to Cart")
+    end
+    it "reloads the page" do
+      expect(response).to redirect_to("original_page")
+    end
   end
 end

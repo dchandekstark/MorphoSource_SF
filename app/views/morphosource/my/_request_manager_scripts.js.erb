@@ -1,0 +1,45 @@
+function togglePageButtons() {
+  let items = $(".batch_document_selector:checked").length;
+  if ( items > 0 ) {
+    $('.batch-all-button').prop('disabled', false);
+  } else {
+    $('.batch-all-button').prop('disabled', true);
+  }
+}
+
+// submit item id for individual download approvals
+$('body').on('shown.bs.modal', '#editExpiration, #approvalModal', function (e) {
+  var item_id = $(e.relatedTarget).data('item-id');
+  $('#item_id_').val(item_id);
+});
+
+function createHiddenInputs(id) {
+  var form = $('#modal-form');
+  var input = document.createElement("input");
+  input.setAttribute('type','hidden');
+  input.setAttribute('name','batch_document_ids[]');
+  input.setAttribute('value',id);
+  form.append(input);
+}
+
+// submit all item ids for batch approvals
+$('body').on('shown.bs.modal', '#batchApprovalModal', function (e) {
+  var item_ids = [];
+  $.each($('.batch_document_selector:checked'), function(){
+    item_ids.push($(this).val());
+  });
+  item_ids.forEach(createHiddenInputs);
+});
+
+Blacklight.onLoad(function() {
+  togglePageButtons();
+  // toggle button on or off based on boxes being clicked
+  $(".batch_document_selector, #check_all").bind('click', function(e) {
+    togglePageButtons();
+  });
+  // remove item ids from form if modal cancel button is clicked
+  $("#cancel-batch-approval").bind('click', function(e) {
+    var form = $('#modal-form');
+    form.find('input[name="batch_document_ids[]"]').remove();
+  });
+});

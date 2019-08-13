@@ -22,6 +22,9 @@
             <% if item.restricted == true %>
               <span class="label" style="background: teal;">Download Approved</span>
             <% end %>
+            <% if current_user.email == item.approver %>
+              <span class="label" style="background: blue;">Your Media</span>
+            <% end %>
           <% end %>
           <br />
         </div>
@@ -29,7 +32,7 @@
     </div>
   </td>
   <td class="date"><%= item.created_at.strftime("%Y-%m-%d") %></td>
-  <td><%=item.date_approved&.strftime("%Y-%m-%d") %></td>
-  <td><%=item.date_expired&.strftime("%Y-%m-%d") %></td>
+  <td><%= date(item,'approved') %></td>
+  <td><%= date(item,'expired') %></td>
   <td><%= link_to "Download Item", main_app.download_items_path(item_id: item.id), class: "btn btn-info", method: :get %></td>
 </tr>
