@@ -60,6 +60,11 @@ RSpec.describe 'cart items routing', type: :routing do
     expect(:put => 'cancel_request').to route_to(route)
   end
 
+  it 'has a route to request download from the work page' do
+    route = { controller: 'morphosource/my/requests', action: 'request_work' }
+    expect(:post => 'request_work').to route_to(route)
+  end
+
   # request manager
 
   it 'has a route for the request manager page' do

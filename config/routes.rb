@@ -111,7 +111,7 @@ Rails.application.routes.draw do
       post 'new_taxonomy_submit'
     end
   end
-  
+
   # Route to flow initial page when using browser reload or back button
   get '/submissions/stage_biological_specimen', to: 'submissions#new'
   get '/submissions/stage_device', to: 'submissions#new'
@@ -145,6 +145,7 @@ Rails.application.routes.draw do
       get 'request_again', action: :request_again, controller: :requests, as: 'request_again'
       put 'cancel_request', action: :cancel_request, controller: :requests, as: 'cancel_request'
       put 'move_to_cart', action: :move_to_cart, controller: :requests
+      post 'request_work', action: :request_work, controller: :requests
 
       # request manager
       get 'dashboard/my/request_manager', action: :index, controller: :request_managers, as: 'request_manager'

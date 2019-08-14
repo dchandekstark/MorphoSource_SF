@@ -20,6 +20,16 @@ class CartItem < ApplicationRecord
     !self.restricted?
   end
 
+  def active_request?
+    statuses = ["Approved","Requested","Cleared"]
+    statuses.include?(self.request_status)
+  end
+
+  def inactive_request?
+    statuses = ["Canceled","Denied","Expired"]
+    statuses.include?(self.request_status)
+  end
+
   def request_status
     if self.date_canceled.present?
       "Canceled"
@@ -54,7 +64,7 @@ class CartItem < ApplicationRecord
 
   def expired?
     return false unless self.date_expired
-    self.date_expired < Time.now
+    self.date_expired.to_date < Date.today
   end
 
   def approved?

@@ -27,7 +27,7 @@ module Morphosource
       private
 
       def get_downloadable_items
-        @items = id_params ? get_items_by_id(id_params) & unrestricted_items : unrestricted_items
+        @items = id_params ? get_items_by_id(id_params) & downloadable_items : downloadable_items
       end
 
       def destroy_flash
@@ -36,7 +36,7 @@ module Morphosource
 
       def remove_from_cart
         @items.each do |item|
-          if (item.date_downloaded? || item.date_requested?)
+          if item.date_downloaded? || item.date_requested?
             item.in_cart = false
             item.save
           else

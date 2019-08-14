@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Morphosource::CartItemHelper, type: :helper do
-  let(:work)  { double('work', id: 'www', depositor: 'test@test.com')}
-  let(:item)  { CartItem.create( id: 'aaa', media_cart_id: 'bbb', work_id: work.id)}
 
-  before do
-    allow(Media).to receive(:find).with(item.work_id).and_return(work)
-  end
 
   describe '#item_status_label and #item_action_button' do
+
+    let(:work)  { double('work', id: 'www', depositor: 'test@test.com')}
+    let(:item)  { CartItem.create( id: 'aaa', media_cart_id: 'bbb', work_id: work.id)}
+
+    before do
+      allow(Media).to receive(:find).with(item.work_id).and_return(work)
+    end
 
     context 'the item is canceled' do
       let(:label_content) do
@@ -153,6 +155,56 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
         expect(item_action_button(item)).to eq(button_content)
       end
 
+    end
+  end
+
+  describe '#choose_download_button' do
+    let(:current_user)          { double('user') }
+    let(:downloadable_work_ids) { ['aaa','bbb','ccc'] }
+    let(:requests_work_ids)     { ['ddd','eee','fff'] }
+
+    before do
+      allow(current_user).to receive(:downloadable_item_work_ids).and_return(downloadable_work_ids)
+      allow(current_user).to receive(:my_active_requests_work_ids).and_return(requests_work_ids)
+    end
+
+    context "item is not in the user's cart OR item is in the user's cart but hasn't been requested" do
+      it 'displays the request download button' do
+        expect(choose_download_button('ggg')).to eq("<a class=\"btn btn-default\" role=\"button\" rel=\"nofollow\" data-method=\"post\" href=\"/request_work?work_id=ggg\">Request download</a>")
+      end
+    end
+    context "item has been requested but not yet approved" do
+      it 'displays the download requested button' do
+        expect(choose_download_button('ddd')).to eq("<a class=\"btn btn-default\" role=\"button\" disabled=\"disabled\" href=\"\">Download Requested</a>")
+      end
+    end
+    context "item is in the user's cart, has been requested, and has been approved" do
+      it 'displays the download button' do
+        expect(choose_download_button('aaa')).to eq("<a class=\"btn btn-default\" role=\"button\" download=\"true\" target=\"_blank\" href=\"/concern/media/zip?ids%5B%5D=aaa\">Download</a>")
+      end
+    end
+  end
+
+  describe '#choose_cart_button' do
+    let(:current_user)          { double('user') }
+    let(:cart_works)            { ['aaa','bbb','ccc'] }
+    let(:presenter1)            { double('presenter', id: 'aaa') }
+    let(:presenter2)            { double('presenter', id: 'ddd') }
+
+    before do
+      allow(current_user).to receive(:work_ids_in_cart).and_return(cart_works)
+      allow(current_user).to receive_message_chain(:media_cart,:id).and_return(555)
+    end
+
+    context "the work is in the user's cart" do
+      it 'displays the item in cart button' do
+        expect(choose_cart_button(presenter1)).to eq("<a class=\"btn btn-default\" href=\"/dashboard/my/cart\">Item in Cart</a>")
+      end
+    end
+    context "the work is not in the user's cart" do
+      it 'displays the add to cart button' do
+        expect(choose_cart_button(presenter2)).to eq("<a class=\"btn btn-default\" rel=\"nofollow\" data-method=\"post\" href=\"/add_to_cart?media_cart_id=555&amp;work_id=ddd&amp;work_type=Media\">Add to Cart</a>")
+      end
     end
   end
 end

@@ -14,7 +14,7 @@ module Hyrax
       :other_details, :imaging_event_creator, :imaging_event_date_created, :imaging_event_modality,
       :parent_media_id_list, :child_media_id_list,
       :sibling_media_id_list, :parent_media_count, :direct_parent_members, :this_media_member,
-      :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens, 
+      :processing_event_count, :data_managed_by, :download_permission, :ark, :doi, :lens,
       :processing_activity_count, :processing_activity_items,
       :raw_or_derived, :is_absentee_parent,
       :imaging_event_exist,

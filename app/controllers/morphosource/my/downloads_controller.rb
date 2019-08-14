@@ -14,6 +14,7 @@ module Morphosource
         get_items_by_id
         get_duplicate_requests
         create_new_items(@items,nil)
+        move_active_requests_to_cart
         flash[:notice] = duplicates_flash
         redirect_to main_app.my_cart_path
       end
@@ -39,14 +40,30 @@ module Morphosource
       end
 
       def duplicates_flash
-        "#{count_text(@count)} Added to Cart#{duplicates_text(@duplicate_requests+@duplicates_in_cart)}"
+        "#{count_text(@count)} Added to Cart#{duplicates_text(@duplicate_requests+@duplicates_in_cart)}#{active_requests_text}"
       end
 
       def duplicates_text(duplicates)
         if duplicates.count > 0
-          "; #{count_text(duplicates.count)}: #{duplicates.join(', ')} Already in Your Cart."
+          "; #{count_text(duplicates.count)}: #{duplicates.join(', ')} Already in Your Cart"
         else
           ''
+        end
+      end
+
+      def active_requests_text
+        if @active_requests_moved.count > 0
+          "; #{count_text(@active_requests_moved.count)} Already Requested and Moved to Your Cart."
+        else
+          '.'
+        end
+      end
+
+      def move_active_requests_to_cart
+        @items.each do |item|
+          if item.active_request? && item.in_cart == false
+            mark_as('in_cart',item,date: true)
+          end
         end
       end
 

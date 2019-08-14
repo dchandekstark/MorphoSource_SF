@@ -30,13 +30,13 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
     context 'the selected works are not already in the cart' do
       it "creates new cart items for all works" do
         expect{
-          process :batch_create, method: :get, params: {:batch_document_ids => [cartItem4.id,cartItem5.id,cartItem6.id]}
-        }.to change{CartItem.count}.by(3)
+          process :batch_create, method: :get, params: {:batch_document_ids => [cartItem4.id,cartItem6.id]}
+        }.to change{CartItem.count}.by(2)
       end
 
       it "displays a flash message" do
-        get :batch_create, params: {:batch_document_ids => [cartItem4.id, cartItem5.id, cartItem6.id]}
-        expect(response.flash[:notice]).to eq("3 Items Added to Cart")
+        get :batch_create, params: {:batch_document_ids => [cartItem4.id,cartItem6.id]}
+        expect(response.flash[:notice]).to eq("2 Items Added to Cart.")
       end
 
       it 'assigns the correct metadata to the new cart item' do
@@ -55,6 +55,8 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
 
         before do
           allow(CartItem).to receive(:where).with(id: [cartItem4.id.to_s, cartItem10.id.to_s, cartItem11.id.to_s]).and_return([cartItem4,cartItem10,cartItem11])
+          allow(cartItem10).to receive(:active_request?).and_return(false)
+          allow(cartItem11).to receive(:active_request?).and_return(false)
         end
 
         it "creates one cart item for each unique work" do
@@ -67,7 +69,6 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
           get :batch_create, params: {:batch_document_ids => [cartItem4.id,cartItem10.id,cartItem11.id]}
           expect(response.flash[:notice]).to eq("1 Item Added to Cart; 2 Items: Mddd: Test Media Work, Mddd: Test Media Work Already in Your Cart.")
         end
-
       end
     end
 
@@ -81,6 +82,36 @@ RSpec.describe Morphosource::My::DownloadsController, :type => :controller  do
       it "displays a flash message with duplicates" do
         get :batch_create, params: {:batch_document_ids => [cartItem1.id, cartItem2.id, cartItem3.id]}
         expect(response.flash[:notice]).to eq("0 Items Added to Cart; 3 Items: Test Media Work, Test Media Work, Test Media Work Already in Your Cart.")
+      end
+    end
+
+    context 'the selected works are active requests' do
+      context 'the work is already in the cart' do
+        it "does not create new cart items" do
+          expect{
+            process :batch_create, method: :get, params: {:batch_document_ids => [cartItem1.id]}
+          }.to change{CartItem.count}.by(0)
+        end
+        it "displays a flash message with duplicates" do
+          get :batch_create, params: {:batch_document_ids => [cartItem1.id]}
+          expect(response.flash[:notice]).to eq("0 Items Added to Cart; 1 Item: Test Media Work Already in Your Cart.")
+        end
+      end
+      context 'the work is not in the cart' do
+        it "does not create new cart items" do
+          expect{
+            process :batch_create, method: :get, params: {:batch_document_ids => [cartItem5.id]}
+          }.to change{CartItem.count}.by(0)
+        end
+        it "moves the request to the cart" do
+          expect{
+            process :batch_create, method: :get, params: {:batch_document_ids => [cartItem5.id]}
+          }.to change{cartItem5.reload.in_cart}.from(false).to(true)
+        end
+        it "displays a flash message with active request" do
+          get :batch_create, params: {:batch_document_ids => [cartItem5.id]}
+          expect(response.flash[:notice]).to eq("0 Items Added to Cart; 1 Item Already Requested and Moved to Your Cart.")
+        end
       end
     end
 
