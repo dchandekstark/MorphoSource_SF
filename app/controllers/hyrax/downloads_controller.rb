@@ -2,8 +2,6 @@ require_dependency Hyrax::Engine.config.root.join('app','controllers','hyrax','d
 class Hyrax::DownloadsController
   # Renders derivatives only. Original downloads are disabled.
   def show
-    Rails.logger.info("DownloadsController#show")
-    Rails.logger.info("DownloadsController file: #{file.inspect}")
     case file
     when ActiveFedora::File
       # For original files that are stored in fedora
@@ -32,8 +30,6 @@ class Hyrax::DownloadsController
 
     def load_file
       file_reference = params[:file]
-      Rails.logger.info("DownloadsController#load_file: #{file_reference.inspect}")
-      Rails.logger.info("DownloadsController asset_param_key: #{params[asset_param_key].inspect}")
       return default_file unless file_reference
       if file_reference.include? 'dcm'
         file_reference.slice!('dcm')

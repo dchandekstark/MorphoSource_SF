@@ -32,11 +32,8 @@ module MorphosourceHelper
   end
 
   def has_custom_thumbnail?(work)
-    Rails.logger.info("CustomThumbnails: has_custom_thumbnail? for #{work.id.to_s}")
-    Rails.logger.info("CustomThumbnails: has_custom_thumbnail? thumbnail_id #{work.thumbnail_id}")
     original_thumbnail_path = Hyrax::DerivativePath.derivative_path_for_reference(work.thumbnail_id,'original_thumbnail')
     has_custom_thumbnail = File.exist?(original_thumbnail_path)
-    Rails.logger.info("CustomThumbnails: #{original_thumbnail_path} exists? #{has_custom_thumbnail.to_s}")
     return has_custom_thumbnail
   end
 
