@@ -1,7 +1,10 @@
 # Based on https://github.com/duke-libraries/rdr/blob/develop/.travis.yml
 
 language: ruby
-cache: bundler
+cache:
+  bundler: true
+  directories:
+  - downloads
 rvm:
   - 2.4.2
 services:
@@ -38,8 +41,9 @@ before_install:
 
   # begin Blender setup --------
   - cd $TRAVIS_BUILD_DIR/download
-  - curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
-  - tar xjf blender.tar.bz2
+  - mkdir -p $TRAVIS_BUILD_DIR/downloads
+  - wget -nc -O $TRAVIS_BUILD_DIR/downloads/blender-2.79b-linux-glibc219-x86_64.tar.bz2 https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2
+  - tar xjf $TRAVIS_BUILD_DIR/downloads/blender-2.79b-linux-glibc219-x86_64.tar.bz2
   - mv blender-2.79b-linux-glibc219-x86_64 blender
   - curl -o blender_characterize_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_characterize_mesh.py
   - curl -o blender_derive_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_derive_mesh.py
