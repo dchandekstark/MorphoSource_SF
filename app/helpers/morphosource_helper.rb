@@ -31,6 +31,12 @@ module MorphosourceHelper
     end
   end
 
+  def has_custom_thumbnail?(work)
+    original_thumbnail_path = Hyrax::DerivativePath.derivative_path_for_reference(work.thumbnail_id,'original_thumbnail')
+    has_custom_thumbnail = File.exist?(original_thumbnail_path)
+    return has_custom_thumbnail
+  end
+
   def find_works_autocomplete_url(curation_concern, relation)
     valid_concerns = curation_concern.send("valid_#{relation}_concerns").map(&:to_s)
     type_params = valid_concerns.sort.map { |type| "type[]=#{type}" }
