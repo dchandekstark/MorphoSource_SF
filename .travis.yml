@@ -38,7 +38,7 @@ before_install:
 
   # begin Blender setup --------
   - cd $TRAVIS_BUILD_DIR/download
-  - curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
+  - travis_wait 30 curl https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2 -o blender.tar.bz2
   - tar xjf blender.tar.bz2
   - mv blender-2.79b-linux-glibc219-x86_64 blender
   - curl -o blender_characterize_mesh.py https://raw.githubusercontent.com/MorphoSource/morphosource-vagrant/master/install_scripts/blender_config/scripts/blender_characterize_mesh.py
