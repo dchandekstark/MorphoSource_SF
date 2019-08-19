@@ -9,8 +9,8 @@ module Morphosource
       end
 
       def get_restricted_items
-        @unrestricted_items = unrestricted_items
-        @restricted_items = restricted_items
+        @unrestricted_items = downloadable_items
+        @restricted_items = undownloadable_items
         @restricted_count = count_text(@restricted_items.count)
       end
 
@@ -101,6 +101,7 @@ module Morphosource
       end
 
       def mark_as(action,items=@items,date: nil)
+        items = Array(items)
         date = attribute_value(date)
         attribute = get_attribute(action)
          items.each do |item|
@@ -131,12 +132,19 @@ module Morphosource
         create_new_items(items)
       end
 
+
       def requested(items)
         items.select{|item| item.date_requested }
       end
 
+      # For restricted items, returns those w/ request_status ("Not Requested", "Cleared")
       def unrequested(items)
         items.select{|item| !item.date_requested }
+      end
+
+      # For restricted items, returns those w/ request_status ("Expired","Denied","Canceled")
+      def inactive(items)
+        items.select{|item| item.inactive_request? }
       end
 
       def get_items_by_id(ids=id_params)
@@ -149,6 +157,7 @@ module Morphosource
       end
 
       def get_work_ids_by_items(items=@items)
+        items = Array(items)
         @work_ids = items.map{|item| item.work_id}
       end
 
@@ -157,27 +166,49 @@ module Morphosource
         works = get_media_by_items(old_items)
         @count = 0
         @duplicates_in_cart = []
+        @active_requests_moved = []
         works.each do |work|
-          unless work_already_in_cart?(work.id)
-            item = CartItem.new({media_cart_id: current_user.media_cart.id, work_id: work.id, in_cart: true, approver: work.depositor, date_requested: value, restricted: work.restricted?})
-            item.save
+          unless work_in_cart_or_requested?(work.id)
+            item = create_cart_item(work.id)
+            mark_as('in_cart',item,date: true)
+            mark_as('requested',item,date: value)
             @count += 1
           else
-            @duplicates_in_cart << work.title[0]
+            if work_requested?(work.id) && !work_already_in_cart?(work.id)
+              @active_requests_moved << work.title[0]
+            elsif work_already_in_cart?(work.id)
+              @duplicates_in_cart << work.title[0]
+            end
           end
         end
-        return @count, @duplicates_in_cart
+      end
+
+      def work_in_cart_or_requested?(work_id)
+        work_already_in_cart?(work_id) || work_requested?(work_id)
+      end
+
+      def work_requested?(work_id)
+        my_active_requests_work_ids.include?(work_id)
+      end
+
+      def find_requested_item(work_id)
+        current_user.my_active_requests.find{|item| item.work_id == work_id}
+      end
+
+      def create_cart_item(work_id)
+        work = Media.find(work_id)
+        CartItem.create({:media_cart_id => current_user.media_cart.id, :work_id => work.id, :restricted => work.restricted?, :approver => work.depositor})
       end
 
       def uniq_downloaded_work_ids
         downloaded_work_ids.uniq
       end
 
-      def unrestricted_items
+      def downloadable_items
         items_in_cart.select{ |item| item.downloadable? }
       end
 
-      def restricted_items
+      def undownloadable_items
         items_in_cart.select{ |item| !item.downloadable? }
       end
 
@@ -194,7 +225,7 @@ module Morphosource
         item.save
       end
 
-      delegate :downloaded_work_ids, :downloaded_items, :items_in_cart, :item_ids_in_cart, :my_requests_ids, :my_requests_work_ids, :requested_items, :previously_requested_items, :newly_requested_items, :requested_item_ids, :previously_requested_item_ids, :newly_requested_item_ids, :requested_items_work_ids, :previously_requested_items_work_ids, :newly_requested_items_work_ids, :work_ids_in_cart, to: :current_user
+      delegate :downloaded_work_ids, :downloaded_items, :items_in_cart, :item_ids_in_cart, :my_requests_ids, :my_requests_work_ids, :requested_items, :previously_requested_items, :newly_requested_items, :requested_item_ids, :previously_requested_item_ids, :newly_requested_item_ids, :requested_items_work_ids, :previously_requested_items_work_ids, :newly_requested_items_work_ids, :work_ids_in_cart, :my_active_requests_work_ids, to: :current_user
     end
   end
 end

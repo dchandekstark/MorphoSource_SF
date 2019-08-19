@@ -10,7 +10,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
   describe "POST #create" do
 
-    context 'item is not in cart' do
+    context 'item is not in cart and has not been requested' do
       let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work6.id, :work_type => "Media" } }
 
       it "creates a new CartItem" do
@@ -65,6 +65,26 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
       end
     end
 
+    context 'item is not in cart and has already been requested' do
+      let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work5.id, :work_type => "Media" } }
+
+      it "finds the requested CartItem and moves it to the cart" do
+        expect{
+          process :create, method: :post, params: post_params
+        }.to change{cartItem5.reload.in_cart}.from(false).to(true)
+      end
+
+      it "returns flash message 'Item Added to Cart'" do
+        post :create, params: post_params
+        expect(response.flash[:notice]).to eq('Item Added to Cart')
+      end
+
+      it "should call 'after_create_response' with @curation_concern" do
+        expect(subject).to receive(:after_create_response).with(work5)
+        post :create, params: post_params
+      end
+    end
+
     context 'item is already in cart' do
       let(:post_params) { {:media_cart_id => media_cart.id, :work_id => work2.id, :file_accessibility => "open", :work_type => "Media"} }
 
@@ -76,7 +96,7 @@ RSpec.describe Morphosource::My::CartItemsController, :type => :controller  do
 
       it "returns flash message 'Item Already in Cart'" do
         post :create, params: post_params
-        expect(response.flash[:alert]).to eq('Item Already in Cart')
+        expect(response.flash[:alert]).to eq('Item Already in Cart or Requested')
       end
 
       it "should call 'after_create_response' with @curation_concern" do

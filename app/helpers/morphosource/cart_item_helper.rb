@@ -1,5 +1,52 @@
 module Morphosource::CartItemHelper
 
+  def edit_work_button(presenter)
+    link_to "Edit", edit_polymorphic_path([main_app, presenter]), class: 'btn btn-default'
+  end
+
+  def download_button(id)
+    link_to t('hyrax.file_sets.actions.download'), main_app.zip_hyrax_media_index_path(ids: [id]) , class: 'btn btn-default', role: 'button', download: true, target: '_blank'
+  end
+
+  def request_download_button(id)
+    link_to 'Request download', main_app.request_work_path(work_id: id), class: 'btn btn-default', :method => :post, role: 'button'
+  end
+
+  def download_requested_button
+    link_to 'Download Requested','', class: 'btn btn-default', role: 'button', disabled: true
+  end
+
+  def choose_download_button(id)
+    if current_user.downloadable_item_work_ids.include?(id)
+      download_button(id)
+    elsif current_user.my_active_requests_work_ids.include?(id)
+      download_requested_button
+    else
+      request_download_button(id)
+    end
+  end
+
+  def in_cart_button
+    link_to "Item in Cart", main_app.my_cart_path, class: 'btn btn-default'
+  end
+
+  def add_to_cart_button(id)
+    # TODO: don't need media_cart_id
+    link_to "Add to Cart", main_app.add_to_cart_path(:work_id => id, :media_cart_id => current_user.media_cart.id, :work_type => "Media"), class: 'btn btn-default', :method => :post
+  end
+
+  def choose_cart_button(presenter)
+    if current_user.work_ids_in_cart.include? presenter.id
+      in_cart_button
+    else
+      add_to_cart_button(presenter.id)
+    end
+  end
+
+  def unavailable_for_download_button
+    link_to 'Download Unavailable','', class: 'btn btn-default', role: 'button', disabled: true
+  end
+
   # provide status label <span> element
   # arguments: label text, class, style
   def item_status_label(item)

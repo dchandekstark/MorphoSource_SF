@@ -43,8 +43,21 @@ class Media < Morphosource::Works::Base
     all_visibilities & file_visibilities
   end
 
+  #TODO: during development, previously imported media do not have fileset accessibility; assume they are open. This should be changed after all media have fileset accessibility
   def restricted?
-    fileset_accessibility.first == "restricted_download"
+    if fileset_accessibility
+      fileset_accessibility.first == "restricted_download"
+    else
+      false
+    end
+  end
+
+  def open?
+    if fileset_accessibility
+      fileset_accessibility.first == "open"
+    else
+      true
+    end
   end
 
   private

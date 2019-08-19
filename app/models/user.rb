@@ -67,9 +67,29 @@ class User < ApplicationRecord
     restricted_items_in_cart.map{ |item| item.id }
   end
 
+  def downloadable_items
+    cart_items.select{ |item| item.downloadable? }
+  end
+
+  def downloadable_ids
+    downloadable_items.map{ |item| item.id }
+  end
+
+  def downloadable_item_work_ids
+    downloadable_items.map{ |item| item.work_id }
+  end
+
+  def downloadable_items_in_cart
+    items_in_cart.select{ |item| item.downloadable? }
+  end
+
+  def downloadable_ids_in_cart
+    downloadable_items_in_cart.map{ |item| item.id }
+  end
+
   # all a user's current and past requests (items where user is requestor)
   def my_requests
-    cart_items.select{ |item| item.date_requested.present? }
+    cart_items.select{ |item| (item.date_requested.present? || item.date_cleared.present?) }
   end
 
   def my_requests_ids
@@ -80,17 +100,26 @@ class User < ApplicationRecord
     my_requests.map{ |item| item.work_id }
   end
 
+  def my_active_requests
+    active_statuses = ["Approved","Requested","Cleared"]
+    my_requests.select{ |item| active_statuses.include?(item.request_status) }
+  end
+
+  def my_active_requests_work_ids
+    my_active_requests.map{ |item| item.work_id }
+  end
+
   # items requested from user (items where user is data manager)
   def requested_items
-    CartItem.where(approver: self.email).where.not(date_requested: nil).or(CartItem.where(approver: self.email).where.not(date_cleared: nil))
+    CartItem.where(approver: self.email).where(restricted: true).where.not(date_requested: nil).or(CartItem.where(approver: self.email).where(restricted: true).where.not(date_cleared: nil))
   end
 
-   def previously_requested_items
-    requested_items.select{|item| (item.date_approved || item.date_denied || item.date_canceled || item.date_cleared)}
+  def newly_requested_items
+    requested_items.select{|item| item.request_status == "Requested"}
   end
 
-   def newly_requested_items
-    requested_items - previously_requested_items
+  def previously_requested_items
+    requested_items - newly_requested_items
   end
 
   def requested_item_ids
