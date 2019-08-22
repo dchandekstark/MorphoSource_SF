@@ -32,9 +32,13 @@ module MorphosourceHelper
   end
 
   def has_custom_thumbnail?(work)
-    original_thumbnail_path = Hyrax::DerivativePath.derivative_path_for_reference(work.thumbnail_id,'original_thumbnail')
-    has_custom_thumbnail = File.exist?(original_thumbnail_path)
-    return has_custom_thumbnail
+    if work.nil? || work.thumbnail_id.nil?
+      return false
+    else
+      original_thumbnail_path = Hyrax::DerivativePath.derivative_path_for_reference(work.thumbnail_id,'original_thumbnail')
+      has_custom_thumbnail = File.exist?(original_thumbnail_path)
+      return has_custom_thumbnail
+    end
   end
 
   def find_works_autocomplete_url(curation_concern, relation)
