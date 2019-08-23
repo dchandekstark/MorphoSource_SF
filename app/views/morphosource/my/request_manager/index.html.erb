@@ -22,11 +22,6 @@
   </div>
 </div>
 
-<script>
-//<![CDATA[
-  <%= render partial: 'morphosource/my/request_manager_scripts', formats: [:js] %>
-//]]>
-</script>
 <div class="panel panel-default tabs">
   <%= render 'morphosource/my/request_manager/tabs' %>
   <div class="panel-body">
@@ -38,3 +33,11 @@
     <%= render 'morphosource/my/request_manager/results_pagination' %>
   </div>
 </div>
+
+<%= render 'morphosource/my/modals/page_modal' %>
+
+<script>
+  <%= render partial: 'morphosource/my/scripts/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/request_manager_scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/scripts/modal_scripts', formats: [:js] %>
+</script>

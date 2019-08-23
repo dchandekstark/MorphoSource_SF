@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Morphosource::CartItemHelper, type: :helper do
+  include Rails.application.routes.url_helpers
 
 
   describe '#item_status_label and #item_action_button' do
@@ -17,7 +18,7 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
         %(<span class=\"label label-danger\" style=\"background-color: gray;\">Canceled</span>)
       end
       let(:button_content) do
-        %(<a class=\"btn btn-info\" style=\"\" rel=\"nofollow\" data-method=\"put\" href=\"/request_item?item_id=#{item.id}\">Request Download</a>)
+        %(<button name=\"button\" type=\"submit\" id=\"request-button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#pageModal\" data-item-id=\"0\">Request Download</button>)
       end
       before do
         item.date_requested = Date.yesterday
@@ -132,7 +133,7 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
         %(<span class=\"label label-info\" style=\"background-color: teal;\">Not Requested</span>)
       end
       let(:button_content) do
-        %(<a class=\"btn btn-info\" style=\"\" rel=\"nofollow\" data-method=\"put\" href=\"/request_item?item_id=#{item.id}\">Request Download</a>)
+        %(<button name=\"button\" type=\"submit\" id=\"request-button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#pageModal\">Request Download</button>)
       end
 
       it 'creates a "Not Requested" label' do
@@ -170,7 +171,7 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
 
     context "item is not in the user's cart OR item is in the user's cart but hasn't been requested" do
       it 'displays the request download button' do
-        expect(choose_download_button('ggg')).to eq("<a class=\"btn btn-default\" role=\"button\" rel=\"nofollow\" data-method=\"post\" href=\"/request_work?work_id=ggg\">Request download</a>")
+        expect(choose_download_button('ggg')).to eq("<button name=\"button\" type=\"submit\" id=\"request-button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#pageModal\" data-work-id=\"ggg\">Request Download</button>")
       end
     end
     context "item has been requested but not yet approved" do
@@ -206,5 +207,39 @@ RSpec.describe Morphosource::CartItemHelper, type: :helper do
         expect(choose_cart_button(presenter2)).to eq("<a class=\"btn btn-default\" rel=\"nofollow\" data-method=\"post\" href=\"/add_to_cart?media_cart_id=555&amp;work_id=ddd&amp;work_type=Media\">Add to Cart</a>")
       end
     end
+  end
+
+  describe 'page' do
+    let(:request) { double("request")}
+    before do
+      allow(helper).to receive(:request).and_return(request)
+      allow(helper.request).to receive(:fullpath).and_return(path)
+    end
+
+    context 'media cart page' do
+      let(:path) { my_cart_path }
+      it{ expect(page).to eq('cart') }
+    end
+
+    context 'requests page' do
+      let(:path) { my_requests_path }
+      it{ expect(page).to eq('requests') }
+    end
+
+    context 'request manager page' do
+      let(:path) { request_manager_path }
+      it{ expect(page).to eq('request_manager') }
+    end
+
+    context 'downloads page' do
+      let(:path) { my_downloads_path }
+      it{ expect(page).to eq('downloads') }
+    end
+
+    context 'previous requests page' do
+      let(:path) { previous_requests_path }
+      it{ expect(page).to eq('previous_requests') }
+    end
+
   end
 end

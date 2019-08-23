@@ -49,9 +49,11 @@ module Morphosource
           if previous_requests?
             @tab = 'previous'
             get_items('previous_requests')
+            @requesters = get_requesters('previous_requests')
           else
             @tab = 'new'
             get_items('request_manager')
+            @requesters = get_requesters('request_manager')
           end
         end
 

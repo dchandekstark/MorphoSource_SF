@@ -32,13 +32,15 @@ module Morphosource
         },
         'request_manager' => {
           item_ids: :newly_requested_item_ids,
-          order: 'date_requested DESC',
-          work_ids: :newly_requested_items_work_ids
+          order: "user_id DESC",
+          work_ids: :newly_requested_items_work_ids,
+          user_ids: :newly_requested_items_user_ids
         },
         'previous_requests' => {
           item_ids: :previously_requested_item_ids,
           order: 'date_requested DESC',
-          work_ids: :previously_requested_items_work_ids
+          work_ids: :previously_requested_items_work_ids,
+          user_ids: :previously_requested_items_user_ids
         }
       }
 
@@ -49,7 +51,20 @@ module Morphosource
       def items(page)
         ids = get_value(page,:item_ids)
         order = get_order(page)
-        CartItem.where(id: ids).order(order).page params[:page]
+        if page == 'request_manager'
+          new_request_items(ids)
+        else
+          CartItem.where(id: ids).order(order).page params[:page]
+        end
+      end
+
+      def new_request_items(ids)
+        CartItem.where(id: ids).includes(:media_cart).order("user_id desc").order("note desc").references(:media_cart)
+      end
+
+      def get_requesters(page)
+        ids = get_value(page,:user_ids).uniq
+        User.where(id: ids).page params[:page]
       end
 
       def get_value(page,key)
@@ -90,6 +105,10 @@ module Morphosource
         work_to_render = (params[:work_type].downcase.concat('/show'))
       end
 
+      def get_intended_use
+        @intended_use = params[:intended_use].first
+      end
+
       # Using instead of search in order to get back full results instead of paginated
       def solr_docs(page)
         work_ids = get_value(page,:work_ids)
@@ -112,6 +131,7 @@ module Morphosource
       end
 
       def get_attribute(action)
+        return 'note=' if action == 'note'
         return 'in_cart=' if action == 'in_cart'
         'date_'.concat(action).concat('=')
       end
@@ -148,7 +168,7 @@ module Morphosource
       end
 
       def get_items_by_id(ids=id_params)
-        @items = CartItem.where(id: ids)
+        @items ||= CartItem.where(id: ids)
       end
 
       def get_media_by_items(items)
@@ -170,8 +190,8 @@ module Morphosource
         works.each do |work|
           unless work_in_cart_or_requested?(work.id)
             item = create_cart_item(work.id)
-            mark_as('in_cart',item,date: true)
             mark_as('requested',item,date: value)
+            mark_as('note',item,date: @intended_use)
             @count += 1
           else
             if work_requested?(work.id) && !work_already_in_cart?(work.id)
@@ -205,11 +225,11 @@ module Morphosource
       end
 
       def downloadable_items
-        items_in_cart.select{ |item| item.downloadable? }
+        items_in_cart.select{ |item| (item.downloadable? || user_is_approver?(item)) }
       end
 
       def undownloadable_items
-        items_in_cart.select{ |item| !item.downloadable? }
+        items_in_cart.select{ |item| (!item.downloadable? && !user_is_approver?(item)) }
       end
 
       def user_is_depositor?(work)
@@ -225,7 +245,7 @@ module Morphosource
         item.save
       end
 
-      delegate :downloaded_work_ids, :downloaded_items, :items_in_cart, :item_ids_in_cart, :my_requests_ids, :my_requests_work_ids, :requested_items, :previously_requested_items, :newly_requested_items, :requested_item_ids, :previously_requested_item_ids, :newly_requested_item_ids, :requested_items_work_ids, :previously_requested_items_work_ids, :newly_requested_items_work_ids, :work_ids_in_cart, :my_active_requests_work_ids, to: :current_user
+      delegate :downloaded_work_ids, :downloaded_items, :items_in_cart, :item_ids_in_cart, :my_requests_ids, :my_requests_work_ids, :requested_items, :previously_requested_items, :newly_requested_items, :requested_item_ids, :previously_requested_item_ids, :newly_requested_item_ids, :requested_items_work_ids, :previously_requested_items_work_ids, :newly_requested_items_work_ids, :work_ids_in_cart, :my_active_requests_work_ids, :newly_requested_items_user_ids, :previously_requested_items_user_ids, to: :current_user
     end
   end
 end

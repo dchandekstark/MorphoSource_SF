@@ -18,12 +18,6 @@
   </div>
 </div>
 
-<script>
-//<![CDATA[
-  <%= render partial: 'morphosource/my/cart_scripts', formats: [:js] %>
-//]]>
-</script>
-
 <div class="panel-body">
   <h2 class="sr-only">Works listing</h2>
   <%= render 'morphosource/my/cart/batch_actions' %>
@@ -41,3 +35,11 @@
   <%= render 'morphosource/my/cart/requestable_list' %>
   <%= render 'morphosource/my/cart/results_pagination' %>
 </div>
+
+<%= render 'morphosource/my/modals/page_modal' %>
+
+<script>
+  <%= render partial: 'morphosource/my/scripts/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/cart_scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/scripts/modal_scripts', formats: [:js] %>
+</script>

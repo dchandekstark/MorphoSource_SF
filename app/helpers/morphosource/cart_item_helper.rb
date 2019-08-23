@@ -9,7 +9,7 @@ module Morphosource::CartItemHelper
   end
 
   def request_download_button(id)
-    link_to 'Request download', main_app.request_work_path(work_id: id), class: 'btn btn-default', :method => :post, role: 'button'
+    button_tag("Request Download", id:'request-button', class: 'btn btn-default', data: {toggle: 'modal', target: '#pageModal', work_id: id})
   end
 
   def download_requested_button
@@ -79,7 +79,7 @@ module Morphosource::CartItemHelper
         content_tag(:button, 'Item in Cart', class: "btn btn-success", disabled: true)
       end
     when 'Canceled'
-      make_button(item,"Request Download",:request_item_path,"btn btn-info",:put,'')
+      button_tag("Request Download", id:'request-button', class: 'btn btn-info', data: {toggle: 'modal', target: '#pageModal', item_id: item.id})
     when 'Denied'
       if item.in_cart
         make_button(item,"Remove from Cart",:remove_items_path,"btn btn-danger",:delete,'')
@@ -95,7 +95,7 @@ module Morphosource::CartItemHelper
     when 'Downloadable'
       make_button(item,"Download Item",:download_items_path,"btn btn-info",:get,'')
     else
-      make_button(item,"Request Download",:request_item_path,"btn btn-info",:put,'')
+      button_tag("Request Download", id:'request-button', class: 'btn btn-info', data: {toggle: 'modal', target: '#pageModal'})
     end
   end
 
@@ -111,4 +111,35 @@ module Morphosource::CartItemHelper
     attribute = 'date_'.concat(attribute).to_sym
     item.send(attribute)&.strftime("%Y-%m-%d")
   end
+
+  def get_requester_items(items,requester)
+    @requester_items = items.select{|item| item.media_cart.user_id == requester.id}
+  end
+
+  def requester_uses
+    @requester_items.map{|item| item.note }.uniq
+  end
+
+  def use_requests(items,use)
+    items.select{|item| item.note == use }
+  end
+
+  def page
+    path = request.fullpath
+    case
+    when path.include?('cart')
+      'cart'
+    when path.include?('previous_requests')
+      'previous_requests'
+    when path.include?('requests')
+      'requests'
+    when path.include?('request_manager')
+      'request_manager'
+    when path.include?('downloads')
+      'downloads'
+    when path.include?('media')
+      'showcase'
+    end
+  end
+
 end

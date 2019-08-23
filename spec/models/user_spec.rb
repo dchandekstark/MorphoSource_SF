@@ -78,6 +78,14 @@ RSpec.describe User, type: :model do
     it { expect(data_owner.requested_items_work_ids).to match_array([cartItem1.work_id,cartItem3.work_id,cartItem5.work_id])}
   end
 
+  describe '#newly_requested_items_user_ids' do
+    it { expect(data_owner.newly_requested_items_user_ids.uniq).to match_array([user.id]) }
+  end
+
+  describe '#previously_requested_items_user_ids' do
+    it { expect(data_owner.previously_requested_items_user_ids.uniq).to match_array([user.id]) }
+  end
+
   describe '#downloaded_items' do
     it "returns items the user has downloaded" do
       expect(user.downloaded_items).to match_array([cartItem4, cartItem5])
