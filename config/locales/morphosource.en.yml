@@ -17,6 +17,7 @@ en:
         heading:
           file_visibility: 'File Visibility'
           date_downloaded: 'Date Downloaded'
+          publication_status: 'Publication Status'
     validation:
       missing:
         title: 'Your work must have a title.'
@@ -30,6 +31,21 @@ en:
         photogrammetry: 'Photogrammetry Image Series'
         mesh: 'Mesh or Point Cloud'
         other: 'Other'
+    publication_status:
+      open:
+        text: "Open"
+      restricted:
+        text: "Restricted"
+      preview:
+        text: "Preview"
+      hidden:
+        text: "Hidden"
+      private:
+        text: "Private"
+      embargo:
+        text: "Embargo"
+      lease:
+        text: "Lease"
     upload:
       change_access_message_html: "<p>You have changed the access level on work <i>%{curation_concern}</i>, making it accessible to other users or groups to view or edit.</p><p>All attached files are now being updated with the same access level.</p>"
       change_access_yes_message: Yes please.

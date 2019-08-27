@@ -43,7 +43,6 @@ class Media < Morphosource::Works::Base
     all_visibilities & file_visibilities
   end
 
-  #TODO: during development, previously imported media do not have fileset accessibility; assume they are open. This should be changed after all media have fileset accessibility
   def restricted?
     if fileset_accessibility
       fileset_accessibility.first == "restricted_download"
@@ -53,10 +52,36 @@ class Media < Morphosource::Works::Base
   end
 
   def open?
-    if fileset_accessibility
-      fileset_accessibility.first == "open"
+    accessibility = fileset_accessibility.first
+    unless accessibility.nil?
+      accessibility == "open"
+    # TODO: remove after migrated media have fileset_accessibility
     else
       true
+    end
+  end
+
+  def publication_status
+    fileset_accessibility = self.fileset_accessibility.first
+
+    case
+    when fileset_accessibility == "open"
+      "open"
+    when fileset_accessibility == "restricted_download"
+      "restricted"
+    when fileset_accessibility == "preview_only"
+      "preview"
+    when fileset_accessibility == "hidden"
+      "hidden"
+    when fileset_accessibility == "private"
+      "private"
+    when self.embargo && self.embargo.active?
+      "embargo"
+    when self.lease && self.lease.active?
+      "lease"
+      #TODO: remove after migrated media have fileset_accessibility values
+    when fileset_accessibility == nil
+      "open"
     end
   end
 

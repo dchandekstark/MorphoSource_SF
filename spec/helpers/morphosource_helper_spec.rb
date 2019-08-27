@@ -207,5 +207,83 @@ RSpec.describe MorphosourceHelper, type: :helper do
         end
       end
     end
+
+    describe '#render_publication_status_badge' do
+      let(:document)  { SolrDocument.new(id: 'aaa')}
+      let(:media)     { Media.new(id: 'aaa', title: ["Test Media Work"], visibility: 'open', fileset_visibility: [''])}
+      let(:model)     { Hyrax::SolrDocumentBehavior::ModelWrapper.new(Media,media.id) }
+
+      before do
+        allow(Media).to receive(:find).with(document.id).and_return(media)
+        allow(document).to receive(:to_model).and_return(model)
+      end
+
+      context 'media and files are open' do
+        before do
+          media.fileset_accessibility = ["open"]
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-success\" style=\"\">Open</span></a>") }
+      end
+
+      context 'media is open, files are restricted' do
+        before do
+          media.fileset_accessibility = ["restricted_download"]
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-info\" style=\"border-color: red;\">Restricted</span></a>") }
+      end
+
+      context 'media is open, files are preview only' do
+        before do
+          media.fileset_accessibility = ["preview_only"]
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-info\" style=\"\">Preview</span></a>") }
+      end
+
+      context 'media is open, files are hidden' do
+        before do
+          media.fileset_visibility = ["restricted"]
+          media.fileset_accessibility = ['hidden']
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-info\" style=\"border-color: black;\">Hidden</span></a>") }
+      end
+
+      context 'media and files are both private' do
+        before do
+          media.visibility = "restricted"
+          media.fileset_accessibility = ["private"]
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-danger\" style=\"\">Private</span></a>") }
+      end
+
+      context 'media and files are under embargo' do
+        let(:embargo) { double("Embargo")}
+
+        before do
+          media.visibility = "restricted"
+          media.fileset_accessibility = ['']
+          allow(embargo).to receive(:active?).and_return(true)
+          allow(media).to receive(:embargo).and_return(embargo)
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-warning\" style=\"background-color: black;\">Embargo</span></a>") }
+      end
+
+      context 'media and files are under a lease' do
+        let(:lease) { double("Lease")}
+
+        before do
+          media.fileset_accessibility = [""]
+          allow(lease).to receive(:active?).and_return(true)
+          allow(media).to receive(:lease).and_return(lease)
+        end
+
+        it { expect(helper.render_publication_status_badge(document)).to eq("<a id=\"permission_aaa\" class=\"visibility-link\" href=\"/concern/media/aaa/edit#share\"><span class=\"label label-warning\" style=\"background-color: black;\">Lease</span></a>") }
+      end
+    end
   end
 end
