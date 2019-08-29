@@ -161,10 +161,70 @@ RSpec.describe Media do
       end
       context 'fileset_accessibility is nil' do
         before do
-          allow(subject).to receive(:fileset_accessibility).and_return(nil)
+          allow(subject).to receive(:fileset_accessibility).and_return([])
         end
         it { expect(subject.restricted?).to be(false) }
         it { expect(subject.open?).to be(true) }
+      end
+    end
+
+    describe '#publication_status' do
+      let(:open) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      let(:private) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+
+      context 'media and files are open' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: [""], fileset_accessibility: ["open"]) }
+
+        it { expect(subject.publication_status).to eq("open") }
+      end
+      context 'media is open, files are restricted' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: [""], fileset_accessibility: ["restricted_download"]) }
+
+        it { expect(subject.publication_status).to eq("restricted") }
+      end
+      context 'media is open, files are preview only' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: [""], fileset_accessibility: ["preview_only"]) }
+
+        it { expect(subject.publication_status).to eq("preview") }
+      end
+      context 'media is open, files are hidden' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: ["Restricted"], fileset_accessibility: ["hidden"]) }
+
+        it { expect(subject.publication_status).to eq("hidden") }
+      end
+      context 'media and files are both private' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: private, fileset_visibility: [""], fileset_accessibility: ["private"]) }
+
+        it { expect(subject.publication_status).to eq("private") }
+      end
+      context 'media and files are under embargo' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: private, fileset_visibility: [""], fileset_accessibility: [""]) }
+        let(:embargo) { double("Embargo")}
+
+        before do
+          allow(embargo).to receive(:active?).and_return(true)
+          allow(subject).to receive(:embargo).and_return(embargo)
+        end
+
+        it { expect(subject.publication_status).to eq("embargo") }
+      end
+      context 'media and files are under a lease' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: [""], fileset_accessibility: [""]) }
+        let(:lease) { double("Lease")}
+
+        before do
+          allow(lease).to receive(:active?).and_return(true)
+          allow(subject).to receive(:lease).and_return(lease)
+        end
+
+        it { expect(subject.publication_status).to eq("lease") }
+      end
+
+      context 'media does not have a fileset_accessibity set' do
+        subject { described_class.new(title: ["Test Media Work"], visibility: open, fileset_visibility: [""], fileset_accessibility: nil) }
+
+        it { expect(subject.publication_status).to eq("open") }
+
       end
     end
   end

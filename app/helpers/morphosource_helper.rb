@@ -1,5 +1,4 @@
 module MorphosourceHelper
-
   def current_controller
     current_uri = request.env['PATH_INFO']
     # to-do: might need to catch exception here for route not found
@@ -127,6 +126,23 @@ module MorphosourceHelper
 
   def is_number_with_decimal? string
     true if Float(string).to_f % 1 != 0 rescue false
+  end
+
+  def publication_badge(value)
+    Morphosource::PublicationBadge.new(value).render
+  end
+
+  def render_publication_status_badge(document)
+    media = Media.find(document.id)
+
+    path = edit_polymorphic_path([main_app, document], anchor: 'share')
+
+    link_to(
+      publication_badge(media.publication_status),
+      path,
+      id: "permission_#{document.id}",
+      class: 'visibility-link'
+    )
   end
 
 end
