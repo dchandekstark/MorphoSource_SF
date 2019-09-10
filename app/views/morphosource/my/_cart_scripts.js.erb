@@ -1,3 +1,7 @@
+function hide(button) {
+  $(button).hide();
+}
+
 function hideButtons() {
   let downloadable = $(".downloadable_items").length;
   let restricted = $(".restricted_items").length;
@@ -5,19 +9,27 @@ function hideButtons() {
   let select_restricted = $('#documents > table > thead > tr > th.check-all');
 
   if (downloadable < 1) {
-    $('#download-all').hide();
-    $('#delete-selected').hide();
-    $('#download-selected').hide();
+    hide('#download-all');
+    hide('#delete-selected');
+    hide('#download-selected');
     select_downloadable.hide();
   }
   if (restricted < 1) {
-    $('#request-selected').hide();
-    $('#delete-selected-restricted').hide();
+    hide('#request-selected');
+    hide('#delete-selected-restricted');
     select_restricted.hide();
   }
   if (restricted < 1 && downloadable < 1) {
-    $('#clear-cart').hide();
+    hide('#clear-cart');
   }
+}
+
+function disable(button){
+  $(button).prop('disabled',true);
+}
+
+function enable(button){
+  $(button).prop('disabled',false);
 }
 
 function togglePageButtons() {
@@ -25,36 +37,36 @@ function togglePageButtons() {
   let downloadable = $(".downloadable_items").length;
 
   if ( downloadable > 0 ) {
-    $('#download-all').prop('disabled', false);
-    $('#clear-cart').prop('disabled', false);
+    enable('#download-all');
+    enable('#clear-cart');
   } else if ( items > 0 ) {
-    $('#download-all').prop('disabled', true);
-    $('#clear-cart').prop('disabled', false);
+    disable('#download-all');
+    enable('#clear-cart');
   } else {
-    $('#download-all').prop('disabled', true);
-    $('#clear-cart').prop('disabled', true);
+    disable('#download-all');
+    disable('#clear-cart');
   }
 }
 
 function toggleDownloadableButtons() {
   let downloadable = $(".downloadable_items:checked").length;
   if ( downloadable > 0 ) {
-    $('#delete-selected').prop('disabled', false);
-    $('#download-selected').prop('disabled', false);
+    enable('#delete-selected');
+    enable('#download-selected');
   } else {
-    $('#delete-selected').prop('disabled', true);
-    $('#download-selected').prop('disabled', true);
+    disable('#delete-selected');
+    disable('#download-selected');
   }
 }
 
 function toggleRestrictedButtons() {
   let restricted = $(".restricted_items:checked").length;
   if ( restricted > 0 ) {
-    $('#request-selected').prop('disabled', false);
-    $('#delete-selected-restricted').prop('disabled', false);
+    enable('#request-selected');
+    enable('#delete-selected-restricted');
   } else {
-    $('#request-selected').prop('disabled', true);
-    $('#delete-selected-restricted').prop('disabled', true);
+    disable('#request-selected');
+    disable('#delete-selected-restricted');
   }
 }
 

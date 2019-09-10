@@ -21,11 +21,13 @@ class CartItem < ApplicationRecord
   end
 
   def active_request?
+    return false if self.unrestricted?
     statuses = ["Approved","Requested","Cleared"]
     statuses.include?(self.request_status)
   end
 
   def inactive_request?
+    return false if self.unrestricted?
     statuses = ["Canceled","Denied","Expired"]
     statuses.include?(self.request_status)
   end

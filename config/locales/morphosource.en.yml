@@ -31,6 +31,14 @@ en:
         photogrammetry: 'Photogrammetry Image Series'
         mesh: 'Mesh or Point Cloud'
         other: 'Other'
+    modal:
+      approve:
+        title: "Set Download Expiration Date"
+      expiration:
+        title: "Edit Expiration Date"
+      request:
+        title: "Intended Use"
+        subtitle: "Please let the data owner know how you intend to use their data"
     publication_status:
       open:
         text: "Open"

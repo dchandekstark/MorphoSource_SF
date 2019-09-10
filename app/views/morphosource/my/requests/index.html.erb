@@ -17,15 +17,17 @@
   </div>
 </div>
 
-<script>
-//<![CDATA[
-  <%= render partial: 'morphosource/my/scripts', formats: [:js] %>
-//]]>
-</script>
-
 <div class="panel-body">
   <h2 class="sr-only">Works listing</h2>
   <%= render 'morphosource/my/requests/batch_actions' %>
   <%= render 'morphosource/my/requests/document_list' %>
   <%= render 'morphosource/my/requests/results_pagination' %>
 </div>
+
+<%= render 'morphosource/my/modals/page_modal' %>
+
+<script>
+  <%= render partial: 'morphosource/my/scripts/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/requests_scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/scripts/modal_scripts' %>
+</script>

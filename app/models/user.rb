@@ -2,6 +2,8 @@ class User < ApplicationRecord
   has_one :media_cart, dependent: :destroy
   has_many :cart_items, through: :media_cart
 
+  paginates_per 10
+
   after_create :create_user_media_cart
 
   # Connects this user object to Hydra behaviors.
@@ -144,6 +146,14 @@ class User < ApplicationRecord
 
   def newly_requested_items_work_ids
     newly_requested_items.map{ |item| item.work_id }
+  end
+
+  def newly_requested_items_user_ids
+    newly_requested_items.map{ |item| item.media_cart.user_id }
+  end
+
+  def previously_requested_items_user_ids
+    previously_requested_items.map{ |item| item.media_cart.user_id }
   end
 
   def downloaded_items

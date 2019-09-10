@@ -31,15 +31,17 @@
   </div>
 </div>
 
-<script>
-//<![CDATA[
-  <%= render partial: 'morphosource/my/download_scripts', formats: [:js] %>
-//]]>
-</script>
-
 <div class="panel-body">
   <h2 class="sr-only">Works listing</h2>
   <%= render 'morphosource/my/downloads/batch_actions' %>
   <%= render 'morphosource/my/downloads/document_list' %>
   <%= render 'morphosource/my/downloads/results_pagination' %>
 </div>
+
+<%= render 'morphosource/my/modals/page_modal' %>
+
+<script>
+  <%= render partial: 'morphosource/my/scripts/scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/download_scripts', formats: [:js] %>
+  <%= render partial: 'morphosource/my/scripts/modal_scripts', formats: [:js] %>
+</script>

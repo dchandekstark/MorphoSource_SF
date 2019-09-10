@@ -17,33 +17,64 @@ RSpec.describe Morphosource::My::RequestManagersController, :type => :controller
 
   describe "GET #index" do
 
+    let(:user1) { User.create(email: "user1@test.com", password: "password")}
+    let(:user2) { User.create(email: "user2@test.com", password: "password")}
+    let(:user3) { User.create(email: "user3@test.com", password: "password")}
+    let(:user4) { User.create(email: "user4@test.com", password: "password")}
+
+    let(:media_cart1)    { MediaCart.find_by(user_id: user1.id) }
+    let(:media_cart2)    { MediaCart.find_by(user_id: user2.id) }
+    let(:media_cart3)    { MediaCart.find_by(user_id: user3.id) }
+    let(:media_cart4)    { MediaCart.find_by(user_id: user4.id) }
+
+    before do
+      cartItem1.media_cart_id = media_cart1.id
+      cartItem3.media_cart_id = media_cart2.id
+      cartItem5.media_cart_id = media_cart3.id
+      cartItem7.media_cart_id = media_cart4.id
+      [cartItem1,cartItem3,cartItem5,cartItem7].each(&:save)
+    end
+
     context 'normal index stuff' do
       before do
         get :index
       end
-
       include_examples '#index'
-
     end
 
     context 'user looks at new requests' do
       before do
+        allow(subject).to receive(:previous_requests?).and_return(false)
         get :index
       end
 
       include_examples '#get_items instance variables', 'request manager'
+
+      it 'retrieves the correct tab' do
+        expect(subject.instance_variable_get(:@tab)).to eq('new')
+      end
+
+      it 'retrieves the correct requesters' do
+        expect(subject.instance_variable_get(:@requesters)).to match_array([user3])
+      end
     end
 
     context 'user looks at previous requests' do
-
       before do
         allow(subject).to receive(:previous_requests?).and_return(true)
         get :index
       end
 
       include_examples '#get_items instance variables', 'previous requests'
-    end
 
+      it 'retrieves the correct tab' do
+        expect(subject.instance_variable_get(:@tab)).to eq('previous')
+      end
+
+      it 'retrieves the correct requesters' do
+        expect(subject.instance_variable_get(:@requesters)).to match_array([user1])
+      end
+    end
   end
 
   describe "PUT #approve_download" do
@@ -137,5 +168,4 @@ RSpec.describe Morphosource::My::RequestManagersController, :type => :controller
       expect(response).to redirect_to(previous_requests_path)
     end
   end
-
 end

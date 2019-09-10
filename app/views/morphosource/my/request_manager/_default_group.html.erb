@@ -1,47 +1,12 @@
-<table class="table table-striped works-list">
-  <caption class="sr-only"><%= t("hyrax.dashboard.my.sr.listing") %> <%= application_name %></caption>
-  <thead>
-  <tr>
-    <% if @tab == 'new' %>
-      <th class="check-all"><label for="check_all" class="sr-only"><%= t("hyrax.dashboard.my.sr.check_all_label") %></label><%= render_check_all %></th>
-    <% end %>
-    <th><%= t("hyrax.dashboard.my.heading.title") %></th>
-    <% if @tab == 'previous' %>
-      <th>Request Status</th>
-    <% end %>
-    <th>Requester</th>
-    <th>Affiliation</th>
+<div class="dropdown batch_document_selector_all" style="margin-top: 10px;">
+  <label class="centerizer check-all-media">
+    <%= check_box_tag 'check_all', 'yes', @all_checked, class: 'check_all', disabled: @disable_select_all %>
+    <span style="margin-left: 5px;">Select All Media This Page</span>
+  </label>
+</div>
 
-    <% if @tab == 'new' %>
-      <th>Requested</th>
-      <th>Approve</th>
-      <th>Clear</th>
-      <th>Deny</th>
-    <% end %>
-
-    <% if @tab == 'previous' %>
-      <th>Requested</th>
-      <th>Approved</th>
-      <th>Denied</th>
-      <th>Canceled</th>
-      <th>Expiration</th>
-      <th>Cleared</th>
-      <th>Downloaded</th>
-      <th></th>
-    <% end %>
-
-  </tr>
-  </thead>
-  <tbody>
-    <% @items.each_with_index do |item, counter| %>
-      <% document = @solr_docs.select{|doc| doc.id == item.work_id}[0] %>
-      <%= render 'morphosource/my/request_manager/list_works', document: document, counter: counter, item: item, presenter: Hyrax::WorkShowPresenter.new(document, current_ability) %>
-    <% end %>
-  </tbody>
-</table>
-<% if @tab == 'previous' %>
-  <%= render 'morphosource/my/request_manager/expiration_modal' %>
-<% else %>
-  <%= render 'morphosource/my/request_manager/approval_modal' %>
-  <%= render 'morphosource/my/request_manager/batch_approval_modal' %>
-<% end %>
+<div>
+  <% @requesters.each_with_index do |requester, counter| %>
+    <%= render 'morphosource/my/request_manager/list_requesters', requester: requester, counter: counter %>
+  <% end %>
+</div>

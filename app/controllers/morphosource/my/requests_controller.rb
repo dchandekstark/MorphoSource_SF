@@ -5,6 +5,7 @@ module Morphosource
       include Morphosource::My::CartItemsBehavior
 
       before_action :get_items_by_id, except: [:index]
+      before_action :get_intended_use, only: [:request_item, :request_again, :request_work]
 
       def index
         get_items('my_requests')
@@ -12,8 +13,13 @@ module Morphosource
       end
 
       def request_item
-        re_request(inactive(@items))
-        mark_as('requested',unrequested(@items))
+        @items = @items.select{|item| !item.downloadable? }
+        re_request(inactive(@items)) unless inactive(@items).empty?
+        unless unrequested(@items).empty?
+          mark_as('note',unrequested(@items),date: @intended_use)
+          # this step must go last, otherwise unrequested(@items) will become empty
+          mark_as('requested',unrequested(@items))
+        end
         flash[:notice] = item_count_text.concat(' Requested')
         redirect_back(fallback_location: my_requests_path)
       end
@@ -42,6 +48,7 @@ module Morphosource
           item = find_item_in_cart(work_id)
           if item_is_unrequested?(item)
             mark_as('requested',item)
+            mark_as('note',item,date: @intended_use)
           else
             re_request(item)
           end
@@ -63,6 +70,7 @@ module Morphosource
 
         def create_new_requested_item(work_id)
           item = create_cart_item(work_id)
+          mark_as('note',item,date: @intended_use)
           mark_as('requested',item)
           mark_as('in_cart',item,date: true)
         end

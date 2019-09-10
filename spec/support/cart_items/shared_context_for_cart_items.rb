@@ -1,6 +1,6 @@
 RSpec.shared_context 'cart items', :shared_context => :metadata do
 
-  let(:current_user)  { User.create(id: 1, email: "example@email.com", password: "password") }
+  let(:current_user)  { User.create(email: "example@email.com", password: "password") }
   let(:media_cart)    { MediaCart.where(user_id: current_user.id)[0] }
 
   let(:work1)         { Media.create(id: "aaa", title: ["Test Media Work"], depositor: "test@test.com", fileset_accessibility: ['restricted_download'])}
