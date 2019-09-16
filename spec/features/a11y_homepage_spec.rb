@@ -10,9 +10,9 @@ RSpec.feature "Accessibility check on homepage", :accessibility => true, :type =
     expect(page).to be_accessible.within '.navbar-right'
   end
 
-#  scenario "homepage should be accessible" do
-#    expect(page).to be_accessible
-#  end
+  scenario "homepage should be accessible" do
+    expect(page).to be_accessible
+  end
 
 
 end
