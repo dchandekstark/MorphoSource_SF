@@ -72,6 +72,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'axe-matchers'
   gem 'rspec-json_expectations'
 end
 
