@@ -6,11 +6,13 @@ RSpec.feature "Accessibility check on homepage", :accessibility => true, :type =
     visit "/"
   end
 
-  scenario "homepage should be accessible" do
-
-    expect(page).to be_accessible
-
+  scenario "navbar-right should be accessible" do
+    expect(page).to be_accessible.within '.navbar-right'
   end
+
+#  scenario "homepage should be accessible" do
+#    expect(page).to be_accessible
+#  end
 
 
 end
